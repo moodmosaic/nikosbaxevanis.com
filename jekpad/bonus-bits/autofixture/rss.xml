@@ -1,0 +1,1211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss
+ xmlns:dc="http://purl.org/dc/elements/1.1/"
+ xmlns:content="http://purl.org/rss/1.0/modules/content/"
+ version="2.0">
+<channel>
+		<title>Nikos Baxevanis - AutoFixture</title>
+	  <link>http://nikosbaxevanis.com</link>
+	  <description>(I should have written something here.)</description>
+    <language>en-GB</language>
+		
+			<item>
+				<title>Categorized list of AutoFixture questions on Stack Overflow</title>
+				<link>http://nikosbaxevanis.com/2013/06/09/categorized-list-of-autofixture-questions-on-stack-overflow</link>
+				<guid isPermaLink="true">http://nikosbaxevanis.com/2013/06/09/categorized-list-of-autofixture-questions-on-stack-overflow</guid>
+				<author>nikos.baxevanis@gmail.com (Nikos Baxevanis)</author>
+				<description>&lt;p&gt;&lt;em&gt;The complete list can be found &lt;a href=&quot;http://stackoverflow.com/questions/tagged/autofixture&quot;&gt;here&lt;/a&gt;.&lt;/em&gt;&lt;/p&gt;
+
+&lt;h3&gt;AutoFixture.Auto[Moq/RhinoMocks/FakeItEasy/NSubstitute]&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/4845065/what-is-autofixture-automoq&quot;&gt;What is AutoFixture AutoMoq?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/5786628/what-are-the-differences-between-moq-and-autofixture&quot;&gt;Differences between Moq and AutoFixture&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/8069164/how-do-i-verify-a-method-was-called&quot;&gt;How to verify a method was called&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/8883685/using-verify-to-confirm-expected-parameter-values-in-moq-mock-class&quot;&gt;Using verify to confirm expected parameter values in Moq&amp;rsquo;s Mock class&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/9341413/creating-a-hybrid-of-a-mock-and-an-anonymous-object-using-e-g-moq-and-autofixtu&quot;&gt;Creating a hybrid of a Mock and an Anonymous object using Moq and AutoFixture&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/9839574/how-do-i-test-a-class-that-takes-a-factory&quot;&gt;Test a class that takes a Factory&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/10493510/repetitive-code-in-unit-tests&quot;&gt;Repetitive code in Unit Tests&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/11958110/technique-for-using-autofixture-to-integration-test-an-application-using-castle&quot;&gt;Integration Test an application using Castle Windsor&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/12868235/autofixture-as-an-automocking-container-vs-automocking-differences&quot;&gt;AutoFixture as an Auto-mocking Container vs Auto-mocking differences&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/12949417/how-to-let-autofixture-create-an-instance-of-a-type-that-contains-properties-wit&quot;&gt;Create an instance of a type that contains properties with an interface type&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/12963019/how-do-i-get-autofixture-automoq-to-return-results-from-injected-services-in-an&quot;&gt;How to return results from injected services in an instantiated object&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/14709025/autofixture-mock-methods-dont-return-a-frozen-instance&quot;&gt;Mocked methods returning a Frozen instance&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/15208879/does-this-test-make-proper-use-of-autofixture-and-moq&quot;&gt;Proper use of AutoFixture AutoMoq&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/15442636/autodata-theories-with-autofixture-using-manual-fakes&quot;&gt;AutoData Theories with AutoFixture using manual fakes&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/16145284/autofixture-how-to-express-the-following-code-declaratively&quot;&gt;How to express a Unit Test declaratively?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/16455511/new-to-autofixture-trying-to-get-my-head-around-it-and-i-cant-see-it-helping-me&quot;&gt;Imperative to Declarative Unit Test&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/16612145/how-to-use-autofixture-in-this-case&quot;&gt;Auto-mocking using FakeItEasy&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/16738191/automocking-the-sut&quot;&gt;Auto-mocking the SUT&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h3&gt;AutoFixture.Idioms&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/11452539/generalised-func-wrapping-with-anonymous-values-equivalent-to-autofixture-with&quot;&gt;When I pass &lt;em&gt;input&lt;/em&gt; to the parameter &lt;em&gt;x&lt;/em&gt; of a method, supplying the other parameters anonymously, the result is ..&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/12051087/how-to-simplify-unit-testing-ddd-value-objects-equality-with-autofixture&quot;&gt;Simplifing Unit Testing DDD Value objects Equality&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/15078400/autofixture-test-for-invalid-constructor-parameter&quot;&gt;Verify invalid constructor parameters&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h3&gt;AutoFixture.Xunit&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/11958110/technique-for-using-autofixture-to-integration-test-an-application-using-castle&quot;&gt;Integration Test an application using Castle Windsor&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/13960681/autofixture-with-weak-types&quot;&gt;AutoFixture with &amp;lsquo;weak&amp;rsquo; types&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/14391146/using-autofixture-in-my-data-integration-tests-to-create-proxies&quot;&gt;Proxies in data integration tests&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/14410991/autofixture-with-derived-types&quot;&gt;AutoFixture with derived types&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/14709025/autofixture-mock-methods-dont-return-a-frozen-instance&quot;&gt;Mocked methods returning a Frozen instance&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/15208879/does-this-test-make-proper-use-of-autofixture-and-moq&quot;&gt;Proper use of AutoFixture AutoMoq&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/16145284/autofixture-how-to-express-the-following-code-declaratively&quot;&gt;How to express a Unit Test declaratively&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/16455511/new-to-autofixture-trying-to-get-my-head-around-it-and-i-cant-see-it-helping-me&quot;&gt;Imperative to Declarative Unit Test&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/16612145/how-to-use-autofixture-in-this-case&quot;&gt;Auto-mocking using FakeItEasy&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/16731821/what-are-the-principles-behind-autofixtures-declarative-way-of-setting-up-a-fix&quot;&gt;What are the principles behind AutoFixture&amp;rsquo;s declarative way of setting up a fixture?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/16841414/autofixture-propertydata-and-heterogeneous-parameters&quot;&gt;PropertyDataAttribute and heterogeneous parameters&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h3&gt;Customizations&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/5555054/how-do-i-create-a-list-of-classes-which-always-have-a-predefined-value-set-in-au&quot;&gt;How to create a list of types with predefined values&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/5722581/autofixture-how-do-i-call-a-method-how-to-set-a-private-setter-of-an-autoprop&quot;&gt;How to set a private setter of an Automatic Property by calling a method&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/9209050/generate-anonymous-number-for-string-property-with-autofixture&quot;&gt;Generate anonymous number for string property&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/10032535/can-autofixture-execute-a-delegate-at-object-creation-time&quot;&gt;Execute a delegate at object creation time&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/10125199/autofixture-configure-fixture-to-limit-string-generation-length&quot;&gt;How to limit the length of generated strings&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/11958110/technique-for-using-autofixture-to-integration-test-an-application-using-castle&quot;&gt;Integration Test an application using Castle Windsor&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/12425521/force-autofixture-to-use-the-greediest-constructor&quot;&gt;Selecting the greediest constructor by default&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/13143977/can-i-tell-autofixture-to-call-some-base-method-for-all-instances-of-classes-tha&quot;&gt;How to call a base method for all instances of classes that inherit from it&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/13869968/how-do-i-apply-autofixture-customizations-to-anything-inheriting-from-a-base-cla&quot;&gt;Creating ASP.NET MVC Controller instances without setting property values&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/13940278/how-do-i-generate-objects-when-there-are-multiple-paths-to-a-child-entity&quot;&gt;How to generate objects when there are multiple paths to a child entity&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/13960681/autofixture-with-weak-types&quot;&gt;AutoFixture with &amp;lsquo;weak&amp;rsquo; types&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/14391146/using-autofixture-in-my-data-integration-tests-to-create-proxies&quot;&gt;Proxies in data integration tests&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/14639018/why-is-autofixture-customization-causing-inherited-properties-to-not-be-filled&quot;&gt;Supplying values for inherited properties&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/14709025/autofixture-mock-methods-dont-return-a-frozen-instance&quot;&gt;Mocked methods returning a Frozen instance&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/14985930/autofixture-fails-to-createanonymous-mvc-controller&quot;&gt;Creating ASP.NET MVC Controller instances&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/5398258/customizing-autofixture-builder-with-seeded-property&quot;&gt;Using Customize with seeded property&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/15478897/ploeh-autofixture-was-unable-to-create-an-instance-from-system-runtime-serializa&quot;&gt;PropertyTypeOmitter (System.Runtime.Serialization.ExtensionDataObject example)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/15531321/how-do-i-use-autofixture-v3-with-icustomization-ispecimenbuilder-to-deal-with&quot;&gt;Customizing constructor parameter values&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/15705830/autofixture-ignore-virtual-properties&quot;&gt;Ignore virtual properties&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/16322697/creating-an-autofixture-specimen-builder-for-a-type&quot;&gt;Creating an ISpecimenBuilder for a type&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/16455511/new-to-autofixture-trying-to-get-my-head-around-it-and-i-cant-see-it-helping-me&quot;&gt;Imperative to Declarative Unit Test&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h3&gt;Freeze, Inject&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/8069164/how-do-i-verify-a-method-was-called&quot;&gt;How to verify a method was called&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/12218206/how-can-i-freeze-a-null-instance-in-autofixture&quot;&gt;How to Freeze a Null Reference&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/13960681/autofixture-with-weak-types&quot;&gt;AutoFixture with &amp;lsquo;weak&amp;rsquo; types&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/14410991/autofixture-with-derived-types&quot;&gt;AutoFixture with derived types&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/16612145/how-to-use-autofixture-in-this-case&quot;&gt;Auto-mocking using FakeItEasy&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/16819470/autofixture-automoq-supply-a-known-value-for-one-constructor-parameter&quot;&gt;Supply a known value for one constructor parameter&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h3&gt;Likeness, Likeness as Resemblance&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/9341153/autofixture-likeness-compare-only-matching-properties&quot;&gt;Compare only matching properties&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/11718761/applying-autofixture-semanticcomparison-oflikeness-to-sequences-collections&quot;&gt;Likeness applied to sequences&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/16714258/likeness-polishing-and-packaging&quot;&gt;Custom Assertion&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/8883685/using-verify-to-confirm-expected-parameter-values-in-moq-mock-class&quot;&gt;Using verify to confirm expected parameter values in Moq&amp;rsquo;s Mock class&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/11718761/applying-autofixture-semanticcomparison-oflikeness-to-sequences-collections&quot;&gt;Likeness applied to sequences&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/15605241/why-doesnt-autofixture-likeness-behave-like-id-expect-for-one-of-these-two-tes&quot;&gt;How to use &amp;lsquo;EqualsWhen&amp;rsquo;&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h3&gt;Refactoring&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/2622334/autofixture-refactoring&quot;&gt;Minimizing the Arrange phase&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/10493510/repetitive-code-in-unit-tests&quot;&gt;Repetitive code in Unit Tests&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/16455511/new-to-autofixture-trying-to-get-my-head-around-it-and-i-cant-see-it-helping-me&quot;&gt;Imperative to Declarative Unit Test&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+</description>
+				<pubDate>Sun, 09 Jun 2013 00:00:00 GTB Daylight Time</pubDate>
+			</item>
+		
+			<item>
+				<title>Truly Constrained Non-Deterministic Numbers in AutoFixture</title>
+				<link>http://nikosbaxevanis.com/2012/10/08/truly-constrained-non-deterministic-numbers-in-autofixture</link>
+				<guid isPermaLink="true">http://nikosbaxevanis.com/2012/10/08/truly-constrained-non-deterministic-numbers-in-autofixture</guid>
+				<author>nikos.baxevanis@gmail.com (Nikos Baxevanis)</author>
+				<description>&lt;p&gt;Numbers in &lt;a href=&quot;https://github.com/autofixture/autofixture&quot;&gt;AutoFixture&lt;/a&gt; are currently created using a &lt;strong&gt;strictly monotonically increasing&lt;/strong&gt; sequence.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;csharp&quot;&gt;&lt;span class=&quot;kt&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fixture&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Fixture&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+
+&lt;span class=&quot;kt&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fixture&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;CreateAnonymous&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;();&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// Prints -&amp;gt; 1&lt;/span&gt;
+&lt;span class=&quot;kt&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;l&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fixture&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;CreateAnonymous&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;long&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;();&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// Prints -&amp;gt; 2&lt;/span&gt;
+&lt;span class=&quot;kt&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;f&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fixture&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;CreateAnonymous&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;float&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;();&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// Prints -&amp;gt; 3.0&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Starting with version &lt;em&gt;2.13.0&lt;/em&gt;, by applying a specific customization numbers can also be created using a &lt;strong&gt;constrained non-deterministic&lt;/strong&gt; sequence. The new customization is called &lt;code&gt;RandomNumericSequenceCustomization&lt;/code&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;csharp&quot;&gt;&lt;span class=&quot;kt&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fixture&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Fixture&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Customize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;RandomNumericSequenceCustomization&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;());&lt;/span&gt;
+
+&lt;span class=&quot;kt&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fixture&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;CreateAnonymous&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;();&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// Prints -&amp;gt; 122&lt;/span&gt;
+&lt;span class=&quot;kt&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;l&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fixture&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;CreateAnonymous&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;long&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;();&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// Prints -&amp;gt; 38&lt;/span&gt;
+&lt;span class=&quot;kt&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;f&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fixture&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;CreateAnonymous&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;float&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;();&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// Prints -&amp;gt; 147.0&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Once the customization has been applied to a &lt;code&gt;Fixture&lt;/code&gt; instance subsequent requests for numeric types will yield random non-repeatable numbers in the range of [1, 255]. When requesting more than 255 numbers the range is automatically changed to [256, 32767] and so on.&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;The default ranges are [1, 255], [256, 32767], and [32768, 2147483647].&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;h2&gt;Supplying a custom range&lt;/h2&gt;
+
+&lt;p&gt;To supply a custom range, customize an instance of the Fixture class with an instance of the &lt;code&gt;RandomNumericSequenceGenerator&lt;/code&gt; and pass to its constructor a sequence of integer numbers (e.g. &lt;code&gt;-100, 100, 255&lt;/code&gt;).&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;The sequence must be two positive or negative numbers optionally followed by a series of greater numbers.&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;csharp&quot;&gt;&lt;span class=&quot;kt&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fixture&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Fixture&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;fixture&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Customizations&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Add&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;RandomNumericSequenceGenerator&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(-&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;255&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
+
+&lt;span class=&quot;kt&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fixture&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;CreateAnonymous&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;();&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// Prints -&amp;gt; -95&lt;/span&gt;
+&lt;span class=&quot;kt&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;l&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fixture&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;CreateAnonymous&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;long&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;();&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// Prints -&amp;gt; 47&lt;/span&gt;
+&lt;span class=&quot;kt&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;f&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fixture&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;CreateAnonymous&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;float&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;();&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// Prints -&amp;gt; -82.0&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;After applying the customization, numbers are now created in the range of [-100, 100]. However, when requesting more numbers than the range size the range is automatically changed to [101, 255].&lt;/p&gt;
+</description>
+				<pubDate>Mon, 08 Oct 2012 00:00:00 GTB Daylight Time</pubDate>
+			</item>
+		
+			<item>
+				<title>AutoFixture, xUnit.net, and Auto Mocking</title>
+				<link>http://nikosbaxevanis.com/2012/07/31/autofixture-xunit-net-and-auto-mocking</link>
+				<guid isPermaLink="true">http://nikosbaxevanis.com/2012/07/31/autofixture-xunit-net-and-auto-mocking</guid>
+				<author>nikos.baxevanis@gmail.com (Nikos Baxevanis)</author>
+				<description>&lt;p&gt;&lt;strong&gt;Update&lt;/strong&gt;: In AutoFixture 3 &lt;a href=&quot;https://github.com/AutoFixture/AutoFixture/wiki/AutoFixture-3.0-Release-Notes#numbers-are-random&quot;&gt;numbers are random&lt;/a&gt;.&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;The features discussed in this post are available when using &lt;a href=&quot;https://github.com/AutoFixture/AutoFixture&quot;&gt;AutoFixture&lt;/a&gt; &lt;a href=&quot;http://blog.ploeh.dk/2010/10/08/AutoDataTheoriesWithAutoFixture.aspx&quot;&gt;decleratively&lt;/a&gt; with the xUnit.net &lt;a href=&quot;http://nuget.org/packages/AutoFixture.Xunit/&quot;&gt;extension&lt;/a&gt;. In addition, it is required to have at least one of the extensions for Auto Mocking using &lt;a href=&quot;http://nuget.org/packages/AutoFixture.AutoMoq&quot;&gt;AutoMoq&lt;/a&gt;, &lt;a href=&quot;http://nuget.org/packages/AutoFixture.AutoRhinoMocks&quot;&gt;AutoRhinoMocks&lt;/a&gt;, &lt;a href=&quot;http://nuget.org/packages/AutoFixture.AutoFakeItEasy&quot;&gt;AutoFakeItEasy&lt;/a&gt;, or &lt;a href=&quot;http://nuget.org/packages/AutoFixture.AutoNSubstitute&quot;&gt;AutoNSubstitute&lt;/a&gt;.&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;To install AutoFixture with xUnit.net data theories, run the following command in the Package Manager Console:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;csharp&quot;&gt;&lt;span class=&quot;n&quot;&gt;PM&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Install&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Package&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AutoFixture&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Xunit&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;In the test method below we would like to use xUnit.net data theories to provide:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Auto-generated data specimens for &lt;code&gt;d&lt;/code&gt;, &lt;code&gt;s&lt;/code&gt;, &lt;code&gt;i&lt;/code&gt;, &lt;code&gt;a&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;Auto-generated data specimens for &lt;code&gt;_&lt;/code&gt;, &lt;code&gt;s&lt;/code&gt;, &lt;code&gt;i&lt;/code&gt;, &lt;code&gt;a&lt;/code&gt;, and inline values for &lt;code&gt;d&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;Auto-generated data specimens for &lt;code&gt;_&lt;/code&gt;, &lt;code&gt;_&lt;/code&gt;, &lt;code&gt;i&lt;/code&gt;, &lt;code&gt;a&lt;/code&gt;, and inline values for &lt;code&gt;d&lt;/code&gt;, &lt;code&gt;s&lt;/code&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;csharp&quot;&gt;&lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;TestMethod&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;kt&quot;&gt;double&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;string&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IInterface&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AbstractType&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;Assert&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;True&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;d&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;    &lt;span class=&quot;p&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;s&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;null&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;null&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;null&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;blockquote&gt;&lt;p&gt;That fact that argument &lt;code&gt;i&lt;/code&gt; is an interface and argument &lt;code&gt;a&lt;/code&gt; is an abstract class prevents us from using &lt;code&gt;[InlineData]&lt;/code&gt;, &lt;code&gt;[AutoData]&lt;/code&gt;, or &lt;code&gt;[InlineAutoData]&lt;/code&gt; attributes.&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;AutoFixture allows us to easily define custom DataAttribute derived types:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;By deriving from AutoDataAttribute and passing to the base constructor a customization that enables auto mocking with Moq, Rhino Mocks, FakeItEasy, or NSubstitute.&lt;/li&gt;
+&lt;li&gt;By deriving from CompositeDataAttribute and passing to the base constructor an array of DataAttribute derived type instances, e.g. an instance of &lt;code&gt;InlineDataAttribute&lt;/code&gt; and an instance of &lt;code&gt;AutoDataAttribute&lt;/code&gt; derived type.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;Auto Mocking using Moq&lt;/h2&gt;
+
+&lt;p&gt;To install AutoFixture with Auto Mocking using Moq, run the following command in the Package Manager Console:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;csharp&quot;&gt;&lt;span class=&quot;n&quot;&gt;PM&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Install&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Package&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AutoFixture&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;AutoMoq&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;We decorate the test method with AutoMoqData and InlineAutoMoqData attributes:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;csharp&quot;&gt;&lt;span class=&quot;na&quot;&gt;[Theory]&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;[AutoMoqData]&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;[InlineAutoMoqData(2)]&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;[InlineAutoMoqData(3, &amp;quot;foo&amp;quot;)]&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;WithMoq&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;kt&quot;&gt;double&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;string&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IInterface&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AbstractType&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;Write&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Output:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;xml&quot;&gt;AutoMoqData:
+  d = 1
+  s = s05080d05-b874-4182-bba5-18678ad9b134
+  i = Castle.Proxies.IInterfaceProxy
+  a = Castle.Proxies.AbstractTypeProxy
+  
+InlineAutoMoqData:
+  d = 2
+  s = sce87888d-8cc8-4f69-927c-c4b1347d3147
+  i = Castle.Proxies.IInterfaceProxy
+  a = Castle.Proxies.AbstractTypeProxy
+
+InlineAutoMoqData:
+  d = 3
+  s = foo
+  i = Castle.Proxies.IInterfaceProxy
+  a = Castle.Proxies.AbstractTypeProxy
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Source code:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;csharp&quot;&gt;&lt;span class=&quot;k&quot;&gt;internal&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;AutoMoqDataAttribute&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AutoDataAttribute&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;internal&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;AutoMoqDataAttribute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;base&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Fixture&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Customize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AutoMoqCustomization&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()))&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;internal&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;InlineAutoMoqDataAttribute&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CompositeDataAttribute&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;internal&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;InlineAutoMoqDataAttribute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;params&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;object&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;values&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;base&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DataAttribute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; 
+            &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;InlineDataAttribute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;values&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AutoMoqDataAttribute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;More information on AutoFixture with Auto Mocking using Moq can be found at &lt;a href=&quot;http://blog.ploeh.dk/2010/08/19/AutoFixtureAsAnAutomockingContainer.aspx&quot;&gt;AutoFixture as an auto-mocking container&lt;/a&gt; blog post.&lt;/p&gt;
+
+&lt;h2&gt;Auto Mocking using Rhino Mocks&lt;/h2&gt;
+
+&lt;p&gt;To install AutoFixture with Auto Mocking using Rhino Mocks, run the following command in the Package Manager Console:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;csharp&quot;&gt;&lt;span class=&quot;n&quot;&gt;PM&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Install&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Package&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AutoFixture&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;AutoRhinoMocks&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;We decorate the test method with AutoRhinoMockData and InlineAutoRhinoMockData attributes:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;csharp&quot;&gt;&lt;span class=&quot;na&quot;&gt;[Theory]&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;[AutoRhinoMockData]&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;[InlineAutoRhinoMockData(2)]&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;[InlineAutoRhinoMockData(3, &amp;quot;foo&amp;quot;)]&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;WithRhinoMocks&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;kt&quot;&gt;double&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;string&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IInterface&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AbstractType&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;Write&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Ouput:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;xml&quot;&gt;AutoRhinoMockData:
+  d = 1
+  s = s01172643-5162-474f-bcfa-319ef40a8272
+  i = Castle.Proxies.IInterfaceProxy201f58a5559841bfb41895881489658c
+  a = Castle.Proxies.AbstractTypeProxy5a86172bbda14cc098b4c675c5b7e555
+
+InlineAutoRhinoMockData:
+  d = 2
+  s = sd3b9c112-5181-4daa-9b2f-333c7498044a
+  i = Castle.Proxies.IInterfaceProxy201f58a5559841bfb41895881489658c
+  a = Castle.Proxies.AbstractTypeProxy5a86172bbda14cc098b4c675c5b7e555
+  
+InlineAutoRhinoMockData:
+  d = 3
+  s = foo
+  i = Castle.Proxies.IInterfaceProxy201f58a5559841bfb41895881489658c
+  a = Castle.Proxies.AbstractTypeProxy5a86172bbda14cc098b4c675c5b7e555
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Source code:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;csharp&quot;&gt;&lt;span class=&quot;k&quot;&gt;internal&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;AutoRhinoMockDataAttribute&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AutoDataAttribute&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;internal&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;AutoRhinoMockDataAttribute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;base&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Fixture&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Customize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AutoRhinoMockCustomization&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()))&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;internal&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;InlineAutoRhinoMockDataAttribute&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CompositeDataAttribute&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;internal&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;InlineAutoRhinoMockDataAttribute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;params&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;object&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;values&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;base&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DataAttribute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; 
+            &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;InlineDataAttribute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;values&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AutoRhinoMockDataAttribute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;More information on AutoFixture with Auto Mocking using Rhino Mocks can be found at &lt;a href=&quot;http://blog.ploeh.dk/2010/11/13/RhinoMocksbasedAutomockingWithAutoFixture.aspx&quot;&gt;Rhino Mocks-based auto-mocking with AutoFixture&lt;/a&gt; blog post.&lt;/p&gt;
+
+&lt;h2&gt;Auto Mocking using FakeItEasy&lt;/h2&gt;
+
+&lt;p&gt;To install AutoFixture with Auto Mocking using FakeItEasy, run the following command in the Package Manager Console:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;csharp&quot;&gt;&lt;span class=&quot;n&quot;&gt;PM&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Install&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Package&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AutoFixture&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;AutoFakeItEasy&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;We decorate the test method with AutoFakeItEasyData or InlineAutoFakeItEasyData attributes:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;csharp&quot;&gt;&lt;span class=&quot;na&quot;&gt;[Theory]&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;[AutoFakeItEasyData]&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;[InlineAutoFakeItEasyData(2)]&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;[InlineAutoFakeItEasyData(3, &amp;quot;foo&amp;quot;)]&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;WithFakeItEasy&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;kt&quot;&gt;double&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;string&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IInterface&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AbstractType&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;Write&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Output:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;xml&quot;&gt;AutoFakeItEasyData:
+  d = 1
+  s = s2b4c118b-d18b-4782-992a-d4138c65fd2a
+  i = Faked IInterface
+  a = Faked AbstractType
+
+InlineAutoFakeItEasyData:
+  d = 2
+  s = se8da7e09-ea4f-4d16-86bd-4229802e5f5d
+  i = Faked IInterface
+  a = Faked AbstractType
+
+InlineAutoFakeItEasyData:
+  d = 3
+  s = foo
+  i = Faked IInterface
+  a = Faked AbstractType
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Source code:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;csharp&quot;&gt;&lt;span class=&quot;k&quot;&gt;internal&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;AutoFakeItEasyDataAttribute&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AutoDataAttribute&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;internal&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;AutoFakeItEasyDataAttribute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;base&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Fixture&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Customize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AutoFakeItEasyCustomization&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()))&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;internal&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;InlineAutoFakeItEasyDataAttribute&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CompositeDataAttribute&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;internal&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;InlineAutoFakeItEasyDataAttribute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;params&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;object&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;values&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;base&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DataAttribute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; 
+            &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;InlineDataAttribute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;values&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AutoFakeItEasyDataAttribute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;More information on AutoFixture with Auto Mocking using FakeItEasy can be found at &lt;a href=&quot;http://nikosbaxevanis.com/2011/12/14/auto-mocking-with-fakeiteasy-and-autofixture/&quot;&gt;Auto-Mocking with FakeItEasy and AutoFixture&lt;/a&gt; blog post.&lt;/p&gt;
+
+&lt;h2&gt;Auto Mocking using NSubstitute&lt;/h2&gt;
+
+&lt;p&gt;To install AutoFixture with Auto Mocking using NSubstitute, run the following command in the Package Manager Console:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;csharp&quot;&gt;&lt;span class=&quot;n&quot;&gt;PM&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Install&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Package&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AutoFixture&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;AutoNSubstitute&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;We decorate the test method with AutoNSubstituteData or InlineAutoNSubstituteData attributes:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;csharp&quot;&gt;&lt;span class=&quot;na&quot;&gt;[Theory]&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;[AutoNSubstituteData]&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;[InlineAutoNSubstituteData(2)]&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;[InlineAutoNSubstituteData(3, &amp;quot;foo&amp;quot;)]&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;WithNSubstitute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;kt&quot;&gt;double&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;string&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IInterface&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AbstractType&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;Write&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Output:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;xml&quot;&gt;AutoNSubstituteData:
+  d = 1
+  s = sf7ce77e0-c2b3-4749-b9ec-78f3aba0254a
+  i = Castle.Proxies.IInterfaceProxy
+  a = Castle.Proxies.AbstractTypeProxy
+  
+InlineAutoNSubstituteData:
+  d = 2
+  s = sf7ba31be-3136-4b50-a51f-3763f1d06004
+  i = Castle.Proxies.IInterfaceProxy
+  a = Castle.Proxies.AbstractTypeProxy
+
+InlineAutoNSubstituteData:
+  d = 3
+  s = foo
+  i = Castle.Proxies.IInterfaceProxy
+  a = Castle.Proxies.AbstractTypeProxy
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Source code:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;csharp&quot;&gt;&lt;span class=&quot;k&quot;&gt;internal&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;AutoNSubstituteDataAttribute&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AutoDataAttribute&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;internal&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;AutoNSubstituteDataAttribute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;base&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Fixture&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Customize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AutoNSubstituteCustomization&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()))&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;internal&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;InlineAutoNSubstituteDataAttribute&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CompositeDataAttribute&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;internal&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;InlineAutoNSubstituteDataAttribute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;params&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;object&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;values&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;base&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DataAttribute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; 
+            &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;InlineDataAttribute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;values&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AutoNSubstituteDataAttribute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;More information on AutoFixture with Auto Mocking using NSubstitute can be found at &lt;a href=&quot;http://blog.ploeh.dk/2013/01/09/NSubstituteAuto-mockingwithAutoFixture/&quot;&gt;NSubstitute Auto-mocking with AutoFixture&lt;/a&gt; blog post.&lt;/p&gt;
+</description>
+				<pubDate>Tue, 31 Jul 2012 00:00:00 GTB Daylight Time</pubDate>
+			</item>
+		
+			<item>
+				<title>URI support in AutoFixture</title>
+				<link>http://nikosbaxevanis.com/2012/04/19/uri-support-in-autofixture</link>
+				<guid isPermaLink="true">http://nikosbaxevanis.com/2012/04/19/uri-support-in-autofixture</guid>
+				<author>nikos.baxevanis@gmail.com (Nikos Baxevanis)</author>
+				<description>&lt;p&gt;Starting with version 2.10.0, AutoFixture supports the creation of &lt;a href=&quot;http://en.wikipedia.org/wiki/Uniform_resource_identifier&quot; target=&quot;_blank&quot; title=&quot;In computing, a uniform resource identifier (URI) is a string of characters used to identify a name or a resource. Such identification enables interaction with representations of the resource over a network (typically the World Wide Web) using specific protocols. Schemes specifying a concrete syntax and associated protocols define each URI.&quot;&gt;Uniform Resource Identifiers&lt;/a&gt;&amp;#0160;and the &lt;a href=&quot;http://msdn.microsoft.com/en-us/library/system.uri(v=vs.90).aspx&quot; target=&quot;_blank&quot; title=&quot;Provides an object representation of a uniform resource identifier (URI) and easy access to the parts of the URI.&quot;&gt;Uri&lt;/a&gt;&amp;#0160;type.&lt;/p&gt;
+
+
+&lt;p&gt;It is now possible to create an anonymous variable for Uri as with any other common type:&lt;/p&gt;
+
+
+
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;csharp&quot;&gt;&lt;span class=&quot;kt&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fixture&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Fixture&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;kt&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;uri&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fixture&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;CreateAnonymous&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Uri&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;();&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// Prints -&amp;gt; scheme://257eb39a-8305-4d13-a7cb-0c481b78809a/&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+
+
+&lt;p&gt;By default, both the &lt;strong&gt;scheme name&lt;/strong&gt;&amp;#0160;and the &lt;strong&gt;authority&lt;/strong&gt;&amp;#0160;part are obtained from the context. A custom&amp;#0160;&lt;em&gt;UriScheme&lt;/em&gt; class represents the URI scheme name while the authority&amp;#0160;part is an anonymous variable of type string.&lt;/p&gt;
+
+
+&lt;p&gt;Example URIs along with their component parts can be found&amp;#0160;&lt;a href=&quot;http://en.wikipedia.org/wiki/URI_scheme#Examples&quot; target=&quot;_blank&quot;&gt;here&lt;/a&gt;.&amp;#0160;Since both parts are received from the context, they can be easily customized.&lt;/p&gt;
+
+
+&lt;h2&gt;Supplying a custom scheme name&lt;/h2&gt;
+
+&lt;p&gt;The UriScheme type provides by default the name &lt;em&gt;&amp;quot;scheme&amp;quot;.&lt;/em&gt;&amp;#0160;However, by injecting a specific instance of this type we can easily override it with something else (e.g. &amp;quot;&lt;em&gt;http&amp;quot;&lt;/em&gt;).&lt;/p&gt;
+
+
+
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;csharp&quot;&gt;&lt;span class=&quot;kt&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fixture&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Fixture&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;fixture&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Inject&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;UriScheme&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;http&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
+&lt;span class=&quot;kt&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;uri&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fixture&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;CreateAnonymous&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Uri&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;();&lt;/span&gt; 
+&lt;span class=&quot;c1&quot;&gt;// Prints -&amp;gt; http://abc9f406-16f2-4e06-b6f9-0750dc115ac3/&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2&gt;Supplying a custom authority&lt;/h2&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;This is preferred only when each test constructs its own instance of the Fixture type since this change will apply for all the strings received from the context.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+
+&lt;p&gt;Since the authority part is a string received from the context, it is possible to modify the base of all strings and get the desired name for the authority.&lt;/p&gt;
+
+
+
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;csharp&quot;&gt;&lt;span class=&quot;kt&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fixture&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Fixture&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;fixture&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Customizations&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Add&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;StringGenerator&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;autofixture.codeplex.com&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
+&lt;span class=&quot;kt&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;uri&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fixture&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;CreateAnonymous&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Uri&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;();&lt;/span&gt; 
+&lt;span class=&quot;c1&quot;&gt;// Prints -&amp;gt; scheme://autofixture.codeplex.com/&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2&gt;Supplying a custom Uri&lt;/h2&gt;
+
+&lt;p&gt;As with any other generated specimen, it is possible to completely take over it&amp;#39;s creation. Using a custom&amp;#0160;ISpecimenBuilder type, each time a Uri is requested, a predefined Uri will be returned.&lt;/p&gt;
+
+
+
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;csharp&quot;&gt;&lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;CustomUriBuilder&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ISpecimenBuilder&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;object&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ISpecimenContext&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;context&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;request&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;typeof&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Uri&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Uri&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;http://autofixture.codeplex.com&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;NoSpecimen&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;kt&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fixture&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Fixture&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;fixture&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Customizations&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Add&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CustomUriBuilder&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;());&lt;/span&gt;
+&lt;span class=&quot;kt&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;uri&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fixture&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;CreateAnonymous&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Uri&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;();&lt;/span&gt; 
+&lt;span class=&quot;c1&quot;&gt;// Prints -&amp;gt; http://autofixture.codeplex.com/&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+
+
+&lt;p&gt;An automatically published release created from the latest successful build can be downloaded from&amp;#0160;&lt;a href=&quot;http://autofixture.codeplex.com/releases/view/85801&quot; target=&quot;_blank&quot; title=&quot;AutoFixture - Downloads&quot;&gt;here&lt;/a&gt;.&amp;#0160;The latest version is also live on&amp;#0160;&lt;a href=&quot;http://nuget.org/List/Packages/AutoFixture&quot; target=&quot;_blank&quot; title=&quot;AutoFixture - Package&quot;&gt;NuGet&lt;/a&gt;.&lt;/p&gt;
+
+
+
+</description>
+				<pubDate>Thu, 19 Apr 2012 00:00:00 GTB Daylight Time</pubDate>
+			</item>
+		
+			<item>
+				<title>Dynamic Proxy overriding Equals in AutoFixture Likeness</title>
+				<link>http://nikosbaxevanis.com/2012/02/20/dynamic-proxy-overriding-equals-in-autofixture-likeness</link>
+				<guid isPermaLink="true">http://nikosbaxevanis.com/2012/02/20/dynamic-proxy-overriding-equals-in-autofixture-likeness</guid>
+				<author>nikos.baxevanis@gmail.com (Nikos Baxevanis)</author>
+				<description>&lt;p&gt;From version 2.9.0 of AutoFixture, the&amp;nbsp;&lt;a href=&quot;http://blog.ploeh.dk/2010/06/29/IntroducingAutoFixtureLikeness.aspx&quot; target=&quot;_blank&quot;&gt;Likeness&lt;/a&gt;&amp;nbsp;class contains a new feature for&amp;nbsp;creating a dynamic proxy that overrides Equals on the destination type.&lt;/p&gt;
+
+
+&lt;p&gt;As an example, we want to compare instances of the following types:&lt;/p&gt;
+
+
+
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;csharp&quot;&gt;&lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;DoubleParameterType&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;T2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;DoubleParameterType&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T1&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;parameter1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;T2&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;parameter2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Parameter1&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;parameter1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Parameter2&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;parameter2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;T1&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Parameter1&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;T2&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Parameter2&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SingleParameterType&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;SingleParameterType&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;parameter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Parameter&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;parameter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;T&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Parameter&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+
+
+&lt;p&gt;We can have the following syntax (prior to version 2.9.0):&lt;/p&gt;
+
+
+
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;csharp&quot;&gt;&lt;span class=&quot;na&quot;&gt;[Fact]&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;TestWithLikeness&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// Fixture setup&lt;/span&gt;
+    &lt;span class=&quot;kt&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;value&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DoubleParameterType&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;double&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;(&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;2.0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;Likeness&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;DoubleParameterType&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;double&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SingleParameterType&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sut&lt;/span&gt; 
+        &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;AsSource&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+               &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;OfLikeness&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;SingleParameterType&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&amp;gt;();&lt;/span&gt;
+            
+    &lt;span class=&quot;c1&quot;&gt;// Exercise system&lt;/span&gt;
+    &lt;span class=&quot;kt&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sut&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Equals&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// Verify outcome&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;Assert&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;True&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+
+
+&lt;p&gt;However, from version 2.9.0 there is also a new CreateProxy method on Likeness which returns a proxy of the destination type overriding Equals with Likeness's instance of IEqualityComparer&amp;nbsp;(the SemanticComparer class):&lt;/p&gt;
+
+
+
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;csharp&quot;&gt;&lt;span class=&quot;na&quot;&gt;[Fact]&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;TestWithLikenessProxy&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// Fixture setup&lt;/span&gt;
+    &lt;span class=&quot;kt&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;value&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DoubleParameterType&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;double&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;(&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;2.0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+            
+    &lt;span class=&quot;n&quot;&gt;SingleParameterType&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sut&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;AsSource&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+               &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;OfLikeness&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;SingleParameterType&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&amp;gt;()&lt;/span&gt;
+               &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;CreateProxy&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+            
+    &lt;span class=&quot;c1&quot;&gt;// Exercise system&lt;/span&gt;
+    &lt;span class=&quot;kt&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sut&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Equals&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// Verify outcome&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;Assert&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;True&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+
+
+&lt;p&gt;Below is also an example, where we need to verify that an expectation was met:&lt;/p&gt;
+
+
+
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;csharp&quot;&gt;&lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Bar&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;string&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Zip&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Foo&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Bar&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Bar&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;DoSomething&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ISomeContext&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ctx&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Bar&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Bar&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Zip&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;12345&amp;quot;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;ctx&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;DoSomething&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Bar&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;interface&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ISomeContext&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;DoSomething&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;na&quot;&gt;[Fact]&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Test&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kt&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;foo&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Foo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;kt&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ctx&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Mock&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ISomeContext&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;();&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;foo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;DoSomething&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ctx&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+
+    &lt;span class=&quot;kt&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bar&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Bar&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;AsSource&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;OfLikeness&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Bar&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;().&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;CreateProxy&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;bar&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Zip&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;12345&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;ctx&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Verify&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;DoSomething&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bar&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+
+
+&lt;p&gt;Although the new Bar instance is created inside the DoSomething method, we can pass a &lt;em&gt;proxied &lt;/em&gt;Bar instance on the mock's Verify method.&lt;/p&gt;
+
+
+&lt;p&gt;Internally, a custom Proxy Generator was written which also&amp;nbsp;supports types with non-parameterless constructors.&amp;nbsp;In order to create proxies of such types, the values from the source have to be compatible with the parameters on the destination constructor.&amp;nbsp;(The mapping between the two is made possible by using the same semantic heuristics, as the default semantic comparison.)&lt;/p&gt;
+
+
+
+</description>
+				<pubDate>Mon, 20 Feb 2012 00:00:00 GTB Standard Time</pubDate>
+			</item>
+		
+			<item>
+				<title>Auto-Mocking with FakeItEasy and AutoFixture</title>
+				<link>http://nikosbaxevanis.com/2011/12/14/auto-mocking-with-fakeiteasy-and-autofixture</link>
+				<guid isPermaLink="true">http://nikosbaxevanis.com/2011/12/14/auto-mocking-with-fakeiteasy-and-autofixture</guid>
+				<author>nikos.baxevanis@gmail.com (Nikos Baxevanis)</author>
+				<description>&lt;p&gt;AutoFixture can become an auto-mocking container using &lt;a title=&quot;The simplest mocking library for .NET 3.5 and Silverlight with deep C# 3.0 integration.&quot; href=&quot;http://code.google.com/p/moq/&quot; target=&quot;_blank&quot;&gt;Moq&lt;/a&gt;&amp;nbsp;(described &lt;a title=&quot;AutoFixture as an auto-mocking container.&quot; href=&quot;http://blog.ploeh.dk/2010/08/19/AutoFixtureAsAnAutomockingContainer.aspx&quot; target=&quot;_blank&quot;&gt;here&lt;/a&gt;) and &lt;a title=&quot;Rhino Mocks is a dynamic mock object framework for the .Net platform. Its purpose is to ease testing by allowing the developer to create mock implementations of custom objects and verify the interactions using unit testing.&quot; href=&quot;http://hibernatingrhinos.com/open-source/rhino-mocks&quot; target=&quot;_blank&quot;&gt;Rhino Mocks&lt;/a&gt; (described &lt;a title=&quot;Rhino Mocks-based auto-mocking with AutoFixture.&quot; href=&quot;http://blog.ploeh.dk/2010/11/13/RhinoMocksbasedAutomockingWithAutoFixture.aspx&quot; target=&quot;_blank&quot;&gt;here&lt;/a&gt;).&lt;/p&gt;
+
+
+&lt;p&gt;In addition to the above auto-mocking features it is now possible to use &lt;a title=&quot;A .Net dynamic fake framework for creating all types of fake objects, mocks, stubs etc. Easier semantics, all fake objects are just that - fakes - the use of the fakes determines whether they're mocks or stubs.&quot; href=&quot;http://code.google.com/p/fakeiteasy/&quot; target=&quot;_blank&quot;&gt;FakeItEasy&lt;/a&gt;.&lt;/p&gt;
+
+
+&lt;p&gt;To install AutoFixture with Auto Mocking using FakeItEasy, run the following command in the Package Manager Console:&lt;/p&gt;
+
+
+
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;csharp&quot;&gt;&lt;span class=&quot;n&quot;&gt;PM&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Install&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Package&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AutoFixture&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;AutoFakeItEasy&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+
+
+&lt;p&gt;To use it, add an AutoFakeItEasyCustomization to the Fixture instance:&lt;/p&gt;
+
+
+
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;csharp&quot;&gt;&lt;span class=&quot;kt&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fixture&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Fixture&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Customize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AutoFakeItEasyCustomization&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;());&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+
+
+&lt;p&gt;Here is a typical usage inside a test method which will automatically create mocked instances using FakeItEasy:&lt;/p&gt;
+
+
+
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;csharp&quot;&gt;&lt;span class=&quot;kt&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fixture&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Fixture&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Customize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AutoFakeItEasyCustomization&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;());&lt;/span&gt;
+&lt;span class=&quot;kt&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fixture&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;CreateAnonymous&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;IInterface&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;();&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+
+
+&lt;p&gt;To &lt;em&gt;explicitly &lt;/em&gt;use FakeItEasy inside a test you need to &lt;a title=&quot;AutoFixture Freeze.&quot; href=&quot;http://blog.ploeh.dk/2010/03/17/AutoFixtureFreeze.aspx&quot; target=&quot;_blank&quot;&gt;Freeze&lt;/a&gt; it first:&lt;/p&gt;
+
+
+
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;csharp&quot;&gt;&lt;span class=&quot;na&quot;&gt;[Fact]&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;FixtureCanFreezeFake&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// Fixture setup&lt;/span&gt;
+    &lt;span class=&quot;kt&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fixture&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Fixture&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Customize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AutoFakeItEasyCustomization&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;());&lt;/span&gt;
+    &lt;span class=&quot;kt&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dummy&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;object&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;kt&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fake&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fixture&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Freeze&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Fake&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;IInterface&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&amp;gt;();&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;fake&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;CallsTo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MakeIt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dummy&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Returns&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// Exercise system&lt;/span&gt;
+    &lt;span class=&quot;kt&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fixture&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;CreateAnonymous&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;IInterface&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;();&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MakeIt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dummy&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// Verify outcome&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;CallTo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MakeIt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dummy&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)).&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MustHaveHappened&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// Teardown&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+
+
+&lt;p&gt;The above example can be made even more elegant by using &lt;a title=&quot;AutoData Theories with AutoFixture.&quot; href=&quot;http://blog.ploeh.dk/2010/10/08/AutoDataTheoriesWithAutoFixture.aspx&quot; target=&quot;_blank&quot;&gt;AutoData&lt;/a&gt; theories:&lt;/p&gt;
+
+
+
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;csharp&quot;&gt;&lt;span class=&quot;na&quot;&gt;[Theory, AutoFakeData]&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;FixtureCanFreezeFake&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Frozen&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Fake&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;IInterface&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fake&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IInterface&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sut&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kt&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dummy&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;object&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;sut&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MakeIt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dummy&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;CallTo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sut&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MakeIt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dummy&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)).&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MustHaveHappened&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+
+
+&lt;p&gt;Below is the code for the AutoFakeDataAttribute class:&lt;/p&gt;
+
+
+
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;csharp&quot;&gt;&lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;AutoFakeDataAttribute&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AutoDataAttribute&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;AutoFakeDataAttribute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;base&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Fixture&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Customize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AutoFakeItEasyCustomization&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()))&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+
+
+&lt;p&gt;An automatically published release created from the latest successful build can also be downloaded from&amp;nbsp;&lt;a title=&quot;AutoFixture - Downloads&quot; href=&quot;http://autofixture.codeplex.com/releases/view/78605&quot; target=&quot;_blank&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+</description>
+				<pubDate>Wed, 14 Dec 2011 00:00:00 GTB Standard Time</pubDate>
+			</item>
+		
+			<item>
+				<title>RegularExpressionAttribute support in AutoFixture</title>
+				<link>http://nikosbaxevanis.com/2011/12/11/regularexpressionattribute-support-in-autofixture</link>
+				<guid isPermaLink="true">http://nikosbaxevanis.com/2011/12/11/regularexpressionattribute-support-in-autofixture</guid>
+				<author>nikos.baxevanis@gmail.com (Nikos Baxevanis)</author>
+				<description>&lt;p&gt;Continuing the support of DataAnnotations as described&amp;nbsp;&lt;a title=&quot;StringLengthAttribute support in AutoFixture&quot; href=&quot;http://www.nikosbaxevanis.com/bonus-bits/2011/09/stringlengthattribute-support-in-autofixture.html&quot; target=&quot;_blank&quot;&gt;here&lt;/a&gt;&amp;nbsp;and &lt;a title=&quot;RangeAttribute support in AutoFixture&quot; href=&quot;http://www.nikosbaxevanis.com/bonus-bits/2011/09/rangeattribute-support-in-autofixture.html&quot; target=&quot;_blank&quot;&gt;here&lt;/a&gt;, there is now added support for the&amp;nbsp;&lt;a title=&quot;Specifies that a data field value must match the specified regular expression.&quot; href=&quot;http://msdn.microsoft.com/en-us/library/system.componentmodel.dataannotations.regularexpressionattribute.aspx&quot; target=&quot;_blank&quot;&gt;RegularExpressionAttribute&lt;/a&gt;&amp;nbsp;class.&lt;/p&gt;
+
+
+&lt;p&gt;Starting with version 2.6.0, when this attribute is applied on a data field AutoFixture will &lt;em&gt;try &lt;/em&gt;to&amp;nbsp;generate a value that&amp;nbsp;matches the specified regular expression.&lt;/p&gt;
+
+
+&lt;p&gt;Let's take as an example the following type:&lt;/p&gt;
+
+
+
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;csharp&quot;&gt;&lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;RegularExpressionValidatedType&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// Allow up to 40 uppercase and lowercase.&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;    [RegularExpression(&amp;quot;^[a-zA-Z&amp;#39;&amp;#39;-&amp;#39;\s]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;40&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;)]&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;string&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Name&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;    &lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;    [RegularExpression(&amp;quot;^http\://[a-zA-Z0-9\-\.]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;zA&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Z&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]{&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}(/&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;S&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;*)?&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;)]&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;string&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Url&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+
+
+&lt;p&gt;Prior to version 2.6.0 if&amp;nbsp;we request an anonymous instance from AutoFixture, by&amp;nbsp;&lt;em&gt;default&lt;/em&gt;&amp;nbsp;we would get back an instance of the above type with it's properties containing values similar to those below.&lt;/p&gt;
+
+
+&lt;p&gt;&lt;img src=&quot;http://farm9.staticflickr.com/8510/8398554280_b996887d56_o.png&quot; title=&quot;Prior verion 2.6.0&quot; alt=&quot;Prior verion 2.6.0&quot; /&gt;&lt;/p&gt;
+
+
+
+
+&lt;p&gt;However, from version 2.6.0 AutoFixture can handle requests with&amp;nbsp;regular expressions, through the RegularExpressionAttribute class, by issuing a new request for the specified regular expression pattern.&lt;/p&gt;
+
+
+&lt;p&gt;&lt;img src=&quot;http://farm9.staticflickr.com/8501/8398554186_edc6990289_o.png&quot; title=&quot;After verion 2.6.0&quot; alt=&quot;After verion 2.6.0&quot; /&gt;&lt;/p&gt;
+
+
+
+
+&lt;p&gt;The idea behind this new feature is that members of a &lt;a title=&quot;In computing, a regular expression provides a concise and flexible means for &amp;quot;matching&amp;quot; (specifying and recognizing) strings of text, such as particular characters, words, or patterns of characters.&quot; href=&quot;http://en.wikipedia.org/wiki/Regular_expression&quot; target=&quot;_blank&quot;&gt;Regular Expression&lt;/a&gt;&amp;nbsp;(Regex) can be generated by first transforming the Regex into a &lt;a title=&quot;A finite-state machine (FSM) or finite-state automaton (plural: automata), or simply a state machine, is a mathematical model used to design computer programs and digital logic circuits.&quot; href=&quot;http://en.wikipedia.org/wiki/Finite_state_machine&quot; target=&quot;_blank&quot;&gt;Finite-state machine&lt;/a&gt;, particularly a&amp;nbsp;&lt;a title=&quot;In the theory of computation and automata theory, a deterministic finite automaton (DFA)—also known as deterministic finite state machine—is a finite state machine accepting finite strings of symbols.&quot; href=&quot;http://en.wikipedia.org/wiki/Deterministic_finite_automata&quot; target=&quot;_blank&quot;&gt;Deterministic finite automaton&lt;/a&gt;.&amp;nbsp;&lt;/p&gt;
+
+
+&lt;p&gt;You may also watch a short,&amp;nbsp;introductory,&amp;nbsp;video on the subject &lt;a title=&quot;Symbolic Regular Expression Exploration&quot; href=&quot;http://channel9.msdn.com/posts/Peli/Margus-Veanes-Rex-Symbolic-Regular-Expression-Exploration/&quot; target=&quot;_blank&quot;&gt;here&lt;/a&gt;. (Although it is for &lt;a title=&quot;Rex is a tool that explores .NET regexes and generates members efficiently.&quot; href=&quot;http://research.microsoft.com/en-us/projects/rex/&quot; target=&quot;_blank&quot;&gt;Rex&lt;/a&gt;, I find it very descriptive.)&lt;/p&gt;
+
+
+&lt;p&gt;The current implementation uses internally the algorithms provided by the&amp;nbsp;&lt;a title=&quot;A DFA/NFA (finite-state automata) implementation with Unicode alphabet (UTF16) and support for the standard regular expression operations (concatenation, union, Kleene star) and a number of non-standard ones (intersection, complement, etc.)&quot; href=&quot;http://www.brics.dk/automaton/&quot; target=&quot;_blank&quot;&gt;dk.brics.automaton&lt;/a&gt;&amp;nbsp;and &lt;a title=&quot;A library for generating random text from regular expressions.&quot; href=&quot;http://code.google.com/p/xeger/&quot; target=&quot;_blank&quot;&gt;Xeger&lt;/a&gt;&amp;nbsp;packages.&lt;/p&gt;
+
+
+&lt;p&gt;An automatically published release created from the latest successful build can be downloaded from&amp;nbsp;&lt;a title=&quot;AutoFixture - Downloads&quot; href=&quot;http://autofixture.codeplex.com/releases/view/78338&quot; target=&quot;_blank&quot;&gt;here&lt;/a&gt;.&amp;nbsp;The latest version is also live on&amp;nbsp;&lt;a title=&quot;AutoFixture - Package&quot; href=&quot;http://nuget.org/List/Packages/AutoFixture&quot; target=&quot;_blank&quot;&gt;NuGet&lt;/a&gt;.&lt;/p&gt;
+
+
+
+</description>
+				<pubDate>Sun, 11 Dec 2011 00:00:00 GTB Standard Time</pubDate>
+			</item>
+		
+			<item>
+				<title>StringLengthAttribute support in AutoFixture</title>
+				<link>http://nikosbaxevanis.com/2011/09/18/stringlengthattribute-support-in-autofixture</link>
+				<guid isPermaLink="true">http://nikosbaxevanis.com/2011/09/18/stringlengthattribute-support-in-autofixture</guid>
+				<author>nikos.baxevanis@gmail.com (Nikos Baxevanis)</author>
+				<description>&lt;p&gt;Continuing the support of DataAnnotations as described &lt;a href=&quot;http://www.nikosbaxevanis.com/bonus-bits/2011/09/rangeattribute-support-in-autofixture.html&quot; target=&quot;_blank&quot; title=&quot;RangeAttribute support in AutoFixture&quot;&gt;here&lt;/a&gt;, there is now added support for the&amp;#0160;&lt;a href=&quot;http://msdn.microsoft.com/en-us/library/system.componentmodel.dataannotations.stringlengthattribute(v=VS.90).aspx&quot; target=&quot;_blank&quot; title=&quot;Specifies the maximum length of characters that are allowed in a data field.&quot;&gt;StringLengthAttribute&lt;/a&gt; class. Starting with version 2.4.0, when this attribute is applied on a data field it can specify the maximum length of characters that are allowed.&lt;/p&gt;
+
+
+&lt;p&gt;Let&amp;#39;s take as an example the following type:&lt;/p&gt;
+
+
+
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;csharp&quot;&gt;&lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;StringLengthValidatedType&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;    [StringLength(3)]&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;string&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Property&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+
+
+&lt;p&gt;Prior to version 2.4.0 if&amp;#0160;we request an anonymous instance from AutoFixture, by &lt;em&gt;default&lt;/em&gt; we would get back an instance of the above type with it&amp;#39;s Property containing a value similar to the one below.&lt;/p&gt;
+
+
+&lt;p&gt;&lt;img src=&quot;http://farm9.staticflickr.com/8476/8398548352_20a167088e_o.png&quot; title=&quot;Prior verion 2.4.0&quot; alt=&quot;Prior verion 2.4.0&quot; /&gt;&lt;/p&gt;
+
+
+
+
+&lt;p&gt;However, after version 2.4.0 AutoFixture can handle requests with&amp;#0160;string length constraints through the StringLengthAttribute&amp;#0160;class&amp;#0160;by issuing a new request for a constrained string.&lt;/p&gt;
+
+
+&lt;p&gt;&lt;img src=&quot;http://farm9.staticflickr.com/8084/8398548324_cfb75590cd_o.png&quot; title=&quot;After verion 2.4.0&quot; alt=&quot;After verion 2.4.0&quot; /&gt;&lt;/p&gt;
+
+
+
+
+&lt;p&gt;An automatically published release created from the latest successful build can be downloaded from&amp;#0160;&lt;a href=&quot;http://autofixture.codeplex.com/releases/view/73545&quot; target=&quot;_blank&quot; title=&quot;AutoFixture - Downloads&quot;&gt;here&lt;/a&gt;.&amp;#0160;The latest version is also live on&amp;#0160;&lt;a href=&quot;http://nuget.org/List/Packages/AutoFixture&quot; target=&quot;_blank&quot; title=&quot;AutoFixture - Package&quot;&gt;NuGet&lt;/a&gt;.&lt;/p&gt;
+
+</description>
+				<pubDate>Sun, 18 Sep 2011 00:00:00 GTB Daylight Time</pubDate>
+			</item>
+		
+			<item>
+				<title>RangeAttribute support in AutoFixture</title>
+				<link>http://nikosbaxevanis.com/2011/09/13/rangeattribute-support-in-autofixture</link>
+				<guid isPermaLink="true">http://nikosbaxevanis.com/2011/09/13/rangeattribute-support-in-autofixture</guid>
+				<author>nikos.baxevanis@gmail.com (Nikos Baxevanis)</author>
+				<description>&lt;p&gt;Support for types from the System.ComponentModel.&lt;a href=&quot;http://msdn.microsoft.com/en-us/library/system.componentmodel.dataannotations(v=VS.90).aspx&quot; target=&quot;_blank&quot; title=&quot;The System.ComponentModel.DataAnnotations namespace provides attribute classes that are used to define metadata for ASP.NET Dynamic Data controls.&quot;&gt;DataAnnotations&lt;/a&gt; namespace is one of the most voted features for AutoFixture. Starting with version 2.3.1 AutoFixture supports the &lt;a href=&quot;http://msdn.microsoft.com/en-us/library/system.componentmodel.dataannotations.rangeattribute(v=VS.90).aspx&quot; target=&quot;_blank&quot; title=&quot;Specifies the numeric range constraints for the value of a data field.&quot;&gt;RangeAttribute&lt;/a&gt; class.&amp;#0160;When this attribute is applied on a data field it can specify the numeric range constraints for it&amp;#39;s value.&lt;/p&gt;
+
+
+&lt;p&gt;Let&amp;#39;s take as an example the following type:&lt;/p&gt;
+
+
+
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;csharp&quot;&gt;&lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;RangeValidatedType&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;    [Range(10, 20)]&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Property&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+
+
+&lt;p&gt;Prior to version 2.3.1 if&amp;#0160;we request an anonymous instance from AutoFixture (or better,&amp;#0160;a specimen from AutoFixture&amp;#39;s kernel) we would get back an instance of the above type with it&amp;#39;s Property containing a value probably out of the specified numeric range.&lt;/p&gt;
+
+
+&lt;p&gt;&lt;img src=&quot;http://farm9.staticflickr.com/8352/8398554262_e0f7efe6ef_o.png&quot; title=&quot;Prior verion 2.3.1&quot; alt=&quot;Prior verion 2.3.1&quot; /&gt;&lt;/p&gt;
+
+
+
+
+&lt;p&gt;However, after version 2.3.1 AutoFixture can handle requests with&amp;#0160;numeric range constraints through the RangeAttribute class&amp;#0160;by issuing a new request for a value inside the specified range.&lt;/p&gt;
+
+
+&lt;p&gt;&lt;img src=&quot;http://farm9.staticflickr.com/8045/8397465809_4ba5a4b147_o.png&quot; title=&quot;After verion 2.3.1&quot; alt=&quot;After verion 2.3.1&quot; /&gt;&lt;/p&gt;
+
+
+
+
+&lt;p&gt;An automatically published release created from the latest successful build can be downloaded from &lt;a href=&quot;http://autofixture.codeplex.com/releases/view/73230&quot; target=&quot;_blank&quot; title=&quot;AutoFixture - Downloads&quot;&gt;here&lt;/a&gt;.&amp;#0160;The latest version is also live on&amp;#0160;&lt;a href=&quot;http://nuget.org/List/Packages/AutoFixture&quot; target=&quot;_blank&quot; title=&quot;AutoFixture - Package&quot;&gt;NuGet&lt;/a&gt;.&lt;/p&gt;
+
+
+
+</description>
+				<pubDate>Tue, 13 Sep 2011 00:00:00 GTB Daylight Time</pubDate>
+			</item>
+		
+			<item>
+				<title>Heuristics for Static Factory Methods in AutoFixture</title>
+				<link>http://nikosbaxevanis.com/2011/08/25/heuristics-for-static-factory-methods-in-autofixture</link>
+				<guid isPermaLink="true">http://nikosbaxevanis.com/2011/08/25/heuristics-for-static-factory-methods-in-autofixture</guid>
+				<author>nikos.baxevanis@gmail.com (Nikos Baxevanis)</author>
+				<description>&lt;p&gt;Here is a type with a private constructor:&lt;/p&gt;
+
+
+
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;csharp&quot;&gt;&lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;TypeWithFactoryMethod&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;TypeWithFactoryMethod&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; 
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TypeWithFactoryMethod&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;TypeWithFactoryMethod&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TypeWithFactoryMethod&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;argument&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;TypeWithFactoryMethod&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+
+
+&lt;p&gt;In order to create an instance of that type we have to call one of it&amp;#39;s static factory methods, for example:&lt;/p&gt;
+
+
+
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;csharp&quot;&gt;&lt;span class=&quot;kt&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;instance&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TypeWithFactoryMethod&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+
+
+&lt;p&gt;If we try to create an &lt;a href=&quot;http://blogs.msdn.com/b/ploeh/archive/2008/11/17/anonymous-variables.aspx&quot; target=&quot;_blank&quot; title=&quot;Anonymous Variables&quot;&gt;Anonymous Variable&lt;/a&gt; with &lt;a href=&quot;http://autofixture.codeplex.com&quot; target=&quot;_blank&quot; title=&quot;AutoFixture makes it easier for developers to do Test-Driven Development by automating non-relevant Test Fixture Setup, allowing the Test Developer to focus on the essentials of each test case.&quot;&gt;AutoFixture&lt;/a&gt; right now (version 2.1) it will throw an exception since there are no public constructors:&lt;/p&gt;
+
+
+
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;csharp&quot;&gt;&lt;span class=&quot;kt&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fixture&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Fixture&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;kt&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fixture&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;CreateAnonymous&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;TypeWithFactoryMethod&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;();&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+
+
+&lt;p&gt;Using the latest version from&amp;#0160;&lt;a href=&quot;http://autofixture.codeplex.com/SourceControl/list/changesets&quot; target=&quot;_blank&quot; title=&quot;AutoFixture (changesets)&quot;&gt;trunk&lt;/a&gt;&amp;#0160;(and on the next public release) the above code will work.&amp;#0160;It will successfully return an instance of the type by using&amp;#0160;a set of heuristics that enable AutoFixture to search for static factory methods.&lt;/p&gt;
+
+
+&lt;p&gt;The latest build (including strong names) can be downloaded from &lt;a href=&quot;http://teamcity.codebetter.com/project.html?projectId=project129&amp;amp;tab=projectOverview. &quot; target=&quot;_blank&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+
+
+</description>
+				<pubDate>Thu, 25 Aug 2011 00:00:00 GTB Daylight Time</pubDate>
+			</item>
+		
+			<item>
+				<title>Combining Data Theories in AutoFixture.Xunit extension</title>
+				<link>http://nikosbaxevanis.com/2011/08/25/combining-data-theories-in-autofixture-xunit-extension</link>
+				<guid isPermaLink="true">http://nikosbaxevanis.com/2011/08/25/combining-data-theories-in-autofixture-xunit-extension</guid>
+				<author>nikos.baxevanis@gmail.com (Nikos Baxevanis)</author>
+				<description>&lt;p&gt;&lt;a href=&quot;http://xunit.codeplex.com/&quot; target=&quot;_blank&quot; title=&quot;xUnit.net is a unit testing tool for the .NET Framework. Written by the original inventor of NUnit.&quot;&gt;xUnit.net&lt;/a&gt; supports parameterized tests via data theories which are types deriving from the Xunit.Extensions.DataAttribute type.&amp;#0160;Some popular attributes include:&lt;/p&gt;
+
+
+&lt;p&gt;InlineDataAttribute,&amp;#0160;PropertyDataAttribute and ClassDataAttribute.&lt;/p&gt;
+
+
+&lt;p&gt;AutoFixture.Xunit extension includes a very useful type, for providing auto-data theories, called&amp;#0160;&lt;a href=&quot;http://blog.ploeh.dk/2010/10/08/AutoDataTheoriesWithAutoFixture.aspx&quot; target=&quot;_blank&quot; title=&quot;AutoData Theories with AutoFixture&quot;&gt;AutoMoqDataAttribute&lt;/a&gt;.&amp;#0160;&lt;/p&gt;
+
+
+&lt;p&gt;Imagine a Scenario where we have a unit test method with 3 parameters.&amp;#0160;We want the first parameters to be supplied by InlineData and the rest by AutoFixture using AutoMoqData.&lt;/p&gt;
+
+
+
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;csharp&quot;&gt;&lt;span class=&quot;na&quot;&gt;[Theory]&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;[InlineAutoData(&amp;quot;foo&amp;quot;)]&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;[InlineAutoData(&amp;quot;foo&amp;quot;, &amp;quot;bar&amp;quot;)]&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Test&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;string&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;s1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;string&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;s2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MyClass&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;myClass&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+
+
+&lt;p&gt;This is now possible using the &lt;strong&gt;InlineAutoDataAttribute&lt;/strong&gt; type which is now on the trunk and will be available on next public release (after version 2.1).&amp;#0160;It provides a data source for a data theory, with the data coming from inline values combined with auto-generated data specimens generated by AutoFixture.&lt;/p&gt;
+
+
+&lt;p&gt;InlineAutoDataAttribute derives from &lt;strong&gt;CompositeDataAttribute&lt;/strong&gt;,&amp;#0160;an implementation of DataAttribute that composes other DataAttribute instances.&lt;/p&gt;
+
+
+&lt;p&gt;Here is how it works:&lt;/p&gt;
+
+
+&lt;ul&gt;
+&lt;li&gt;Delegate the GetData method call to the&amp;#0160;&lt;em&gt;first&lt;/em&gt;&amp;#0160;attribute.&lt;/li&gt;
+&lt;li&gt;Loop through the results from the first attribute and check if the length of each object array matches the number of arguments required by the method.     
+&lt;ul&gt;
+&lt;li&gt;If so, yield the object array.&lt;/li&gt;
+&lt;li&gt;If not, invoke GetData on the&amp;#0160;&lt;em&gt;next&lt;/em&gt;&amp;#0160;attribute.     
+&lt;ul&gt;
+&lt;li&gt;Throw away the first objects from the result in order to continue from where it ran out of objects from the first result set and concatenate the rest to the previous array.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;ul&gt;
+&lt;li&gt;Recursively repeat this process until all object arrays have the required length.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;blockquote&gt;
+&lt;p&gt;While this feature comes with AutoFixture.Xunit extension, the CompositeDataAttribute class depends only on the xunit.extensions assembly.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+
+&lt;p&gt;You may compile the code from the latest&amp;#0160;&lt;a href=&quot;http://autofixture.codeplex.com/SourceControl/list/changesets&quot; target=&quot;_blank&quot; title=&quot;AutoFixture (changesets)&quot;&gt;trunk&lt;/a&gt;&amp;#0160;version, alternatively&amp;#0160;the latest build (including strong names) can be downloaded from&amp;#0160;&lt;a href=&quot;http://teamcity.codebetter.com/project.html?projectId=project129&amp;amp;tab=projectOverview. &quot; target=&quot;_blank&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+
+
+</description>
+				<pubDate>Thu, 25 Aug 2011 00:00:00 GTB Daylight Time</pubDate>
+			</item>
+		
+			<item>
+				<title>Persistence specification testing combined with AutoFixture</title>
+				<link>http://nikosbaxevanis.com/2011/03/13/persistence-specification-testing-combined-with-autofixture</link>
+				<guid isPermaLink="true">http://nikosbaxevanis.com/2011/03/13/persistence-specification-testing-combined-with-autofixture</guid>
+				<author>nikos.baxevanis@gmail.com (Nikos Baxevanis)</author>
+				<description>&lt;p&gt;When working with NHibernate you need to make sure that your mappings are correct. At least, you have to make sure that when you&amp;nbsp;save an item you can also qet that item back.&lt;/p&gt;
+
+
+&lt;p&gt;If you are using FluentNHibernate you can use the &lt;a href=&quot;https://github.com/jagregory/fluent-nhibernate/tree/master/src/FluentNHibernate/Testing&quot; target=&quot;_blank&quot;&gt;PersistenceSpecification&amp;lt;T&amp;gt; class&lt;/a&gt;. However, the&amp;nbsp;PersistenceSpecification&amp;lt;T&amp;gt; class requires that you pass the property to check and also a value for that property.&lt;/p&gt;
+
+
+&lt;p&gt;By using &lt;a title=&quot;AutoFixture makes it easier for developers to do Test-Driven Development by automating non-relevant Test Fixture Setup, allowing the Test Developer to focus on the essentials of each test case.&quot; href=&quot;http://autofixture.codeplex.com/&quot; target=&quot;_blank&quot;&gt;AutoFixture&lt;/a&gt; you can easily create objects that you can pass inside the CheckXx methods:&lt;/p&gt;
+
+
+
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;csharp&quot;&gt;&lt;span class=&quot;na&quot;&gt;[Fact]&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;ShouldVerifyTheMappings&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kt&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fixture&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Fixture&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;session&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;PersistenceSpecification&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;EventType&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;session&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;CheckProperty&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;EventTypeId&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; 
+                &lt;span class=&quot;n&quot;&gt;fixture&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;CreateAnonymous&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;long&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;())&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;CheckProperty&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;EventTypeName&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; 
+                &lt;span class=&quot;n&quot;&gt;fixture&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;CreateAnonymous&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;())&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;CheckProperty&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ExchangeServerId&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; 
+                &lt;span class=&quot;n&quot;&gt;fixture&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;CreateAnonymous&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;())&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;CheckProperty&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;LastUpdatedOn&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; 
+                &lt;span class=&quot;n&quot;&gt;DateTime&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Today&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;CheckProperty&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;NextMarketId&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; 
+                &lt;span class=&quot;n&quot;&gt;fixture&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;CreateAnonymous&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;long&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;())&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;CheckReference&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Bookmaker&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; 
+                &lt;span class=&quot;n&quot;&gt;fixture&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;CreateAnonymous&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Bookmaker&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;())&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;VerifyTheMappings&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+
+
+&lt;p&gt;Combining&amp;nbsp;AutoFixture with the PersistenceSpecification&amp;lt;T&amp;gt; class results in&amp;nbsp;writing less code when testing NHibernate mappings, specially when dealing with complex types.&lt;/p&gt;
+
+
+
+</description>
+				<pubDate>Sun, 13 Mar 2011 00:00:00 GTB Standard Time</pubDate>
+			</item>
+		
+	</channel>
+</rss>

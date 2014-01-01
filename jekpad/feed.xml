@@ -1,0 +1,22 @@
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>moodmosaic - evolutionary flux, rudimentary switches</title>
+  <subtitle>Published works of Nikos Baxevanis</subtitle>
+  <author>
+    <name>Nikos Baxevanis</name>
+  </author>
+  <link rel="alternate" type="text/html" href="http://nikosbaxevanis.com/blog/"/>
+  <link rel="self" href="http://nikosbaxevanis.com/feed.xml"/>
+  <id>http://nikosbaxevanis.com/</id>
+  <entry>
+    <title>The feed has moved</title>
+    <link rel="alternate" href="http://nikosbaxevanis.com/feed/"/>
+    <id>http://nikosbaxevanis.com/feed.xml/</id>
+    <updated>2014-01-01T00:00:00+02:00</updated>
+    <author>
+      <name>Nikos Baxevanis</name>
+    </author>
+    <content type="html">
+      <div><p>The feed has moved.</p><p>The new location is <a href="http://nikosbaxevanis.com/feed">http://nikosbaxevanis.com/feed</a>.</p><p><em>Thank you very much and sorry for any inconvenience this update may cause.</em></p></div>
+    </content>
+  </entry>
+</feed>

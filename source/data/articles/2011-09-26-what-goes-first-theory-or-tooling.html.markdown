@@ -1,0 +1,16 @@
+---
+layout: post
+title: What goes first? (Theory or Tooling)
+published: 1
+categories: [Software Eng]
+comments: [disqus]
+slug: "Tools are implementations of patterns and principles in a specific language. Thus a developer should give priority on the theory behind them rather on the API of a specific tool."
+alias: /bonus-bits/2011/09/what-goes-first-theory-or-tooling.html
+---
+<blockquote>
+<p>A very good friend of mine went to an interview where the interviewer kept asking about the X, Y or Z tool without paying attention to knowledge on the theory behind those tools.</p>
+</blockquote>
+<p>In my opinion it is always better to have a discussion, rather than a cliché&#0160;interview.&#0160;During the discussion it would be good to let the developer talk and express opinions on theory, design patterns and principles rather than make questions on specific tools and frameworks. The reason I strongly support that is because languages and tools tend to continuously&#0160;evolve (and sometimes change directions) while the patterns and principles hardly change.</p>
+<p>Tools are implementations of patterns and principles in a specific language. Thus a developer should give priority on the theory behind them rather on the API of a specific tool.</p>
+<p>Let&#39;s take as an example a Dependency Injection (DI) container. It gives no real value when a developer knows <em>only</em> how to use Spring, Windsor or Unity if lacks fundamental knowledge of DI theory. On the other hand one, that knows how to apply proper&#0160;<a href="http://butunclebob.com/ArticleS.UncleBob.PrinciplesOfOod" target="_blank" title="The Principles of OOD">OOD</a>&#0160;design and follows SOLID&#0160;principles, will use a DI container to compose object graphs in the <a href="http://blog.ploeh.dk/2011/07/28/CompositionRoot.aspx" target="_blank" title="Composition Root">Composition Root</a> and it&#39;s API to effectively apply lifetime management on them.</p>
+<p>The same applies when making questions on a specific ORM solution.</p>

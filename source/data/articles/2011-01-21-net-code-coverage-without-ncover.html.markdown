@@ -1,0 +1,43 @@
+---
+layout: post
+title: Code Coverage without NCover
+published: 1
+categories: [Visual Studio, Unit Testing]
+comments: [disqus]
+slug: "A quick look at the unit test code coverage in DynamicViewModel using Visual Studio's Code Coverage feature."
+alias: /bonus-bits/2011/01/net-code-coverage-without-ncover.html
+---
+<p>Let&#39;s analyze code coverage in the&#0160;<a href="http://dynamicviewmodel.codeplex.com/" target="_blank" title="This project aims to provide a way to implement the Model View ViewModel (MVVM) architectural pattern using Plain Old CLR Objects (POCOs) while taking full advantage of .NET 4.0 DynamicObject Class.">DynamicViewModel</a>&#0160;project.</p>
+<p>I currently work with Visual Studio 2010 Premium. This product comes with Code Coverage so I thought I should give it a try with, the&#0160;unit testing tool I use,&#0160;<a href="http://xunit.codeplex.com/" target="_blank" title="xUnit.net is a unit testing tool for the .NET Framework.">xUnit.net</a>.</p>
+<p>First of all, if you do a lot of unit testing, I suggest using the&#0160;<a href="http://www.google.gr/url?sa=t&amp;source=web&amp;cd=2&amp;ved=0CBoQFjAB&amp;url=http%3A%2F%2Fwww.testdriven.net%2F&amp;ei=I3A5TeO8Dczssgbw2bzzBg&amp;usg=AFQjCNFFiRlQapOFMcbUcbKyl37SNWRygw&amp;sig2=B37qeEgk0LSAevdmGq5z_A" target="_blank" title="http://www.testdriven.net/">TestDriven.Net</a>&#0160;add-in for Visual Studio because it is fully integrated with xUnit.net (and many other unit testing tools).</p>
+<p>Right-Click on the project under test, select Test With &gt; Coverage:</p>
+
+<p><img src="http://farm9.staticflickr.com/8500/8398555174_7a12f17243_o.png" alt="" /></p>
+
+<p>The Code Coverage Results tab shows the % of Not Covered/Covered Blocks:</p>
+
+<p><img src="http://farm9.staticflickr.com/8353/8398555110_237199b896_o.png" alt="" /></p>
+
+<p>Using the object explorer we navigate to the methods that are not fully covered:</p>
+
+<p><img src="http://farm9.staticflickr.com/8376/8398555104_1ff09f326f_o.png" alt="" /></p>
+
+<p>Right-Click on any method &gt; Go to source code. This will navigates us to the target method:</p>
+
+<p><img src="http://farm9.staticflickr.com/8497/8397466461_7af064d53c_o.png" alt="" /></p>
+
+<p>In the target method we can now see the portion of the code that is not covered.&#0160;</p>
+<p>Here we can see that there are no unit tests covering the case for invalid property names when binding in the view model:</p>
+
+<p><img src="http://farm9.staticflickr.com/8330/8397466403_e126a224be_o.png" alt="Code not covered by tests"/></p>
+
+<p>Let&#39;s add a unit test for that:</p>
+
+<p><img src="http://farm9.staticflickr.com/8188/8397466387_3fd667c4b5_o.png" alt=""/></p>
+
+<p>Again, Right-Click on the project under test, select Test With &gt; Coverage:</p>
+
+<p><img src="http://farm9.staticflickr.com/8356/8397466379_3ddd680253_o.png" alt="Code is covered by tests"/></p>
+
+<p>That&#39;s it!&#0160;Visual Studio 2010 Cove Coverage feature (on Premium and Ultimate products) plays nicely with TestDriven.Net and xUnit.net!</p>
+

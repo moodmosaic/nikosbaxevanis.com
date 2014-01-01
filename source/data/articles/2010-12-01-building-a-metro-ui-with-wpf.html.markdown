@@ -1,0 +1,345 @@
+---
+layout: post
+title: Building a Metro UI with WPF
+published: 1
+categories: [WPF]
+comments: [disqus]
+slug: "How to build a Metro UI with WPF by calling unmanaged functions in the Desktop Window Manager API."
+alias: /bonus-bits/2010/12/building-a-metro-ui-with-wpf.html
+---
+<p><img src="http://farm9.staticflickr.com/8075/8397466987_1b6913aa26_o.png" alt="A very metro-ish image" /></p>
+
+<p>Have you ever used the <a href="http://www.zune.net/" target="_blank" title="The Zune software organizes the media in its library and allows users to add to the library by ripping from CDs, syncing with a Zune device, and downloading from the Zune Marketplace. The Zune software also allows one to organize song metadata. It can automatically download album art and metadata tag data for content in the library.">Zune</a> software? I guess so, but I haven&#39;t until version&#0160;4.7.1404.0 came out. This version comes with significant changes:&#0160;Windows Phone 7 support and integration with Windows Live Essentials 2011 among other.</p>
+<p>When I first run the software I got amazed by the user interface (UI). I told to myself, &quot;this must not be WPF, no way!&quot;. The text was so clear and the UI was so responsive. I also looked in <a href="http://en.wikipedia.org/wiki/Zune#Zune_software" target="_blank" title="Zune software History">Wikipedia</a> and read that the first versions of Zune software were released back in 2006. At this time WPF was about to be released with .NET 3.0 (release date was Nov 2006).</p>
+
+<p><img src="http://farm9.staticflickr.com/8091/8398555764_9d52a62608_o.png" alt="Zune" /></p>
+
+<p>Since the UI is not built with WPF then what kind of technology did the Zune team used? Could it be MFC or some other unmanaged UI? To find out, I&#0160;launched the <a href="http://technet.microsoft.com/en-us/sysinternals/bb896653.aspx" target="_blank" title="Process Explorer, also known as procexp.exe, shows you information about which handles and DLLs processes have opened or loaded.">Process Explorer</a>&#0160;utility and looked for the Zune executable. By default, .NET Processes are highlighted with yellow as shown in the image below.</p>
+
+<p><img src="http://farm9.staticflickr.com/8368/8397467077_6cca0076df_o.png" alt="Zune process in Process Explorer" /></p>
+
+<p>Great, so Zune software is a managed application, or better, if it&#39;s an unmanaged application at least it hosts the CLR in it&#39;s process. (Any Windows application can host the CLR). A quick look in the installation directory yield the following output:</p>
+
+<p><img src="http://farm9.staticflickr.com/8508/8398555562_ee8f743d37_o.png" alt="Zune assemblies" /></p>
+
+Followed by a quick view with Reflector:
+
+<p><img src="http://farm9.staticflickr.com/8331/8398555552_8b74a6d427_o.png" alt="Zune UIX assembly in Reflector" /></p>
+
+<p>As you can see, the root namespace is <em>Microsoft.Iris</em>. A quick search returned this blog&#0160;<a href="http://www.istartedsomething.com/20071116/microsoft-iris-uix-framework-zune/" target="_blank" title="Mysterious Microsoft Iris UI Framework “UIX” behind the new Zune software eye-candy.">post</a>&#0160;and&#0160;this <a href="http://www.withinwindows.com/2010/03/17/what-the-heck-is-microsoft-iris-here-are-my-notes-thus-far/" target="_blank" title="What is Microsoft Iris? Here are my notes thus far.">one</a>. It looks like some kind of WPF&#0160;ancestor combined with <a href="http://msdn.microsoft.com/en-us/library/bb189388.aspx" target="_blank" title="Media Center Markup Language Reference">MCML</a>.&#0160;</p>
+<p>Is it possible to build a similar UI with WPF?</p>
+<p>The first difficulties came when setting the <a href="http://msdn.microsoft.com/en-us/library/system.windows.windowstyle.aspx" target="_blank" title="WindowStyle Enumeration">WindowStyle</a>&#0160;enumeration to None. We need that because with this style only the client area is visible - the title bar and border are not shown.</p>
+
+<p><img src="http://farm9.staticflickr.com/8051/8397466915_dc8ae4c3ce_o.png" alt="First attempt to create a Zune style window" /></p>
+
+The image above is not what we want. We need to hide the window boundaries. This can be done by setting the <a href="http://msdn.microsoft.com/en-us/library/system.windows.resizemode.aspx" target="_blank" title="Specifies whether a window can be resized and, if so, how it can be resized.">ResizeMode</a> enumeration to NoResize. But now, we can&#39;t move the window, we can&#39;t resize it and the mouse events are not raised! Here is a very nice blog <a href="http://blogs.msdn.com/b/dwayneneed/archive/2008/09/08/transparent-windows-in-wpf.aspx" target="_blank" title="Transparent Windows in WPF">post</a> discussing in very detail (among other) the reason for that.
+
+**How can we move the window?**
+
+<p>By adding a Shape (ex. a <a href="http://msdn.microsoft.com/en-us/library/system.windows.shapes.rectangle.aspx" target="_blank" title="Draws a rectangle.">Rectangle</a>) and registering on it&#39;s&#0160;PreviewMouseDown event:</p>
+
+```c#
+// Is this a double-click?
+if (DateTime.Now.Subtract(this.headerLastClicked) <= doubleClick)
+{
+    // Execute the code inside the event handler for the
+    // restore button click passing null for the sender
+    // and null for the event args.
+    HandleRestoreClick(null, null);
+}
+ 
+this.headerLastClicked = DateTime.Now;
+ 
+if (Mouse.LeftButton == MouseButtonState.Pressed)
+{
+    DragMove();
+}
+```
+
+**How can we resize the window?**
+
+<p>By adding Shapes (ex.&#0160;<a href="http://msdn.microsoft.com/en-us/library/system.windows.shapes.rectangle.aspx" target="_blank" title="Draws a rectangle.">Rectangles</a>) one on each side of the window (left, top, right, bottom) and registering on it&#39;s&#0160;PreviewMouseDown event:</p>
+
+```c#
+Rectangle clickedRectangle = (Rectangle)sender;
+ 
+switch (clickedRectangle.Name)
+{
+    case "top":
+        Cursor = Cursors.SizeNS;
+        ResizeWindow(ResizeDirection.Top);
+        break;
+    case "bottom":
+        Cursor = Cursors.SizeNS;
+        ResizeWindow(ResizeDirection.Bottom);
+        break;
+    // ...
+}
+```
+
+<p>Here is the code for resizing the window. It uses the underlying <a href="http://en.wikipedia.org/wiki/Windows_User" target="_blank" title="Windows USER is a component of the Microsoft Windows operating system that provides core functionality for building simple user interfaces. The component has existed in all versions of Windows, and includes functionality for window management, message passing, input processing and standard controls.">Windows USER</a> component.</p>
+
+```c#
+/// <summary>
+/// Resizes the window.
+/// </summary>
+/// <param name="direction">The direction.</param>
+private void ResizeWindow(ResizeDirection direction)
+{
+    NativeMethods.SendMessage(this.hwndSource.Handle, WM_SYSCOMMAND,
+        (IntPtr)(61440 + direction), IntPtr.Zero);
+}
+ 
+[DllImport("user32.dll", CharSet = CharSet.Auto)]
+internal static extern IntPtr SendMessage(
+    IntPtr hWnd,
+    UInt32 msg,
+    IntPtr wParam,
+    IntPtr lParam);
+```
+
+**How can we add a drop shadow to the window?**
+
+<p>At the time of this&#0160;writing, I know two ways of doing this:</p>
+<p>The first one (which is described <a href="http://groups.google.com/group/wpf-disciples/browse_thread/thread/82d408e569e0b5f9" target="_blank" title="OS Composed DropShadows on WPF Windows with Custom Chrome Options.">here</a>) uses the&#0160;<a href="http://msdn.microsoft.com/en-us/library/aa969540(VS.85).aspx" target="_blank" title="The desktop composition feature, introduced in Windows Vista, fundamentally changed the way applications display pixels on the screen. When desktop composition is enabled, individual windows no longer draw directly to the screen or primary display device as they did in previous versions of Windows. Instead, their drawing is redirected to off-screen surfaces in video memory, which are then rendered into a desktop image and presented on the display.">Desktop Window Manager</a>&#0160;(DWM)&#0160;API. Specifically it uses the&#0160;<a href="http://msdn.microsoft.com/en-us/library/aa969524(VS.85).aspx" target="_blank" title="Sets the value of the specified attributes for non-client rendering to apply to the window.">DwmSetWindowAttribute</a> Function combined with the &#0160;<a href="http://msdn.microsoft.com/en-us/library/aa969512(VS.85).aspx" target="_blank" title="Extends the window frame behind the client area.">DwmExtendFrameIntoClientArea </a>Function to place a drop shadow around the window area. This method works by registering at the <a href="http://msdn.microsoft.com/en-us/library/system.windows.window.sourceinitialized.aspx" target="_blank" title="This event is raised to support interoperation with Win32.">SourceInitialized</a> event. When this event is raised, it is a good place to call any code that can&#0160;interoperate&#0160;with the underlying Win32 window.</p>
+
+```c#
+/// <summary>
+/// Raises the <see cref="FrameworkElement.Initialized"/> event.
+/// This method is invoked whenever
+/// <see cref="P:FrameworkElement.IsInitialized"/>
+/// is set to true internally.
+/// </summary>
+/// <param name="e">The <see cref="T:RoutedEventArgs"/>
+/// that contains the event data.</param>
+protected override void OnInitialized(EventArgs e)
+{
+    AllowsTransparency    = false;
+    ResizeMode            = ResizeMode.NoResize;
+    Height                = 480;
+    Width                 = 852; 
+    WindowStartupLocation = WindowStartupLocation.CenterScreen;
+    WindowStyle           = WindowStyle.None;
+ 
+    SourceInitialized    += HandleSourceInitialized;
+ 
+    base.OnInitialized(e);
+}
+ 
+/// <summary>
+/// Handles the source initialized.
+/// </summary>
+/// <param name="sender">The sender.</param>
+/// <param name="e">The <see cref="System.EventArgs"/>
+/// instance containing the event data.</param>
+private void HandleSourceInitialized(object sender, EventArgs e)
+{
+    this.hwndSource = (HwndSource)PresentationSource.FromVisual(this);
+ 
+    // Returns the HwndSource object for the window
+    // which presents WPF content in a Win32 window.
+    HwndSource.FromHwnd(this.hwndSource.Handle).AddHook(
+        new HwndSourceHook(NativeMethods.WindowProc));
+ 
+    // http://msdn.microsoft.com/en-us/library/aa969524(VS.85).aspx
+    int DWMWA_NCRENDERING_POLICY = 2;
+    NativeMethods.DwmSetWindowAttribute(
+        this.hwndSource.Handle,
+        DWMWA_NCRENDERING_POLICY,
+        ref DWMWA_NCRENDERING_POLICY,
+        4);
+ 
+    // http://msdn.microsoft.com/en-us/library/aa969512(VS.85).aspx
+    NativeMethods.ShowShadowUnderWindow(this.hwndSource.Handle);
+}
+```
+
+<p><img src="http://farm9.staticflickr.com/8212/8397466875_a3a92be9ed_o.png" alt="Metro window Without the drop shadow" /></p>
+<p style="text-align: center;"><em><span style="font-size: 8pt;">Without the drop shadow</span></em></p>
+
+<p><img src="http://farm9.staticflickr.com/8075/8398555504_6cf93d7b35_o.png" alt="Metro window with the drop shadow" /></p>
+<p style="text-align: center;"><em><span style="font-size: 8pt;">With the drop shadow</span></em></p>
+
+<p>There is a problem here though. If the user goes to System Properties, Performance Options and uncheck the &quot;Show shadows under windows&quot; checkbox, the shadow will not be visible.</p>
+
+**The Zune software still keeps it&#39;s drop shadow visible even if the &quot;Show shadows under windows&quot; checkbox is unchecked.**
+
+<p><em>&#0160;&#0160;&#0160;&#0160;How can this possibly be? </em></p>
+<p>Well, the Zune software does not use the DWM API to place drop shadows. Instead, it uses four external, transparent, windows on each size to create an illusion of a drop shadow. The drop shadow is actually &quot;composed&quot; by four transparent windows on each side.</p>
+
+<p><img src="http://farm9.staticflickr.com/8192/8398555496_21ef88e090_o.png" alt="The drop shadows as they are composed by four transparent windows on each side" /></p>
+
+The second way, of placing the drop shadows, via external windows is the main reason for this post.
+<p>Here is what I had to do:</p>
+<ol>
+<li>Create a transparent window in code (and also set it&#39;s background).</li>
+<li>Find the Main Window position on screen. Fortunately I could access the Left and Top properties and by it&#39;s width and height I could calculate the window boundary.</li>
+<li>Calculate position for each external window.</li>
+<li>When moving the Main Window the external windows had to &quot;glue&quot; or better &quot;dock&quot; with the Main Window.</li>
+<li>When resizing the Main Window the external windows had to resize as well, according to the Main Window size.</li>
+</ol>
+<p>..Sounds like a lot of work to do for displaying a drop shadow that remains visible even if the user&#0160;unchecks the &quot;Show shadows under windows&quot; checkbox!</p>
+<p>Creating the transparent window in code was easy:</p>
+
+```c#
+/// <summary>
+/// Initializes the surrounding windows.
+/// </summary>
+private void InitializeSurrounds()
+{
+    // Top.
+    this.wndT = CreateTransparentWindow();
+ 
+    // Left.
+    this.wndL = CreateTransparentWindow();
+ 
+    // Bottom.
+    this.wndB = CreateTransparentWindow();
+ 
+    // Right.
+    this.wndR = CreateTransparentWindow();
+ 
+    SetSurroundShadows();
+}
+ 
+/// <summary>
+/// Creates an empty window.
+/// </summary>
+/// <returns></returns>
+private static Window CreateTransparentWindow()
+{
+    Window wnd             = new Window();
+    wnd.AllowsTransparency = true;
+    wnd.ShowInTaskbar      = false;
+    wnd.WindowStyle        = WindowStyle.None;
+    wnd.Background         = null;
+ 
+    return wnd;
+}
+ 
+/// <summary>
+/// Sets the artificial drop shadow.
+/// </summary>
+/// <param name="active">if set to <c>true</c> [active].</param>
+private void SetSurroundShadows(bool active = true)
+{
+    if (active)
+    {
+        double cornerRadius = 1.75;
+ 
+        this.wndT.Content = GetDecorator(
+            "Images/ACTIVESHADOWTOP.PNG");
+        this.wndL.Content = GetDecorator(
+            "Images/ACTIVESHADOWLEFT.PNG", cornerRadius);
+        this.wndB.Content = GetDecorator(
+            "Images/ACTIVESHADOWBOTTOM.PNG");
+        this.wndR.Content = GetDecorator(
+            "Images/ACTIVESHADOWRIGHT.PNG", cornerRadius);
+    }
+    else
+    {
+        this.wndT.Content = GetDecorator(
+            "Images/INACTIVESHADOWTOP.PNG");
+        this.wndL.Content = GetDecorator(
+            "Images/INACTIVESHADOWLEFT.PNG");
+        this.wndB.Content = GetDecorator(
+            "Images/INACTIVESHADOWBOTTOM.PNG");
+        this.wndR.Content = GetDecorator(
+            "Images/INACTIVESHADOWRIGHT.PNG");
+    }
+}
+ 
+[DebuggerStepThrough]
+private Decorator GetDecorator(string imageUri, double radius = 0)
+{
+    Border border       = new Border();
+    border.CornerRadius = new CornerRadius(radius);
+    border.Background   = new ImageBrush(
+        new BitmapImage(
+            new Uri(BaseUriHelper.GetBaseUri(this),
+                imageUri)));
+ 
+    return border;
+}
+```
+
+<p>Calculating the position, width and height for each external window was also not difficult:</p>
+
+```c#
+/// <summary>
+/// Raises the <see cref="FrameworkElement.Initialized"/> event.
+/// This method is invoked whenever
+/// <see cref="FrameworkElement.IsInitialized"/>
+/// is set to true internally.
+/// </summary>
+/// <param name="e">The <see cref="T:RoutedEventArgs"/>
+/// that contains the event data.</param>
+protected override void OnInitialized(EventArgs e)
+{
+    // ...
+ 
+    LocationChanged += HandleLocationChanged;
+    SizeChanged     += HandleLocationChanged;
+    StateChanged    += HandleWndStateChanged;
+ 
+    InitializeSurrounds();
+    ShowSurrounds();
+ 
+    base.OnInitialized(e);
+}
+ 
+/// <summary>
+/// Handles the location changed.
+/// </summary>
+/// <param name="sender">The sender.</param>
+/// <param name="e">The <see cref="System.EventArgs"/>
+/// instance containing the event data.</param>
+private void HandleLocationChanged(object sender, EventArgs e)
+{
+    this.wndT.Left   = Left  - edgeWndSize;
+    this.wndT.Top    = Top   - this.wndT.Height;
+    this.wndT.Width  = Width + edgeWndSize * 2;
+    this.wndT.Height = edgeWndSize;
+ 
+    this.wndL.Left   = Left - this.wndL.Width;
+    this.wndL.Top    = Top;
+    this.wndL.Width  = edgeWndSize;
+    this.wndL.Height = Height;
+ 
+    this.wndB.Left   = Left  - edgeWndSize;
+    this.wndB.Top    = Top   + Height;
+    this.wndB.Width  = Width + edgeWndSize * 2;
+    this.wndB.Height = edgeWndSize;
+ 
+    this.wndR.Left   = Left + Width;
+    this.wndR.Top    = Top;
+    this.wndR.Width  = edgeWndSize;
+    this.wndR.Height = Height;
+}
+ 
+/// <summary>
+/// Handles the windows state changed.
+/// </summary>
+/// <param name="sender">The sender.</param>
+/// <param name="e">The <see cref="System.EventArgs"/>
+/// instance containing the event data.</param>
+private void HandleWndStateChanged(object sender, EventArgs e)
+{
+    if (WindowState == WindowState.Normal)
+    {
+        ShowSurrounds();
+    }
+    else
+    {
+        HideSurrounds();
+    }
+}
+```
+
+<p><img src="http://farm9.staticflickr.com/8225/8398555440_33b04b6bea_o.png" alt="The final result as composed by four transparent windows on each side" /></p>
+
+<p>I hope you find this post useful, there is a lot of information around but I think this post connects the pieces.</p>
+<p>The <a href="https://github.com/moodmosaic/BonusBits.CodeSamples/tree/master/BonusBits.CodeSamples.MetroUI" target="_blank" title="BonusBits Blog source-code for Windows Presentation Foundation">solution</a> contains two projects. The first one uses the 1st method for displaying the drop shadow. The second one uses the method described above.</p>
+<p>Due to popular demand, you can download the sample projects <a href="https://github.com/downloads/moodmosaic/BonusBits.CodeSamples/MetroUI-1.zip" target="_blank" title="MetroUI Sample 1">here</a> and <a href="https://github.com/downloads/moodmosaic/BonusBits.CodeSamples/MetroUI-2.zip" target="_blank" title="MetroUI Sample 2">here</a>.</p>
+<p><a href="http://www.codeproject.com/script/Articles/BlogFeedList.aspx?amid=5962224" rel="tag" style="display: none;">CodeProject</a></p>
+

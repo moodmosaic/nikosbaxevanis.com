@@ -1,0 +1,14 @@
+---
+layout: post
+title: Test-After Development Sins (Ignoring cross-cutting concerns)
+published: 1
+categories: [Legacy Code]
+comments: [disqus]
+slug: "Cross-cutting concerns, when ignored, can slip through the Services."
+alias: /bonus-bits/2012/02/test-after-development-sins-ignoring-cross-cutting-concerns.html
+---
+<p>A&#0160;<a href="http://www.nikosbaxevanis.com/bonus-bits/2012/01/test-after-development-sins-introduction.html" target="_blank" title="&quot;Test-After Development&quot; Sins: Introduction">series</a>&#0160;of articles exploring the impact of writing tests&#0160;<em>after&#0160;</em>the code is written&#0160;on the implementation part of&#0160;<a href="http://en.wikipedia.org/wiki/Software_development_process" target="_blank" title="A software development process, also known as a software development life cycle (SDLC), is a structure imposed on the development of a software product.">SDLC</a>.</p>
+<p><span style="text-decoration: underline;">Sin No.3</span>: Ignoring cross-cutting concerns.</p>
+<p>The problem with this approach becomes very clear. It will be hard and tedious work, inside each test, to create stubs and mocks for each and every aspect.&#0160;The intent of the unit tests will also look wrong since, in reality, these aspects should not be treated as<em>&#0160;</em>dependencies of the&#0160;<a href="http://xunitpatterns.com/SUT.html" target="_blank" title="The &quot;system under test&quot;. It is short for &quot;whatever thing we are testing&quot; and is always defined from the perspective of the test.">SUT</a>.</p>
+<p>Among others, logging and caching are cross-cutting concerns that can easily slip through the services (making us treat them as normal dependencies).&#0160;</p>
+<p>While the preferred way to model these aspects is using decorators and/or dynamic interceptors,&#0160;there are many times that we see classes violating the&#0160;<a href="http://en.wikipedia.org/wiki/Single_responsibility_principle" target="_blank" title="In object-oriented programming, the single responsibility principle states that every object should have a single responsibility, and that responsibility should be entirely encapsulated by the class. All its services should be narrowly aligned with that responsibility.">SRP</a>&#0160;containing <em>all-in-one</em> logging, caching, auditing and other aspects (and even violating the&#0160;<a href="http://en.wikipedia.org/wiki/Interface_segregation_principle" target="_blank" title="The notion that many client specific interfaces are better than one general purpose interface.">ISP</a>&#0160;with a coarse-grained&#0160;<a href="http://martinfowler.com/bliki/HeaderInterface.html" target="_blank" title="A header interface is an explicit interface that mimics the implicit public interface of a class. Essentially you take all the public methods of a class and declare them in an interface.">Header Interface</a>).</p>

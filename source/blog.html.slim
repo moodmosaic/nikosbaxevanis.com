@@ -1,0 +1,35 @@
+---
+title: moodmosaic
+layout: blog
+---
+
+body
+  div#title
+    div
+      h1
+        a href="/blog" style="color: #222" moodmosaic
+      div 
+        span by 
+        a href="/" Nikos Baxevanis 
+        a style="color: #877" href="http://creativecommons.org/licenses/by/3.0/" (license)
+    div.line
+  div#main
+    div#postlist
+      - for item in catalog do
+        div.post data-tags="#{item.categories.map!{|x| x.downcase.gsub(' ','-')}.join(",")}"
+          h2
+            a href=item.url
+              = item.title
+          div.undertitle
+            span.date #{item.day}/#{item.month}/#{item.year}
+            - for category in item.categories
+              span.tag onclick="filterTag(&quot;#{category.downcase.gsub(' ','-')}&quot;)" #{category.downcase.gsub(' ','-')}
+  div#side
+    p Tags:
+    ul.taglist
+      - for category in categories.sort! { |a,b| a.last <=> b.last }.reverse! do
+        li
+          span.tag onclick="filterTag(&quot;#{category.first.downcase.gsub(' ','-')}&quot;)" #{category.first.downcase.gsub(' ','-')}
+          span (#{category.last})
+
+  == javascript_include_tag 'filter'

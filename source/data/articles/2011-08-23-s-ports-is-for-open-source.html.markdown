@@ -1,0 +1,21 @@
+---
+layout: post
+title: S(ports) is for (Open) Source
+published: 1
+categories: [Software Eng]
+comments: [disqus]
+slug: "The equiment and the conditions doesn't really matter. What it does matter is how one truly wants to do something."
+alias: /bonus-bits/2011/08/sports-is-for-open-source.html
+---
+<p style="text-align: center;"><em>The &quot;Loose Laces&quot; Story</em></p>
+<p style="text-align: center;"><img src="http://farm9.staticflickr.com/8183/8398548564_325c904f66_o.png" title="Country, Northeastern Corinthia" alt="Country, Northeastern Corinthia"/></p>
+<p>On the weekends, I usually try not to stay in Glyfada. Sometimes I go to country. There, I may invite friends and go out or stay at home.</p>
+<p>Usually, in the afternoon I go for a run.&#0160;Τhere is a 10 km route from my house to the next village. Because of the uphill road on the way back, it takes me 51-53 minutes to run.</p>
+<p>I always try to run the route in less than 51 minutes. Nevertheless most of the time I can not do it - either&#0160;I start too fast (doing first 5KM below 26 minutes) and then get tired or I begin slowly and on the way back it&#39;s impossible to go that fast.</p>
+<p>However, the last time I run there&#0160;I started fast, faster than any other time. Reached the 5KM point (the next village) on ~20 minutes and on my way back it took me other ~27 minutes. This is a total of ~47 minutes (!).</p>
+<p>Obviously, that was a personal record.</p>
+<p>The reason I write all these, is because that one (and only) time that I&#39;ve made it below 50 minutes,&#0160;I was running with loosed laces on the right shoe, plus the shoes were not running shoes at all. I noticed the loose lace when I had already started, but I could not do anything since I didn&#39;t want to stop the timer.</p>
+<p>What I&#39;ve learned is that, the equiment (non-running shoes) and the conditions (loosed laces) doesn&#39;t really matter.</p>
+<p>What it does matter&#0160;is how one truly wants to do something.</p>
+<p>Τhe same applies for software.</p>
+

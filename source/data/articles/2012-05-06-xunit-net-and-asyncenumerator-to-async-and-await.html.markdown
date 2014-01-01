@@ -1,0 +1,125 @@
+---
+layout: post
+title: xUnit.net and AsyncEnumerator to Async and Await
+published: 1
+categories: [xUnit.net, Async, Unit Testing]
+comments: [disqus]
+slug: "Asynchronous xUnit.net tests using Jeffrey Richter's AsyncEnumerator class."
+alias: /bonus-bits/2012/05/xunit-net-and-asyncenumerator-to-async-and-await.html
+---
+<p>Prior to .NET 4,&#0160;one had to implement the <a href="http://msdn.microsoft.com/en-us/magazine/cc163467.aspx" target="_blank" title="Implementing the CLR Asynchronous Programming Model.">APM</a> model in order to expose asynchronous methods. After a couple of years, the&#0160;<a href="http://msdn.microsoft.com/en-gb/magazine/cc546608.aspx" target="_blank" title="Simplified APM With The AsyncEnumerator.">AsyncEnumerator</a>&#0160;class came out to&#0160;simplify the APM by leveraging the use&#0160;of C# iterators for asynchrony. In the meantime,&#0160;Microsoft developed a&#0160;<a href="http://msdn.microsoft.com/en-us/library/dd460693.aspx" target="_blank" title="Parallel Programming in the .NET Framework.">new</a>&#0160;model for asynchronous (and parallel) programming. Since the new model was targeting the&#0160;.NET 4, code written in previous versions have to keep using the AsyncEnumerator class.</p>
+<p>I&#0160;<a href="http://www.nikosbaxevanis.com/bonus-bits/2010/10/an-alternative-net-20-approach-to-the-task-based-asynchronous-pattern.html" target="_blank" title="An alternative (.NET 2.0+) approach to the Task-based Asynchronous Pattern.">have</a>&#0160;<a href="http://www.nikosbaxevanis.com/bonus-bits/2011/07/async-rest-client-for-scrumy-api.html" target="_blank" title="Async REST Client for the Scrumy API.">been</a>&#0160;<a href="http://www.nikosbaxevanis.com/bonus-bits/2010/11/going-asynchronous-with-sterling-for-windows-phone-7.html" target="_blank" title="Going Asynchronous with Sterling for Windows Phone 7.">using</a>&#0160;<a href="http://www.nikosbaxevanis.com/bonus-bits/2010/10/exposing-asynchronous-features-to-client-code-windows-phone-edition.html" target="_blank" title="Exposing asynchronous features to client code: Windows Phone 7.">the</a>&#0160;AsyncEnumerator class since 2008 and it works great. Today we have the new Async and Await keywords in C# 5.0 (together with the <a href="http://blogs.microsoft.co.il/blogs/sasha/archive/2011/09/17/improvements-in-the-clr-core-in-net-framework-4-5.aspx" target="_blank">many</a> <a href="http://blogs.msdn.com/b/dotnet/archive/2011/10/03/large-object-heap-improvements-in-net-4-5.aspx" target="_blank">improvements</a>&#0160;in the CLR) that will ship with .NET 4.5 and the recently added support for&#0160;async unit tests on&#0160;<a href="http://xunit.codeplex.com/releases/view/77573" target="_blank">version 1.9</a>&#0160;of the&#0160;<a href="http://xunit.codeplex.com/" target="_blank" title="xUnit.net is a unit testing tool for the .NET Framework. Written by the original inventor of NUnit, xUnit.net is the latest technology for unit testing C#, F#, VB.NET and other .NET languages.">xUnit.net</a>.&#0160;So, I decided to move some .NET 2.0 code using AsyncEnumerator to .NET 4.5 using Async and Await.</p>
+<p>Below is an interface of the sample type (described in <a href="http://msdn.microsoft.com/en-us/magazine/cc163467.aspx" target="_blank" title="Implementing the CLR Asynchronous Programming Model.">this</a> article) exposing both synchronous and asynchronous versions of a time-consuming method:</p>
+
+```c#
+public interface IMyType
+{
+    // Synchronous version of time-consuming method.
+    DateTime DoSomething();
+
+    // Asynchronous version of time-consuming method (Begin part).
+    IAsyncResult BeginDoSomething(AsyncCallback callback, object state = null);
+
+    // Asynchronous version of time-consuming method (End part).
+    DateTime EndDoSomething(IAsyncResult asyncResult);
+}
+```
+
+<p>A unit test with the AsyncEnumerator can be similar to the one shown below:</p>
+
+```c#
+public IEnumerator<int> D(AsyncEnumerator ae)
+{
+    var sut = new MyType(5);
+
+    sut.BeginDoSomething(ae.End(), state: null);
+    yield return 1;
+    var result = sut.EndDoSomething(ae.DequeueAsyncResult());
+}
+```
+
+<p>However, since xUnit.net does not support methods of type IEnumerator&lt;int&gt;, we need to tell xUnit.net how to execute them:</p>
+
+```c#
+[Fact]
+public void D()
+{
+    // Drive the D method's iterator asynchronously.
+    var ae = new AsyncEnumerator<DateTime>();
+    ae.EndExecute(
+        ae.BeginExecute(
+            this.D(ae), _ => { }));
+}
+```
+
+<p>Moving to .NET 4.5 and xUnit.net 1.9 we can create an <a href="http://msdn.microsoft.com/en-us/library/bb383977.aspx" target="_blank" title="Extension methods enable you to &quot;add&quot; methods to existing types without creating a new derived type, recompiling, or otherwise modifying the original type.">Extension Method</a> that returns a <a href="http://msdn.microsoft.com/en-us/library/system.threading.tasks.task.aspx" target="_blank" title="Represents an asynchronous operation.">Task</a> in order to use both the Async and Await keywords in production code and the async unit tests feature of xUnit.net.</p>
+
+```c#
+// Task-based asynchronous version of time-consuming method.
+public static Task<DateTime> DoSomethingAsync(this IMyType t)
+{
+    return Task<DateTime>.Factory.FromAsync(
+        t.BeginDoSomething,
+        t.EndDoSomething,
+        state: null
+        );
+}
+```
+
+<p>Now the previous unit test with the AsyncEnumerator can be rewritten as follow:</p>
+
+```c#
+[Fact]
+public async Task D()
+{
+    var sut = new MyType(5);
+    var result = await sut.DoSomethingAsync();
+}
+```
+
+<p>This looks very nice and clean. As it seems though, if the class contains many async unit tests they will not run in parallel.&#0160;</p>
+<p>As an example, the following 3 tests will take 3 x 5 = 15 seconds to complete:</p>
+
+```c#
+[Fact]
+public async Task A()
+{
+    var sut = new MyType(5);
+    var result = await sut.DoSomethingAsync();
+}
+
+[Fact]
+public async Task B()
+{
+    var sut = new MyType(5);
+    var result = await sut.DoSomethingAsync();
+}
+
+[Fact]
+public async Task C()
+{
+    var sut = new MyType(5);
+    var result = await sut.DoSomethingAsync();
+}
+```
+
+<p>The output from xUnit.net:</p>
+
+```c#
+Output from AsyncUnitTesting.xUnit.net.MyTypeTests.C:
+  Started  5/5/2012 10:24:45 AM
+  Finished 5/5/2012 10:24:50 AM
+
+Output from AsyncUnitTesting.xUnit.net.MyTypeTests.B:
+  Started  5/5/2012 10:24:50 AM
+  Finished 5/5/2012 10:24:55 AM
+
+Output from AsyncUnitTesting.xUnit.net.MyTypeTests.A:
+  Started  5/5/2012 10:24:50 AM
+  Finished 5/5/2012 10:25:00 AM
+
+3 passed, 0 failed, 0 skipped, took 15.26 seconds (xUnit.net 1.9.0 build 1566).
+```
+
+<p>That was the part of moving the unit tests from an older version of xUnit.net (and the AsyncEnumerator) to version 1.9 of xUnit.net (with Async and Await).&#0160;Apparently, things become more challenging when moving to production code where one needs to deal with stuff such is the <a href="http://msdn.microsoft.com/en-us/library/system.threading.synchronizationcontext(v=vs.110).aspx" target="_blank" title="Provides the basic functionality for propagating a synchronization context in various synchronization models.">SyncrhonizationContext</a>.</p>
+<p>A gist with all the source code can be found&#0160;<a href="https://gist.github.com/2604956" target="_blank">here</a>.</p>

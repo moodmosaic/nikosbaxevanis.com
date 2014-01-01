@@ -1,0 +1,23 @@
+---
+layout: post
+title: Test-After Development Sins (Header Interfaces)
+published: 1
+categories: [Legacy Code]
+comments: [disqus]
+slug: "Coarse-grained interfaces and some of their (many) side effects."
+alias: /bonus-bits/2012/01/test-after-development-sins-coarse-header-interfaces.html
+---
+<p>A&#0160;<a href="http://www.nikosbaxevanis.com/bonus-bits/2012/01/test-after-development-sins-introduction.html" target="_blank" title="&quot;Test-After Development&quot; Sins: Introduction">series</a>&#0160;of articles exploring the impact of writing tests&#0160;<em>after&#0160;</em>the code is written&#0160;on the implementation part of&#0160;<a href="http://en.wikipedia.org/wiki/Software_development_process" target="_blank" title="A software development process, also known as a software development life cycle (SDLC), is a structure imposed on the development of a software product.">SDLC</a>.</p>
+<p><span style="text-decoration: underline;">Sin No.2</span>: Header Interfaces.</p>
+<p>A good example is a data access layer combined with the use of an&#0160;Object-relational mapper (ORM).</p>
+<p>While an ORM provides (out of the box) a collection-like interface (<a href="https://github.com/nhibernate/nhibernate-core/blob/master/src/NHibernate/ISession.cs" target="_blank" title="The main runtime interface between a .NET application and NHibernate. This is the central API class abstracting the notion of a persistence service.">ISession</a>, <a href="http://msdn.microsoft.com/en-us/library/system.data.entity.dbcontext(v=vs.103).aspx" target="_blank" title="Provides facilities for querying and working with entity data as objects.">DbContext</a>) for accessing domain objects, most of the time a coarse-grained <a href="http://martinfowler.com/bliki/HeaderInterface.html" target="_blank" title="A header interface is an explicit interface that mimics the implicit public interface of a class. Essentially you take all the public methods of a class and declare them in an interface.">Header Interface</a> is created on <em>top </em>of that.</p>
+<p>Those interfaces usually contain high number of members making the overall architecture extremely <em>inflexible.</em></p>
+<p>The system is usually forced to live with only <em>one </em>implementation for each interface. That implementation is most of the times generalized.</p>
+<p>Some examples,</p>
+<ul>
+<li>It&#39;s nearly impossible, in performance related scenarios, to manually execute SQL or access the IDbConnection.</li>
+</ul>
+<ul>
+<li>In order to map data between application boundaries or&#0160;populate an instance of a view model the exact same implementation is used.</li>
+</ul>
+<blockquote><p>In the second example, the implementation&#0160;<strong>eagerly&#0160;</strong>loads all the entities of an Aggregate Root which hurts performance.</p></blockquote>
