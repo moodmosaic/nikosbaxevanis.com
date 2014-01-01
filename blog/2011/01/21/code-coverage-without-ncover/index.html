@@ -1,0 +1,51 @@
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width" name="viewport" /><title>Code Coverage without NCover</title><link href="/images/favicon.ico" rel="icon" type="image/x-icon" /><link href="/feed" rel="alternate" type="application/rss+xml" /><link href="/stylesheets/blog.css?1388607283" media="screen" rel="stylesheet" type="text/css" /></head><body><body><div id="title"><div><h1><a href="/blog" style="color: #222">moodmosaic</a></h1><div><span>by </span><a href="/">Nikos Baxevanis </a><a href="http://creativecommons.org/licenses/by/3.0/" style="color: #877">(license)</a></div></div><div class="line"></div></div><div id="full"><h1><a>Code Coverage without NCover</a></h1><div class="undertitle"><span class="date">Filed under </span><a class="tag" href="/blog#visual-studio">visual-studio</a><a class="tag" href="/blog#unit-testing">unit-testing</a></div><p>Let&#39;s analyze code coverage in the&#0160;<a href="http://dynamicviewmodel.codeplex.com/" target="_blank" title="This project aims to provide a way to implement the Model View ViewModel (MVVM) architectural pattern using Plain Old CLR Objects (POCOs) while taking full advantage of .NET 4.0 DynamicObject Class.">DynamicViewModel</a>&#0160;project.</p>
+
+<p>I currently work with Visual Studio 2010 Premium. This product comes with Code Coverage so I thought I should give it a try with, the&#0160;unit testing tool I use,&#0160;<a href="http://xunit.codeplex.com/" target="_blank" title="xUnit.net is a unit testing tool for the .NET Framework.">xUnit.net</a>.</p>
+
+<p>First of all, if you do a lot of unit testing, I suggest using the&#0160;<a href="http://www.google.gr/url?sa=t&amp;source=web&amp;cd=2&amp;ved=0CBoQFjAB&amp;url=http%3A%2F%2Fwww.testdriven.net%2F&amp;ei=I3A5TeO8Dczssgbw2bzzBg&amp;usg=AFQjCNFFiRlQapOFMcbUcbKyl37SNWRygw&amp;sig2=B37qeEgk0LSAevdmGq5z_A" target="_blank" title="http://www.testdriven.net/">TestDriven.Net</a>&#0160;add-in for Visual Studio because it is fully integrated with xUnit.net (and many other unit testing tools).</p>
+
+<p>Right-Click on the project under test, select Test With &gt; Coverage:</p>
+
+<p><img src="http://farm9.staticflickr.com/8500/8398555174_7a12f17243_o.png" alt="" /></p>
+
+<p>The Code Coverage Results tab shows the % of Not Covered/Covered Blocks:</p>
+
+<p><img src="http://farm9.staticflickr.com/8353/8398555110_237199b896_o.png" alt="" /></p>
+
+<p>Using the object explorer we navigate to the methods that are not fully covered:</p>
+
+<p><img src="http://farm9.staticflickr.com/8376/8398555104_1ff09f326f_o.png" alt="" /></p>
+
+<p>Right-Click on any method &gt; Go to source code. This will navigates us to the target method:</p>
+
+<p><img src="http://farm9.staticflickr.com/8497/8397466461_7af064d53c_o.png" alt="" /></p>
+
+<p>In the target method we can now see the portion of the code that is not covered.&#0160;</p>
+
+<p>Here we can see that there are no unit tests covering the case for invalid property names when binding in the view model:</p>
+
+<p><img src="http://farm9.staticflickr.com/8330/8397466403_e126a224be_o.png" alt="Code not covered by tests"/></p>
+
+<p>Let&#39;s add a unit test for that:</p>
+
+<p><img src="http://farm9.staticflickr.com/8188/8397466387_3fd667c4b5_o.png" alt=""/></p>
+
+<p>Again, Right-Click on the project under test, select Test With &gt; Coverage:</p>
+
+<p><img src="http://farm9.staticflickr.com/8356/8397466379_3ddd680253_o.png" alt="Code is covered by tests"/></p>
+
+<p>That&#39;s it!&#0160;Visual Studio 2010 Cove Coverage feature (on Premium and Ultimate products) plays nicely with TestDriven.Net and xUnit.net!</p>
+</div><div id="disqus_thread"></div><script type="text/javascript">var disqus_shortname = 'bonusbits';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script></body><script type="text/javascript">var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-24262928-1']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

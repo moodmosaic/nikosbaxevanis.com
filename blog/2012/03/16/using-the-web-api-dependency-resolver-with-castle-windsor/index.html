@@ -1,0 +1,201 @@
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width" name="viewport" /><title>Using the Web API Dependency Resolver with Castle Windsor</title><link href="/images/favicon.ico" rel="icon" type="image/x-icon" /><link href="/feed" rel="alternate" type="application/rss+xml" /><link href="/stylesheets/blog.css?1388607283" media="screen" rel="stylesheet" type="text/css" /></head><body><body><div id="title"><div><h1><a href="/blog" style="color: #222">moodmosaic</a></h1><div><span>by </span><a href="/">Nikos Baxevanis </a><a href="http://creativecommons.org/licenses/by/3.0/" style="color: #877">(license)</a></div></div><div class="line"></div></div><div id="full"><h1><a>Using the Web API Dependency Resolver with Castle Windsor</a></h1><div class="undertitle"><span class="date">Filed under </span><a class="tag" href="/blog#web-api">web-api</a><a class="tag" href="/blog#castle-windsor">castle-windsor</a></div><blockquote>
+<p>The code in this post requires the ASP.NET MVC 4 Beta. If you use the RC version use the code from <a href="http://nikosbaxevanis.com/2012/06/04/using-the-web-api-dependency-resolver-with-castle-windsor-part-2/">this</a> post.</p>
+</blockquote>
+
+<p><strong>Update</strong>: <a href="http://blog.ploeh.dk">Mark Seemann</a> has provided a <a href="http://blog.ploeh.dk/2012/03/20/RobustDIWithTheASPNETWebAPI.aspx">great post</a> on this subject.
+<p>In this post I will discuss a possible solution for having Castle Windsor resolving types for both MVC controllers and Web API controllers. Since the former is well known I will focus mostly on the Web API part.</p>
+<p>A team building a mobile web application uses the&nbsp;ASP.NET&nbsp;MVC stack combined with another web services framework. With the release of the Beta version of&nbsp;ASP.NET&nbsp;MVC 4 they decided to give Web API a try (side by side with MVC controllers) and see if it fits their needs.</p>
+<p>The&nbsp;<a href="http://msdn.microsoft.com/en-us/library/system.web.mvc.controller.aspx" target="_blank">Controller</a>-derived types are used only for rendering the views (the code is written in JavaScript) while the&nbsp;<a href="http://msdn.microsoft.com/en-us/library/system.web.http.apicontroller(v=vs.108).aspx" target="_blank">ApiController</a>-derived types are used for returning &nbsp;data to the client.</p>
+<p>The&nbsp;<a href="http://msdn.microsoft.com/en-us/library/system.web.http.services.dependencyresolver(v=vs.108).aspx" target="_blank">DependencyResolver</a>&nbsp;class provides a method called&nbsp;<a href="http://msdn.microsoft.com/en-us/library/hh834083(v=vs.108).aspx" target="_blank">SetResolver</a>&nbsp;which acts as a registration point for resolving dependencies.</p>
+<blockquote>Be careful as there are more than one DependencyResolver types. One defined in System.Web.Mvc namespace and one defined in System.Web.Http namespace. We need the latter here.</blockquote>
+<p>Once we define the delegates and set a breakpoint we can see what types the framework requests.</p>
+<p>At first an instance of the IHttpControllerFactory type is requested:</p>
+<p><img src="http://farm9.staticflickr.com/8506/8397459253_439417138a_o.png" alt="IHttpControllerFactory type is requested" /></p>
+<p>Followed by a request for an instance of the ILogger type and so on.</p>
+<p><img src="http://farm9.staticflickr.com/8073/8398547788_242021568e_o.png" alt="ILogger type is requested" /></p>
+<p>The first thing we want to do is to create a type implementing the IHttpControllerFactory interface.</p></p>
+
+<pre><code class="c#">using System.Web.Http;
+using System.Web.Http.Controllers;
+using System.Web.Http.Dispatcher;
+using Castle.MicroKernel;
+
+internal class WindsorHttpControllerFactory : IHttpControllerFactory
+{
+    private readonly HttpConfiguration configuration;
+    private readonly IKernel kernel;
+
+    public WindsorHttpControllerFactory(
+        HttpConfiguration configuration, 
+        IKernel kernel)
+    {
+        this.configuration = configuration;
+        this.kernel = kernel;
+    }
+
+    public IHttpController CreateController(
+        HttpControllerContext controllerContext, 
+        string controllerName)
+    {
+        var controller = this.kernel.Resolve&lt;IHttpController&gt;(controllerName);
+
+        controllerContext.Controller = controller;
+        controllerContext.ControllerDescriptor = new HttpControllerDescriptor(
+            this.configuration, 
+            controllerName, 
+            controller.GetType());
+
+        return controllerContext.Controller;
+    }
+
+    public void ReleaseController(IHttpController controller)
+    {
+        this.kernel.ReleaseComponent(controller);
+    }
+}
+</code></pre>
+
+<p>Note that inside the WindsorHttpControllerFactory class the CreateController method&nbsp;&nbsp;takes a string for the name of the controller. That means we need to use the Windsor&rsquo;s&nbsp;<em>Named&nbsp;</em>method to set a name for each controller registration. (We can also trim the &ldquo;Controller&rdquo; part from the name and also pluralize the remaining part.)</p>
+
+<pre><code class="c#">foreach (Type controller in typeof(OrderController).Assembly.GetTypes()
+    .Where(type =&gt; typeof(IHttpController).IsAssignableFrom(type)))
+{
+    // https://github.com/srkirkland/Inflector/
+    string name = Inflector.Pluralize(
+        controller.Name.Replace(&quot;Controller&quot;, &quot;&quot;));
+
+    container.Register(Component
+        .For(controller)
+        .Named(name)
+        .LifestylePerWebRequest());
+}
+</code></pre>
+
+<p>Let&rsquo;s also create a NullLogger implementing the ILogger interface.</p>
+
+<pre><code class="c#">using System;
+using System.Diagnostics;
+using System.Web.Http.Common;
+
+internal class NullLogger : ILogger
+{
+    public void Log(string category, TraceLevel level, 
+        Func&lt;string&gt; messageCallback)
+    {
+    }
+
+    public void LogException(string category, TraceLevel level, 
+        Exception exception)
+    {
+    }
+}
+</code></pre>
+
+<p>For all the other instances that the framework requests there are default implementations in the System.Web.* assemblies and we can now create a Windsor&nbsp;<a href="http://stw.castleproject.org/Default.aspx?Page=Installers&amp;NS=Windsor&amp;AspxAutoDetectCookieSupport=1" target="_blank">Installer</a>&nbsp;to encapsulate the registration logic.</p>
+
+<pre><code class="c#">using System;
+using System.Linq;
+using System.Net.Http.Formatting;
+using System.Web.Http;
+using System.Web.Http.Common;
+using System.Web.Http.Controllers;
+using System.Web.Http.Dispatcher;
+using System.Web.Http.Metadata;
+using System.Web.Http.Metadata.Providers;
+using System.Web.Http.ModelBinding;
+using Castle.MicroKernel.Registration;
+using Castle.MicroKernel.SubSystems.Configuration;
+using Castle.Windsor;
+
+internal class WebApiInstaller : IWindsorInstaller
+{
+    public void Install(IWindsorContainer container, IConfigurationStore store)
+    {
+        container.Register(
+            Component.For&lt;IHttpControllerFactory&gt;()
+               .ImplementedBy&lt;WindsorHttpControllerFactory&gt;()
+               .LifestyleSingleton(),
+
+            Component.For&lt;ILogger&gt;()
+               .ImplementedBy&lt;NullLogger&gt;()
+               .LifestyleSingleton(),
+
+            Component.For&lt;IFormatterSelector&gt;()
+               .ImplementedBy&lt;FormatterSelector&gt;()
+               .LifestyleSingleton(),
+
+            Component.For&lt;IHttpControllerActivator&gt;()
+               .ImplementedBy&lt;DefaultHttpControllerActivator&gt;()
+               .LifestyleTransient(),
+
+            Component.For&lt;IHttpActionSelector&gt;()
+               .ImplementedBy&lt;ApiControllerActionSelector&gt;()
+               .LifestyleTransient(),
+
+            Component.For&lt;IActionValueBinder&gt;()
+               .ImplementedBy&lt;DefaultActionValueBinder&gt;()
+               .LifestyleTransient(),
+
+            Component.For&lt;IHttpActionInvoker&gt;()
+               .ImplementedBy&lt;ApiControllerActionInvoker&gt;()
+               .LifestyleTransient(),
+
+            Component.For&lt;ModelMetadataProvider&gt;()
+               .ImplementedBy&lt;CachedDataAnnotationsModelMetadataProvider&gt;()
+               .LifestyleTransient(),
+
+            Component.For&lt;HttpConfiguration&gt;()
+               .Instance(GlobalConfiguration.Configuration));
+    }
+}
+</code></pre>
+
+<p>In the&nbsp;Application_Start method we add the installer and set the delegates for the SetResolver method. That way when the framework requests an IHttpControllerFactory instance, Windsor will supply the one we created earlier.</p>
+
+<pre><code class="c#">this.container = new WindsorContainer()
+    .Install(new WebApiInstaller());
+
+GlobalConfiguration.Configuration.ServiceResolver.SetResolver(
+    serviceType =&gt; container.Resolve(serviceType),
+    serviceType =&gt; container.ResolveAll(serviceType).Cast&lt;object&gt;());
+</code></pre>
+
+<p>In order to have Windsor resolve regular controllers (side by side) we can create and add another installer as well as an implementation of the IControllerFactory interface.</p>
+
+<pre><code class="c#">this.container = new WindsorContainer()
+    .Install(new WebMvcInstaller())
+    .Install(new WebApiInstaller());
+
+GlobalConfiguration.Configuration.ServiceResolver.SetResolver(
+    serviceType =&gt; container.Resolve(serviceType),
+    serviceType =&gt; container.ResolveAll(serviceType).Cast&lt;object&gt;());
+
+ControllerBuilder.Current.SetControllerFactory(
+    new WindsorControllerFactory(this.container));
+</code></pre>
+
+<p>Finally, a&nbsp;gist with all the source code can be found <a href="https://gist.github.com/2044349" target="_blank">here</a>.</p>
+
+<p>References:</p>
+
+<ul>
+<li><a href="http://forums.asp.net/t/1770736.aspx/" target="_blank">Web Api / Implementing IHttpControllerFactory.CreateController</a></li>
+<li><a href="http://forums.asp.net/t/1772519.aspx/" target="_blank">Web Api /&nbsp;How do I use Windsor?</a></li>
+</ul>
+
+<ul>
+</ul>
+</div><div id="disqus_thread"></div><script type="text/javascript">var disqus_shortname = 'bonusbits';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script></body><script type="text/javascript">var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-24262928-1']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

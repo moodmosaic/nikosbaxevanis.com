@@ -1,0 +1,116 @@
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width" name="viewport" /><title>Using Reflection to Dynamically Invoke the NHibernate Profiler</title><link href="/images/favicon.ico" rel="icon" type="image/x-icon" /><link href="/feed" rel="alternate" type="application/rss+xml" /><link href="/stylesheets/blog.css?1388607283" media="screen" rel="stylesheet" type="text/css" /></head><body><body><div id="title"><div><h1><a href="/blog" style="color: #222">moodmosaic</a></h1><div><span>by </span><a href="/">Nikos Baxevanis </a><a href="http://creativecommons.org/licenses/by/3.0/" style="color: #877">(license)</a></div></div><div class="line"></div></div><div id="full"><h1><a>Using Reflection to Dynamically Invoke the NHibernate Profiler</a></h1><div class="undertitle"><span class="date">Filed under </span><a class="tag" href="/blog#nhibernate">nhibernate</a></div><p>If you are using NHibernate&#0160;as your Object-relational mapping (ORM) solution, then chances are you are also using the <a href="http://nhprof.com" target="_blank" title="NHibernate Profiler is a real-time visual debugger allowing a development team to gain valuable insight and perspective into their usage of NHibernate. The product is architected with input coming from many top industry leaders within the NHibernate community.">NHibernate Profiler</a>. You can see the exact SQL queries sent to the database and also detect&#0160;<a href="http://nhprof.com/Learn/Alerts" target="_blank" title="Alerts are presented in a concise code-review manner indicating patterns of misuse by your application.">common pitfalls</a>, among others.</p>
+
+<p>NHibernate Profiler&#0160;is developed by Hibernating Rhinos and&#0160;Blue Spire Consulting, Inc. The <a href="http://nhprof.com/About" target="_blank" title="The NHibernate Profiler was developed by Hibernating Rhinos. The user interface was built by Blue Spire Consulting, Inc.">main contributers</a> behind this tool are Oren Eini (NHibernate, Castle Project, RavenDB), Christopher Bennage (Sams Teach Yourself WPF in 24 Hours) and Rob Eisenberg (Sams Teach Yourself WPF in 24 Hours, Caliburn, Caliburn Micro). As you can see, this tool is not only interesting for what it does, but it has also interesting people behind it.</p>
+
+<p>Using the NHibernate Profiler in your application is very easy:</p>
+
+<ol>
+<li><strong>Add a reference</strong> to HibernatingRhinos.Profiler.Appender.dll assembly.</li>
+<li>Invoke the NHibernateProfiler.Initialize method from your code.</li>
+</ol>
+
+<p>The problem is, you (might) need to remove the referenced assembly&#0160;every time you ship. Even if you decide to keep it, you need to invoke the Initialize method from your code inside a method marked with the&#0160;<a href="http://msdn.microsoft.com/en-us/library/system.diagnostics.conditionalattribute.aspx" target="_blank" title="Indicates to compilers that a method call or attribute should be ignored unless a specified conditional compilation symbol is defined.">ConditionalAttribute</a>&#0160;class so the compiler ignores it unless you are running in debug mode.</p>
+
+<p>You can avoid adding a reference (step 1), and invoke the Initialize method dynamically&#0160;using reflection:</p>
+
+<p>1. In the&#0160;<a href="http://msdn.microsoft.com/en-us/library/aa903313(VS.71).aspx" target="_blank" title="Contains custom application settings. This is a predefined configuration section provided by the .NET Framework.">&lt;appSettings&gt;</a> element include the following keys:</p>
+
+<pre><code class="python">&lt;appSettings&gt;
+    &lt;add key=&quot;NHibernate_ProfilerAssembly&quot;
+         value=&quot;HibernatingRhinos.Profiler.Appender.dll&quot;/&gt;
+    &lt;add key=&quot;NHibernate_ProfilerDirectory&quot;
+         value=&quot;&lt;your_path&gt;&quot;/&gt;
+    &lt;add key=&quot;NHibernate_ProfilerMethod&quot;
+         value=&quot;Initialize&quot;/&gt;
+    &lt;add key=&quot;NHibernate_ProfilerType&quot;
+         value=&quot;NHibernateProfiler&quot;/&gt;
+&lt;/appSettings&gt;
+</code></pre>
+
+<p>2. For housekeeping you can define an interface.</p>
+
+<pre><code class="c#">public interface IIntegrateProfiler
+{
+    void SetNHibernateProfiler(string directory, string assembly);
+
+    bool CanUseProfiler { get; }
+
+    string ProfilerPath { get; }
+}
+</code></pre>
+
+<p>3. Inside the&#0160;your bootstrapper class, or the class where the&#0160;<a href="http://nhibernate.svn.sourceforge.net/viewvc/nhibernate/trunk/nhibernate/src/NHibernate/ISessionFactory.cs?revision=5259&amp;view=markup" target="_blank" title="Usually an application has a single SessionFactory. Threads servicing client requests obtain ISession&#39;s from the factory.">ISessionFactory</a>&#0160;is built, implement the above interface.</p>
+
+<blockquote>
+<p style="text-align: justify;">In the example below the ValidateDirectory and ValidateFileName methods are not included as well as the&#0160;this.profilerPath &#0160;private instance field.</p>
+</blockquote>
+
+<pre><code class="c#">public void SetNHibernateProfiler(string directory, string assembly)
+{
+    if (ValidateDirectory(directory))
+    {
+        string profilerPath = Path.Combine(directory, assembly);
+
+        if (ValidateFileName(profilerPath))
+        {
+            this.profilerPath = profilerPath;
+        }
+        else
+        {
+            this.profilerPath = string.Empty;
+        }
+    }
+}
+
+public bool CanUseProfiler
+{
+    get { return !string.IsNullOrWhiteSpace(this.profilerPath); }
+}
+
+public string ProfilerPath
+{
+    get { return this.profilerPath; }
+}
+</code></pre>
+
+<p>4. Finally, from your code you can check whether the&#0160;<span style="font-family: Consolas; font-size: 13px;">CanUseProfiler&#0160;</span>property returns true and call the&#0160;<span style="font-family: Consolas; font-size: 13px;">InitializeProfiler&#0160;</span>method below:</p>
+
+<pre><code class="c#">private void InitializeProfiler()
+{
+    Assembly asm  = Assembly.LoadFileLoadFrom(this.options.ProfilerPath);
+    Type profiler = asm.GetExportedTypes().Where(x =&gt; 
+        x.Name == ConfigurationManager.AppSettings[&quot;NHibernate_ProfilerType&quot;])
+            .FirstOrDefault();
+
+     if (profiler != null)
+     {
+         MethodInfo initialize = profiler.GetMethods().Where(x =&gt; 
+           x.Name == ConfigurationManager
+             .AppSettings[&quot;NHibernate_ProfilerMethod&quot;]).FirstOrDefault();
+         if (initialize != null)
+         {
+             initialize.Invoke(null, null);
+         }
+     }
+}
+</code></pre>
+
+<blockquote>
+<p style="text-align: justify;">Actually, the same technique can be used for the other profilers too (<a href="http://efprof.com/" target="_blank" title="Entity Framework Profiler is a real-time visual debugger allowing a development team to gain valuable insight and perspective into their usage of Entity Framework. The product is architected with input coming from many top industry leaders within the OR/M community.">EFProf</a>,&#0160;<a href="http://l2sprof.com/" target="_blank" title="Linq to Sql Profiler is a real-time visual debugger allowing a development team to gain valuable insight and perspective into their usage of Linq to Sql. The product is architected with input coming from many top industry leaders within the OR/M community.">L2SProf</a>, etc).</p>
+</blockquote>
+
+<p>Don&#39;t forget to remove the&#0160;referenced assembly from your project.</p>
+</div><div id="disqus_thread"></div><script type="text/javascript">var disqus_shortname = 'bonusbits';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script></body><script type="text/javascript">var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-24262928-1']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

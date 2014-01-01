@@ -1,0 +1,51 @@
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width" name="viewport" /><title>Legacy Code Risk</title><link href="/images/favicon.ico" rel="icon" type="image/x-icon" /><link href="/feed" rel="alternate" type="application/rss+xml" /><link href="/stylesheets/blog.css?1388607283" media="screen" rel="stylesheet" type="text/css" /></head><body><body><div id="title"><div><h1><a href="/blog" style="color: #222">moodmosaic</a></h1><div><span>by </span><a href="/">Nikos Baxevanis </a><a href="http://creativecommons.org/licenses/by/3.0/" style="color: #877">(license)</a></div></div><div class="line"></div></div><div id="full"><h1><a>Legacy Code Risk</a></h1><div class="undertitle"><span class="date">Filed under </span><a class="tag" href="/blog#legacy-code">legacy-code</a></div><p>Taking the risk to adjust the architecture of a  <a href="http://c2.com/cgi/wiki?WorkingEffectivelyWithLegacyCode">legacy</a> system and extend it in a nice and clean way.</p>
+
+<p>Creating a context:</p>
+
+<ul>
+<li>Complex domain (e.g. life insurance)</li>
+<li>Many technologies are used, tightly coupled (e.g. Redis, db40, iBATIS, Quartz,  Sparks, etc).</li>
+<li>The model has been designed around the <a href="http://en.wikipedia.org/wiki/Active_record_pattern">Active Record</a> (<a href="http://programmers.stackexchange.com/questions/119352/does-the-activerecord-pattern-follow-encourage-the-solid-design-principles">anti</a>)pattern.</li>
+<li>In a few places there are also DAOs and/or Repositories.</li>
+<li>The <a href="http://en.wikipedia.org/wiki/Service_locator_pattern">Service Locator</a> (<a href="http://blog.ploeh.dk/2010/02/03/ServiceLocatorIsAnAntiPattern.aspx">anti</a>)pattern has been applied everywhere.</li>
+<li>Almost everywhere, the <a href="http://en.wikipedia.org/wiki/Single_responsibility_principle">SRP</a> has been violated.</li>
+<li>Communication with any external Web Service is not guarded with a <a href="http://en.wikipedia.org/wiki/Circuit_breaker_design_pattern">Circuit Breaker</a>.</li>
+<li>And yes.. there are no tests..</li>
+</ul>
+
+<blockquote>
+<p>(All the above yield sad customers, bugs, and slow performance.)</p>
+</blockquote>
+
+<p><strong>Against messy, tightly coupled, legacy code</strong></p>
+
+<ul>
+<li>Strive toward <a href="http://blog.ploeh.dk/2012/01/03/SOLIDIsAppendonly.aspx">real SOLID</a> principles</li>
+<li>Instead of doing <a href="http://localhost:4000/2012/01/28/test-after-development-sins/">Test-After Development Sins</a> write <strong>test code</strong> <em>trying</em> to <strong>drive the</strong> <a href="http://xunitpatterns.com/SUT.html">SUT</a> <strong>API</strong> and safely refactoring afterwards. The non-relevant <a href="http://xunitpatterns.com/test%20fixture%20-%20xUnit.html">Test Fixture</a> setup is automated with <a href="https://github.com/AutoFixture">AutoFixture</a> <a href="http://blog.ploeh.dk/2010/10/08/AutoDataTheoriesWithAutoFixture.aspx">decleratively</a> with the xUnit.net <a href="http://nuget.org/packages/AutoFixture.Xunit/">extension</a>.</li>
+<li>Instead of using the Service Locator <strong>use Dependency Injection patterns</strong>, such is <a href="http://blog.ploeh.dk/2011/03/03/InjectionConstructorsShouldBeSimple.aspx">Constructor Injection</a>.</li>
+<li>Instead of using Active Record, Repositories and DAOs consider using <strong>Queries and Commands</strong> <em>(as described in the first half of <a href="http://codebetter.com/gregyoung/2010/02/16/cqrs-task-based-uis-event-sourcing-agh/">this post</a></em>). This might result in more classes but each class is going to have one responsibility instead of two or more.</li>
+</ul>
+
+<p><strong>Why it is a risk?</strong></p>
+
+<p>The above require a few changes in the system architecture (e.g. in order to be possible to <em>not</em> use Service Locators, in order to be possible to use <em>Services</em> to query from the database instead of the Active Record way, etc.).</p>
+
+<p>While the required changes are going to (initially) <a href="http://butunclebob.com/ArticleS.UncleBob.SpeedKills">slow down the development process</a> at the end the overall development is going to be faster.</p>
+
+<blockquote>
+<p>Would <em>you</em> take the risk?</p>
+</blockquote>
+</div><div id="disqus_thread"></div><script type="text/javascript">var disqus_shortname = 'bonusbits';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script></body><script type="text/javascript">var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-24262928-1']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

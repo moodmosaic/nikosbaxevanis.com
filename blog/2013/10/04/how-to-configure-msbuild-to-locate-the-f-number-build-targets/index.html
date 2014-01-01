@@ -1,0 +1,84 @@
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width" name="viewport" /><title>How to configure MSBuild to locate the F# build targets</title><link href="/images/favicon.ico" rel="icon" type="image/x-icon" /><link href="/feed" rel="alternate" type="application/rss+xml" /><link href="/stylesheets/blog.css?1388607283" media="screen" rel="stylesheet" type="text/css" /></head><body><body><div id="title"><div><h1><a href="/blog" style="color: #222">moodmosaic</a></h1><div><span>by </span><a href="/">Nikos Baxevanis </a><a href="http://creativecommons.org/licenses/by/3.0/" style="color: #877">(license)</a></div></div><div class="line"></div></div><div id="full"><h1><a>How to configure MSBuild to locate the F# build targets</a></h1><div class="undertitle"><span class="date">Filed under </span><a class="tag" href="/blog#fsharp">fsharp</a></div><p><strong>Problem</strong></p>
+
+<p>When the <a href="http://nuget.org/packages/AutoFixture.AutoFoq">AutoFixture.AutoFoq</a> build run on the <a href="http://teamcity.codebetter.com/">CodeBetter CI</a> server for the first time, the following error message appeared:</p>
+
+<blockquote>
+<p>MSB4057: The target &ldquo;Build&rdquo; does not exist in the project.</p>
+</blockquote>
+
+<p>That was strange since the build run successfully in a development workstation with VS 2012 and .NET 4.5 installed.</p>
+
+<p><strong>Solution (CI Server)</strong></p>
+
+<p>By <a href="https://twitter.com/codebetterCI/status/379618879846100992">moving the project to a different agent</a>, with .NET 4.5 installed, the problem was solved on the CodeBetter CI server.</p>
+
+<hr>
+
+<p>However, the same issue was <a href="https://github.com/AutoFixture/AutoFixture/issues/177">reported</a> again - this time in a development workstation with VS 2013 RC.</p>
+
+<p><strong>Solution (Workstation)</strong></p>
+
+<p><a href="https://twitter.com/adamchester">Adam Chester</a> has <a href="https://github.com/AutoFixture/AutoFixture/pull/178">provided a solution</a> which seems to work pretty well for VS 2012, VS 2013, and the CodeBetter CI server.</p>
+
+<p><strong>The solution can be applied to all F# projects using the MSBuild platform.</strong></p>
+
+<p>The most important changes are shown below. You can also see the diff as an image <a href="/images/articles/2013-10-04-how-to-configure-msbuild-to-locate-the-fsharp-build-targets.png">here</a>:</p>
+
+<p><img alt="Image" src="/images/articles/2013-10-04-how-to-configure-msbuild-to-locate-the-fsharp-build-targets.png?1388607282" /></p>
+
+<p><strong>A note for VS 2012 users</strong></p>
+
+<p>While VS 2013 RC applies these changes automatically for F# projects, in VS 2012 the project file must be tweaked manually:</p>
+
+<p><strong>Step 1</strong> - Append:</p>
+
+<pre><code>&lt;TargetFSharpCoreVersion&gt;4.3.0.0&lt;/TargetFSharpCoreVersion&gt;
+</code></pre>
+
+<p><strong>Step 2</strong> - Find and Replace:</p>
+
+<pre><code>&lt;Import Project=&quot;$(MSBuildExtensionsPath32)\..\Microsoft SDKs\F#\3.0\Framework\v4.0\Microsoft.FSharp.Targets&quot; Condition=&quot; Exists(&#39;$(MSBuildExtensionsPath32)\..\Microsoft SDKs\F#\3.0\Framework\v4.0\Microsoft.FSharp.Targets&#39;)&quot; /&gt;
+</code></pre>
+
+<p>With:</p>
+
+<pre><code>&lt;Choose&gt;
+  &lt;When Condition=&quot;&#39;$(VisualStudioVersion)&#39; == &#39;11.0&#39;&quot;&gt;
+    &lt;PropertyGroup&gt;
+      &lt;FSharpTargetsPath&gt;$(MSBuildExtensionsPath32)\..\Microsoft SDKs\F#\3.0\Framework\v4.0\Microsoft.FSharp.Targets&lt;/FSharpTargetsPath&gt;
+    &lt;/PropertyGroup&gt;
+  &lt;/When&gt;
+  &lt;Otherwise&gt;
+    &lt;PropertyGroup&gt;
+      &lt;FSharpTargetsPath&gt;$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\FSharp\Microsoft.FSharp.Targets&lt;/FSharpTargetsPath&gt;
+    &lt;/PropertyGroup&gt;
+  &lt;/Otherwise&gt;
+&lt;/Choose&gt;
+&lt;Import Project=&quot;$(FSharpTargetsPath)&quot; Condition=&quot;Exists(&#39;$(FSharpTargetsPath)&#39;)&quot; /&gt;
+</code></pre>
+
+<p><strong>Step 3</strong> - Find and Replace:</p>
+
+<pre><code>&lt;Reference Include=&#39;FSharp.Core, Version=4.3.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a&#39;&gt;
+</code></pre>
+
+<p>With:</p>
+
+<pre><code>&lt;Reference Include=&#39;FSharp.Core, Version=$(TargetFSharpCoreVersion), Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a&#39;&gt;
+</code></pre>
+
+<p>The F# build targets, compiler, and run time should be located successfully now.</p>
+</div><div id="disqus_thread"></div><script type="text/javascript">var disqus_shortname = 'bonusbits';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script></body><script type="text/javascript">var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-24262928-1']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

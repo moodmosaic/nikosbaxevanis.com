@@ -1,0 +1,95 @@
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width" name="viewport" /><title>Statement Completion for Dynamic languages in Sublime Text</title><link href="/images/favicon.ico" rel="icon" type="image/x-icon" /><link href="/feed" rel="alternate" type="application/rss+xml" /><link href="/stylesheets/blog.css?1388607283" media="screen" rel="stylesheet" type="text/css" /></head><body><body><div id="title"><div><h1><a href="/blog" style="color: #222">moodmosaic</a></h1><div><span>by </span><a href="/">Nikos Baxevanis </a><a href="http://creativecommons.org/licenses/by/3.0/" style="color: #877">(license)</a></div></div><div class="line"></div></div><div id="full"><h1><a>Statement Completion for Dynamic languages in Sublime Text</a></h1><div class="undertitle"><span class="date">Filed under </span><a class="tag" href="/blog#sublime-text">sublime-text</a></div><p>This post describes how to configure <a href="http://www.sublimetext.com/">Sublime Text</a> in order to get statement completion for JavaScript, Python, <em>(and perhaps PHP, RHTML, Smarty, Mason, Node.js, XBL, Tcl, HTML, HTML5, TemplateToolkit, XUL, Django, Perl, and Ruby)</em>.</p>
+
+<blockquote>
+<p>After following the steps, statement completion will also work for Python projects installed in a <a href="http://www.virtualenv.org/en/latest/index.html#what-it-does">virtualenv</a>.</p>
+</blockquote>
+
+<ul>
+<li>Download Sublime Text from <a href="http://www.sublimetext.com/2">here</a>.</li>
+<li>Install on Windows or OS X (it doesn&#39;t really matter).</li>
+</ul>
+
+<p><strong>Install Package Manager</strong></p>
+
+<ul>
+<li>Run Sublime Text</li>
+<li>Open the Sublime Text Console. This is accessed via the <em>ctrl + </em> shortcut.</li>
+<li>Paste the command found <a href="https://sublime.wbond.net/installation">here</a> into the console.</li>
+<li>Restart Sublime Text</li>
+</ul>
+
+<blockquote>
+<p>We have just installed Sublime Package Control - A full-featured package manager that helps discovering, installing, updating and removing packages for Sublime Text 2. It features an automatic updater and supports GitHub, BitBucket and a full channel/repository system.</p>
+</blockquote>
+
+<p><strong>Configure Statement Completion</strong></p>
+
+<ul>
+<li>Press <em>ctrl + shift + p</em> (Windows, Linux) or <em>cmd + shift + p</em> (OS X).</li>
+<li>Type <em>Install Package</em> and select it.</li>
+</ul>
+
+<blockquote>
+<p>The <em>Install Package</em> command shows a list of all available packages that are available for install. This will include all of the packages from the <a href="http://wbond.net/sublime_packages/community">default channel</a>, plus any from repositories you have added.</p>
+</blockquote>
+
+<ul>
+<li>Select <code>SublimeCodeIntel</code> from the list of packages.</li>
+</ul>
+
+<p><strong>Configure Statement Completion for Python projects in virtualenv</strong></p>
+
+<p><em>You may skip this if you are not using virtualenv.</em></p>
+
+<ul>
+<li>Create a <code>.codeintel</code> directory at the root of the project</li>
+<li>Create a <code>config</code> file (without any extension) inside the newly created directory.</li>
+</ul>
+
+<pre><code class="json">{
+    &quot;Python&quot;: {
+        &quot;python&quot;: &#39;~/Documents/Projects/VirtualEnvName/bin/python&#39;,
+        &quot;pythonExtraPaths&quot;: [&#39;~/Documents/Projects/VirtualEnvName/lib/python/site-packages&#39;,
+        ]
+    },
+}
+</code></pre>
+
+<p>Note that <code>VirtualEnvName</code> is the name of the virtualenv were the files of the project are located.</p>
+
+<p>The project itself is in <code>~/Documents/Projects/VirtualEnvName/ProjectName</code></p>
+
+<p><strong>Statement Completion in action!</strong></p>
+
+<p>A screenshot for jQuery (note also the <a href="https://github.com/buymeasoda/soda-theme"><em>very</em> cool theme</a>)
+<p><img src="http://farm9.staticflickr.com/8357/8397459957_e121e4b04c_o.png" alt="A screenshot for jQuery"/></p></p>
+
+<p>Also,</p>
+
+<p><a href="http://farm9.staticflickr.com/8076/8398548370_3a313d63d8_o.png" target="_blank">A screenshot for Document Object Model</a></p>
+
+<p><a href="http://farm9.staticflickr.com/8466/8397459947_18d7176364_o.png" target="_blank">A screenshot for Python</a></p>
+
+<p>References:</p>
+
+<ul>
+<li><a href="http://www.sublimetext.com/">Sublime Text - The text editor you&#39;ll fall in love with</a></li>
+<li><a href="http://wbond.net/sublime_packages/package_control">Sublime Package Control - Overview</a></li>
+<li><a href="http://wbond.net/sublime_packages/package_control/usage">Sublime Package Control - Usage</a></li>
+<li><a href="https://github.com/Kronuz/SublimeCodeIntel">Sublime Code Intel - Overview</a></li>
+<li><a href="https://github.com/Kronuz/SublimeCodeIntel/issues/165">Sublime Code Intel - Usage on virtualenv</a></li>
+</ul>
+</div><div id="disqus_thread"></div><script type="text/javascript">var disqus_shortname = 'bonusbits';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script></body><script type="text/javascript">var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-24262928-1']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

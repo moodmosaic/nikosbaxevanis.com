@@ -1,0 +1,25 @@
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width" name="viewport" /><title>What goes first? (Theory or Tooling)</title><link href="/images/favicon.ico" rel="icon" type="image/x-icon" /><link href="/feed" rel="alternate" type="application/rss+xml" /><link href="/stylesheets/blog.css?1388607283" media="screen" rel="stylesheet" type="text/css" /></head><body><body><div id="title"><div><h1><a href="/blog" style="color: #222">moodmosaic</a></h1><div><span>by </span><a href="/">Nikos Baxevanis </a><a href="http://creativecommons.org/licenses/by/3.0/" style="color: #877">(license)</a></div></div><div class="line"></div></div><div id="full"><h1><a>What goes first? (Theory or Tooling)</a></h1><div class="undertitle"><span class="date">Filed under </span><a class="tag" href="/blog#software-eng">software-eng</a></div><blockquote>
+<p>A very good friend of mine went to an interview where the interviewer kept asking about the X, Y or Z tool without paying attention to knowledge on the theory behind those tools.</p>
+</blockquote>
+
+<p>In my opinion it is always better to have a discussion, rather than a cliché&#0160;interview.&#0160;During the discussion it would be good to let the developer talk and express opinions on theory, design patterns and principles rather than make questions on specific tools and frameworks. The reason I strongly support that is because languages and tools tend to continuously&#0160;evolve (and sometimes change directions) while the patterns and principles hardly change.</p>
+
+<p>Tools are implementations of patterns and principles in a specific language. Thus a developer should give priority on the theory behind them rather on the API of a specific tool.</p>
+
+<p>Let&#39;s take as an example a Dependency Injection (DI) container. It gives no real value when a developer knows <em>only</em> how to use Spring, Windsor or Unity if lacks fundamental knowledge of DI theory. On the other hand one, that knows how to apply proper&#0160;<a href="http://butunclebob.com/ArticleS.UncleBob.PrinciplesOfOod" target="_blank" title="The Principles of OOD">OOD</a>&#0160;design and follows SOLID&#0160;principles, will use a DI container to compose object graphs in the <a href="http://blog.ploeh.dk/2011/07/28/CompositionRoot.aspx" target="_blank" title="Composition Root">Composition Root</a> and it&#39;s API to effectively apply lifetime management on them.</p>
+
+<p>The same applies when making questions on a specific ORM solution.</p>
+</div><div id="disqus_thread"></div><script type="text/javascript">var disqus_shortname = 'bonusbits';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script></body><script type="text/javascript">var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-24262928-1']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

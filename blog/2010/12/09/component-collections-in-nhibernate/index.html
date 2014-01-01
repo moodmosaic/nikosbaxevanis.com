@@ -1,0 +1,189 @@
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width" name="viewport" /><title>Component Collections in NHibernate</title><link href="/images/favicon.ico" rel="icon" type="image/x-icon" /><link href="/feed" rel="alternate" type="application/rss+xml" /><link href="/stylesheets/blog.css?1388607283" media="screen" rel="stylesheet" type="text/css" /></head><body><body><div id="title"><div><h1><a href="/blog" style="color: #222">moodmosaic</a></h1><div><span>by </span><a href="/">Nikos Baxevanis </a><a href="http://creativecommons.org/licenses/by/3.0/" style="color: #877">(license)</a></div></div><div class="line"></div></div><div id="full"><h1><a>Component Collections in NHibernate</a></h1><div class="undertitle"><span class="date">Filed under </span><a class="tag" href="/blog#nhibernate">nhibernate</a></div><p><strong>Update:</strong>&#0160;In <a href="http://www.nikosbaxevanis.com/bonus-bits/2010/12/component-base-class-nhibernate.html" target="_blank" title="ComponentBase(Of T) Class for NHibernate Components.">this post</a> I discuss further about the ComponentBase(Of T) Class.</p>
+
+<p>Objects that are used to describe certain&#0160;aspects of a domain, and which do not have identity, are named&#0160;Value Objects (do not confuse them with .NET Value Types). Value Object is a term used in <a href="http://en.wikipedia.org/wiki/Domain-driven_design" target="_blank" title="omain-driven design (DDD) is an approach to developing software for complex needs by deeply connecting the implementation to an evolving model of the core business concepts.">Domain-driven design</a> (DDD). In NHibernate, such kind of objects are declared using the <i>component</i> tag. However, <span style="text-decoration: underline;">collections of components</span> are declared with a <i>composite-element</i> tag.</p>
+
+<p>Here is an example with <a href="http://www.fluentnhibernate.org/" target="_blank">Fluent NHibernate</a>:</p>
+
+<pre><code class="c#">/*
+&lt;set name=&quot;MandatoryCoverages&quot;
+    table=&quot;CarUseMandatoryCoverageFees&quot; mutable=&quot;true&quot;&gt;
+&lt;key&gt;
+    &lt;column name=&quot;CarUse_id&quot; /&gt;
+&lt;/key&gt;
+&lt;composite-element class=&quot;Domain.Car.CarCoverageFee, ..&quot;&gt;
+    &lt;property name=&quot;NetFeePercentage&quot; type=&quot;System.Double, ..&quot;&gt;
+    &lt;column name=&quot;NetFeePercentage&quot; /&gt;
+    &lt;/property&gt;
+    &lt;many-to-one class=&quot;Domain.Car.CarCoverageFee,
+                fetch=&quot;join&quot; name=&quot;Coverage&quot;&gt;
+    &lt;column name=&quot;Coverage_id&quot; /&gt;
+    &lt;/many-to-one&gt;
+&lt;/composite-element&gt;
+&lt;/set&gt;
+*/
+HasMany&lt;CarCoverageFee&gt;(x =&gt; x.MandatoryCoverages)
+    .AsSet()
+    .Table(&quot;CarUseMandatoryCoverageFees&quot;)
+    .Component(fee =&gt;
+    {
+        fee.References&lt;Coverage&gt;(x =&gt; x.Coverage).Fetch.Join();
+        fee.Map(x =&gt; x.NetFeePercentage);
+    });
+</code></pre>
+
+<p><br /></p>
+
+<pre><code class="c#">/*
+&lt;set name=&quot;OptionalCoverages&quot;
+    table=&quot;CarUseOptionalCoverageFees&quot; mutable=&quot;true&quot;&gt;
+&lt;key&gt;
+    &lt;column name=&quot;CarUse_id&quot; /&gt;
+&lt;/key&gt;
+&lt;composite-element class=&quot;Domain.Car.CarCoverageFee, ..&quot;&gt;
+    &lt;property name=&quot;NetFeePercentage&quot; type=&quot;System.Double, ..&quot;&gt;
+    &lt;column name=&quot;NetFeePercentage&quot; /&gt;
+    &lt;/property&gt;
+    &lt;many-to-one class=&quot;Domain.Car.CarCoverageFee,
+                fetch=&quot;join&quot; name=&quot;Coverage&quot;&gt;
+    &lt;column name=&quot;Coverage_id&quot; /&gt;
+    &lt;/many-to-one&gt;
+&lt;/composite-element&gt;
+&lt;/set&gt;
+*/
+HasMany&lt;CarCoverageFee&gt;(x =&gt; x.OptionalCoverages)
+    .AsSet()
+    .Table(&quot;CarUseOptionalCoverageFees&quot;)
+    .Component(fee =&gt;
+    {
+        fee.References&lt;Coverage&gt;(x =&gt; x.Coverage).Fetch.Join();
+        fee.Map(x =&gt; x.NetFeePercentage);
+    });
+</code></pre>
+
+<p>The&#0160;CarCoverageFee class is a component (a Value Object for DDD) so <span style="text-decoration: underline;">it does not have an identity field</span>.&#0160;This creates a lot of noise between the application and the database as we can see from the image below:</p>
+
+<p><img src="http://farm9.staticflickr.com/8183/8397466663_aa3d5e1fca_b.jpg" alt="Profiler output, without overriding Equals and GetHashCode" /></p>
+
+<p>We can define an abstract base class for our components. Inside this class we override the Equals method and immediately throw an exception to the caller indicating that this method must be overridden by the caller:</p>
+
+<pre><code class="c#">public abstract class ComponentBase
+{
+    /// &lt;summary&gt;
+    /// Determines whether the specified
+    /// &lt;see cref=&quot;System.Object&quot;/&gt; is equal
+    /// to this instance.
+    /// &lt;/summary&gt;
+    /// &lt;param name=&quot;obj&quot;&gt;The &lt;see cref=&quot;System.Object&quot;/&gt;
+    /// to compare with this instance.&lt;/param&gt;
+    /// &lt;returns&gt;
+    ///     &lt;c&gt;true&lt;/c&gt; if the specified
+    ///     &lt;see cref=&quot;System.Object&quot;/&gt; is equal to this
+    ///     instance; otherwise, &lt;c&gt;false&lt;/c&gt;.
+    /// &lt;/returns&gt;
+    /// &lt;exception cref=&quot;T:System.NullReferenceException&quot;&gt;
+    /// The &lt;paramref name=&quot;obj&quot;/&gt; parameter is null.
+    /// &lt;/exception&gt;
+    public override bool Equals(object obj)
+    {
+        throw new MethodAccessException(
+            &quot;Components must be compared using property values.&quot;);
+    }
+
+    /// &lt;summary&gt;
+    /// Returns a hash code for this instance.
+    /// &lt;/summary&gt;
+    /// &lt;returns&gt;
+    /// A hash code for this instance, suitable for
+    /// use in hashing algorithms and data structures
+    /// like a hash table.
+    /// &lt;/returns&gt;
+    public override int GetHashCode()
+    {
+        throw new MethodAccessException(
+            &quot;Components must be hashed using property values.&quot;);
+    }
+}
+</code></pre>
+
+<p>Here is the class, modified to inherit from the ComponentBase class:</p>
+
+<pre><code class="c#">public class CarCoverageFee : ComponentBase
+{
+    /// &lt;summary&gt;
+    /// Gets or sets the coverage.
+    /// &lt;/summary&gt;
+    /// &lt;value&gt;The coverage.&lt;/value&gt;
+    public virtual Coverage Coverage { get; set; }
+
+    /// &lt;summary&gt;
+    /// Gets or sets the fee.
+    /// &lt;/summary&gt;
+    /// &lt;value&gt;The fee.&lt;/value&gt;
+    public virtual double NetFeePercentage { get; set; }
+
+    /// &lt;summary&gt;
+    /// Determines whether the specified
+    /// &lt;see cref=&quot;System.Object&quot;/&gt; is equal
+    /// to this instance.
+    /// &lt;/summary&gt;
+    /// &lt;param name=&quot;obj&quot;&gt;The &lt;see cref=&quot;System.Object&quot;/&gt;
+    /// to compare with this instance.&lt;/param&gt;
+    /// &lt;returns&gt;
+    ///     &lt;c&gt;true&lt;/c&gt; if the specified
+    ///     &lt;see cref=&quot;System.Object&quot;/&gt; is equal to this
+    ///     instance; otherwise, &lt;c&gt;false&lt;/c&gt;.
+    /// &lt;/returns&gt;
+    /// &lt;exception cref=&quot;T:System.NullReferenceException&quot;&gt;
+    /// The &lt;paramref name=&quot;obj&quot;/&gt; parameter is null.
+    /// &lt;/exception&gt;
+    public override bool Equals(object obj)
+    {
+        // The given object to compare to can&#39;t be null.
+        if (obj == null) { return false; }
+
+        // If objects are different types, they can&#39;t be equal.
+        if (this.GetType() != obj.GetType()) { return false; }
+
+        // At this point, we really know that obj is really
+        // a CarCoverageFee object. Cast obj to CarCoverageFee.
+        if (Coverage.Code != ((CarCoverageFee)obj)
+            .Coverage.Code) { return false; }
+
+        return true;
+    }
+
+    /// &lt;summary&gt;
+    /// Returns a hash code for this instance.
+    /// &lt;/summary&gt;
+    /// &lt;returns&gt;
+    /// A hash code for this instance, suitable for
+    /// use in hashing algorithms and data structures
+    /// like a hash table.
+    /// &lt;/returns&gt;
+    public override int GetHashCode()
+    {
+        return Coverage.Name.GetHashCode()
+             + Coverage.Code.GetHashCode();
+    }
+}
+</code></pre>
+
+<p>After overriding Equals and GetHashCode methods, I compared the Sessions:</p>
+
+<p><img src="http://farm9.staticflickr.com/8079/8398555276_1b307eb2dd_b.jpg" alt="The Diff after overriding Equals and GetHashCode" /></p>
+
+<p>Now, everything looks fine; No necessary inserts and deletes.</p>
+</div><div id="disqus_thread"></div><script type="text/javascript">var disqus_shortname = 'bonusbits';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script></body><script type="text/javascript">var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-24262928-1']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

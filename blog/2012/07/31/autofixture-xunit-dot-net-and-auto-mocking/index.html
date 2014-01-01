@@ -1,0 +1,307 @@
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width" name="viewport" /><title>AutoFixture, xUnit.net, and Auto Mocking</title><link href="/images/favicon.ico" rel="icon" type="image/x-icon" /><link href="/feed" rel="alternate" type="application/rss+xml" /><link href="/stylesheets/blog.css?1388607283" media="screen" rel="stylesheet" type="text/css" /></head><body><body><div id="title"><div><h1><a href="/blog" style="color: #222">moodmosaic</a></h1><div><span>by </span><a href="/">Nikos Baxevanis </a><a href="http://creativecommons.org/licenses/by/3.0/" style="color: #877">(license)</a></div></div><div class="line"></div></div><div id="full"><h1><a>AutoFixture, xUnit.net, and Auto Mocking</a></h1><div class="undertitle"><span class="date">Filed under </span><a class="tag" href="/blog#xunit.net">xunit.net</a><a class="tag" href="/blog#autofixture">autofixture</a><a class="tag" href="/blog#unit-testing">unit-testing</a></div><p><strong>Update</strong>: In AutoFixture 3 <a href="https://github.com/AutoFixture/AutoFixture/wiki/AutoFixture-3.0-Release-Notes#numbers-are-random">numbers are random</a>.</p>
+
+<blockquote>
+<p>The features discussed in this post are available when using <a href="https://github.com/AutoFixture/AutoFixture">AutoFixture</a> <a href="http://blog.ploeh.dk/2010/10/08/AutoDataTheoriesWithAutoFixture.aspx">decleratively</a> with the xUnit.net <a href="http://nuget.org/packages/AutoFixture.Xunit/">extension</a>. In addition, it is required to have at least one of the extensions for Auto Mocking using <a href="http://nuget.org/packages/AutoFixture.AutoMoq">AutoMoq</a>, <a href="http://nuget.org/packages/AutoFixture.AutoRhinoMocks">AutoRhinoMocks</a>, <a href="http://nuget.org/packages/AutoFixture.AutoFakeItEasy">AutoFakeItEasy</a>, or <a href="http://nuget.org/packages/AutoFixture.AutoNSubstitute">AutoNSubstitute</a>.</p>
+</blockquote>
+
+<p>To install AutoFixture with xUnit.net data theories, run the following command in the Package Manager Console:</p>
+
+<pre><code class="c#">PM&gt; Install-Package AutoFixture.Xunit
+</code></pre>
+
+<p>In the test method below we would like to use xUnit.net data theories to provide:</p>
+
+<ol>
+<li>Auto-generated data specimens for <code>d</code>, <code>s</code>, <code>i</code>, <code>a</code>.</li>
+<li>Auto-generated data specimens for <code>_</code>, <code>s</code>, <code>i</code>, <code>a</code>, and inline values for <code>d</code>.</li>
+<li>Auto-generated data specimens for <code>_</code>, <code>_</code>, <code>i</code>, <code>a</code>, and inline values for <code>d</code>, <code>s</code>.</li>
+</ol>
+
+<pre><code class="c#">public void TestMethod(
+    double d, string s, IInterface i, AbstractType a)
+{
+    Assert.True(
+        d != 0    &amp;&amp;
+        s != null &amp;&amp;
+        i != null &amp;&amp;
+        a != null
+        );
+}
+</code></pre>
+
+<blockquote>
+<p>That fact that argument <code>i</code> is an interface and argument <code>a</code> is an abstract class prevents us from using <code>[InlineData]</code>, <code>[AutoData]</code>, or <code>[InlineAutoData]</code> attributes.</p>
+</blockquote>
+
+<p>AutoFixture allows us to easily define custom DataAttribute derived types:</p>
+
+<ul>
+<li>By deriving from AutoDataAttribute and passing to the base constructor a customization that enables auto mocking with Moq, Rhino Mocks, FakeItEasy, or NSubstitute.</li>
+<li>By deriving from CompositeDataAttribute and passing to the base constructor an array of DataAttribute derived type instances, e.g. an instance of <code>InlineDataAttribute</code> and an instance of <code>AutoDataAttribute</code> derived type.</li>
+</ul>
+
+<p><strong>Auto Mocking using Moq</strong></p>
+
+<p>To install AutoFixture with Auto Mocking using Moq, run the following command in the Package Manager Console:</p>
+
+<pre><code class="c#">PM&gt; Install-Package AutoFixture.AutoMoq
+</code></pre>
+
+<p>We decorate the test method with AutoMoqData and InlineAutoMoqData attributes:</p>
+
+<pre><code class="c#">[Theory]
+[AutoMoqData]
+[InlineAutoMoqData(2)]
+[InlineAutoMoqData(3, &quot;foo&quot;)]
+public void WithMoq(
+    double d, string s, IInterface i, AbstractType a)
+{
+    Write(d, s, i, a);
+}
+</code></pre>
+
+<p>Output:</p>
+
+<pre><code class="python">AutoMoqData:
+  d = 1
+  s = s05080d05-b874-4182-bba5-18678ad9b134
+  i = Castle.Proxies.IInterfaceProxy
+  a = Castle.Proxies.AbstractTypeProxy
+
+InlineAutoMoqData:
+  d = 2
+  s = sce87888d-8cc8-4f69-927c-c4b1347d3147
+  i = Castle.Proxies.IInterfaceProxy
+  a = Castle.Proxies.AbstractTypeProxy
+
+InlineAutoMoqData:
+  d = 3
+  s = foo
+  i = Castle.Proxies.IInterfaceProxy
+  a = Castle.Proxies.AbstractTypeProxy
+</code></pre>
+
+<p>Source code:</p>
+
+<pre><code class="c#">internal class AutoMoqDataAttribute : AutoDataAttribute
+{
+    internal AutoMoqDataAttribute()
+        : base(new Fixture().Customize(new AutoMoqCustomization()))
+    {
+    }
+}
+
+internal class InlineAutoMoqDataAttribute : CompositeDataAttribute
+{
+    internal InlineAutoMoqDataAttribute(params object[] values)
+        : base(new DataAttribute[] { 
+            new InlineDataAttribute(values), new AutoMoqDataAttribute() })
+    {
+    }
+}
+</code></pre>
+
+<p>More information on AutoFixture with Auto Mocking using Moq can be found at <a href="http://blog.ploeh.dk/2010/08/19/AutoFixtureAsAnAutomockingContainer.aspx">AutoFixture as an auto-mocking container</a> blog post.</p>
+
+<p><strong>Auto Mocking using Rhino Mocks</strong></p>
+
+<p>To install AutoFixture with Auto Mocking using Rhino Mocks, run the following command in the Package Manager Console:</p>
+
+<pre><code class="c#">PM&gt; Install-Package AutoFixture.AutoRhinoMocks
+</code></pre>
+
+<p>We decorate the test method with AutoRhinoMockData and InlineAutoRhinoMockData attributes:</p>
+
+<pre><code class="c#">[Theory]
+[AutoRhinoMockData]
+[InlineAutoRhinoMockData(2)]
+[InlineAutoRhinoMockData(3, &quot;foo&quot;)]
+public void WithRhinoMocks(
+    double d, string s, IInterface i, AbstractType a)
+{
+    Write(d, s, i, a);
+}
+</code></pre>
+
+<p>Ouput:</p>
+
+<pre><code class="python">AutoRhinoMockData:
+  d = 1
+  s = s01172643-5162-474f-bcfa-319ef40a8272
+  i = Castle.Proxies.IInterfaceProxy201f58a5559841bfb41895881489658c
+  a = Castle.Proxies.AbstractTypeProxy5a86172bbda14cc098b4c675c5b7e555
+
+InlineAutoRhinoMockData:
+  d = 2
+  s = sd3b9c112-5181-4daa-9b2f-333c7498044a
+  i = Castle.Proxies.IInterfaceProxy201f58a5559841bfb41895881489658c
+  a = Castle.Proxies.AbstractTypeProxy5a86172bbda14cc098b4c675c5b7e555
+
+InlineAutoRhinoMockData:
+  d = 3
+  s = foo
+  i = Castle.Proxies.IInterfaceProxy201f58a5559841bfb41895881489658c
+  a = Castle.Proxies.AbstractTypeProxy5a86172bbda14cc098b4c675c5b7e555
+</code></pre>
+
+<p>Source code:</p>
+
+<pre><code class="c#">internal class AutoRhinoMockDataAttribute : AutoDataAttribute
+{
+    internal AutoRhinoMockDataAttribute()
+        : base(new Fixture().Customize(new AutoRhinoMockCustomization()))
+    {
+    }
+}
+
+internal class InlineAutoRhinoMockDataAttribute : CompositeDataAttribute
+{
+    internal InlineAutoRhinoMockDataAttribute(params object[] values)
+        : base(new DataAttribute[] { 
+            new InlineDataAttribute(values), new AutoRhinoMockDataAttribute() })
+    {
+    }
+}
+</code></pre>
+
+<p>More information on AutoFixture with Auto Mocking using Rhino Mocks can be found at <a href="http://blog.ploeh.dk/2010/11/13/RhinoMocksbasedAutomockingWithAutoFixture.aspx">Rhino Mocks-based auto-mocking with AutoFixture</a> blog post.</p>
+
+<p><strong>Auto Mocking using FakeItEasy</strong></p>
+
+<p>To install AutoFixture with Auto Mocking using FakeItEasy, run the following command in the Package Manager Console:</p>
+
+<pre><code class="c#">PM&gt; Install-Package AutoFixture.AutoFakeItEasy
+</code></pre>
+
+<p>We decorate the test method with AutoFakeItEasyData or InlineAutoFakeItEasyData attributes:</p>
+
+<pre><code class="c#">[Theory]
+[AutoFakeItEasyData]
+[InlineAutoFakeItEasyData(2)]
+[InlineAutoFakeItEasyData(3, &quot;foo&quot;)]
+public void WithFakeItEasy(
+    double d, string s, IInterface i, AbstractType a)
+{
+    Write(d, s, i, a);
+}
+</code></pre>
+
+<p>Output:</p>
+
+<pre><code class="python">AutoFakeItEasyData:
+  d = 1
+  s = s2b4c118b-d18b-4782-992a-d4138c65fd2a
+  i = Faked IInterface
+  a = Faked AbstractType
+
+InlineAutoFakeItEasyData:
+  d = 2
+  s = se8da7e09-ea4f-4d16-86bd-4229802e5f5d
+  i = Faked IInterface
+  a = Faked AbstractType
+
+InlineAutoFakeItEasyData:
+  d = 3
+  s = foo
+  i = Faked IInterface
+  a = Faked AbstractType
+</code></pre>
+
+<p>Source code:</p>
+
+<pre><code class="c#">internal class AutoFakeItEasyDataAttribute : AutoDataAttribute
+{
+    internal AutoFakeItEasyDataAttribute()
+        : base(new Fixture().Customize(new AutoFakeItEasyCustomization()))
+    {
+    }
+}
+
+internal class InlineAutoFakeItEasyDataAttribute : CompositeDataAttribute
+{
+    internal InlineAutoFakeItEasyDataAttribute(params object[] values)
+        : base(new DataAttribute[] { 
+            new InlineDataAttribute(values), new AutoFakeItEasyDataAttribute() })
+    {
+    }
+}
+</code></pre>
+
+<p>More information on AutoFixture with Auto Mocking using FakeItEasy can be found at <a href="http://nikosbaxevanis.com/2011/12/14/auto-mocking-with-fakeiteasy-and-autofixture/">Auto-Mocking with FakeItEasy and AutoFixture</a> blog post.</p>
+
+<p><strong>Auto Mocking using NSubstitute</strong></p>
+
+<p>To install AutoFixture with Auto Mocking using NSubstitute, run the following command in the Package Manager Console:</p>
+
+<pre><code class="c#">PM&gt; Install-Package AutoFixture.AutoNSubstitute
+</code></pre>
+
+<p>We decorate the test method with AutoNSubstituteData or InlineAutoNSubstituteData attributes:</p>
+
+<pre><code class="c#">[Theory]
+[AutoNSubstituteData]
+[InlineAutoNSubstituteData(2)]
+[InlineAutoNSubstituteData(3, &quot;foo&quot;)]
+public void WithNSubstitute(
+    double d, string s, IInterface i, AbstractType a)
+{
+    Write(d, s, i, a);
+}
+</code></pre>
+
+<p>Output:</p>
+
+<pre><code class="python">AutoNSubstituteData:
+  d = 1
+  s = sf7ce77e0-c2b3-4749-b9ec-78f3aba0254a
+  i = Castle.Proxies.IInterfaceProxy
+  a = Castle.Proxies.AbstractTypeProxy
+
+InlineAutoNSubstituteData:
+  d = 2
+  s = sf7ba31be-3136-4b50-a51f-3763f1d06004
+  i = Castle.Proxies.IInterfaceProxy
+  a = Castle.Proxies.AbstractTypeProxy
+
+InlineAutoNSubstituteData:
+  d = 3
+  s = foo
+  i = Castle.Proxies.IInterfaceProxy
+  a = Castle.Proxies.AbstractTypeProxy
+</code></pre>
+
+<p>Source code:</p>
+
+<pre><code class="c#">internal class AutoNSubstituteDataAttribute : AutoDataAttribute
+{
+    internal AutoNSubstituteDataAttribute()
+        : base(new Fixture().Customize(new AutoNSubstituteCustomization()))
+    {
+    }
+}
+
+internal class InlineAutoNSubstituteDataAttribute : CompositeDataAttribute
+{
+    internal InlineAutoNSubstituteDataAttribute(params object[] values)
+        : base(new DataAttribute[] { 
+            new InlineDataAttribute(values), new AutoNSubstituteDataAttribute() })
+    {
+    }
+}
+</code></pre>
+
+<p>More information on AutoFixture with Auto Mocking using NSubstitute can be found at <a href="http://blog.ploeh.dk/2013/01/09/NSubstituteAuto-mockingwithAutoFixture/">NSubstitute Auto-mocking with AutoFixture</a> blog post.</p>
+</div><div id="disqus_thread"></div><script type="text/javascript">var disqus_shortname = 'bonusbits';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script></body><script type="text/javascript">var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-24262928-1']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

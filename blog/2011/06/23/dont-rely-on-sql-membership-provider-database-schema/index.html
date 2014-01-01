@@ -1,0 +1,223 @@
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width" name="viewport" /><title>Don&#39;t Rely on SQL Membership Provider database schema</title><link href="/images/favicon.ico" rel="icon" type="image/x-icon" /><link href="/feed" rel="alternate" type="application/rss+xml" /><link href="/stylesheets/blog.css?1388607283" media="screen" rel="stylesheet" type="text/css" /></head><body><body><div id="title"><div><h1><a href="/blog" style="color: #222">moodmosaic</a></h1><div><span>by </span><a href="/">Nikos Baxevanis </a><a href="http://creativecommons.org/licenses/by/3.0/" style="color: #877">(license)</a></div></div><div class="line"></div></div><div id="full"><h1><a>Don&#39;t Rely on SQL Membership Provider database schema</a></h1><div class="undertitle"><span class="date">Filed under </span><a class="tag" href="/blog#nhibernate">nhibernate</a></div><p>You take the blue pill and the story <a href="http://blogs.teamb.com/craigstuntz/2010/03/05/38558/">ends</a>.</p>
+
+<p>However, due to the role-centric nature of many applications, entities rely on the user and it&#39;s role(s).&#0160;On registration, the user choose one or more roles. Each role is associated with behaviors. For each behavior one or more restriction policies apply, etc.&#0160;</p>
+
+<p>In somes cases, we could decide to take a dependency on the ASP.NET Membership tables and just map on the UserName column of Users table, and the RoleName column of Roles table (also on the UsersInRole table too).</p>
+
+<p>Fabio has a <a href="http://fabiomaulo.blogspot.com/2010/03/conform-mapping-aspnet-membership.html" target="_blank" title="ConfORM: &quot;Mapping&quot; ASP.NET Membership">post</a> on how you can do this using ConfORM. In this post I will map only the User and Role tables. In addition, I will demonstrate an elegant approach of assigning different behaviors on the Role entity and mapping them with the RoleName column on the database.</p>
+
+<p><strong>Entities</strong></p>
+
+<pre><code class="c#">using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+
+public class User : Entity&lt;Guid&gt;
+{
+    public virtual string UserName { get; set; }
+
+    public virtual ICollection&lt;Role&gt; Roles { get; set; }
+
+    public User()
+    {
+        Roles = new Collection&lt;Role&gt;();
+    }
+}
+
+public class Role : Entity&lt;Guid&gt;
+{
+    public virtual string RoleName { get; set; }
+
+    public virtual RoleType RoleType { get; set; }
+
+    public virtual ICollection&lt;User&gt; Users { get; set; }
+
+    public Role()
+    {
+        Users = new Collection&lt;User&gt;();
+    }
+}
+</code></pre>
+
+<p><strong>Mappings</strong></p>
+
+<pre><code class="c#">using FluentNHibernate.Mapping;
+
+public sealed class UserMap : ClassMap&lt;User&gt;
+{
+    public UserMap()
+    {
+        Table(&quot;aspnet_Users&quot;);
+        LazyLoad();
+
+        Id(x =&gt; x.Id).GeneratedBy
+            .Assigned().Column(&quot;UserId&quot;);
+
+        Map(x =&gt; x.UserName);
+
+        HasManyToMany(x =&gt; x.Roles)
+            .Table(&quot;aspnet_UsersInRoles&quot;);
+    }
+}
+
+public sealed class RoleMap : ClassMap&lt;Role&gt;
+{
+    public RoleMap()
+    {
+        Table(&quot;aspnet_Roles&quot;);
+        LazyLoad();
+
+        Id(x =&gt; x.Id).GeneratedBy
+            .Assigned().Column(&quot;RoleId&quot;);
+
+        Map(x =&gt; x.RoleName);
+
+        HasManyToMany(x =&gt; x.Users)
+            .Cascade.All()
+            .Inverse()
+            .Table(&quot;aspnet_UsersInRoles&quot;);
+    }
+}
+</code></pre>
+
+<p>The RoleName property on our domain model is a string, in order to get mapped with the RoleName column of the table in the database schema.</p>
+
+<p>In order to assign different behaviors on the Role entity we can follow the solution of Jimmy Bogard with the Enumeration class described <a href="http://lostechies.com/jimmybogard/2008/08/12/enumeration-classes/" target="_blank" title="Enumeration classes">here</a>.</p>
+
+<p><strong>RoleType class</strong></p>
+
+<pre><code class="c#">public class RoleType : Enumeration
+{
+    public static readonly RoleType Consumer = new ConsumerType();
+    public static readonly RoleType Provider = new ProviderType();
+    public static readonly RoleType Referrer = new ReferrerType();
+
+    public static readonly RoleType Administrator = new AdministratorType();
+
+    private RoleType() { }
+    private RoleType(int value, string displayName)
+        : base(value, displayName) { }
+
+    private sealed class ConsumerType : RoleType
+    {
+        public ConsumerType()
+            : base(0, &quot;Consumer&quot;) { }
+
+        // TODO: Add behavior for Consumer.
+    }
+
+    private sealed class ProviderType : RoleType
+    {
+        public ProviderType()
+            : base(1, &quot;Provider&quot;) { }
+
+        // TODO: Add behavior for Provider.
+    }
+
+    private sealed class ReferrerType : RoleType
+    {
+        public ReferrerType()
+            : base(2, &quot;Referrer&quot;) { }
+
+        // TODO: Add behavior for Referrer.
+    }
+
+    private sealed class AdministratorType : RoleType
+    {
+        public AdministratorType()
+            : base(3, &quot;Administrator&quot;) { }
+
+        // TODO: Add behavior for Administrator.
+    }
+}
+</code></pre>
+
+<p>Adding an IPostLoadEventListener on NHibernate configuration we can easily add logic to set a specific RoleType to each Role entity.</p>
+
+<pre><code class="c#">private sealed class RoleToRoleTypeEventListener : IPostLoadEventListener
+{
+    public void OnPostLoad(PostLoadEvent @event)
+    {
+        User user = @event.Entity as User;
+        if (user != null)
+        {
+            foreach (Role role in user.Roles)
+            {
+                AssignRoleTypeToRole(role);
+            }
+        }
+        else
+        {
+            Role role = @event.Entity as Role;
+            if (role != null)
+            {
+                AssignRoleTypeToRole(role);
+            }
+        }
+    }
+
+    private static void AssignRoleTypeToRole(Role role)
+    {
+        switch (role.RoleName)
+        {
+            case &quot;Consumer&quot;:
+                role.RoleType = RoleType.Consumer;
+                break;
+
+            case &quot;Provider&quot;:
+                role.RoleType = RoleType.Provider;
+                break;
+
+            case &quot;Referrer&quot;:
+                role.RoleType = RoleType.Referrer;
+                break;
+
+            case &quot;Administrator&quot;:
+                role.RoleType = RoleType.Administrator;
+                break;
+        }
+    }
+}
+</code></pre>
+
+<p>The complete Configuration for the ISessionFactory is (or, could be) below:</p>
+
+<pre><code class="c#">public static ISessionFactory BuildSessionFactory(IKernel kernel)
+{
+    var configuration = CreateConfiguration(ForMsSql2008);
+    return configuration.BuildSessionFactory();
+}
+
+public static FluentConfiguration CreateConfiguration(
+     Action&lt;IDbIntegrationConfigurationProperties&gt; db)
+{
+    var cfg = new NHibernate.Cfg.Configuration();
+    cfg.DataBaseIntegration(db)
+        .Proxy(p =&gt; p.ProxyFactoryFactory&lt;ProxyFactoryFactory&gt;())
+        .SessionFactory()
+            .GenerateStatistics();
+
+    cfg.EventListeners.PostLoadEventListeners = 
+        new IPostLoadEventListener[] { 
+            new RoleToRoleTypeEventListener() };
+
+        return Fluently.Configure(cfg)
+            .Mappings(AddMappingTypes);
+}
+</code></pre>
+
+<p>..However we already took the red pill and staying in wonderland!</p>
+</div><div id="disqus_thread"></div><script type="text/javascript">var disqus_shortname = 'bonusbits';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script></body><script type="text/javascript">var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-24262928-1']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

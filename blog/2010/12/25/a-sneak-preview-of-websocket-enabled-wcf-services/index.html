@@ -1,0 +1,56 @@
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width" name="viewport" /><title>A Sneak Preview of WebSocket-enabled WCF Services</title><link href="/images/favicon.ico" rel="icon" type="image/x-icon" /><link href="/feed" rel="alternate" type="application/rss+xml" /><link href="/stylesheets/blog.css?1388607283" media="screen" rel="stylesheet" type="text/css" /></head><body><body><div id="title"><div><h1><a href="/blog" style="color: #222">moodmosaic</a></h1><div><span>by </span><a href="/">Nikos Baxevanis </a><a href="http://creativecommons.org/licenses/by/3.0/" style="color: #877">(license)</a></div></div><div class="line"></div></div><div id="full"><h1><a>A Sneak Preview of WebSocket-enabled WCF Services</a></h1><div class="undertitle"><span class="date">Filed under </span><a class="tag" href="/blog#wcf">wcf</a></div><p>Recently the Interoperability Bridges and Labs Center (run by the Microsoft Interoperability Strategy Group) released a prototype&#0160;&#0160;implementation (in managed code) of two drafts of the WebSockets protocol specification:</p>
+
+<ul>
+<li><a href="http://tools.ietf.org/html/draft-hixie-thewebsocketprotocol-75" target="_blank" title="The Web Socket protocol draft-hixie-thewebsocketprotocol-75">draft-hixie-thewebsocketprotocol-75</a></li>
+<li><a href="http://tools.ietf.org/html/draft-hixie-thewebsocketprotocol-76" target="_blank" title="The WebSocket protocol draft-hixie-thewebsocketprotocol-76.">draft-hixie-thewebsocketprotocol-76</a></li>
+</ul>
+
+<p>The prototype can be found at&#0160;<a href="http://html5labs.interoperabilitybridges.com/" target="_blank" title="The HTML5 Labs site is the place where Microsoft prototypes early and unstable web standard specifications from standards bodies such as the W3C.">HTML5 Labs</a>, however (at the time of this&#0160;writing) the samples did not come with source code and they were delay signed (which means you have to <a href="http://mailinglist.interoperabilitybridges.com/scripts/wa-INTEROP.exe?A2=HTML5_WEBSOCKETS;e6d276d8.1012" target="_self">follow the instructions</a>&#0160;to run them).&#0160;After running the samples (and since I had no access to the source code) I opened with reflector and had a look under the hood.</p>
+
+<p>What I noticed is that a WebSocket-enabled service in .NET will be written like any other WCF service with <span style="text-decoration: underline;">two differences</span>:</p>
+
+<p>The service implementation has to derive from the base WebSocketService class:</p>
+
+<pre><code class="c#">[ServiceBehavior(
+    InstanceContextMode=InstanceContextMode.PerSession, 
+    ConcurrencyMode=ConcurrencyMode.Multiple)]
+internal sealed class NotificationService : WebSocketsService
+{
+    // ...
+}
+</code></pre>
+
+<p>The service host is a type deriving from the <a href="http://msdn.microsoft.com/en-us/library/system.servicemodel.servicehost.aspx" target="_blank" title="Provides a host for services.">ServiceHost</a>&#0160;named&#0160;WebSocketsHost:</p>
+
+<pre><code class="c#">Uri baseAddress = new Uri(&quot;&lt;uriString goes here&gt;&quot;);            
+WebSocketsHost&lt;NotificationService&gt; host =
+    new WebSocketsHost&lt;NotificationService&gt;(baseAddress);
+host.AddWebSocketsEndpoint();
+host.Open();
+</code></pre>
+
+<p>Notice, that since your specify <a href="http://msdn.microsoft.com/en-us/library/system.servicemodel.concurrencymode.aspx" target="_self" title="Specifies whether a service class supports single-threaded or multi-threaded modes of operation.">ConcurrencyMode.Multipe</a> you have to manually handle synchronization and state using a synchronization construct. That means if the clients need only write-access to the data you can use a mutual exclusive lock (like the <a href="http://msdn.microsoft.com/en-us/library/system.threading.monitor.aspx" target="_blank" title="Provides a mechanism that synchronizes access to objects.">Monitor Class</a>)&#0160;otherwise you can use a lock like the <a href="http://msdn.microsoft.com/en-us/library/system.threading.readerwriterlockslim.aspx" target="_blank" title="Represents a lock that is used to manage access to a resource, allowing multiple threads for reading or exclusive access for writing.">ReaderWriterLockSlim Class</a>&#0160;(or a faster one).</p>
+
+<p>Here is a summary of links about the WebSocket prototype for .NET:</p>
+
+<ul>
+<li>HTML5 Labs, <a href="http://html5labs.interoperabilitybridges.com/prototypes/available-for-download/websockets" target="_blank" title="HTML5 Labs, WebSockets.">WebSockets prototype</a></li>
+<li>Tomasz Janczuk&#39;s,&#0160;<a href="http://blogs.msdn.com/b/interoperability/archive/2010/12/21/introducing-the-websockets-prototype.aspx" target="_blank" title="Introducing the WebSockets prototype draft-montenegro-hybi-upgrade-hello-handshake-00">Blog post</a></li>
+<li>Interoperability @ Microsoft, <a href="http://blogs.msdn.com/b/interoperability/archive/2010/12/21/introducing-the-websockets-prototype.aspx" target="_blank" title="Introducing the WebSockets Prototype.">Blog post</a></li>
+</ul>
+
+<p><a href="http://www.codeproject.com/script/Articles/BlogFeedList.aspx?amid=5962224" rel="tag" style="display: none;">CodeProject</a></p>
+</div><div id="disqus_thread"></div><script type="text/javascript">var disqus_shortname = 'bonusbits';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script></body><script type="text/javascript">var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-24262928-1']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

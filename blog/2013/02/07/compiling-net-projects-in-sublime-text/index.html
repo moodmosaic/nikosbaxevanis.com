@@ -1,0 +1,65 @@
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width" name="viewport" /><title>Compiling .NET projects in Sublime Text</title><link href="/images/favicon.ico" rel="icon" type="image/x-icon" /><link href="/feed" rel="alternate" type="application/rss+xml" /><link href="/stylesheets/blog.css?1388607283" media="screen" rel="stylesheet" type="text/css" /></head><body><body><div id="title"><div><h1><a href="/blog" style="color: #222">moodmosaic</a></h1><div><span>by </span><a href="/">Nikos Baxevanis </a><a href="http://creativecommons.org/licenses/by/3.0/" style="color: #877">(license)</a></div></div><div class="line"></div></div><div id="full"><h1><a>Compiling .NET projects in Sublime Text</a></h1><div class="undertitle"><span class="date">Filed under </span><a class="tag" href="/blog#sublime-text">sublime-text</a></div><blockquote>
+<p>The subject of this post is the compilation of .NET projects and solutions in Sublime Text using the Build Systems feature.</p>
+</blockquote>
+
+<p><a href="http://www.sublimetext.com/">Sublime Text</a> supports custom <a href="http://docs.sublimetext.info/en/latest/file_processing/build_systems.html">Build Systems</a>.</p>
+
+<p>By adding <a href="http://msdn.microsoft.com/en-us/library/wea2sca5.aspx">MSBuild</a> as a new Build System, it is possible to build Visual Studio projects and solutions without the Visual Studio IDE installed.</p>
+
+<p><strong>Adding the Source Code</strong></p>
+
+<blockquote>
+<p>The following steps require a folder with MSBuild project files. In order to be pragmatic, the custom Build System is going to compile the source code of <a href="https://github.com/AutoFixture/AutoFixture">AutoFixture</a>.</p>
+</blockquote>
+
+<p>Go to <code>File</code> menu, click <code>Open Folder...</code> and select the root folder of the project to be compiled.</p>
+
+<p><strong>Adding the new Build System</strong></p>
+
+<p>Go to <code>Tools</code> menu, <code>Build System</code>, and click <code>New Build System...</code></p>
+
+<p>Paste the following code to a file:</p>
+
+<pre><code class="json">{
+    &quot;cmd&quot;: [&quot;C:\\Windows\\Microsoft.NET\\Framework\\v4.0.30319\\MSBuild.exe&quot;, &quot;AutoFixture.sln&quot;],
+    &quot;working_dir&quot;: &quot;${project_path:${folder:${file_path}}}\\Src&quot;
+}
+</code></pre>
+
+<p>Save the file as <code>AutoFixture.sublime-build</code>.</p>
+
+<p>Go to <code>Tools</code> menu, <code>Build System</code>, and select <code>AutoFixture</code>.</p>
+
+<blockquote>
+<p>The above steps are per MBSuild project file. Repeat the above steps by creating a Build System per MSBuild project file.</p>
+</blockquote>
+
+<p><strong>Running the Build</strong></p>
+
+<p>Go to <code>Tools</code> menu, and select <code>Build</code>. Alternatively, use the <code>Ctrl+B</code> command.</p>
+
+<p><img src="http://farm9.staticflickr.com/8371/8454681575_f36c89b618_o.png" alt="The compiler detects a missing semicolon."/></p>
+
+<p>In the above screenshot, on line <em>38</em> a semicolon has been intentionally removed for the demo. After running a build, the compiler detects the missing semicolon.</p>
+
+<p><strong>What about the Tests?</strong></p>
+
+<p>Currently, the easiest way to run the tests is by using a command-line interface version of the test runner.</p>
+
+<blockquote>
+<p>On my machine, attempting to add a new Build System for the tests resulted in <a href="https://twitter.com/nikosbaxevanis/status/298701966945693696">high memory usage</a>. This has been tested while Sublime Text 3 was in beta (Build 3010).</p>
+</blockquote>
+</div><div id="disqus_thread"></div><script type="text/javascript">var disqus_shortname = 'bonusbits';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script></body><script type="text/javascript">var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-24262928-1']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

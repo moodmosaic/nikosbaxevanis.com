@@ -1,0 +1,63 @@
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width" name="viewport" /><title>Dealing with Legacy Systems</title><link href="/images/favicon.ico" rel="icon" type="image/x-icon" /><link href="/feed" rel="alternate" type="application/rss+xml" /><link href="/stylesheets/blog.css?1388607283" media="screen" rel="stylesheet" type="text/css" /></head><body><body><div id="title"><div><h1><a href="/blog" style="color: #222">moodmosaic</a></h1><div><span>by </span><a href="/">Nikos Baxevanis </a><a href="http://creativecommons.org/licenses/by/3.0/" style="color: #877">(license)</a></div></div><div class="line"></div></div><div id="full"><h1><a>Dealing with Legacy Systems</a></h1><div class="undertitle"><span class="date">Filed under </span><a class="tag" href="/blog#legacy-code">legacy-code</a></div><p>An overview of some things to consider when dealing with existing <a href="http://en.wikipedia.org/wiki/Legacy_system">legacy systems</a>.</p>
+
+<p><strong>Team</strong></p>
+
+<ul>
+<li>Can help and suggest on when to say: <em>NO!</em> <a href="http://blog.8thlight.com/uncle-bob/2013/11/12/Healthcare-gov.html">loud enough for the right people to hear</a>.</li>
+<li>Can help in performing <a href="http://c2.com/cgi/wiki?DoubleEntryBookkeeping">double entry bookkeepings</a> when necessary.</li>
+<li>May contain core team members that can provide valuable information - kindly ask for a review of your work.</li>
+</ul>
+
+<p><strong>Maintenance</strong></p>
+
+<ul>
+<li>Code review everything.</li>
+<li>Avoid big, coarse-grained, Pull Requests - Prefer small, fine-grained, Pull Requests.</li>
+</ul>
+
+<blockquote class="twitter-tweet" lang="en"><p>10 lines of code = 10 issues.&#10;&#10;500 lines of code = &ldquo;looks fine.&rdquo;&#10;&#10;Code reviews.</p>&mdash; I Am Devloper (@iamdevloper) <a href="https://twitter.com/iamdevloper/statuses/397664295875805184">November 5, 2013</a></blockquote>
+
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+<ul>
+<li>Always leave the campground cleaner than you found it - a technique known as <a href="http://programmer.97things.oreilly.com/wiki/index.php/The_Boy_Scout_Rule">The Boy Scout Rule</a> coined by Robert C. Martin.</li>
+<li>Decide when to <a href="http://git-scm.com/book/en/Git-Branching-Rebasing">rebase</a> and when not - you may <a href="http://www.mail-archive.com/dri-devel@lists.sourceforge.net/msg39091.html">read about Linus Torvalds&#39; opinion</a>.</li>
+</ul>
+
+<p><strong>Quality assurance (QA)</strong></p>
+
+<p>The non-automated version of <a href="http://en.wikipedia.org/wiki/Continuous_delivery">Continuous Delivery</a> - performed by humans.</p>
+
+<ul>
+<li>Each team member adding a new Pull Request must provide the necessary steps for manual testing.</li>
+<li>The QA will be busy executing non-automated tests to verify (as much as possible) that the new code doesn&#39;t break anything.</li>
+<li>Requires a medium-to-high level of experience to perform this process effectively and identify potential bugs.</li>
+</ul>
+
+<blockquote>
+<p>For complicated systems, adding more people to the QA doesn&#39;t necessarily means that the QA process scales.</p>
+</blockquote>
+
+<p><strong>Discussions</strong></p>
+
+<ul>
+<li>Use GitHub everywhere - Consider GitHub discussions on each Pull Request instead of Skype conversations. That way there will always be a team-wide searchable trace where everyone may participate.</li>
+</ul>
+
+<blockquote>
+<p>The problem with Skype (and any other instant messaging client) is that the history of the conversation gets lost after some point and there is no permanent URL to track the messages.</p>
+</blockquote>
+</div><div id="disqus_thread"></div><script type="text/javascript">var disqus_shortname = 'bonusbits';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script></body><script type="text/javascript">var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-24262928-1']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

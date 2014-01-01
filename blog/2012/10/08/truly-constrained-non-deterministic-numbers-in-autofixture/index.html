@@ -1,0 +1,67 @@
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width" name="viewport" /><title>Truly Constrained Non-Deterministic Numbers in AutoFixture</title><link href="/images/favicon.ico" rel="icon" type="image/x-icon" /><link href="/feed" rel="alternate" type="application/rss+xml" /><link href="/stylesheets/blog.css?1388607283" media="screen" rel="stylesheet" type="text/css" /></head><body><body><div id="title"><div><h1><a href="/blog" style="color: #222">moodmosaic</a></h1><div><span>by </span><a href="/">Nikos Baxevanis </a><a href="http://creativecommons.org/licenses/by/3.0/" style="color: #877">(license)</a></div></div><div class="line"></div></div><div id="full"><h1><a>Truly Constrained Non-Deterministic Numbers in AutoFixture</a></h1><div class="undertitle"><span class="date">Filed under </span><a class="tag" href="/blog#autofixture">autofixture</a></div><p>Numbers in <a href="https://github.com/autofixture/autofixture">AutoFixture</a> are currently created using a <strong>strictly monotonically increasing</strong> sequence.</p>
+
+<pre><code class="c#">
+var fixture = new Fixture();
+
+var i = fixture.CreateAnonymous&lt;int&gt;();
+// Prints -&gt; 1
+var l = fixture.CreateAnonymous&lt;long&gt;();
+// Prints -&gt; 2
+var f = fixture.CreateAnonymous&lt;float&gt;();
+// Prints -&gt; 3.0
+</code></pre>
+
+<p>Starting with version <em>2.13.0</em>, by applying a specific customization numbers can also be created using a <strong>constrained non-deterministic</strong> sequence. The new customization is called <code>RandomNumericSequenceCustomization</code>.</p>
+
+<pre><code class="c#">var fixture = new Fixture()
+    .Customize(new RandomNumericSequenceCustomization());
+
+var i = fixture.CreateAnonymous&lt;int&gt;();
+// Prints -&gt; 122
+var l = fixture.CreateAnonymous&lt;long&gt;();
+// Prints -&gt; 38
+var f = fixture.CreateAnonymous&lt;float&gt;();
+// Prints -&gt; 147.0
+</code></pre>
+
+<p>Once the customization has been applied to a <code>Fixture</code> instance subsequent requests for numeric types will yield random non-repeatable numbers in the range of [1, 255]. When requesting more than 255 numbers the range is automatically changed to [256, 32767] and so on.</p>
+
+<blockquote>
+<p>The default ranges are [1, 255], [256, 32767], and [32768, 2147483647].</p>
+</blockquote>
+
+<p><strong>Supplying a custom range</strong></p>
+
+<p>To supply a custom range, customize an instance of the Fixture class with an instance of the <code>RandomNumericSequenceGenerator</code> and pass to its constructor a sequence of integer numbers (e.g. <code>-100, 100, 255</code>).</p>
+
+<blockquote>
+<p>The sequence must be two positive or negative numbers optionally followed by a series of greater numbers.</p>
+</blockquote>
+
+<pre><code class="c#">var fixture = new Fixture();
+fixture.Customizations.Add(
+    new RandomNumericSequenceGenerator(-100, 100, 255));
+
+var i = fixture.CreateAnonymous&lt;int&gt;();
+// Prints -&gt; -95
+var l = fixture.CreateAnonymous&lt;long&gt;();
+// Prints -&gt; 47
+var f = fixture.CreateAnonymous&lt;float&gt;();
+// Prints -&gt; -82.0
+</code></pre>
+
+<p>After applying the customization, numbers are now created in the range of [-100, 100]. However, when requesting more numbers than the range size the range is automatically changed to [101, 255].</p>
+</div><div id="disqus_thread"></div><script type="text/javascript">var disqus_shortname = 'bonusbits';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script></body><script type="text/javascript">var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-24262928-1']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

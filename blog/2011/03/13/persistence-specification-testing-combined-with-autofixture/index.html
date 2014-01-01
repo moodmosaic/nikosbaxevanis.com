@@ -1,0 +1,46 @@
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width" name="viewport" /><title>Persistence specification testing combined with AutoFixture</title><link href="/images/favicon.ico" rel="icon" type="image/x-icon" /><link href="/feed" rel="alternate" type="application/rss+xml" /><link href="/stylesheets/blog.css?1388607283" media="screen" rel="stylesheet" type="text/css" /></head><body><body><div id="title"><div><h1><a href="/blog" style="color: #222">moodmosaic</a></h1><div><span>by </span><a href="/">Nikos Baxevanis </a><a href="http://creativecommons.org/licenses/by/3.0/" style="color: #877">(license)</a></div></div><div class="line"></div></div><div id="full"><h1><a>Persistence specification testing combined with AutoFixture</a></h1><div class="undertitle"><span class="date">Filed under </span><a class="tag" href="/blog#unit-testing">unit-testing</a><a class="tag" href="/blog#nhibernate">nhibernate</a></div><p>When working with NHibernate you need to make sure that your mappings are correct. At least, you have to make sure that when you&nbsp;save an item you can also qet that item back.</p>
+
+<p>If you are using FluentNHibernate you can use the <a href="https://github.com/jagregory/fluent-nhibernate/tree/master/src/FluentNHibernate/Testing" target="_blank">PersistenceSpecification&lt;T&gt; class</a>. However, the&nbsp;PersistenceSpecification&lt;T&gt; class requires that you pass the property to check and also a value for that property.</p>
+
+<p>By using <a title="AutoFixture makes it easier for developers to do Test-Driven Development by automating non-relevant Test Fixture Setup, allowing the Test Developer to focus on the essentials of each test case." href="http://autofixture.codeplex.com/" target="_blank">AutoFixture</a> you can easily create objects that you can pass inside the CheckXx methods:</p>
+
+<pre><code class="c#">[Fact]
+public void ShouldVerifyTheMappings()
+{
+    var fixture = new Fixture();
+
+    using (session)
+    {
+        new PersistenceSpecification&lt;EventType&gt;(session)
+            .CheckProperty(x =&gt; x.EventTypeId, 
+                fixture.CreateAnonymous&lt;long&gt;())
+            .CheckProperty(x =&gt; x.EventTypeName, 
+                fixture.CreateAnonymous&lt;string&gt;())
+            .CheckProperty(x =&gt; x.ExchangeServerId, 
+                fixture.CreateAnonymous&lt;int&gt;())
+            .CheckProperty(x =&gt; x.LastUpdatedOn, 
+                DateTime.Today)
+            .CheckProperty(x =&gt; x.NextMarketId, 
+                fixture.CreateAnonymous&lt;long&gt;())
+            .CheckReference(x =&gt; x.Bookmaker, 
+                fixture.CreateAnonymous&lt;Bookmaker&gt;())
+            .VerifyTheMappings();
+    }
+}
+</code></pre>
+
+<p>Combining&nbsp;AutoFixture with the PersistenceSpecification&lt;T&gt; class results in&nbsp;writing less code when testing NHibernate mappings, specially when dealing with complex types.</p>
+</div><div id="disqus_thread"></div><script type="text/javascript">var disqus_shortname = 'bonusbits';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script></body><script type="text/javascript">var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-24262928-1']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

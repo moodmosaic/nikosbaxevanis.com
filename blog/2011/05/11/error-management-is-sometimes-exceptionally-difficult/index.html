@@ -1,0 +1,191 @@
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width" name="viewport" /><title>Error Management Is Sometimes Exceptionally Difficult</title><link href="/images/favicon.ico" rel="icon" type="image/x-icon" /><link href="/feed" rel="alternate" type="application/rss+xml" /><link href="/stylesheets/blog.css?1388607283" media="screen" rel="stylesheet" type="text/css" /></head><body><body><div id="title"><div><h1><a href="/blog" style="color: #222">moodmosaic</a></h1><div><span>by </span><a href="/">Nikos Baxevanis </a><a href="http://creativecommons.org/licenses/by/3.0/" style="color: #877">(license)</a></div></div><div class="line"></div></div><div id="full"><h1><a>Error Management Is Sometimes Exceptionally Difficult</a></h1><div class="undertitle"><span class="date">Filed under </span><a class="tag" href="/blog#entlib">entlib</a><a class="tag" href="/blog#castle-windsor">castle-windsor</a></div><p><strong>Update:&nbsp;</strong>&nbsp;Please also read <a title="Enterprise Library IContainerConfigurator implementation for Windsor" href="http://www.nikosbaxevanis.com/bonus-bits/2011/05/enterpriselibrary-and-windsorcontainerconfigurator.html" target="_blank">Part 2</a>. The source <del>is on github</del> has been <a href="http://entlibcontrib.codeplex.com/SourceControl/changeset/63545">merged</a> in Enterprise Library Contrib.</p>
+
+<p>I tend to simplify exception handling at layer boundaries, when&nbsp;designing a distributed application. Most of the time if an exception is propagated there I try to apply some kind of policy in order to log the exception and then re-throw&nbsp;&nbsp;a different exception.</p>
+
+<p>When I started using the<span>&nbsp;Exception Handling Application Block from Enterprise Library I found out that I had to also deploy the Unity assemblies. </span></p>
+
+<p><span>The call below resolves the registered component for the ExceptionManager class:</span></p>
+
+<pre><code class="c#">EnterpriseLibraryContainer.Current.GetInstance&lt;ExceptionManager&gt;();
+</code></pre>
+
+<p>The IServiceLocator.Current property of EnterpriseLibraryContainer class sets by default the Unity container (via UnityServiceLocator adapter class).</p>
+
+<p><img src="http://farm9.staticflickr.com/8508/8398554996_e06fa74d80_b.jpg" alt="" /></p>
+
+<p>In fact, if I remove the Unity assemblies a FileNotFoundException is thrown, indicating that&nbsp;Microsoft.Practices.Unity assembly or one of its dependencies could not be found.</p>
+
+<p>Since I use Windsor in that application I didn&rsquo;t like the fact that I had to deploy it with two different IoC containers (!) so I started figuring out how I can call tell the EnterpriseLibraryContainer to resolve the ExceptionManager component using Windsor.</p>
+
+<p>The first thing I did was to compile the&nbsp;<a title="Castle Windsor Adapter - CommonServiceLocator" href="http://commonservicelocator.codeplex.com/wikipage?title=Castle%20Windsor%20Adapter&amp;referringTitle=Home" target="_blank">Windsor adapter</a> of the CommonServiceLocator against the current version of Windsor that I use (and also run the unit-tests and see if they pass).</p>
+
+<p>Next, I set the IServiceLocator.Current property of the EnterpriseLibraryContainer class:</p>
+
+<pre><code class="c#">EntLibraryContainer.Current = new WindsorServiceLocator(container);
+</code></pre>
+
+<p>The last thing I did was to call the ConfigureContainer method on the EnterpriseLibraryContainer class. This method takes an&nbsp;IContainerConfigurator and an IConfigurationSource as parameters.</p>
+
+<p>Great, so I had to provide a class implementing the IContainerConfigurator interface for the Windsor container.</p>
+
+<p>The IContainerConfigurator interface contains a single method:&nbsp;</p>
+
+<pre><code class="c#">void RegisterAll(
+     IConfigurationSource configurationSource,        
+     ITypeRegistrationsProvider rootProvider
+     );
+</code></pre>
+
+<p>Below is the (currently incomplete) implementation:</p>
+
+<pre><code class="c#">using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using Castle.MicroKernel.Registration;
+using Castle.Windsor;
+using Microsoft.Practices.EnterpriseLibrary.Common.Configuration;
+using Microsoft.Practices.EnterpriseLibrary.Common.Configuration.ContainerModel;
+
+internal sealed class WindsorContainerConfigurator
+    : IContainerConfigurator
+{
+    private readonly IWindsorContainer container;
+
+    public WindsorContainerConfigurator(IWindsorContainer container)
+    {
+        this.container = container;
+    }
+
+    public void RegisterAll(
+        IConfigurationSource configurationSource,
+        ITypeRegistrationsProvider rootProvider)
+    {
+        foreach (TypeRegistration registration 
+            in rootProvider.GetRegistrations(configurationSource))
+        {
+            Register(registration);
+        }
+    }
+
+    private void Register(TypeRegistration registration)
+    {
+        Type implementation = registration.ImplementationType;
+
+        if (!this.container.Kernel.HasComponent(implementation))
+        {
+            var componentRegistration =
+                Component.For(registration.ServiceType)
+                            .ImplementedBy(implementation);
+
+            if (registration.ConstructorParameters.Any())
+            {
+                var dependencies = GetRegistrationDependencies(
+                    componentRegistration, 
+                    registration.ConstructorParameters);
+
+                componentRegistration = 
+                    componentRegistration.DependsOn(dependencies);
+            }
+
+            this.container.Register(AddLifeStyleToRegistration(
+                componentRegistration, registration.Lifetime));
+        }
+    }
+
+    private IDictionary GetRegistrationDependencies&lt;TInterface&gt;(
+        ComponentRegistration&lt;TInterface&gt; registration,
+        IEnumerable&lt;ParameterValue&gt; constructorParameters)
+    {
+        var dependencies = new Hashtable();
+
+        foreach (ParameterValue pv in constructorParameters)
+        {
+            MemberExpression exp = pv.Expression
+                as MemberExpression;
+
+            if (exp != null)
+            {
+                string key = exp.Member.Name;
+                object val = GetValue(exp);
+
+                dependencies.Add(key, val);
+            }
+            else
+            {
+                // TODO: pv.Expression is a MethodCallExpression.
+            }
+        }
+
+        return dependencies;
+    }
+
+    private static ComponentRegistration&lt;TInterface&gt; AddLifeStyleToRegistration&lt;TInterface&gt;(
+        ComponentRegistration&lt;TInterface&gt; registration, 
+        TypeRegistrationLifetime typeRegistrationLifetime)
+    {
+        if (typeRegistrationLifetime == 
+            TypeRegistrationLifetime.Singleton)
+        {
+            registration = registration.LifeStyle.Singleton;
+        }
+        else if (typeRegistrationLifetime == 
+            TypeRegistrationLifetime.Transient)
+        {
+            registration = registration.LifeStyle.Transient;
+        }
+        else
+        {
+            throw new ArgumentOutOfRangeException(
+                &quot;typeRegistrationLifetime&quot;, 
+                &quot;Only Transient and Singleton are supported.&quot;);
+        }
+
+        return registration;
+    }
+
+    private static object GetValue(Expression member)
+    {
+        var objectMember = Expression.Convert(member, typeof(object));
+        var getterLambda = Expression.Lambda&lt;Func&lt;object&gt;&gt;(objectMember);
+
+        return getterLambda.Compile().Invoke();
+    }
+}
+</code></pre>
+
+<p>I really don&rsquo;t know what to do in the case of a MethodCallExpression as you can see inside the <em>else</em> block. However, after I can finish with the code inside that block I will be able to do this:</p>
+
+<pre><code class="c#">var container = new WindsorContainer();
+
+// Add a SubResolver for components with IEnumerable&lt;T&gt; dependencies on .ctors.
+container.Kernel.Resolver.AddSubResolver(
+     new CollectionResolver(container.Kernel));
+
+// This is the Windsor specific impl. of IContainerConfigurator interface.
+var configurator = new WindsorContainerConfigurator(container);
+
+// Configure the Enterprise Library Container to use Windsor internally.
+EnterpriseLibraryContainer.ConfigureContainer(configurator, 
+    ConfigurationSourceFactory.Create());
+
+// Set Current property to a new instance of the WindsorServiceLocator adapter.
+EnterpriseLibraryContainer.Current = new WindsorServiceLocator(container);
+</code></pre>
+
+<p>I will try to update the code as soon as I have done any changes.</p>
+</div><div id="disqus_thread"></div><script type="text/javascript">var disqus_shortname = 'bonusbits';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script></body><script type="text/javascript">var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-24262928-1']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

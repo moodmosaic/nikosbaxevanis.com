@@ -1,0 +1,84 @@
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width" name="viewport" /><title>xUnit.net Attributes Execution Order</title><link href="/images/favicon.ico" rel="icon" type="image/x-icon" /><link href="/feed" rel="alternate" type="application/rss+xml" /><link href="/stylesheets/blog.css?1388607283" media="screen" rel="stylesheet" type="text/css" /></head><body><body><div id="title"><div><h1><a href="/blog" style="color: #222">moodmosaic</a></h1><div><span>by </span><a href="/">Nikos Baxevanis </a><a href="http://creativecommons.org/licenses/by/3.0/" style="color: #877">(license)</a></div></div><div class="line"></div></div><div id="full"><h1><a>xUnit.net Attributes Execution Order</a></h1><div class="undertitle"><span class="date">Filed under </span><a class="tag" href="/blog#xunit.net">xunit.net</a></div><p>The test below uses the <a href="http://xunit.codeplex.com/">xUnit.net</a> framework and executes twice, since it is decorated with two data sources. The first data source is the built-in <code>[InlineData]</code> and the second data source is the custom <code>[StringData]</code>.</p>
+
+<pre><code class="c#">[Theory]
+[InlineData(&quot;foo&quot;, &quot;bar&quot;)]
+[StringData]
+[Intercept]
+public void Test(string a, string b)
+{
+}
+</code></pre>
+
+<p>xUnit.net invokes in exact order:</p>
+
+<p><strong>Initialization</strong></p>
+
+<ol>
+<li><code>[InlineData]</code> consturctor</li>
+<li><code>[StringData]</code> consturctor</li>
+<li><code>[InlineData]</code> <code>IEnumerable&lt;object[]&gt; GetData(MethodInfo, Type[])</code></li>
+<li><code>[StringData]</code> <code>IEnumerable&lt;object[]&gt; GetData(MethodInfo, Type[])</code></li>
+</ol>
+
+<p><strong>1st Run</strong></p>
+
+<ol>
+<li><code>[Intercept]</code> consturctor </li>
+<li><code>[Intercept]</code> <code>void Before(MethodInfo)</code></li>
+<li><code>[Theory]</code> supplying values for <em>a</em> and <em>b</em> taken from either <code>[InlineData]</code> or <code>[StringData]</code></li>
+<li><code>[Intercept]</code> <code>void After(MethodInfo)</code></li>
+</ol>
+
+<p><strong>2nd Run</strong></p>
+
+<ol>
+<li><code>[Intercept]</code> consturctor</li>
+<li><code>[Intercept]</code> <code>void Before(MethodInfo)</code></li>
+<li><code>[Theory]</code> supplying values for <em>a</em> and <em>b</em> taken from either <code>[InlineData]</code> or <code>[StringData]</code></li>
+<li><code>[Intercept]</code> <code>void After(MethodInfo)</code></li>
+</ol>
+
+<p><strong>Remarks</strong></p>
+
+<p><code>[Intercept]</code> is defined as:</p>
+
+<pre><code class="c#">internal class InterceptAttribute : BeforeAfterTestAttribute
+{
+    public override void Before(MethodInfo methodUnderTest)
+    {
+    }
+
+    public override void After(MethodInfo methodUnderTest)
+    {
+    }
+}
+</code></pre>
+
+<p>It allows code to be run before and after each test is run.</p>
+
+<p><code>[StringData]</code> is defined as:</p>
+
+<pre><code class="c#">internal class StringDataAttribute : DataAttribute
+{
+    public override IEnumerable&lt;object[]&gt; GetData(
+        MethodInfo methodUnderTest,
+        Type[] parameterTypes)
+    {
+        yield return new object[] { &quot;cow&quot;, &quot;zoo&quot; };
+    }
+}
+</code></pre>
+</div><div id="disqus_thread"></div><script type="text/javascript">var disqus_shortname = 'bonusbits';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script></body><script type="text/javascript">var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-24262928-1']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

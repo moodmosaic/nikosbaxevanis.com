@@ -1,0 +1,47 @@
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width" name="viewport" /><title>Exercising the SUT asynchronously</title><link href="/images/favicon.ico" rel="icon" type="image/x-icon" /><link href="/feed" rel="alternate" type="application/rss+xml" /><link href="/stylesheets/blog.css?1388607283" media="screen" rel="stylesheet" type="text/css" /></head><body><body><div id="title"><div><h1><a href="/blog" style="color: #222">moodmosaic</a></h1><div><span>by </span><a href="/">Nikos Baxevanis </a><a href="http://creativecommons.org/licenses/by/3.0/" style="color: #877">(license)</a></div></div><div class="line"></div></div><div id="full"><h1><a>Exercising the SUT asynchronously</a></h1><div class="undertitle"><span class="date">Filed under </span><a class="tag" href="/blog#unit-testing">unit-testing</a></div><p>In unit testing, there are times were the <a href="http://xunitpatterns.com/SUT.html">SUT</a> has to be exercised <strong>asynchronously</strong>.</p>
+
+<p>How can we wait for the exercise to complete execution?</p>
+
+<ul>
+<li>An instance of the SUT can be created on the main thread.</li>
+<li>The main <em>(waiting)</em> thread <strong>spins in user mode</strong> while starting the exercise of the SUT asynchronously.</li>
+<li>Once the result has been received, the execution continues on the main thread.</li>
+<li>The assertion takes place.</li>
+</ul>
+
+<p>The <a href="http://msdn.microsoft.com/en-us/library/system.threading.spinwait.aspx">SpinWait</a> synchronization type contains a method named <a href="http://msdn.microsoft.com/en-us/library/system.threading.spinwait.spinuntil.aspx">SpinUntil</a> which works perfect for the described scenario.</p>
+
+<pre><code class="c#">// Fixture setup
+var sut = new ObjectLocalStorage();
+sut.Set(@object, expected);
+object result = null;
+
+// Exercise system
+new Task(() =&gt; result = sut.Get(@object)).Start();
+SpinWait.SpinUntil(() =&gt; result != null);
+
+// Verify outcome
+Assert.Equal(expected, result);
+// Teardown
+</code></pre>
+
+<ul>
+<li>Once the <code>Task</code> has been created it is immediately scheduled for execution by calling the <code>Start</code> method.</li>
+<li>As long as the unit test runs fast, the waiting thread spins in user mode, which is a <a href="http://msdn.microsoft.com/en-us/library/ee722114.aspx">good thing</a>.</li>
+</ul>
+
+<p>There is also a <a href="http://msdn.microsoft.com/en-us/library/dd449238.aspx">SpinUntil overload</a> accepting a TimeSpan timeout.</p>
+</div><div id="disqus_thread"></div><script type="text/javascript">var disqus_shortname = 'bonusbits';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script></body><script type="text/javascript">var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-24262928-1']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

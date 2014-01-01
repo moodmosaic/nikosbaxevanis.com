@@ -1,0 +1,335 @@
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width" name="viewport" /><title>MVVM using POCOs with .NET 4.0 and the DynamicViewModel Class</title><link href="/images/favicon.ico" rel="icon" type="image/x-icon" /><link href="/feed" rel="alternate" type="application/rss+xml" /><link href="/stylesheets/blog.css?1388607283" media="screen" rel="stylesheet" type="text/css" /></head><body><body><div id="title"><div><h1><a href="/blog" style="color: #222">moodmosaic</a></h1><div><span>by </span><a href="/">Nikos Baxevanis </a><a href="http://creativecommons.org/licenses/by/3.0/" style="color: #877">(license)</a></div></div><div class="line"></div></div><div id="full"><h1><a>MVVM using POCOs with .NET 4.0 and the DynamicViewModel Class</a></h1><div class="undertitle"><span class="date">Filed under </span><a class="tag" href="/blog#wpf">wpf</a></div><blockquote>
+<p>This post aims to provide a way to implement the Model View ViewModel (MVVM) architectural pattern using Plain Old CLR Objects (POCOs) while taking full advantage of .NET 4.0 DynamicObject Class.</p>
+</blockquote>
+
+<p>In order to apply the Model View ViewModel (MVVM) architectural pattern we need:</p>
+
+<ol>
+<li>An instance of the View, (e.g. a UserControl type).</li>
+<li>An instance of the ViewModel, which in most scenarios is a class implementing the INotifyPropertyChanged interface (or inherits from a base class getting the implementation for free).</li>
+<li>An instance of the Model inside the ViewModel class, for getting the properties to display (and format them if necessary) and also for invoking commands on the model.</li>
+</ol>
+
+<p>While we can not avoid step 1 (we need to have something to display to the user) and step 3 (we need to have something the user can read/edit), for basic scenarios we can try to avoid step 2.&#0160;</p>
+
+<p>Taking advantage of the .NET 4.0 and the <a href="http://msdn.microsoft.com/en-us/library/system.dynamic.dynamicobject.aspx" target="_blank" title="Provides a base class for specifying dynamic behavior at run time. This class must be inherited from; you cannot instantiate it directly.">DynamicObject</a>&#0160;Class, we can create a type deriving from the DynamicObject Class and&#0160;specify dynamic behavior at run time. Furthermore, we can implement the <a href="http://msdn.microsoft.com/en-us/library/system.componentmodel.inotifypropertychanged.aspx" target="_blank" title="Notifies clients that a property value has changed.">INotifyPropertyChanged</a>&#0160;Interface on the derived type making it a good candidate for Data Binding.</p>
+
+<p>Let&#39;s name our class, DynamicViewModel(Of TModel) Class. It must be able to:</p>
+
+<ol>
+<li>Accept references types (any class - a model is usually a class).</li>
+<li>Invoke public instance methods.</li>
+<li>Invoke public instance methods with arguments passed as CommandParameters.</li>
+<li>Get public instance properties.</li>
+<li>Set public instance properties.</li>
+<li>Notify callers when property change by raising the PropertyChanged event.</li>
+<li>If a property change results in chaning other properties, the caller must receive the notification for the other property changes too.</li>
+</ol>
+
+<p>Here is the <a href="http://dynamicviewmodel.codeplex.com/SourceControl/changeset/view/9e2b2d03b705#DynamicViewModel%2fDynamicViewModel.cs" target="_blank" title="The DynamicViewModel(Of TModel) Class adds dynamic ViewModel behavior to any class at runtime.">DynamicViewModel(Of TModel)</a> Class:</p>
+
+<pre><code class="c#">using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Dynamic;
+using System.Linq;
+using System.Reflection;
+using System.Threading;
+
+internal sealed class DynamicViewModel&lt;TModel&gt;
+    : DynamicObject, INotifyPropertyChanged where TModel : class
+{
+    private static readonly IDictionary&lt;string, MethodInfo&gt; methodInfos
+        = GetPublicInstanceMethods();
+
+    private static readonly IDictionary&lt;string, PropertyInfo&gt; propInfos
+        = GetPublicInstanceProperties();
+
+    private readonly TModel model;
+
+    private IDictionary&lt;string, object&gt; propertyValues;
+
+    public DynamicViewModel(TModel model)
+    {
+        this.model = model;
+        NotifyChangedProperties();
+    }
+
+    public DynamicViewModel(Func&lt;TModel&gt; @delegate)
+        : this(@delegate.Invoke()) { }
+
+    public override bool TryInvokeMember(InvokeMemberBinder binder,
+        object[] args, out object result)
+    {
+        result = null;
+
+        MethodInfo methodInfo;
+        if (!methodInfos.TryGetValue(binder.Name,
+            out methodInfo)) { return false; }
+
+        methodInfo.Invoke(this.model, args);
+        NotifyChangedProperties();
+        return true;
+    }
+
+    public override bool TryGetMember(GetMemberBinder binder,
+        out object result)
+    {
+        var propertyValues = Interlocked.CompareExchange(
+            ref this.propertyValues, GetPropertyValues(), null);
+
+        if (!propertyValues.TryGetValue(binder.Name,
+            out result)) { return false; }
+
+        return true;
+    }
+
+    public override bool TrySetMember(SetMemberBinder binder, object value)
+    {
+        PropertyInfo propInfo = propInfos[binder.Name];
+        propInfo.SetValue(this.model, value, null);
+
+        NotifyChangedProperties();
+        return true;
+    }
+
+    public void NotifyChangedProperties()
+    {
+        Interlocked.CompareExchange(
+            ref this.propertyValues, GetPropertyValues(), null);
+
+        IDictionary&lt;string, object&gt; previousPropValues
+            = this.propertyValues;
+
+        IDictionary&lt;string, object&gt; currentPropValues
+            = GetPropertyValues();
+
+        this.propertyValues
+            = currentPropValues;
+
+        foreach (KeyValuePair&lt;string, object&gt; propValue
+            in currentPropValues.Except(previousPropValues))
+        {
+            RaisePropertyChanged(propValue.Key);
+        }
+    }
+
+    private static IDictionary&lt;string, MethodInfo&gt; GetPublicInstanceMethods()
+    {
+        var methodInfoDictionary = new Dictionary&lt;string, MethodInfo&gt;();
+        MethodInfo[] methodInfos = typeof(TModel).GetMethods(
+            BindingFlags.Public | BindingFlags.Instance);
+        foreach (MethodInfo methodInfo in methodInfos)
+        {
+            if (methodInfo.Name.StartsWith(&quot;get_&quot;) ||
+                methodInfo.Name.StartsWith(&quot;set_&quot;)) { continue; }
+            methodInfoDictionary.Add(methodInfo.Name, methodInfo);
+        }
+
+        return methodInfoDictionary;
+    }
+
+    private static IDictionary&lt;string, PropertyInfo&gt;
+        GetPublicInstanceProperties()
+    {
+        var propInfoDictionary = new Dictionary&lt;string, PropertyInfo&gt;();
+        PropertyInfo[] propInfos = typeof(TModel).GetProperties(
+            BindingFlags.Public | BindingFlags.Instance);
+        foreach (PropertyInfo propInfo in propInfos)
+        {
+            propInfoDictionary.Add(propInfo.Name, propInfo);
+        }
+
+        return propInfoDictionary;
+    }
+
+    private IDictionary&lt;string, object&gt; GetPropertyValues()
+    {
+        var bindingPaths = new Dictionary&lt;string, object&gt;();
+        PropertyInfo[] propInfos = typeof(TModel).GetProperties(
+            BindingFlags.Public | BindingFlags.Instance);
+        foreach (PropertyInfo propInfo in propInfos)
+        {
+            bindingPaths.Add(
+                propInfo.Name,
+                propInfo.GetValue(this.model, null));
+        }
+
+        return bindingPaths;
+    }
+
+    private void RaisePropertyChanged(string propertyName)
+    {
+        OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
+    }
+
+    private void OnPropertyChanged(PropertyChangedEventArgs e)
+    {
+        PropertyChangedEventHandler temp =
+            Interlocked.CompareExchange(ref PropertyChanged, null, null);
+
+        if (temp != null)
+        {
+            temp(this, e);
+        }
+    }
+
+    public event PropertyChangedEventHandler PropertyChanged;
+}
+</code></pre>
+
+<p>The sample application for this post comes with a simple ContactView which has no specific viewModel but instead uses the DynamicViewModel(Of TModel) class.</p>
+
+<p>The DynamicViewModel(Of TModel) Class is able to update the View which binds to an instance of this class.</p>
+
+<p>Here is what the sample application does:</p>
+
+<ol>
+<li>Changing the First Name will result in changing the Full Name and the Reversed Full Name.</li>
+<li>The same rules apply when chaning the Last Name.&#0160;</li>
+<li>The&#0160;hyper-link is enabled only if the user presses the Clear Names button.&#0160;</li>
+<li>The Clear Names button is enabled only when the Full Name text is not empty.</li>
+</ol>
+
+<p>Here is the POCO model class that I have used:</p>
+
+<pre><code class="c#">using System;
+
+internal sealed class ContactDetails
+{ 
+    public string FirstName
+    {
+        get
+        {
+            return this.firstName;
+        }
+
+        set
+        {
+            this.firstName = value;
+
+            SetFullName();
+            SetReversedFullName();
+        }
+    }
+
+    public string LastName
+    {
+        get
+        {
+            return this.lastName;
+        }
+
+        set
+        {
+            this.lastName = value;
+
+            SetFullName();
+            SetReversedFullName();
+        }
+    }
+
+    public string FullName
+    {
+        get
+        {
+            return this.fullName;
+        }
+
+        set
+        {
+            this.fullName = value;
+        }
+    }
+
+    public void ClearFullName()
+    {
+        FirstName = string.Empty;
+        LastName  = string.Empty;
+    }
+
+    /// &lt;summary&gt;
+    /// Navigates to this contact&#39;s website.
+    /// &lt;/summary&gt;
+    /// &lt;param name=&quot;uriString&quot;&gt;The URI string.&lt;/param&gt;
+    public void NavigateTo(string uriString)
+    {
+        System.Diagnostics.Process.Start(uriString);
+    }
+
+    private void SetFullName()
+    {
+        FullName = FirstName + &quot; &quot; + LastName;
+    }
+
+    // (Less important members not shown)
+}
+</code></pre>
+
+<p>As you notice, this class <em>does not implement any interface or base class</em>. In fact, this class can be used successfully in ORM scenarios too (when you need to bind on the same classes that are used in your mappings).</p>
+
+<p>Finally, I would like to show how the View&#39;s DataContext is initialized properly to accept the DynamicViewModel(Of TModel) Class wrapper around the model class:</p>
+
+<pre><code class="c#">/// &lt;summary&gt;
+/// Interaction logic for ContactView.xaml
+/// &lt;/summary&gt;
+internal partial class ContactView : UserControl
+{
+    public static readonly RoutedCommand ClearNamesCommand
+        = new RoutedCommand();
+
+    public static readonly RoutedCommand NavigateUriCommand
+        = new RoutedCommand();
+
+    public ContactView()
+    {
+        InitializeComponent();
+
+        // Create a new instance. Once created
+        // do not call methods directly on this
+        // object. (Use the dynamic viewModel).
+        var instance  = new ContactDetails() {
+            FirstName = &quot;Nikos&quot;,
+            LastName  = &quot;Baxevanis&quot;
+        };
+
+        dynamic viewModel = new DynamicViewModel&lt;ContactDetails&gt;(instance);
+
+        // Wire the ClearNamesCommand from the view to the viewModel.
+        CommandManager.RegisterClassCommandBinding(typeof(ContactView),
+            new CommandBinding(
+                ClearNamesCommand,
+                (sender, e) =&gt; { viewModel.ClearFullName(); },
+                (sender, e) =&gt; { e.CanExecute = !string.IsNullOrWhiteSpace(
+                     viewModel.FullName); }));
+
+        // Wire the NavigateUriCommand from the view to the viewModel.
+        CommandManager.RegisterClassCommandBinding(typeof(ContactView),
+            new CommandBinding(
+                NavigateUriCommand,
+                (sender, e) =&gt; { viewModel.NavigateTo(e.Parameter); },
+                (sender, e) =&gt; { e.CanExecute =                
+                    string.IsNullOrWhiteSpace(viewModel.FullName); }));
+
+        DataContext = viewModel;
+    }
+}
+</code></pre>
+
+<p>Notice that wiring between the <a href="http://msdn.microsoft.com/en-us/library/system.windows.input.icommand.aspx" target="_blank" title="Defines a command.">ICommand</a>&#0160;Interface and the model class is done outside the dynamic ViewModel wrapper using the <a href="http://msdn.microsoft.com/en-us/library/system.windows.input.commandmanager.aspx" target="_blank" title="Provides command related utility methods that register CommandBinding and InputBinding objects for class owners and commands, add and remove command event handlers, and provides services for querying the status of a command.">CommandManager</a>&#0160;Class which acts as a <a href="http://en.wikipedia.org/wiki/Mediator_pattern" target="_blank" title="Provides a unified interface to a set of interfaces in a subsystem.">mediator</a> between the View and the ViewModel. This give us the flexibility to define static reusable commands or specific commands for each view (as I&#39;ve done above).</p>
+
+<p>The sample application can be found <a href="http://dynamicviewmodel.codeplex.com/releases/view/57761" target="_blank" title="moodmosaic / DynamicViewModel">here</a>.</p>
+</div><div id="disqus_thread"></div><script type="text/javascript">var disqus_shortname = 'bonusbits';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script></body><script type="text/javascript">var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-24262928-1']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

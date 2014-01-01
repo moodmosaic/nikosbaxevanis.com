@@ -1,0 +1,35 @@
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width" name="viewport" /><title>XCOPY deployment for Code Contracts</title><link href="/images/favicon.ico" rel="icon" type="image/x-icon" /><link href="/feed" rel="alternate" type="application/rss+xml" /><link href="/stylesheets/blog.css?1388607283" media="screen" rel="stylesheet" type="text/css" /></head><body><body><div id="title"><div><h1><a href="/blog" style="color: #222">moodmosaic</a></h1><div><span>by </span><a href="/">Nikos Baxevanis </a><a href="http://creativecommons.org/licenses/by/3.0/" style="color: #877">(license)</a></div></div><div class="line"></div></div><div id="full"><h1><a>XCOPY deployment for Code Contracts</a></h1><div class="undertitle"><span class="date">Filed under </span><a class="tag" href="/blog#visual-studio">visual-studio</a></div><p>If you don&#39;t wish to install <a href="http://research.microsoft.com/en-us/projects/contracts/">Code Contracts</a> through the Windows Installer:</p>
+
+<ul>
+<li>Go to <code>\Program Files (x86)\MSBuild\(version)\Microsoft.Common.Targets\ImportAfter</code> folder.</li>
+<li>Create a new file with name <code>CodeContractsAfter.targets</code> and paste the following XML:</li>
+</ul>
+
+<pre><code class="xml">&lt;Project xmlns=&quot;http://schemas.microsoft.com/developer/msbuild/2003&quot;&gt;
+  &lt;PropertyGroup&gt;
+    &lt;CodeContractsInstallDir Condition=&quot;&#39;$(CodeContractsInstallDir)&#39;==&#39;&#39;&quot;&gt;CONTRACTS_PATH&lt;/CodeContractsInstallDir&gt;
+  &lt;/PropertyGroup&gt;
+  &lt;Import Condition=&quot;&#39;$(CodeContractsImported)&#39; != &#39;true&#39; AND &#39;$(DontImportCodeContracts)&#39; != &#39;true&#39;&quot; 
+          Project=&quot;$(CodeContractsInstallDir)MsBuild\v4.0\Microsoft.CodeContracts.targets&quot; /&gt;
+&lt;/Project&gt;
+</code></pre>
+
+<ul>
+<li>Extract the contents from the Code Contracts Windows Installer using the <a href="https://code.google.com/p/lessmsi/">lessmsi</a> tool.</li>
+<li>Locate the <code>Contracts</code> folder in the extracted contents.</li>
+<li>Replace the <code>CONTRACTS_PATH</code> in <code>CodeContractsAfter.targets</code> with the actual <code>Contracts</code> folder location.</li>
+</ul>
+</div><div id="disqus_thread"></div><script type="text/javascript">var disqus_shortname = 'bonusbits';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script></body><script type="text/javascript">var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-24262928-1']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

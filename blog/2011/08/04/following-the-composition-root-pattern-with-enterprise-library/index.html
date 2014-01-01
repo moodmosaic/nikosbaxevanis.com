@@ -1,0 +1,37 @@
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width" name="viewport" /><title>Following the Composition Root pattern with Enterprise Library</title><link href="/images/favicon.ico" rel="icon" type="image/x-icon" /><link href="/feed" rel="alternate" type="application/rss+xml" /><link href="/stylesheets/blog.css?1388607283" media="screen" rel="stylesheet" type="text/css" /></head><body><body><div id="title"><div><h1><a href="/blog" style="color: #222">moodmosaic</a></h1><div><span>by </span><a href="/">Nikos Baxevanis </a><a href="http://creativecommons.org/licenses/by/3.0/" style="color: #877">(license)</a></div></div><div class="line"></div></div><div id="full"><h1><a>Following the Composition Root pattern with Enterprise Library</a></h1><div class="undertitle"><span class="date">Filed under </span><a class="tag" href="/blog#entlib">entlib</a><a class="tag" href="/blog#castle-windsor">castle-windsor</a></div><p>A question that frequently rises when building enterprise applications is: <em>&ldquo;Where should we compose object graphs?&rdquo; </em>and the answer is given by the Composition Root pattern:&#0160;<em>&ldquo;As close as possible to the applications entry point.&rdquo;</em></p>
+
+<p>The Composition Root pattern is&#0160;described in the excellent&#0160;<a href="http://manning.com/seemann/" target="_blank" title="Dependency Injection in .NET (Mark Seemann)">book</a>, Dependency Injection in .NET by Mark Seemann.</p>
+
+<p>Here is the definition from the book:<em><br /></em></p>
+
+<blockquote>
+<p>A Composition Root is a (preferably) unique location in an application where modules are composed&#0160;together.</p>
+</blockquote>
+
+<p>When working with the Enterprise Library, it is very common to hide the complexities of initial context creation by&#0160;using the built-in IServiceLocator implementation provided by the <a href="http://msdn.microsoft.com/en-us/library/microsoft.practices.enterpriselibrary.common.configuration.enterpriselibrarycontainer(v=pandp.50).aspx" target="_blank" title="Entry point for the container infrastructure for Enterprise Library.">EnterpriseLibraryContainer</a>&#0160;class.</p>
+
+<p>Since I completely agree with the statement &ldquo;<a href="http://blog.ploeh.dk/2010/02/03/ServiceLocatorIsAnAntiPattern.aspx" target="_blank">Service Locator is an Anti-Pattern</a>&rdquo; I would like to compose all Enterprise Library modules in the Composition Root. Then, I can use well-known DI patterns (such as Constructor Injection) to supply the Dependencies.</p>
+
+<p>Fortunately, the EnterpriseLibraryContainer class contains a method named &ldquo;ConfigureContainer&rdquo; that reads the current configuration and supplies the corresponding type information to configure a dependency injection container (by default Unity).</p>
+
+<pre><code class="c#">var configurator = new UnityContainerConfigurator(container);
+var configSource = ConfigurationSourceFactory.Create();
+
+EnterpriseLibraryContainer.ConfigureContainer(configurator, configSource);
+</code></pre>
+
+<p>After configuring the container in the Composition Root we can resolve any instance of a type from Enterprise Library as with any other object.</p>
+</div><div id="disqus_thread"></div><script type="text/javascript">var disqus_shortname = 'bonusbits';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script></body><script type="text/javascript">var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-24262928-1']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

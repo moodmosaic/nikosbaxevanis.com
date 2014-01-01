@@ -1,0 +1,65 @@
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width" name="viewport" /><title>Creating JSON-enabled ViewModels</title><link href="/images/favicon.ico" rel="icon" type="image/x-icon" /><link href="/feed" rel="alternate" type="application/rss+xml" /><link href="/stylesheets/blog.css?1388607283" media="screen" rel="stylesheet" type="text/css" /></head><body><body><div id="title"><div><h1><a href="/blog" style="color: #222">moodmosaic</a></h1><div><span>by </span><a href="/">Nikos Baxevanis </a><a href="http://creativecommons.org/licenses/by/3.0/" style="color: #877">(license)</a></div></div><div class="line"></div></div><div id="full"><h1><a>Creating JSON-enabled ViewModels</a></h1><div class="undertitle"><span class="date">Filed under </span><a class="tag" href="/blog#wpf">wpf</a></div><p>Recently, Ian Randall&nbsp;contributed something really cool to the DynamicViewModel codebase:&nbsp;Support for binding to a JSON object.&nbsp;I find this exciting!&nbsp;</p>
+
+<p>In the trunk of DynamicViewModel you can find an example that uses the Stack Exchange API. It is a WPF application for searching the Stack Overflow Users.&nbsp;</p>
+
+<p><img src="http://farm9.staticflickr.com/8045/8398555224_d4ecaec7ae_o.png" alt="Screenshot of the demo application" /></p>
+
+<p>All API responses are JSON in Stack Exchange API. Ian took advantage of that and wrote a DynamicViewModelFactory that contains the factory method below:</p>
+
+<pre><code class="c#">public static DynamicViewModel Create(string json)
+{
+    DynamicViewModel result;
+    if (!json.TryCreateDynamic(out result))
+    {
+        throw new ArgumentException(&quot;parameter was not a valid JSON string&quot;);
+    }
+
+    return result;
+}
+</code></pre>
+
+<p>This factory method creates an instance of a DynamicViewModel from a JSON formatted string. In order to use it you need to write code similar to the one below:</p>
+
+<pre><code class="c#">var uriString = &quot;http://api.stackoverflow.com/1.1/users?filter=&quot; + e.Argument;
+var request   = CreateHttpWebRequest(uriString);
+var response  = request.GetResponse();
+
+using (var streamReader = new StreamReader(response.GetResponseStream()))
+{
+    var json = streamReader.ReadToEnd();
+    dynamic viewModel = DynamicViewModelFactory.Create(json);
+}
+</code></pre>
+
+<p>And some XAML action:</p>
+
+<pre><code class="c#">&lt;TextBlock
+    Grid.Column=&quot;0&quot;
+    VerticalAlignment=&quot;Center&quot;
+    Margin=&quot;4,0,0,0&quot;
+    Text=&quot;{Binding display_name}&quot; /&gt;
+&lt;TextBlock
+    Grid.Column=&quot;1&quot;
+    VerticalAlignment=&quot;Center&quot;
+    Text=&quot;{Binding reputation}&quot; /&gt;
+
+&lt;local:BadgesUserControl
+    Grid.Column=&quot;2&quot;
+    DataContext=&quot;{Binding badge_counts}&quot; /&gt;
+</code></pre>
+
+<p>The source code is <a href="http://dynamicviewmodel.codeplex.com/SourceControl/list/changesets" target="_blank">here</a>. Thanks to&nbsp;<a href="http://xaml.geek.nz/contact" target="_self">Ian Randall</a>!</p>
+</div><div id="disqus_thread"></div><script type="text/javascript">var disqus_shortname = 'bonusbits';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script></body><script type="text/javascript">var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-24262928-1']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

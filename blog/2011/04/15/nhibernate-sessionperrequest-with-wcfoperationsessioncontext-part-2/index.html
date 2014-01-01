@@ -1,0 +1,163 @@
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width" name="viewport" /><title>NHibernate SessionPerRequest with WcfOperationSessionContext (Part 2)</title><link href="/images/favicon.ico" rel="icon" type="image/x-icon" /><link href="/feed" rel="alternate" type="application/rss+xml" /><link href="/stylesheets/blog.css?1388607283" media="screen" rel="stylesheet" type="text/css" /></head><body><body><div id="title"><div><h1><a href="/blog" style="color: #222">moodmosaic</a></h1><div><span>by </span><a href="/">Nikos Baxevanis </a><a href="http://creativecommons.org/licenses/by/3.0/" style="color: #877">(license)</a></div></div><div class="line"></div></div><div id="full"><h1><a>NHibernate SessionPerRequest with WcfOperationSessionContext (Part 2)</a></h1><div class="undertitle"><span class="date">Filed under </span><a class="tag" href="/blog#nhibernate">nhibernate</a><a class="tag" href="/blog#wcf">wcf</a></div><p>In the <a title="NHibernate Session Per Request with WcfOperationSessionContext." href="http://www.nikosbaxevanis.com/bonus-bits/2011/03/nhibernate-session-per-request-with-wcfoperationsessioncontext.html" target="_blank">previous</a> post I gave a brief description on how&nbsp;WcfOperationSessionContext can be configured to work.&nbsp;In this post I am going through all the basic steps required to set up a <em>test project</em> that uses WCF for out of process communication and NHibernate for persistence.</p>
+
+<p><strong>Hosting the WCF Service in a Managed Application</strong></p>
+
+<p>To host the service inside a managed application, define an endpoint for the service either imperatively in code, declaratively through configuration, or using default endpoints, and then create an instance of ServiceHost.</p>
+
+<pre><code class="c#">internal sealed class Program
+{
+    public static void Main()
+    {
+        var svh = new ServiceHost(
+            typeof(WcfOperationSessionContextTestService));
+        svh.AddServiceEndpoint(typeof(ICurrentSessionContextTestService),
+            new NetTcpBinding(), &quot;net.tcp://localhost:56789&quot;);
+
+        Bootstrapper.Initialize();
+        svh.Open();
+
+        Console.WriteLine(&quot;Server ready. Press any key to exit..&quot;);
+        Console.ReadKey(false);
+        svh.Close();
+    }
+}
+</code></pre>
+
+<p>Before putting the service to start receiving messages, initialize NHibernate by calling Boostrapper&rsquo;s Initialize method. This creates the ISessionFactory instance that will be used through the entire application. Then call Open on ServiceHost. This creates and opens the listener for the service.</p>
+
+<p><strong>Building the default SessionFactory</strong></p>
+
+<pre><code class="c#">internal static class Bootstrapper
+{
+    public static void Initialize()
+    {
+        if (SessionFactoryHolder.DefaultSessionFactory != null)
+        {
+            return;
+        }
+
+        var cfg = new Configuration();
+        cfg.CurrentSessionContext&lt;WcfOperationSessionContext&gt;()
+           .DataBaseIntegration(ForSQLiteInMemory)
+           .Proxy(p =&gt; p.ProxyFactoryFactory&lt;ProxyFactoryFactory&gt;())
+           .SessionFactory()
+               .GenerateStatistics();
+
+        SessionFactoryHolder.DefaultSessionFactory = cfg.BuildSessionFactory();
+    }
+
+    private static void ForSQLiteInMemory(
+        IDbIntegrationConfigurationProperties db)
+    {
+        db.ConnectionString = &quot;data source=:memory:&quot;;
+        db.ConnectionReleaseMode = ConnectionReleaseMode.OnClose;
+        db.Dialect&lt;SQLiteDialect&gt;();
+        db.ConnectionProvider&lt;DriverConnectionProvider&gt;();
+        db.Driver&lt;SQLite20Driver&gt;();
+        db.BatchSize = 100;
+    }
+}
+</code></pre>
+
+<p>The above steps to build the SessionFactory are straightforward. The new&nbsp;Loquacious extension methods are used for the configuration.</p>
+
+<p><strong>Creating a WCF Service for testing the&nbsp;WcfOperationSessionContext</strong></p>
+
+<pre><code class="c#">
+[NHibernateWcfContext]
+[ServiceBehavior(
+    InstanceContextMode = InstanceContextMode.PerSession)]
+internal sealed class WcfOperationSessionContextTestService
+    : ICurrentSessionContextTestService
+{
+    private static readonly ISessionFactory sessionFactory
+        = SessionFactoryHolder.DefaultSessionFactory;
+
+    public void RunTests()
+    {
+        // Show the current session Id for each request.
+        Console.WriteLine(&quot;SessionId={0}&quot;, 
+            sessionFactory.GetCurrentSession()
+                .GetSessionImplementation().SessionId);
+
+        // Calling GetCurrentSession 2 times returns the SAME instance.
+        Debug.Assert(object.ReferenceEquals(
+            sessionFactory.GetCurrentSession(), 
+            sessionFactory.GetCurrentSession()) == true);
+        Console.WriteLine(&quot;Passed..&quot;);
+
+        // Since session is NOT thread-safe GetCurrentSession does
+        // not work from other thread than the one it was created.
+        var done = new ManualResetEventSlim(false);
+        ThreadPool.QueueUserWorkItem((state) =&gt; {
+            try
+            {
+                ((ISessionFactory)state).GetCurrentSession();
+            }
+            catch (NullReferenceException)
+            { 
+                Console.WriteLine(&quot;Passed..&quot;);
+            }
+            done.Set();
+        }, sessionFactory);
+        done.Wait();
+    }
+}
+</code></pre>
+
+<blockquote>
+<p>You may find more information about the&nbsp;NHibernateWcfContext attribute in&nbsp;the&nbsp;<a title="NHibernate Session Per Request with WcfOperationSessionContext." href="http://www.nikosbaxevanis.com/bonus-bits/2011/03/nhibernate-session-per-request-with-wcfoperationsessioncontext.html" target="_blank">previous</a>&nbsp;post.</p>
+</blockquote>
+
+<p>The above tests shows the current session Id for each request. This is useful when debugging in order to ensure that each session is different for each separate call.</p>
+
+<p>Then it checks that calling ISessionFactory&rsquo;s GetCurrentSession method many times it will returns the same instance.</p>
+
+<p>Since the session is not thread-safe ISessionFactory&rsquo;s GetCurrentSession will throw when called from a thread pool thread. (On a thread pool thread one may call ISessionFactory&rsquo;s OpenSession method and work with the session).</p>
+
+<p><img src="http://farm9.staticflickr.com/8475/8397465779_4d8f2fa782_o.png" alt=""/></p>
+
+<p><strong>WCF Client Configuration</strong></p>
+
+<p>Here is how the client connects to the service in order to run the test method.</p>
+
+<pre><code class="c#">internal sealed class Program
+{
+    private static void Main()
+    {
+        Console.WriteLine(&quot;Press any key when server is ready..&quot;);
+        Console.ReadKey(false);
+
+        var proxy = new ChannelFactory&lt;ICurrentSessionContextTestSer&gt;(
+            new NetTcpBinding(), &quot;net.tcp://localhost:56789&quot;);
+        ICurrentSessionContextTestService svc = proxy.CreateChannel();
+
+        // Start our loop.
+        char operation = (char)0;
+        while (operation != &#39;Q&#39;)
+        {
+            Console.WriteLine(&quot;R=Run Tests, Q=Quit?&quot;);
+            operation = char.ToUpper(Console.ReadKey(true).KeyChar);
+            if (operation == &#39;R&#39;) { svc.RunTests(); }
+        } 
+
+        proxy.Close();
+    }
+}
+</code></pre>
+
+<p>The code can be found <a title="BonusBits Blog source-code." href="https://github.com/moodmosaic/BonusBits.CodeSamples" target="_blank">here</a>.</p>
+</div><div id="disqus_thread"></div><script type="text/javascript">var disqus_shortname = 'bonusbits';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script></body><script type="text/javascript">var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-24262928-1']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

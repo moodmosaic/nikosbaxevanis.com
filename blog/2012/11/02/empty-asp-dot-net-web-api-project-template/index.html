@@ -1,0 +1,77 @@
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width" name="viewport" /><title>Empty ASP.NET Web API Project Template</title><link href="/images/favicon.ico" rel="icon" type="image/x-icon" /><link href="/feed" rel="alternate" type="application/rss+xml" /><link href="/stylesheets/blog.css?1388607283" media="screen" rel="stylesheet" type="text/css" /></head><body><body><div id="title"><div><h1><a href="/blog" style="color: #222">moodmosaic</a></h1><div><span>by </span><a href="/">Nikos Baxevanis </a><a href="http://creativecommons.org/licenses/by/3.0/" style="color: #877">(license)</a></div></div><div class="line"></div></div><div id="full"><h1><a>Empty ASP.NET Web API Project Template</a></h1><div class="undertitle"><span class="date">Filed under </span><a class="tag" href="/blog#web-api">web-api</a></div><p>Usually, every time you create a new Web API project you:</p>
+
+<ol>
+<li>Delete almost all the generated code.</li>
+<li>Uninstall NuGet packages that you don&#39;t need (yet, or at all).</li>
+<li>Remove unused assembly references.</li>
+<li>Manually edit the <code>Web.config</code> file(s) to remove the elements that point to the assemblies which have been removed.</li>
+</ol>
+
+<h2>Solution</h2>
+
+<p>Use the <a href="https://github.com/moodmosaic/EmptyWebApiProjectTemplate">Empty ASP.NET Web API Project Template</a>. The Visual Studio extension can be downloaded from <a href="http://visualstudiogallery.msdn.microsoft.com/a989a149-4bc3-4292-ac8a-5101ee1722d7">here</a>.</p>
+
+<p>It will add a new project template <code>Empty Web API</code> which includes the following:</p>
+
+<p><strong>Files</strong></p>
+
+<ul>
+<li>Properties\AssemblyInfo.cs</li>
+<li>favicon.ico</li>
+<li>Global.asax</li>
+<li>Web.config</li>
+</ul>
+
+<p><strong>Assemblies</strong></p>
+
+<ul>
+<li>System</li>
+<li>System.Core</li>
+<li>System.Configuration</li>
+<li>System.Net.Http</li>
+<li>System.Web</li>
+<li>System.Web.Abstractions</li>
+<li>System.Web.ApplicationServices</li>
+<li><del>System.Web.Mvc</del></li>
+<li>System.Web.Routing</li>
+<li>System.Xml</li>
+</ul>
+
+<p><strong>NuGet packages</strong></p>
+
+<ul>
+<li>Microsoft.AspNet.WebApi.Client</li>
+<li>Microsoft.AspNet.WebApi.Core</li>
+<li>Microsoft.AspNet.WebApi.WebHost</li>
+<li><del>Microsoft.AspNet.Providers.Core</del></li>
+<li>Microsoft.Net.Http</li>
+<li><del>Newtonsoft.Json</del></li>
+</ul>
+
+<h2>Remarks</h2>
+
+<p>A <code>favicon.ico</code> file is included because the browser requests it so <a href="http://developer.yahoo.com/performance/rules.html#favicon">it&#39;s better not to respond with a 404 Not Found</a>.</p>
+
+<p><strong>Update (2013/10/06)</strong>:</p>
+
+<p>You may install <a href="http://www.nuget.org/packages/newtonsoft.json/">Newtonsoft.Json</a> through NuGet:</p>
+
+<blockquote>
+<p>PM&gt; Install-Package Newtonsoft.Json</p>
+</blockquote>
+
+<p>Depending on the configuration, the Newtonsoft.Json package <del>is included because it is</del> can be lazy loaded inside the <code>System.Net.Http.Formatting.JsonMediaTypeFormatter</code> type.</p>
+</div><div id="disqus_thread"></div><script type="text/javascript">var disqus_shortname = 'bonusbits';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script></body><script type="text/javascript">var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-24262928-1']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

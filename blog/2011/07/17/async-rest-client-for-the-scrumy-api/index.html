@@ -1,0 +1,183 @@
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width" name="viewport" /><title>Async REST Client for the Scrumy API</title><link href="/images/favicon.ico" rel="icon" type="image/x-icon" /><link href="/feed" rel="alternate" type="application/rss+xml" /><link href="/stylesheets/blog.css?1388607283" media="screen" rel="stylesheet" type="text/css" /></head><body><body><div id="title"><div><h1><a href="/blog" style="color: #222">moodmosaic</a></h1><div><span>by </span><a href="/">Nikos Baxevanis </a><a href="http://creativecommons.org/licenses/by/3.0/" style="color: #877">(license)</a></div></div><div class="line"></div></div><div id="full"><h1><a>Async REST Client for the Scrumy API</a></h1><div class="undertitle"><span class="date">Filed under </span><a class="tag" href="/blog#rest">rest</a></div><p>I am a big fan of <a title="Scrumy is a simple and intuitive virtual task board based on some concepts of Scrum that helps organize and manage your projects." href="http://scrumy.com/" target="_blank">Scrumy</a>, I must admit that! Scrumy is <em>a simple and intuitive virtual task board based on some concepts of Scrum that helps organize and manage your projects (scrumy.com)</em>.&nbsp;</p>
+
+<p>The last weeks I have been thinking of a Visual Studio Extension for viewing (and interacting with) an entire Scrum (Sprints, Stories, Tasks, etc) from inside the IDE.&nbsp;I started building a client library around the Scrumy REST API. I wanted it to be fully asynchronous because I would like to make the Extension UI responsive.</p>
+
+<p>Back a few months ago, I was watching a 5hr webcast on Windows Azure called <a title="Windows Azure Deep Dive with Jeffrey Richter: Explore the Benefits of Windows Azure Data Storage and Compute Services" href="http://www.wintellect.com/CS/blogs/jeffreyr/archive/2011/04/05/windows-azure-deep-dive-with-jeffrey-richter-explore-the-benefits-of-windows-azure-data-storage-and-compute-services.aspx" target="_blank">Windows Azure Deep Dive with Jeffrey Richter</a> were Jeffrey Richter&nbsp;shared among the (fantastic code samples) a fully asynchronous HttpRestClient class. This class is making heavy use of the&nbsp;<a title="AsyncEnumerator uses C# language features to simplify asynchronous programming." href="http://msdn.microsoft.com/en-us/magazine/cc721613.aspx" target="_blank">AsyncEnumerator</a> class (which I am big fan of, till C# 5.0 with async is out) so I though I should build my client around the HttpRestClient class and make also use of the AsyncEnumerator class.</p>
+
+<p>I started by looking at the GET response:</p>
+
+<pre><code class="python">&lt;scrumy&gt;
+    &lt;created-at&gt;2011-06-24T21:49:57Z&lt;/created-at&gt;
+    &lt;time-zone&gt;Central Time (US &amp; Canada)&lt;/time-zone&gt;
+    &lt;updated-at&gt;2011-06-24T23:38:50Z&lt;/updated-at&gt;
+    &lt;url&gt;nikos&lt;/url&gt;
+&lt;/scrumy&gt;
+
+&lt;sprints type=&quot;array&quot;&gt;
+    &lt;sprint&gt;
+        &lt;created-at&gt;2011-06-24T21:50:53Z&lt;/created-at&gt;
+        &lt;id&gt;186884&lt;/id&gt;
+        &lt;start-date&gt;2011-06-24&lt;/start-date&gt;
+        &lt;updated-at&gt;2011-06-24T21:50:53Z&lt;/updated-at&gt;
+        &lt;scrumy-url&gt;nikos&lt;/scrumy-url&gt;
+    &lt;/sprint&gt;
+&lt;/sprints&gt;
+</code></pre>
+
+<p>Then I created the corresponding&nbsp;classes:</p>
+
+<pre><code class="c#">/// &lt;example&gt;
+///     &lt;scrumy&gt;
+///         &lt;created-at&gt;2011-06-24T21:49:57Z&lt;/created-at&gt;
+///         &lt;time-zone&gt;Central Time (US &amp; Canada)&lt;/time-zone&gt;
+///         &lt;updated-at&gt;2011-06-24T21:57:08Z&lt;/updated-at&gt;
+///         &lt;url&gt;nikos&lt;/url&gt;
+///     &lt;/scrumy&gt;
+/// Editable fields: url, time_zone
+/// &lt;/example&gt;
+public sealed class Scrumy
+{
+    public DateTimeOffset CreatedAt { get; set; }
+
+    public string TimeZone { get; set; }
+
+    public DateTimeOffset UpdatedAt { get; set; }
+
+    public string Url { get; set; }
+}
+
+/// &lt;example&gt;
+///     &lt;sprints type=&quot;array&quot;&gt;
+///        &lt;sprint&gt;
+///            &lt;created-at&gt;2011-06-24T21:50:53Z&lt;/created-at&gt;
+///            &lt;id&gt;186884&lt;/id&gt;
+///            &lt;start-date&gt;2011-06-24&lt;/start-date&gt;
+///            &lt;updated-at&gt;2011-06-24T21:50:53Z&lt;/updated-at&gt;
+///            &lt;scrumy-url&gt;nikos&lt;/scrumy-url&gt;
+///        &lt;/sprint&gt;
+///    &lt;/sprints&gt;
+/// Editable fields: url, time_zone
+/// &lt;/example&gt;
+public sealed class Sprint
+{
+    public DateTimeOffset CreatedAt { get; set; }
+
+    public int Id { get; set; }
+
+    public DateTimeOffset StartDate { get; set; }
+
+    public DateTimeOffset UpdatedAt { get; set; }
+
+    public string ScrumyUrl { get; set; }
+}
+</code></pre>
+
+<p>Next I included generic Begin/End methods for supporting the APM inside my class:</p>
+
+<pre><code class="c#">private IAsyncResult BeginRequest(
+     ScrumyRequest request, 
+     Func&lt;XElement, ScrumyResponse&gt; processor, 
+     AsyncCallback callback = null,
+     object state = null)
+{
+    var ae = new AsyncEnumerator&lt;ScrumyResponse&gt;(
+         string.Format(&quot;Method={0}, Uri={1}&quot;, request.Method, request.Uri));
+    ae.SyncContext = null;
+    return apmWrap.Return(ae,
+        ae.BeginExecute(MakeRequest(ae, request, processor),
+            apmWrap.Callback(ae, callback), state));
+}
+
+private new TResponse EndRequest&lt;TResponse&gt;(IAsyncResult result) 
+     where TResponse : ScrumyResponse
+{
+    return (TResponse)apmWrap.Unwrap(ref result).EndExecute(result);
+}
+
+private IEnumerator&lt;int&gt; MakeRequest(
+     AsyncEnumerator&lt;ScrumyResponse&gt; ae, 
+     ScrumyRequest request, 
+     Func&lt;XElement, ScrumyResponse&gt; processor)
+{
+    base.BeginRequest(request.Method, request.Uri, ae.End());
+    yield return 1;
+
+    XElement element = base.EndRequestXElement(ae.DequeueAsyncResult());
+
+    ae.Result = processor.Invoke(element);
+} 
+</code></pre>
+
+<p>With these helper methods, dealing with the APM was trivial when implementing methods for the Scrumy client. Here are the methods I had to write for getting the Sprints:</p>
+
+<pre><code class="c#">public IAsyncResult BeginGetScrumy(
+     GetScrumyRequest request, 
+     AsyncCallback callback = null, 
+     object state = null)
+{
+    Func&lt;XElement, GetScrumyResponse&gt; processor = element =&gt;
+    {
+        DateTimeOffset createdAt;
+        DateTimeOffset.TryParse(
+             element.Element(&quot;created-at&quot;).Value, out createdAt);
+
+        DateTimeOffset updatedAt;
+        DateTimeOffset.TryParse(
+             element.Element(&quot;updated-at&quot;).Value, out updatedAt);
+
+        var scrumy = new Scrumy
+        {
+            CreatedAt = createdAt,
+            TimeZone = element.Element(&quot;time-zone&quot;).Value,
+            UpdatedAt = updatedAt,
+            Url = element.Element(&quot;url&quot;).Value
+        };
+
+        return new GetScrumyResponse { Scrumy = scrumy };
+    };
+
+    return BeginRequest(request, processor, callback, state);
+}
+
+public GetScrumyResponse EndGetScrumy(IAsyncResult ar)
+{
+    return EndRequest&lt;GetScrumyResponse&gt;(ar);
+} 
+</code></pre>
+
+<p>As you notice, only the logic that creates a Sprint object from an XElement is inside the Begin part. Everything else is handled by the helper classes.</p>
+
+<p>Finally, here is how to use it:</p>
+
+<pre><code class="c#">AsyncEnumerator ae = new AsyncEnumerator();            
+ae.BeginExecute(GetSprint(ae), ae.EndExecute);
+
+private IEnumerator&lt;int&gt; GetSprint(AsyncEnumerator ae)
+{
+    var request = new GetSprintRequest(client.ProjectName);
+
+    client.BeginGetSprint(request, ae.End());
+    yield return 1;
+
+    var response = client.EndGetSprint(ae.DequeueAsyncResult());
+    Assert.NotEmpty(response.Sprints);
+}
+</code></pre>
+
+<p>I am looking forward building as much as I can and then to continue with the Visual Studio Extension.</p>
+
+<p>A gist with all the source code can be found <a title="Asynchronous .NET Client Implementation around the Scrumy REST API." href="https://gist.github.com/2850410" target="_blank">here</a>.</p>
+</div><div id="disqus_thread"></div><script type="text/javascript">var disqus_shortname = 'bonusbits';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script></body><script type="text/javascript">var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-24262928-1']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

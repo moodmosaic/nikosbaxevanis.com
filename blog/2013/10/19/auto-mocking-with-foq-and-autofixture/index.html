@@ -1,0 +1,74 @@
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width" name="viewport" /><title>Auto-Mocking with Foq and AutoFixture</title><link href="/images/favicon.ico" rel="icon" type="image/x-icon" /><link href="/feed" rel="alternate" type="application/rss+xml" /><link href="/stylesheets/blog.css?1388607283" media="screen" rel="stylesheet" type="text/css" /></head><body><body><div id="title"><div><h1><a href="/blog" style="color: #222">moodmosaic</a></h1><div><span>by </span><a href="/">Nikos Baxevanis </a><a href="http://creativecommons.org/licenses/by/3.0/" style="color: #877">(license)</a></div></div><div class="line"></div></div><div id="full"><h1><a>Auto-Mocking with Foq and AutoFixture</a></h1><div class="undertitle"><span class="date">Filed under </span><a class="tag" href="/blog#autofixture">autofixture</a><a class="tag" href="/blog#fsharp">fsharp</a></div><p>A new Auto-mocking extension have been recently added to <a href="http://github.com/autofixture/autofixture">AutoFixture</a> allowing the mock instances to be created by <a href="http://foq.codeplex.com/">Foq</a>. </p>
+
+<p>This brings the total number of Auto-mocking extensions for AutoFixture up to five:</p>
+
+<ul>
+<li><a href="http://nuget.org/packages/AutoFixture.AutoMoq">AutoFixture.AutoMoq</a></li>
+<li><a href="http://nuget.org/packages/AutoFixture.AutoRhinoMocks">AutoFixture.AutoRhinoMocks</a></li>
+<li><a href="http://nuget.org/packages/AutoFixture.AutoFakeItEasy">AutoFixture.AutoFakeItEasy</a></li>
+<li><a href="http://nuget.org/packages/AutoFixture.AutoNSubstitute">AutoFixture.AutoNSubstitute</a></li>
+<li><a href="http://nuget.org/packages/AutoFixture.AutoFoq">AutoFixture.AutoFoq</a></li>
+</ul>
+
+<p><strong>Install</strong></p>
+
+<p>To install AutoFixture with Auto Mocking using Foq, run the following command in the Package Manager Console:</p>
+
+<pre><code>PM&gt; Install-Package AutoFixture.AutoFoq
+</code></pre>
+
+<p>To use it, add an <code>AutoFoqCustomization</code> to the <code>Fixture</code> instance:</p>
+
+<pre><code class="f#">let fixture = Fixture().Customize(AutoFoqCustomization())
+</code></pre>
+
+<p><strong>Typical usage</strong></p>
+
+<p>In the test below the mocked instance is created automatically by Foq:</p>
+
+<pre><code class="f#">[&lt;Fact&gt;]
+let AutoMockInterfaceAndSetupExpectations() =
+    // Fixture setup
+    let fixture = Fixture().Customize(AutoFoqCustomization())
+    let dummy = obj()
+    // Exercise system
+    let sut = fixture.Create&lt;IInterface&gt;()
+    sut.MakeIt(dummy) |&gt; ignore
+    // Verify outcome
+    Mock.Verify(&lt;@ sut.MakeIt(dummy) @&gt;, Times.Once)
+    // Teardown
+</code></pre>
+
+<p><strong>Declarative usage</strong></p>
+
+<p>The above test can be written declaratively using <a href="http://blog.ploeh.dk/2010/10/08/AutoDataTheoriesWithAutoFixture.aspx">AutoData</a> theories:</p>
+
+<pre><code>[&lt;Theory&gt;][&lt;AutoFoqData&gt;]
+let AutoMockInterfaceAndSetupExpectationsDeclaratively 
+  (sut: IInterface, dummy: obj) =
+    sut.MakeIt(dummy) |&gt; ignore
+    Mock.Verify(&lt;@ sut.MakeIt(dummy) @&gt;, Times.Once)
+</code></pre>
+
+<p>The <code>[AutoFoqData]</code> attribute is defined as:</p>
+
+<pre><code>type AutoFoqDataAttribute() = 
+    inherit AutoDataAttribute(
+        Fixture().Customize(AutoFoqCustomization()))
+</code></pre>
+
+<p>An automatically published release created from the latest successful build can be also downloaded from <a href="http://autofixture.codeplex.com/releases/">here</a>.</p>
+</div><div id="disqus_thread"></div><script type="text/javascript">var disqus_shortname = 'bonusbits';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script></body><script type="text/javascript">var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-24262928-1']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

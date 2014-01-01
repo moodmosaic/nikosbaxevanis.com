@@ -1,0 +1,45 @@
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width" name="viewport" /><title>Let&#39;s Pack! Nubular, HornGet and NuPack</title><link href="/images/favicon.ico" rel="icon" type="image/x-icon" /><link href="/feed" rel="alternate" type="application/rss+xml" /><link href="/stylesheets/blog.css?1388607283" media="screen" rel="stylesheet" type="text/css" /></head><body><body><div id="title"><div><h1><a href="/blog" style="color: #222">moodmosaic</a></h1><div><span>by </span><a href="/">Nikos Baxevanis </a><a href="http://creativecommons.org/licenses/by/3.0/" style="color: #877">(license)</a></div></div><div class="line"></div></div><div id="full"><h1><a>Let&#39;s Pack! Nubular, HornGet and NuPack</a></h1><div class="undertitle"><span class="date">Filed under </span><a class="tag" href="/blog#visual-studio">visual-studio</a></div><p><strong>Update: </strong>At the time of this writting <a href="http://nuget.codeplex.com/" target="_blank" title="NuGet is a Visual Studio extension that makes it easy to install and update third-party libraries and tools.">NuGet</a> was called NuPack.</p>
+
+<p>Package Management is not easy, unless you are doing very (very) small projects. It can be quite complex if your project is &#0160;developed in-house for a company (enterprise).</p>
+
+<p>If you haven&#39;t tried anything yet, have a look at the following Package Management tools:</p>
+
+<ul>
+<li><a href="http://nu.wikispot.org/Current_Packages" target="_blank" title="The Nu Project provides a framework and tools to deal with the current .NET package delivery...">Nubular</a></li>
+<li><a href="http://github.com/dagda1/horn_src" target="_blank" title="The initial mission statement is to take control of building a common set of open source packages that are probably similar to many in the ALT.NET space...">HornGet</a></li>
+<li><a href="http://nupack.codeplex.com/" target="_blank" title="NuPack is a free, open source developer focused package management system for the .NET platform intent on simplifying the process of incorporating third party libraries into a .NET application during development.">NuPack</a></li>
+</ul>
+
+<p>Nubular was pretty much the same with <a href="http://rubygems.org/" target="_blank" title="RubyGems.org is the Ruby community&#39;s gem hosting service. Instantly publish your gems and install them. Use the API to interact and find out more...">RubyGems.org</a>&#0160;There are pre-uploaded packages that you can download and use in your project. For example, to use Castle Active Record you don&#39;t need to follow the steps described <a href="http://nikosbaxevanis.com/2010/10/07/building-castle-activerecord-from-source-at-github/" target="_blank">here</a>. Just grab the package, unpack and you are done.&#0160;</p>
+
+<p>What many don&#39;t understand is the situation where you reference for example <a href="http://code.google.com/p/moq/" target="_blank" title="The simplest mocking library for .NET 3.5 and Silverlight with deep C# 3.0 integration.">Moq</a>, <a href="http://github.com/jbogard/automapper" target="_blank" title="A convention-based object-object mapper in .NET">AutoMapper</a>&#0160;and <a href="http://github.com/castleproject/Castle.InversionOfControl" target="_blank" title="Castle Project offers two Inversion of Control Containers. The MicroKernel and the Windsor Container.">Castle Windsor</a>, all in one project <em>(version numbers are&#0160;fictional)</em>:</p>
+
+<ul>
+<li>Moq uses Castle.DynamicProxy.dll v1.1</li>
+<li>AutoMapper uses Castle.DynamicProxy.dll v1.2</li>
+<li>Castle Windsor uses Castle.DynamicProxy.dll v.1.3 <em>(in fact, latest public release of Windsor has DynamicProxy merged in the same assembly).&ldquo;</em></li>
+</ul>
+
+<p>HornGet was able to deal with this situation, it could build Moq using the latest and greatest, AutoMapper and Windsor too. You end up with three assemblies that referenced the same version of the depenency/ies.</p>
+
+<p>Even if you choose this path, it is the hardest one because you need to run all the unit-tests in the projects (Moq, AutoMapper, Windsor) and make sure they pass with the latest version in /trunk of DynamicProxy. And this is not enough, you need to run all the tests (unit and intergration) of your project. After all the above pass, you can go home early. But I am sure that it is already early afternoon and you spent at least 4 hours doing this.</p>
+
+<p>Of course you may not choose to go with this path and install the different versions of Castle.DynamicProxy.dll in&#0160;<a href="http://en.wikipedia.org/wiki/Global_Assembly_Cache" target="_blank" title="GAC is a machine-wide .NET assemblies cache for Microsoft&#39;s CLR platform.">GAC</a>. That way Nubular worked great!</p>
+
+<p>NuPack is a new Package Management tool for the .NET Framework that aims to make your life a lot more easier. It integrates with Visual Studio 2010 and there are a some interesting&#0160;<a href="http://nupack.codeplex.com/team/view" target="_blank">people</a>&#0160;behind it.</p>
+
+<p>Have a look at the <a href="http://nupack.codeplex.com/documentation?title=Getting%20Started" target="_blank" title="The Getting Started guide will help you start using NuPack right away.">documentation</a> and start using it.</p>
+</div><div id="disqus_thread"></div><script type="text/javascript">var disqus_shortname = 'bonusbits';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script></body><script type="text/javascript">var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-24262928-1']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width" name="viewport" /><title>How to enable Code Analysis for F# projects</title><link href="/images/favicon.ico" rel="icon" type="image/x-icon" /><link href="/feed" rel="alternate" type="application/rss+xml" /><link href="/stylesheets/blog.css?1388607283" media="screen" rel="stylesheet" type="text/css" /></head><body><body><div id="title"><div><h1><a href="/blog" style="color: #222">moodmosaic</a></h1><div><span>by </span><a href="/">Nikos Baxevanis </a><a href="http://creativecommons.org/licenses/by/3.0/" style="color: #877">(license)</a></div></div><div class="line"></div></div><div id="full"><h1><a>How to enable Code Analysis for F# projects</a></h1><div class="undertitle"><span class="date">Filed under </span><a class="tag" href="/blog#fsharp">fsharp</a></div><p>As of today, in Visual Studio 2012 the <em>Run Code Analysis</em> command is not available for F# projects.</p>
+
+<blockquote>
+<p><a href="http://msdn.microsoft.com/en-us/library/3z0aeatx.aspx">Code Analysis</a> is a Visual Studio feature for analyzing managed code assemblies and gathering information such as possible design, localization, performance, and security improvements.</p>
+</blockquote>
+
+<p>Code Analysis can be used as a stand-alone tool with the <a href="http://msdn.microsoft.com/en-us/library/bb429474.aspx">FxCopCmd</a> command-line application and  it is also possible to be included to automated build processes such is <a href="http://msdn.microsoft.com/en-us/library/wea2sca5.aspx">MSBuild</a>.</p>
+
+<p><strong>Enable Code Analysis in MSBuild</strong></p>
+
+<p>To enable Code Analysis in MSBuild, include the following elements in the project file:</p>
+
+<pre><code>&lt;CodeAnalysisModuleSuppressionsFile&gt;GlobalSuppressions.fs&lt;/CodeAnalysisModuleSuppressionsFile&gt;
+&lt;RunCodeAnalysis&gt;true&lt;/RunCodeAnalysis&gt;
+&lt;CodeAnalysisRuleSet&gt;My.ruleset&lt;/CodeAnalysisRuleSet&gt;    
+</code></pre>
+
+<p><strong>Problem</strong></p>
+
+<p>Unfortunately, even with the above elements, Code Analysis will not run for F# projects during the MSBuild process.</p>
+
+<p><strong>Solution</strong></p>
+
+<p>Edit the Microsoft.CodeAnalysis.Targets file which is located at:<br>
+C:\Program Files (x86)\MSBuild\Microsoft\VisualStudio\v11.0\CodeAnalysis</p>
+
+<p>Append &ldquo;<strong>or &#39;$(Language)&#39;==&#39;F#&#39;</strong>&rdquo; at the following locations:</p>
+
+<pre><code>&lt;DefineConstants Condition=&quot;&#39;$(Language)&#39;==&#39;C#&#39; &quot;&gt;CODE_ANALYSIS;$(DefineConstants)&lt;/DefineConstants&gt;
+&lt;PropertyGroup Condition=&quot;&#39;$(Language)&#39;==&#39;C#&#39; or &#39;$(Language)&#39;==&#39;VB&#39;&quot;&gt;
+</code></pre>
+
+<p>You may also download the modified Microsoft.CodeAnalysis.Targets file from <a href="/downloads/Microsoft.CodeAnalysis.Targets.zip">here</a>.</p>
+</div><div id="disqus_thread"></div><script type="text/javascript">var disqus_shortname = 'bonusbits';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script></body><script type="text/javascript">var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-24262928-1']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

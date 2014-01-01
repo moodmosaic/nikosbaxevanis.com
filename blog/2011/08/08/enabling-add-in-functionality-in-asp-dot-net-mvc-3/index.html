@@ -1,0 +1,185 @@
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width" name="viewport" /><title>Enabling Add-In functionality in ASP.NET MVC 3</title><link href="/images/favicon.ico" rel="icon" type="image/x-icon" /><link href="/feed" rel="alternate" type="application/rss+xml" /><link href="/stylesheets/blog.css?1388607283" media="screen" rel="stylesheet" type="text/css" /></head><body><body><div id="title"><div><h1><a href="/blog" style="color: #222">moodmosaic</a></h1><div><span>by </span><a href="/">Nikos Baxevanis </a><a href="http://creativecommons.org/licenses/by/3.0/" style="color: #877">(license)</a></div></div><div class="line"></div></div><div id="full"><h1><a>Enabling Add-In functionality in ASP.NET MVC 3</a></h1><div class="undertitle"><span class="date">Filed under </span><a class="tag" href="/blog#asp.net-mvc">asp.net-mvc</a><a class="tag" href="/blog#mef">mef</a></div><p><strong>Update:&#0160;</strong>&#0160;<a href="http://www.nikosbaxevanis.com/bonus-bits/2011/08/enabling-add-in-functionality-in-aspnet-mvc3-part2.html" target="_blank" title="Enabling Add-In functionality in ASP.NET MVC 3 (Part 2)">Part 2</a></p>
+
+<p>I remember, back in 2006 when I wrote my first managed add-in for AutoCAD. The fact that we could extend the functionality of a very big product, using .NET was huge. Till that time, if we wanted to use .NET for add-in functionality we had to rely on <a href="http://en.wikipedia.org/wiki/Runtime_Callable_Wrapper" target="_blank" title="Runtime Callable Wrapper">RCW</a>&#0160;or else we had to&#0160;write messy and error-prone VBA code.&#0160;</p>
+
+<p>Today, anyone who builds applications in managed code (using .NET 4 and above) has built-in&#0160;functionality for extensibility provided by the framework itself. In this post, we will be extending an ASP.NET MVC 3 application. We are going to use Unity as the Dependency Injection (DI) container and the types from the&#0160;System.ComponentModel.Composition namespace (or else, <a href="http://msdn.microsoft.com/en-us/library/system.componentmodel.composition.aspx" target="_blank" title="Managed Extensibility Framework, or MEF">MEF</a>) for managing the composition of parts.</p>
+
+<p>The host application, is the one shown below. I have selected the interesting types that I will be discussing.</p>
+
+<p><img src="http://farm9.staticflickr.com/8071/8397466245_72d78ba23d_o.png" alt="The types that I will be discussing" /></p>
+
+<p><strong>DiscoverableControllerFactory</strong></p>
+
+<p>A MEF-specific <a href="http://msdn.microsoft.com/en-us/library/system.web.mvc.defaultcontrollerfactory.aspx" target="_blank" title="Represents the controller factory that is registered by default.">DefaultControllerFactory</a>&#0160;derived type. It&#0160;gets the exported types with the contract name, derived from an IController type. After the controller is supplied, the MVC framework will resolve the Views.</p>
+
+<pre><code class="c#">internal sealed class DiscoverableControllerFactory : DefaultControllerFactory
+{
+    private readonly CompositionContainer compositionContainer;
+
+    public DiscoverableControllerFactory(
+        CompositionContainer compositionContainer)
+    {
+        this.compositionContainer = compositionContainer;
+    }
+
+    public override IController CreateController(
+        RequestContext requestContext, 
+        string controllerName)
+    {
+        Lazy&lt;IController&gt; controller = this.compositionContainer
+          .GetExports&lt;IController, IDictionary&lt;string, object&gt;&gt;()
+          .Where(c =&gt; c.Metadata.ContainsKey(&quot;controllerName&quot;)
+                   &amp;&amp; c.Metadata[&quot;controllerName&quot;].ToString() == controllerName)
+          .First();
+
+        return controller.Value;
+    }
+}
+</code></pre>
+
+<p><strong>UnityControllerFactory</strong></p>
+
+<p>A Unity-specific DefaultControllerFactory&#0160;&#0160;derived type. There are many implementations around. The difference from other implementations is that this one takes a delegate as a parameter in the constructor that acts as the fallback factory when the DI container can not supply a controller. This is a very important part of our architecture because here we have the chance to supply the target controller (as an add-in)&#0160;using&#0160;MEF.</p>
+
+<pre><code class="c#">internal sealed class UnityControllerFactory : DefaultControllerFactory
+{
+    private readonly UnityContainer container;
+    private Func&lt;RequestContext, string, IController&gt; alternativeFactoryMethod;
+
+    public UnityControllerFactory(
+        UnityContainer container,
+        Func&lt;RequestContext, string, IController&gt; alternativeFactoryMethod)
+    {
+        this.container = container;
+        this.alternativeFactoryMethod = alternativeFactoryMethod;
+    }
+
+    protected override IController GetControllerInstance(
+        RequestContext requestContext, 
+        Type controllerType)
+    {
+        IController controller;
+
+        if (controllerType == null)
+        {
+            try
+            {
+                string controllerName = requestContext.HttpContext
+                    .Request.Path.Replace(&quot;/&quot;, &quot;&quot;);
+                return this.alternativeFactoryMethod(
+                    requestContext, 
+                    controllerName);
+            }
+            catch
+            {
+                throw new HttpException(404, string.Format(
+                    &quot;The controller for path &#39;{0}&#39; could not be found or it 
+                        does not implement IController.&quot;,
+                    requestContext.HttpContext.Request.Path));
+            }
+        }
+
+        if (!typeof(IController).IsAssignableFrom(controllerType))
+        {
+            throw new ArgumentException(string.Format(
+                &quot;Type requested is not a controller: {0}&quot;, controllerType.Name),
+                 &quot;controllerType&quot;);
+        }
+
+        try
+        {
+            controller = container.Resolve(controllerType) as IController;
+        }
+        catch (Exception e)
+        {
+            throw new InvalidOperationException(string.Format(
+                &quot;Error resolving controller {0}&quot;, controllerType.Name), e);
+        }
+
+        return controller;
+    }
+}
+</code></pre>
+
+<p><strong>Global.asax</strong></p>
+
+<p>Here we specify the default path for the extensions. We create a new instance of the DiscoverableControllerFactory class passing a CompositionContainer and a DirectoryCatalog. Keep in mind that the DirectoryCatalog is one of the many choices that MEF provides for discovering parts. Besides the creation of the&#0160;DiscoverableControllerFactory we also create a new instance of the UnityControllerFactory class acting as the default controller factory. Any controllers that this factory can not supply will fallback to the DiscoverableControllerFactory using it&#39;s CreateController method. One last thing to note, this is the application&#39;s&#0160;<a href="http://blog.ploeh.dk/2011/07/28/CompositionRoot.aspx" target="_blank" title="Composition Root">Composition Root</a>. The DI container is referenced here, where the composition happens, and&#0160;<span style="text-decoration: underline;">nowhere else</span>&#0160;in the entire application.</p>
+
+<pre><code class="c#">private static void BootstrapContainer()
+{
+    string extensionsPath = Path.Combine(
+        AppDomain.CurrentDomain.BaseDirectory, &quot;Extensions&quot;);
+
+    var discoverableControllerFactory = new DiscoverableControllerFactory(
+        new CompositionContainer(
+            new DirectoryCatalog(extensionsPath)));
+
+    // No direct reference on the container outside this method.
+    var unityControllerFactory = new UnityControllerFactory(
+        new UnityContainer()
+            .Install(Registrator.ForControllers,
+                     Registrator.ForServices,
+                     Registrator.ForEnterpriseLibrary),
+        fallbackFactoryMethod: discoverableControllerFactory.CreateController);
+
+    ControllerBuilder.Current.SetControllerFactory(unityControllerFactory);
+}
+
+protected void Application_Start()
+{
+    AreaRegistration.RegisterAllAreas();
+
+    RegisterGlobalFilters(GlobalFilters.Filters);
+    RegisterRoutes(RouteTable.Routes);
+
+    BootstrapContainer();
+}
+</code></pre>
+
+<p>The add-in application is a regular class library and it&#39;s structure is shown below. I have selected the interesting types that I will be discussing.</p>
+
+<p><img src="http://farm9.staticflickr.com/8077/8397466255_c4bcf9152a_o.png" alt="The types that I will be discussing" /></p>
+
+<p><strong>ConceptController</strong></p>
+
+<p>This is a proof of concept&#0160;Controller for this demo. It is decorated with the&#0160;<a href="http://msdn.microsoft.com/en-us/library/system.componentmodel.composition.exportattribute.aspx" target="_blank" title="Specifies that a type, property, field, or method provides a particular export.">ExportAttribute</a>&#0160;and&#0160;<a href="http://msdn.microsoft.com/en-us/library/system.componentmodel.composition.exportmetadataattribute.aspx" target="_blank" title="Specifies metadata for a type, property, field, or method marked with the ExportAttribute.">ExportMetadataAttribute</a>. The later is needed in order to help the DiscoverableControllerFactory to choose the right controller among all the controllers supplied by this and other add-ins. The&#0160;<a href="http://msdn.microsoft.com/en-us/library/system.componentmodel.composition.partcreationpolicyattribute.aspx" target="_blank" title="Specifies the CreationPolicy for a part.">PartCreationPolicyAttribute</a>&#0160;is needed in order to specify that a new non-shared (transient) instance will be created for each request.</p>
+
+<pre><code class="c#">[Export(typeof(IController)), ExportMetadata(&quot;controllerName&quot;, &quot;Concept&quot;)]
+[PartCreationPolicy(CreationPolicy.NonShared)]
+public class ConceptController : Controller
+{
+    public ActionResult Index()
+    {
+        ViewBag.Name = this.GetType().Assembly.FullName;
+
+        return View(&quot;~/Extensions/Views/Concept/Index.cshtml&quot;);
+    }
+}
+</code></pre>
+
+<p><strong>Index.cshtml, Web.config</strong></p>
+
+<p>Nothing special to say here. The razor view is just any other (razor) view. The Web.config is needed as a hint for the MVC framework to compile the razor views at runtime.</p>
+
+<blockquote>
+<p>Make sure to select all the views and set the property &ldquo;Copy to Output directory&rdquo; to &ldquo;<em>Copy if newer&rdquo;. </em>This is important because each time we compile the add-in library besides the .dll with the models and the controllers we also want the views to be copied there (they are also part of the add-in).</p>
+</blockquote>
+
+<p>You can download the demo application <a href="http://goo.gl/kX4ZP" target="_blank" title="ExtensibleMvcApplicationDemo-Part1.zip">here</a>. Upon build the Concepts.dll along with it&#39;s Views will be copied in the Web project&#39;s &ldquo;Extensions&rdquo; directory. When run, the application will automatically load the assembly the first time the &ldquo;Concepts&rdquo; tab is pressed.</p>
+
+<ul>
+</ul>
+</div><div id="disqus_thread"></div><script type="text/javascript">var disqus_shortname = 'bonusbits';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script></body><script type="text/javascript">var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-24262928-1']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>
