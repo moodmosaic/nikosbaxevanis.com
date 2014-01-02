@@ -76,7 +76,7 @@ ul li {
 }
 
 section:nth-child(2n) {
-  background: #fdfdfd;
+  background: #fafafa;
   box-shadow: inset 0 1px 0 0 white;
 }
 
