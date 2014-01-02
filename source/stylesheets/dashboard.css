@@ -45,6 +45,7 @@ section:not(#top) {
 p {
   font-weight: 300;
   font-family: "Lucida Grande", "Lucida Sans Unicode", Helvetica, Arial, Verdana, sans-serif;
+  text-align: justify;
 }
 
 h1 {
