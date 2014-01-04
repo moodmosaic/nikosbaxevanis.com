@@ -118,17 +118,3 @@ pre {
 .undertitle {
   margin-top: -5px;
 }
-
-ul {
-  list-style: none;
-  margin-left: 0;
-  padding: 0;
-}
-ul li:before {
-  content: "✼";
-  display: inline-block;
-  width: 1.5em;
-  margin-left: -1.5em;
-  font-size: 80%;
-  vertical-align: 5%;
-}
