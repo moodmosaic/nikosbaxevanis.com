@@ -21,6 +21,9 @@ body
             a href=item.url
               = item.title
           div.undertitle
+            span.meta 
+              = item.slug
+          div.undertitle
             span.date #{item.day}/#{item.month}/#{item.year}
             - for category in item.categories
               span.tag onclick="filterTag(&quot;#{category.downcase.gsub(' ','-')}&quot;)" #{category.downcase.gsub(' ','-')}
