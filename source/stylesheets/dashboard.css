@@ -94,7 +94,7 @@ section:nth-child(2n) {
   -webkit-user-select: none;
   position: absolute;
   top: 50%;
-  margin-top: -150px;
+  margin-top: -183px;
   text-align: center;
   width: 100%;
   color: #33333d;
@@ -175,7 +175,7 @@ section:nth-child(2n) {
   }
 
   #heading {
-    margin-top: -75px;
+    margin-top: -108px;
   }
 
   #logo {
@@ -236,4 +236,24 @@ pre code {
   background-color: #eeeeee;
   line-height: 1.4em;
   padding-left: 0px;
+}
+
+#nav {
+  padding-top: 45px;
+}
+#nav a {
+  text-decoration: none;
+  color: white;
+  background: #33333d;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-radius: 3px;
+}
+
+#nav a:hover {
+  text-decoration: underline;
+  color: #532507;
+  background: white;
 }
