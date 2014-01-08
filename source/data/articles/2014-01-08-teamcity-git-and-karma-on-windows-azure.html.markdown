@@ -7,7 +7,7 @@ comments: []
 slug: "Setup a Windows Azure VM with TeamCity and integrate Karma as part of the CI process."
 ---
 
-<u>Note</u>: After following this post, the end result is be pretty awesome:
+<u>Note</u>: After following this post, the end result is pretty awesome:
 
 ![Image](/images/articles/2014-01-08-azure-teamcity-angular-karma-17.png)
 
