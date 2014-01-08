@@ -1,6 +1,6 @@
-<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width" name="viewport" /><title>TeamCity, Git, and Karma, on Windows Azure</title><link href="/images/favicon.ico" rel="icon" type="image/x-icon" /><link href="/feed" rel="alternate" type="application/rss+xml" /><link href="/stylesheets/blog.css?1389195493" media="screen" rel="stylesheet" type="text/css" /></head><body><body><div id="title"><div><h1><a href="/blog" style="color: #222">moodmosaic</a></h1><div><span>by </span><a href="/">Nikos Baxevanis </a><a href="http://creativecommons.org/licenses/by/3.0/" style="color: #877">(license)</a></div></div><div class="line"></div></div><div id="full"><h1><a>TeamCity, Git, and Karma, on Windows Azure</a></h1><div class="undertitle"><span class="date">Filed under </span><a class="tag" href="/blog#software-eng">software-eng</a><a class="tag" href="/blog#javascript">javascript</a><a class="tag" href="/blog#unit-testing">unit-testing</a></div><p><u>Note</u>: After following this post, the end result is be pretty awesome:</p>
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width" name="viewport" /><title>TeamCity, Git, and Karma, on Windows Azure</title><link href="/images/favicon.ico" rel="icon" type="image/x-icon" /><link href="/feed" rel="alternate" type="application/rss+xml" /><link href="/stylesheets/blog.css?1389205807" media="screen" rel="stylesheet" type="text/css" /></head><body><body><div id="title"><div><h1><a href="/blog" style="color: #222">moodmosaic</a></h1><div><span>by </span><a href="/">Nikos Baxevanis </a><a href="http://creativecommons.org/licenses/by/3.0/" style="color: #877">(license)</a></div></div><div class="line"></div></div><div id="full"><h1><a>TeamCity, Git, and Karma, on Windows Azure</a></h1><div class="undertitle"><span class="date">Filed under </span><a class="tag" href="/blog#software-eng">software-eng</a><a class="tag" href="/blog#javascript">javascript</a><a class="tag" href="/blog#unit-testing">unit-testing</a></div><p><u>Note</u>: After following this post, the end result is pretty awesome:</p>
 
-<p><img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-17.png?1389195493" /></p>
+<p><img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-17.png?1389205806" /></p>
 
 <p><strong>Radio Edit (tl;dr)</strong></p>
 
@@ -29,7 +29,7 @@
 
 <p>Create a new Virtual Machine on Windows Azure to install and access TeamCity.</p>
 
-<p><img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-1.png?1389195493" /></p>
+<p><img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-1.png?1389205806" /></p>
 
 <ul>
 <li>Turn off Internet Explorer&#39;s Enhanced Security Configuration.</li>
@@ -40,7 +40,7 @@
 </ul></li>
 </ul>
 
-<p><img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-3.png?1389195493" /></p>
+<p><img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-3.png?1389205806" /></p>
 
 <ul>
 <li>Install Karma and karma-teamcity-reporter plugin:<br><pre><code>  npm install -g karma
@@ -57,19 +57,19 @@
 </ul></li>
 </ul>
 
-<p><img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-4.png?1389195493" /></p>
+<p><img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-4.png?1389205806" /></p>
 
 <p><u>Optional</u>: <a href="https://help.github.com/articles/generating-ssh-keys">Generate SSH keys</a> if you use SSH keys to establish a secure connection between the Virtual Machine and Git.</p>
 
 <p>Install TeamCity and choose a port so it can be accessed from a browser (e.g. port 80).</p>
 
-<p><img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-5.png?1389195493" /></p>
+<p><img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-5.png?1389205806" /></p>
 
 <p>If you use SSH keys to establish a secure connection between the Virtual Machine and Git, make sure to run TeamCity Server under a user account that can access the path where the SSH keys are saved.</p>
 
 <p>Use the <code>whoami</code> command in the Command Prompt to find out the Virtual Machine&#39;s domain name.</p>
 
-<p><img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-6.png?1389195493" /></p>
+<p><img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-6.png?1389205806" /></p>
 
 <p>Add a new inbound rule to Windows Firewall with the TeamCity Server port that was entered during installation.</p>
 
@@ -79,7 +79,7 @@
 
 <p>On Windows Azure Management Portal add a new endpoint with the selected TeamCity Server port that was entered during installation.</p>
 
-<p><img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-7.png?1389195493" /></p>
+<p><img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-7.png?1389205806" /></p>
 
 <p>Log in to the TeamCity Server:</p>
 
@@ -89,20 +89,20 @@
 <li>Attach a new VCS root on Build Configuration for Git.</li>
 </ul>
 
-<p><img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-8.png?1389195493" /></p>
+<p><img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-8.png?1389205806" /></p>
 
 <p>For the demo, I forked the <a href="https://github.com/moodmosaic/angular-phonecat">angular-phonecat</a> project.</p>
 
-<p><img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-9.png?1389195493" /></p>
+<p><img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-9.png?1389205806" /></p>
 
 <p>Select an authentication method and test the connection.</p>
 
-<p><img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-10.png?1389195493" />
-<img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-11.png?1389195493" /></p>
+<p><img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-10.png?1389205806" />
+<img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-11.png?1389205806" /></p>
 
 <p>Add a Build Step and attach the newly created Build Configuration.</p>
 
-<p><img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-12.png?1389195493" /></p>
+<p><img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-12.png?1389205806" /></p>
 
 <ul>
 <li>In the runner type select Command Line.</li>
@@ -112,20 +112,20 @@
 <li>In the command parameters option enter <code>start karma.conf.js --reporters teamcity --single-run</code>.</li>
 </ul>
 
-<p><img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-13.png?1389195493" /></p>
+<p><img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-13.png?1389205806" /></p>
 
 <p>As a last step, include the <code>karma-teamcity-reporter</code> plugin in the karma.conf.js file.</p>
 
-<p><img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-14.png?1389195493" /></p>
+<p><img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-14.png?1389205806" /></p>
 
 <p>Push to Git to trigger the build process and see the commit on TeamCity Server.</p>
 
-<p><img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-15.png?1389195493" /></p>
+<p><img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-15.png?1389205806" /></p>
 
 <p>The end result is pretty awesome:</p>
 
-<p><img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-16.png?1389195493" />
-<img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-17.png?1389195493" /></p>
+<p><img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-16.png?1389205806" />
+<img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-17.png?1389205806" /></p>
 </div><a class="twitter" href="https://twitter.com/intent/tweet?url=http%3A%2F%2Fnikosbaxevanis.com%2Fblog%2F2014%2F01%2F08%2Fteamcity-git-and-karma-on-windows-azure%2F&amp;text=TeamCity%2C+Git%2C+and+Karma%2C+on+Windows+Azure&amp;via=nikosbaxevanis" target="_blank">Tweet This</a></body><script type="text/javascript">var _gaq = _gaq || [];
 _gaq.push(['_setAccount', 'UA-24262928-1']);
 _gaq.push(['_trackPageview']);
