@@ -245,10 +245,7 @@ pre code {
   text-decoration: none;
   color: white;
   background: #33333d;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  padding-left: 10px;
-  padding-right: 10px;
+  padding: 1%;
   border-radius: 3px;
 }
 
