@@ -131,3 +131,7 @@ a.twitter {
   padding: 1%;
   font: 17px/1.5 "Lucida Grande", "Lucida Sans Unicode", Helvetica, Arial, Verdana, sans-serif;
 }
+
+#disqus_thread {
+  padding-top: 27px;
+}
