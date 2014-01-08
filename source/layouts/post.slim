@@ -27,6 +27,7 @@ html
           - for category in current_page.data.categories
             a class="tag" href="/blog##{category.downcase.gsub(' ','-')}" #{category.downcase.gsub(' ','-')}
         == yield
+      a.twitter target="_blank" href="https://twitter.com/intent/tweet?#{URI::encode_www_form("url" => "http://nikosbaxevanis.com" + current_page.url, "text" => current_page.data.title, "via" => "nikosbaxevanis")}" Tweet This
       - unless data.page.comments.nil?
         - if data.page.comments.any?
           div id="disqus_thread"
