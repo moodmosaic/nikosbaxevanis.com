@@ -1,33 +1,33 @@
-<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width" name="viewport" /><title>Replacing a few LINQ query operators with F# Sequences</title><link href="/images/favicon.ico" rel="icon" type="image/x-icon" /><link href="/feed" rel="alternate" type="application/rss+xml" /><link href="/stylesheets/blog.css?1389206281" media="screen" rel="stylesheet" type="text/css" /></head><body><body><div id="title"><div><h1><a href="/blog" style="color: #222">moodmosaic</a></h1><div><span>by </span><a href="/">Nikos Baxevanis </a><a href="http://creativecommons.org/licenses/by/3.0/" style="color: #877">(license)</a></div></div><div class="line"></div></div><div id="full"><h1><a>Replacing a few LINQ query operators with F# Sequences</a></h1><div class="undertitle"><span class="date">Filed under </span><a class="tag" href="/blog#fsharp">fsharp</a></div><p><strong>ToArray</strong></p>
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width" name="viewport" /><title>Replacing a few LINQ query operators with F# Sequences</title><link href="/images/favicon.ico" rel="icon" type="image/x-icon" /><link href="/feed" rel="alternate" type="application/rss+xml" /><link href="/stylesheets/blog.css?1389379825" media="screen" rel="stylesheet" type="text/css" /></head><body><body><div id="title"><div><h1><a href="/blog" style="color: #222">/blog</a></h1><div><a href="/">Nikos Baxevanis</a><span>&nbsp;</span><a href="http://creativecommons.org/licenses/by/3.0/" style="color: #877">(license)</a></div></div><div class="line"></div></div><div id="full"><h1>Replacing a few LINQ query operators with F# Sequences</h1><div class="undertitle"><span class="date">Filed under </span><a class="tag" href="/blog#fsharp">fsharp</a></div><div class="content"><p><strong>ToArray</strong></p>
 
 <p><a href="http://msdn.microsoft.com/en-us/library/bb298736.aspx">Enumerable.ToArray</a> &#8594; <a href="http://msdn.microsoft.com/en-us/library/ee340263.aspx">Seq.toArray</a></p>
 
-<p><img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-1.png?1389206281" /></p>
+<p><img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-1.png?1389379824" /></p>
 
 <p><strong>AsEnumerable</strong></p>
 
 <p><a href="http://msdn.microsoft.com/en-us/library/bb335435.aspx">Enumerable.AsEnumerable</a> &#8594; <code>seq { }</code></p>
 
-<p><img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-2.png?1389206281" /></p>
+<p><img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-2.png?1389379824" /></p>
 
 <p><strong>First</strong></p>
 
 <p><a href="http://msdn.microsoft.com/en-us/library/bb291976.aspx">Enumerable.First</a> &#8594; <a href="http://msdn.microsoft.com/en-us/library/ee340330.aspx">Seq.head</a></p>
 
-<p><img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-3.png?1389206281" /></p>
+<p><img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-3.png?1389379824" /></p>
 
 <p><strong>Count</strong></p>
 
 <p><a href="http://msdn.microsoft.com/en-us/library/bb338038.aspx">Enumerable.Count</a> &#8594; <a href="http://msdn.microsoft.com/en-us/library/ee370547.aspx">Seq.length</a></p>
 
-<p><img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-4.png?1389206281" /></p>
+<p><img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-4.png?1389379824" /></p>
 
 <p><strong>SequenceEqual</strong></p>
 
 <p><a href="http://msdn.microsoft.com/en-us/library/bb348567.aspx">Enumerable.SequenceEqual</a> &#8594; <a href="http://msdn.microsoft.com/en-us/library/ee353659.aspx">Seq.compareWith</a> <a href="http://msdn.microsoft.com/en-us/library/ee353429.aspx">Operators.compare</a></p>
 
-<p><img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-5.png?1389206281" /></p>
-</div><a class="twitter" href="https://twitter.com/intent/tweet?url=http%3A%2F%2Fnikosbaxevanis.com%2Fblog%2F2013%2F10%2F24%2Freplacing-a-few-linq-query-operators-with-f-number-sequences%2F&amp;text=Replacing+a+few+LINQ+query+operators+with+F%23+Sequences&amp;via=nikosbaxevanis" target="_blank">Tweet This</a><div id="disqus_thread"></div><script type="text/javascript">var disqus_shortname = 'bonusbits';
+<p><img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-5.png?1389379824" /></p>
+</div></div><a class="twitter" href="https://twitter.com/intent/tweet?url=http%3A%2F%2Fnikosbaxevanis.com%2Fblog%2F2013%2F10%2F24%2Freplacing-a-few-linq-query-operators-with-f-number-sequences%2F&amp;text=Replacing+a+few+LINQ+query+operators+with+F%23+Sequences&amp;via=nikosbaxevanis" target="_blank">Tweet This</a><div id="disqus_thread"></div><script type="text/javascript">var disqus_shortname = 'bonusbits';
 (function() {
     var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
     dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
