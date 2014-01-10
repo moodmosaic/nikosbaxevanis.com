@@ -93,8 +93,7 @@ section:nth-child(2n) {
 #heading {
   -webkit-user-select: none;
   position: absolute;
-  top: 50%;
-  margin-top: -183px;
+  top: 27%;
   text-align: center;
   width: 100%;
   color: #33333d;
@@ -172,10 +171,6 @@ section:nth-child(2n) {
 @media screen and (max-width: 700px) {
   section:not(#top) {
     padding: 50px 25px;
-  }
-
-  #heading {
-    margin-top: -108px;
   }
 
   #logo {
