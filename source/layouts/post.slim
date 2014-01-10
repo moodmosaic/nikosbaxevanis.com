@@ -12,21 +12,19 @@ html
       div#title
         div
           h1
-            a href="/blog" style="color: #222" moodmosaic
+            a href="/blog" style="color: #222" = "/blog"
           div 
-            span by 
-            a href="/" Nikos Baxevanis 
+            a href="/" Nikos Baxevanis
+            span &nbsp;
             a style="color: #877" href="http://creativecommons.org/licenses/by/3.0/" (license)
         div.line
       div#full
-        h1
-          a href=current_page.data.url
-            = current_page.data.title
+        h1 = current_page.data.title
         div.undertitle
           span.date Filed under 
           - for category in current_page.data.categories
             a class="tag" href="/blog##{category.downcase.gsub(' ','-')}" #{category.downcase.gsub(' ','-')}
-        == yield
+        div.content == yield
       a.twitter target="_blank" href="https://twitter.com/intent/tweet?#{URI::encode_www_form("url" => "http://nikosbaxevanis.com" + current_page.url, "text" => current_page.data.title, "via" => "nikosbaxevanis")}" Tweet This
       - unless data.page.comments.nil?
         - if data.page.comments.any?

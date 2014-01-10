@@ -135,3 +135,11 @@ a.twitter {
 #disqus_thread {
   padding-top: 27px;
 }
+
+.undertitle a:hover {
+  text-decoration: none;
+}
+
+#full .content a {
+  text-decoration: underline;
+}
