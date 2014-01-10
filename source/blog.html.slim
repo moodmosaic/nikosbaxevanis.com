@@ -14,12 +14,6 @@ body
         a style="color: #877" href="http://creativecommons.org/licenses/by/3.0/" (license)
     div.line
   div#main
-    p 
-      span This is a miscellaneous collection of writings and announcements, mostly related to technology and the 
-      a href="http://www.ohloh.net/accounts/moodmosaic" open-source
-      span  software I work on. Subscribe to the 
-      a href="/feed" Atom feed
-      span  to get notified when it is updated.
     div#postlist
       - for item in catalog do
         div.post data-tags="#{item.categories.map!{|x| x.downcase.gsub(' ','-')}.join(",")}"

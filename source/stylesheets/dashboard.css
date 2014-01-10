@@ -242,15 +242,8 @@ pre code {
   padding-top: 45px;
 }
 #nav a {
-  text-decoration: none;
-  color: white;
-  background: #33333d;
+  text-decoration: underline;
+  color: #33333d;
   padding: 1%;
-  border-radius: 3px;
 }
 
-#nav a:hover {
-  text-decoration: underline;
-  color: #532507;
-  background: white;
-}
