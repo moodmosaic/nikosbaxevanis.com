@@ -125,17 +125,6 @@ img {
   border: 0px;
 }
 
-a.twitter {
-  background-color: #DBF7F8;
-  color: #2D6491;
-  padding: 1%;
-  font: 17px/1.5 "Lucida Grande", "Lucida Sans Unicode", Helvetica, Arial, Verdana, sans-serif;
-}
-
-#disqus_thread {
-  padding-top: 27px;
-}
-
 .undertitle a:hover {
   text-decoration: none;
 }
