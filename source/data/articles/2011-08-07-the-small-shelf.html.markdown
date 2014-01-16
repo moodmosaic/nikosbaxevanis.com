@@ -2,7 +2,7 @@
 layout: post
 title: The Small Shelf
 published: 1
-categories: [Software Eng]
+categories: [Miscellaneous]
 comments: [disqus]
 slug: "The shelf in my library where I store my favorite books on Software Development."
 alias: /bonus-bits/2011/08/the-small-shelf.html

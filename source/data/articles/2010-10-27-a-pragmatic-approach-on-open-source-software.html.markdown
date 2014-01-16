@@ -2,7 +2,7 @@
 layout: post
 title: A pragmatic approach on open source software
 published: 1
-categories: [Software Eng]
+categories: [Miscellaneous]
 comments: [disqus]
 slug: "Open source is sweet but this is not always the case."
 alias: /bonus-bits/2010/10/pragmatic-approach-on-open-source-software.html

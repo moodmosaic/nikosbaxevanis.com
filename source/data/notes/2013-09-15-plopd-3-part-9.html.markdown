@@ -2,7 +2,7 @@
 layout: post
 title: PLoPD 3 - Part 9
 published: 1
-categories: [Software Eng]
+categories: [Miscellaneous]
 slug: "Notes I kept while reading the Process Patterns section of Pattern Languages of Program Design 3."
 ---
 

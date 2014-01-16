@@ -2,7 +2,7 @@
 layout: post
 title: Following the Composition Root pattern with Enterprise Library
 published: 1
-categories: [EntLib, Castle Windsor]
+categories: [Castle Windsor]
 comments: [disqus]
 slug: "Wiring all Enterprise Library modules in the Composition Root in order to use well-known DI patterns (such as Constructor Injection) for supplying dependencies."
 alias: /bonus-bits/2011/08/following-the-composition-root-pattern-with-enterprise-library.html

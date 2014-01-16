@@ -2,7 +2,7 @@
 layout: post
 title: Enabling Add-In functionality in ASP.NET MVC 3
 published: 1
-categories: [ASP.NET MVC, MEF]
+categories: [ASP.NET MVC]
 comments: [disqus]
 slug: "Extending an ASP.NET MVC application using Unity and MEF."
 alias: /bonus-bits/2011/08/enabling-add-in-functionality-in-aspnet-mvc3.html

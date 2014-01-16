@@ -2,7 +2,7 @@
 layout: post
 title: PLoPD 3 - Introduction, Preface
 published: 1
-categories: [Software Eng]
+categories: [Miscellaneous]
 slug: "Notes I kept while reading the Introduction and Preface sections of Pattern Languages of Program Design 3."
 ---
 

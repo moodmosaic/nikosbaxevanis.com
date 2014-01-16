@@ -2,7 +2,7 @@
 layout: post
 title: Estimation Quiz
 published: 1
-categories: [Software Eng]
+categories: [Miscellaneous]
 comments: [disqus]
 slug: "Providing an estimation for the process of assembling a shelf (and failing)."
 alias: /bonus-bits/2011/10/estimation-quiz.html

@@ -2,7 +2,7 @@
 layout: post
 title: SingleInstance(Of T) Class for Windows Phone 7
 published: 1
-categories: [WP]
+categories: [Async]
 comments: [disqus]
 slug: "An implementation of the double-checked locking design pattern for Windows Phone."
 alias: /bonus-bits/2010/11/single-instance-for-windows-phone-7.html

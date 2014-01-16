@@ -2,8 +2,8 @@
 layout: post
 title: TeamCity, Git, and Karma, on Windows Azure
 published: 1
-categories: [Software Eng, JavaScript, Unit Testing]
-comments: []
+categories: [JavaScript, Unit Testing]
+comments: [disqus]
 slug: "Setup a Windows Azure VM with TeamCity and integrate Karma as part of the CI process."
 ---
 

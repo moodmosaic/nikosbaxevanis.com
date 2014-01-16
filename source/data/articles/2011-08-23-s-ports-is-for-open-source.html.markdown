@@ -2,7 +2,7 @@
 layout: post
 title: S(ports) is for (Open) Source
 published: 1
-categories: [Software Eng]
+categories: [Miscellaneous]
 comments: [disqus]
 slug: "The equiment and the conditions doesn't really matter. What it does matter is how one truly wants to do something."
 alias: /bonus-bits/2011/08/sports-is-for-open-source.html

@@ -2,7 +2,7 @@
 layout: post
 title: The GitHub way of blog discussion and commenting
 published: 1
-categories: [Software Eng]
+categories: [Miscellaneous]
 comments: [disqus]
 slug: "Different ways to use GitHub as a discussion and commenting service."
 ---

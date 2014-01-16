@@ -2,7 +2,7 @@
 layout: post
 title: Commit to Revision Control with Care
 published: 1
-categories: [Software Eng]
+categories: [Miscellaneous]
 slug: "Provide orthographically and syntactically correct messages when committing to revision control."
 comments: [disqus]
 ---

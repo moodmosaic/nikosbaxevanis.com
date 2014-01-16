@@ -2,7 +2,7 @@
 layout: post
 title: Enterprise Library IContainerConfigurator implementation for Windsor
 published: 1
-categories: [EntLib, Castle Windsor]
+categories: [Castle Windsor]
 comments: [disqus]
 slug: "Castle Windsor glue library code for the Enterprise Library's Exception Handling Application Block."
 alias: /bonus-bits/2011/05/enterpriselibrary-and-windsorcontainerconfigurator.html

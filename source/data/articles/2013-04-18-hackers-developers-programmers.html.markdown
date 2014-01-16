@@ -2,7 +2,7 @@
 layout: post
 title: Hackers, Developers, Programmers
 published: 1
-categories: [Software Eng]
+categories: [Miscellaneous]
 comments: [disqus]
 slug: "A quick distinction between Hackers, Developers, and Programmers."
 ---

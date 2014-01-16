@@ -2,7 +2,7 @@
 layout: post
 title: What goes first? (Theory or Tooling)
 published: 1
-categories: [Software Eng]
+categories: [Miscellaneous]
 comments: [disqus]
 slug: "Tools are implementations of patterns and principles in a specific language. Thus a developer should give priority on the theory behind them rather on the API of a specific tool."
 alias: /bonus-bits/2011/09/what-goes-first-theory-or-tooling.html

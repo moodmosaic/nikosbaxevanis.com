@@ -2,7 +2,7 @@
 layout: post
 title: Testing Domain-Driven Design with Sterling for Windows Phone 7
 published: 1
-categories: [WP]
+categories: [Unit Testing]
 comments: [disqus]
 slug: "Windows Phone samples for Sterling - a lightweight NoSQL object-oriented database with indexes for fast retrieval of large data sets."
 alias: /bonus-bits/2010/11/testing-domain-driven-design-with-sterling-for-windows-phone-7.html

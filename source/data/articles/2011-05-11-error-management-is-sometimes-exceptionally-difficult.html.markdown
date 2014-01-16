@@ -2,7 +2,7 @@
 layout: post
 title: Error Management Is Sometimes Exceptionally Difficult
 published: 1
-categories: [EntLib, Castle Windsor]
+categories: [Castle Windsor]
 comments: [disqus]
 slug: "Decoupling the Enterprise Library's Exception Handling Application Block from Unity."
 alias: /bonus-bits/2011/05/error-management-is-sometimes-exceptionally-difficult.html
