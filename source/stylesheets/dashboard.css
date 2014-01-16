@@ -20,10 +20,10 @@ body {
 
 a {
   color: #532507;
-  text-decoration: underline;
+  text-decoration: none;
 }
 a:hover {
-  text-decoration: none;
+  text-decoration: underline;
 }
 
 section {
@@ -31,7 +31,7 @@ section {
 }
 
 section:not(:last-child) {
-  border-bottom: 1px solid #eee;
+  /*border-bottom: 1px solid #eee;*/
 }
 
 section:not(#top) {
@@ -106,6 +106,12 @@ section:nth-child(2n) {
 
 #tagline {
   font-size: 16px;
+  margin-top: 2%;
+}
+#tagline a {
+  color: white;
+  background: #33333d;
+  padding: 1%;
 }
 
 #menu {
@@ -232,13 +238,3 @@ pre code {
   line-height: 1.4em;
   padding-left: 0px;
 }
-
-#nav {
-  padding-top: 45px;
-}
-#nav a {
-  text-decoration: underline;
-  color: #33333d;
-  padding: 1%;
-}
-
