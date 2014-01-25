@@ -1,4 +1,4 @@
-<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width" name="viewport" /><title>Semantic Equality Comparison in F#</title><link href="/feed" rel="alternate" type="application/rss+xml" /><link href="/stylesheets/blog.css?1389943505" media="screen" rel="stylesheet" type="text/css" /></head><body><body><div id="title"><div><h1><a href="/blog" style="color: #222">/blog</a></h1><div><a href="/">Nikos Baxevanis</a><span>&nbsp;</span><a href="http://creativecommons.org/licenses/by/3.0/" style="color: #877">(license)</a></div></div><div class="line"></div></div><div id="full"><h1>Semantic Equality Comparison in F#</h1><div class="undertitle"><span class="date">Filed under </span><a class="tag" href="/blog#fsharp">fsharp</a></div><div class="content"><p>This post demonstrates a way to perform semantic equality for complex object graphs with <a href="https://github.com/AutoFixture/AutoFixture/blob/master/Src/SemanticComparison/SemanticComparer.cs#L175"><code>SemanticComparer&lt;T&gt;</code></a> including Structural Types, Entities, Value Objects, as well as Primitive Types.</p>
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width" name="viewport" /><title>Semantic Equality Comparison in F#</title><link href="/feed" rel="alternate" type="application/rss+xml" /><link href="/stylesheets/blog.css?1390674774" media="screen" rel="stylesheet" type="text/css" /></head><body><div id="title"><div><a href="/blog">moodmosaic</a><span>&nbsp;-&nbsp;</span><a href="/">A modern full-stack programmer's journey and ideas.</a></div><div class="line"></div></div><div id="full"><h2>Semantic Equality Comparison in F#</h2><div class="undertitle"><a class="tag" href="/blog#fsharp">fsharp</a></div><div class="content"><p>This post demonstrates a way to perform semantic equality for complex object graphs with <a href="https://github.com/AutoFixture/AutoFixture/blob/master/Src/SemanticComparison/SemanticComparer.cs#L175">SemanticComparer</a> including Structural Types, Entities, Value Objects, as well as Primitive Types.</p>
 
 <p><strong>Scenario</strong></p>
 
@@ -16,7 +16,7 @@
 
 <p><strong>Context</strong></p>
 
-<p>The <code>record</code> is a simple aggregate of named values (a <a href="http://msdn.microsoft.com/en-us/library/dd233184.aspx">Record</a> in F#) with an explicit implementation of <code>Equals</code> and no auto-generated comparisons:</p>
+<p>The <code>record</code> is a simple aggregate of named values (an F# Record type) with an explicit implementation of <code>Equals</code> and no auto-generated comparisons:</p>
 
 <pre><code class="f#">[&lt;CustomEquality; NoComparison&gt;]
 type StructuralType =
@@ -63,7 +63,7 @@ type StructuralType =
     override this.GetHashCode() = hash this.Id
 </code></pre>
 
-<p>The remaining types are defined in <a href="http://en.wikipedia.org/wiki/Base_Class_Library">BCL</a>: <code>version</code> overrides its Equals method using value semantics while <code>os</code> represents instances of the <code>OperatingSystem</code> type which uses its default reference equality.</p>
+<p>The remaining types are defined in BCL: <code>version</code> overrides its Equals method using value semantics while <code>os</code> represents instances of the <code>OperatingSystem</code> type which uses its default reference equality.</p>
 
 <p><strong>Sample test data</strong></p>
 
@@ -163,7 +163,7 @@ type StructuralType =
 
 <p><strong>Approach</strong></p>
 
-<p>Semantic equality can be modeled with <a href="https://github.com/AutoFixture/AutoFixture/blob/master/Src/SemanticComparison/SemanticComparer.cs#L175"><code>SemanticComparer&lt;T&gt;</code></a>, as the following parameterized xUnit.net test demonstrates:</p>
+<p>Semantic equality can be modeled with <a href="https://github.com/AutoFixture/AutoFixture/blob/master/Src/SemanticComparison/SemanticComparer.cs#L175">SemanticComparer</a>, as the following parameterized xUnit.net test demonstrates:</p>
 
 <pre><code class="f#">[&lt;Theory; PropertyData(&quot;RecursiveComparisonTestCases&quot;)&gt;]
 let ``Equals returns correct result for ComplexType`` value other expected =
@@ -217,7 +217,7 @@ let ``Equals returns correct result for ComplexType`` value other expected =
 <p><strong>How it works</strong></p>
 
 <ul>
-<li><code>SemanticComparer&lt;T&gt;</code> is a boolean &#39;AND&#39; composite over <a href="https://github.com/AutoFixture/AutoFixture/blob/master/Src/SemanticComparison/IMemberComparer.cs"><code>IMemberComparer</code></a> instances.</li>
+<li><code>SemanticComparer&lt;T&gt;</code> is a boolean &#39;AND&#39; composite over <a href="https://github.com/AutoFixture/AutoFixture/blob/master/Src/SemanticComparison/IMemberComparer.cs">IMemberComparer</a> instances.</li>
 <li>It uses <code>valueObjectComparer</code> for everything <strong>except</strong> <code>entity</code> (where it uses <code>entityComparer</code>) and <code>os</code> (where it uses <code>osComparer</code>).</li>
 <li>For each property and field, it finds the appropriate <code>IsSatisfiedBy</code> method of the appropriate <code>IMemberComparer</code> instance, and then invokes its <code>Equals</code> method.</li>
 </ul>
@@ -276,4 +276,4 @@ _gaq.push(['_trackPageview']);
   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-})();</script></body></html>
+})();</script></html>
