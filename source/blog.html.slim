@@ -1,16 +1,14 @@
 ---
-title: Nikos Baxevanis' blog
+title: A modern full-stack programmer's journey and ideas.
 layout: blog
 ---
 
 body
   div#title
     div
-      h1
-        a href="/blog" style="color: #222" = "/blog"
-      div 
-        a href="/" Nikos Baxevanis 
-        a style="color: #877" href="http://creativecommons.org/licenses/by/3.0/" (license)
+      a href="/blog" moodmosaic
+      span &nbsp;-&nbsp;
+      a href="/" A modern full-stack programmer's journey and ideas.
     div.line
   div#main
     div#postlist
@@ -23,15 +21,8 @@ body
             span.meta 
               = item.slug
           div.undertitle
-            span.date #{item.day}/#{item.month}/#{item.year}
+            span.date #{item.day}/#{item.month}/#{item.year} 
             - for category in item.categories
               span.tag onclick="filterTag(&quot;#{category.downcase.gsub(' ','-')}&quot;)" #{category.downcase.gsub(' ','-')}
-  div#side
-    p Tags:
-    ul.taglist
-      - for category in categories.sort! { |a,b| a.last <=> b.last }.reverse! do
-        li
-          span.tag onclick="filterTag(&quot;#{category.first.downcase.gsub(' ','-')}&quot;)" #{category.first.downcase.gsub(' ','-')}
-          span (#{category.last})
 
   == javascript_include_tag 'filter'

@@ -7,7 +7,7 @@ comments: [disqus]
 slug: "Compare complex object graphs with SemanticComparer<T>."
 ---
 
-This post demonstrates a way to perform semantic equality for complex object graphs with [`SemanticComparer<T>`](https://github.com/AutoFixture/AutoFixture/blob/master/Src/SemanticComparison/SemanticComparer.cs#L175) including Structural Types, Entities, Value Objects, as well as Primitive Types.
+This post demonstrates a way to perform semantic equality for complex object graphs with [SemanticComparer](https://github.com/AutoFixture/AutoFixture/blob/master/Src/SemanticComparison/SemanticComparer.cs#L175) including Structural Types, Entities, Value Objects, as well as Primitive Types.
 
 **Scenario**
 
@@ -26,7 +26,7 @@ type ComplexType(entity, value, record, number, text, version, os) =
 
 **Context**
 
-The `record` is a simple aggregate of named values (a [Record](http://msdn.microsoft.com/en-us/library/dd233184.aspx) in F#) with an explicit implementation of `Equals` and no auto-generated comparisons:
+The `record` is a simple aggregate of named values (an F# Record type) with an explicit implementation of `Equals` and no auto-generated comparisons:
 
 ```f#
 [<CustomEquality; NoComparison>]
@@ -75,7 +75,7 @@ type Entity(name: string) =
 
     override this.GetHashCode() = hash this.Id
 ```
-The remaining types are defined in [BCL](http://en.wikipedia.org/wiki/Base_Class_Library): `version` overrides its Equals method using value semantics while `os` represents instances of the `OperatingSystem` type which uses its default reference equality.
+The remaining types are defined in BCL: `version` overrides its Equals method using value semantics while `os` represents instances of the `OperatingSystem` type which uses its default reference equality.
 
 **Sample test data**
 
@@ -176,7 +176,7 @@ let RecursiveComparisonTestCases : seq<obj[]> =
 
 **Approach**
 
-Semantic equality can be modeled with [`SemanticComparer<T>`](https://github.com/AutoFixture/AutoFixture/blob/master/Src/SemanticComparison/SemanticComparer.cs#L175), as the following parameterized xUnit.net test demonstrates:
+Semantic equality can be modeled with [SemanticComparer](https://github.com/AutoFixture/AutoFixture/blob/master/Src/SemanticComparison/SemanticComparer.cs#L175), as the following parameterized xUnit.net test demonstrates:
 
 ```f#
 [<Theory; PropertyData("RecursiveComparisonTestCases")>]
@@ -230,7 +230,7 @@ let ``Equals returns correct result for ComplexType`` value other expected =
 
 **How it works**
 
- * `SemanticComparer<T>` is a boolean 'AND' composite over [`IMemberComparer`](https://github.com/AutoFixture/AutoFixture/blob/master/Src/SemanticComparison/IMemberComparer.cs) instances.
+ * `SemanticComparer<T>` is a boolean 'AND' composite over [IMemberComparer](https://github.com/AutoFixture/AutoFixture/blob/master/Src/SemanticComparison/IMemberComparer.cs) instances.
  * It uses `valueObjectComparer` for everything **except** `entity` (where it uses `entityComparer`) and `os` (where it uses `osComparer`).
  * For each property and field, it finds the appropriate `IsSatisfiedBy` method of the appropriate `IMemberComparer` instance, and then invokes its `Equals` method.
 

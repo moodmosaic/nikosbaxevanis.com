@@ -7,40 +7,35 @@ html
     link href='/feed' rel='alternate' type='application/rss+xml'
     == stylesheet_link_tag "blog"
   body
-    body
-      div#title
-        div
-          h1
-            a href="/blog" style="color: #222" = "/blog"
-          div 
-            a href="/" Nikos Baxevanis
-            span &nbsp;
-            a style="color: #877" href="http://creativecommons.org/licenses/by/3.0/" (license)
-        div.line
-      div#full
-        h1 = current_page.data.title
-        div.undertitle
-          span.date Filed under 
-          - for category in current_page.data.categories
-            a class="tag" href="/blog##{category.downcase.gsub(' ','-')}" #{category.downcase.gsub(' ','-')}
-        div.content == yield
-      - unless data.page.comments.nil?
-        - if data.page.comments.any?
-          div id="disqus_thread"
-          javascript:
-            var disqus_shortname = 'bonusbits';
-            (function() {
-                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-            })();
-    javascript:
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-24262928-1']);
-      _gaq.push(['_trackPageview']);
+    div#title
+      div
+        a href="/blog" moodmosaic
+        span &nbsp;-&nbsp;
+        a href="/" A modern full-stack programmer's journey and ideas.
+      div.line
+    div#full
+      h2 = current_page.data.title
+      div.undertitle
+        - for category in current_page.data.categories
+          a class="tag" href="/blog##{category.downcase.gsub(' ','-')}" #{category.downcase.gsub(' ','-')}
+      div.content == yield
+    - unless data.page.comments.nil?
+      - if data.page.comments.any?
+        div id="disqus_thread"
+        javascript:
+          var disqus_shortname = 'bonusbits';
+          (function() {
+              var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+              dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+              (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+  javascript:
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-24262928-1']);
+    _gaq.push(['_trackPageview']);
 
-      (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
