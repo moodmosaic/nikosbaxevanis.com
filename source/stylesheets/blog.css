@@ -71,7 +71,7 @@ a:hover {
 
 .post { margin: 15px 0; }
 .date { color: #606868; font-size: 80%; }
-.meta { color: #606868; font-size: 89%; }
+.meta { color: #606868; font-size: 80%; }
 
 .tag { cursor: pointer; color: #326; font-size: 80%; background: #eef; padding: 0 2px; margin-right: 5px; }
 .tag:hover { background: #ddf; }

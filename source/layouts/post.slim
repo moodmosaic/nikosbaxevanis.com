@@ -3,19 +3,20 @@ html
   head
     meta charset="utf-8"
     meta name="viewport" content="width=device-width"
-    title = "#{data.page.title}"
+    title = "#{data.page.title} - Nikos Baxevanis"
     link href='/feed' rel='alternate' type='application/rss+xml'
     == stylesheet_link_tag "blog"
   body
     div#title
       div
-        a href="/blog" moodmosaic
-        span &nbsp;-&nbsp;
-        a href="/" A modern full-stack programmer's journey and ideas.
+        a href="/blog" A modern full-stack programmer's notes and ideas.
+        span &nbsp;|&nbsp;
+        a href="/" About
       div.line
     div#full
       h2 = current_page.data.title
       div.undertitle
+        span.meta by Nikos Baxevanis in 
         - for category in current_page.data.categories
           a class="tag" href="/blog##{category.downcase.gsub(' ','-')}" #{category.downcase.gsub(' ','-')}
       div.content == yield

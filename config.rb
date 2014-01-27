@@ -144,7 +144,7 @@ ready do
     .sort_by  { |category, count| -count }
 
   proxy "/index.html"      , "/dashboard.html", :locals => {  }
-  proxy "/blog/index.html" , "/blog.html"     , :locals => { :catalog => articles, :categories => categories_by_count }  
+  proxy "/blog/index.html" , "/blog.html"     , :locals => { :catalog => zipped, :categories => categories_by_count }  
   proxy "/notes/index.html", "/blog.html"     , :locals => { :catalog => notes   , :categories => categories_by_count }
   proxy "/feed/index.xml"  , "/feed.xml"      , :locals => { :items   => zipped }
 
