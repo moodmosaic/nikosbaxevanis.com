@@ -18,7 +18,7 @@ html
       div.undertitle
         span.meta by Nikos Baxevanis in 
         - for category in current_page.data.categories
-          a class="tag" href="/blog##{category.downcase.gsub(' ','-')}" #{category.downcase.gsub(' ','-')}
+          a class="tag" href="/blog/##{category.downcase.gsub(' ','-')}" #{category.downcase.gsub(' ','-')}
       div.content == yield
     - unless data.page.comments.nil?
       - if data.page.comments.any?
