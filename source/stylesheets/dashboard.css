@@ -21,7 +21,6 @@ body {
 
 a {
   color: #33333d;
-  text-decoration: none;
 }
 
 section {
@@ -29,7 +28,7 @@ section {
 }
 
 section:not(:last-child) {
-  /*border-bottom: 1px solid #eee;*/
+  border-bottom: 1px solid #eee;
 }
 
 section:not(#top) {
