@@ -3,7 +3,7 @@ layout: false
 ---
 xml.instruct!
 xml.feed "xmlns" => "http://www.w3.org/2005/Atom" do
-  xml.title "moodmosaic - evolutionary flux, rudimentary switches"
+  xml.title "moodmosaic - A modern full-stack programmer's notes and ideas."
   xml.subtitle "Published works of Nikos Baxevanis"
   xml.author { xml.name "Nikos Baxevanis" }
   xml.updated Time.parse(Time.now.to_s).iso8601
