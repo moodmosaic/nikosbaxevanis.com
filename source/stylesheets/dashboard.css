@@ -32,15 +32,21 @@ section:not(:last-child) {
 }
 
 section:not(#top) {
-  padding: 150px 100px;
+  padding-top: 90px;
+  padding-bottom: 150px;
+  padding-left: 100px;
+  padding-right: 100px;
   text-align: center;
 }
 
 .content img {
   border: none;
-  display: block;
+  /*display: block;
   margin: 0 auto;
-  max-width: 100%;
+  max-width: 100%;*/
+  float: left;
+  margin-right: 2.3%;
+  border-radius: 2px;
 }
 
 p {
@@ -233,4 +239,17 @@ pre code {
   background-color: #eeeeee;
   line-height: 1.4em;
   padding-left: 0px;
+}
+
+.thoughts {
+  display: block;
+  float: left;
+  margin-right: 3.66764%;
+  width: 100%;
+  margin-top: 1.65em;
+  margin-right: 0;
+  text-align: center;
+  background: #eeeeee;
+  padding: 1.65em;
+  border-radius: 3px;
 }

@@ -1,13 +1,15 @@
 ---
-title: A modern full-stack programmer's notes and ideas.
+title: A modern full-stack programmer's notes and ideas
 layout: blog
 ---
 
 body
   div#title
     div
-      a href="/blog" A modern full-stack programmer's notes and ideas
-      span &nbsp;|&nbsp;
+      a href="/" Nikos Baxevanis
+      span &nbsp;-&nbsp;
+      a href="#" Blog
+      span &nbsp;-&nbsp;
       a href="/#about" About
     div.line
   div#main
@@ -24,5 +26,7 @@ body
             span.date #{item.day}/#{item.month}/#{item.year} 
             - for category in item.categories
               span.tag onclick="filterTag(&quot;#{category.downcase.gsub(' ','-')}&quot;)" #{category.downcase.gsub(' ','-')}
+  div#side
+    <img src="/images/nikos-baxevanis-small.png" alt="Nikos Baxevanis" title="Nikos Baxevanis">
 
   == javascript_include_tag 'filter'

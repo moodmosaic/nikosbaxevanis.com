@@ -9,27 +9,34 @@ html
   body
     div#title
       div
-        a href="/blog" A modern full-stack programmer's notes and ideas
-        span &nbsp;|&nbsp;
+        a href="/" Nikos Baxevanis
+        span &nbsp;-&nbsp;
+        a href="/blog" Blog
+        span &nbsp;-&nbsp;
         a href="/#about" About
       div.line
-    div#full
-      h2 = current_page.data.title
-      div.undertitle
-        span.meta by Nikos Baxevanis in 
-        - for category in current_page.data.categories
-          a class="tag" href="/blog/##{category.downcase.gsub(' ','-')}" #{category.downcase.gsub(' ','-')}
-      div.content == yield
-    - unless data.page.comments.nil?
-      - if data.page.comments.any?
-        div id="disqus_thread"
-        javascript:
-          var disqus_shortname = 'bonusbits';
-          (function() {
-              var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-              dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-              (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-          })();
+    div#main
+      div#content
+        div.post
+          h2 = current_page.data.title
+          div.undertitle
+            span.meta by Nikos Baxevanis in 
+            - for category in current_page.data.categories
+              a class="tag" href="/blog/##{category.downcase.gsub(' ','-')}" #{category.downcase.gsub(' ','-')}
+          div.content == yield
+        - unless data.page.comments.nil?
+          - if data.page.comments.any?
+            div id="disqus_thread"
+            javascript:
+              var disqus_shortname = 'bonusbits';
+              (function() {
+                  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+              })();
+  div#side
+    <img src="/images/nikos-baxevanis-small.png" alt="Nikos Baxevanis" title="Nikos Baxevanis">
+
   javascript:
     var _gaq = _gaq || [];
     _gaq.push(['_setAccount', 'UA-24262928-1']);
