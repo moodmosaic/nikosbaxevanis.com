@@ -6,13 +6,13 @@ categories: [JavaScript]
 slug: "What is PhoneJS, why it rocks, how it looks like."
 ---
 
-[PhoneJS](http://phonejs.devexpress.com/) is framework created by [DevExpress](http://devexpress.com/) for building cross-platform mobile applications using HTML5. PhoneJS is free for non-commercial use.
+[PhoneJS](http://phonejs.devexpress.com/) is a framework created by [DevExpress](http://devexpress.com/) for building cross-platform mobile applications using HTML5. PhoneJS is free for non-commercial use.
 
 **Why PhoneJS**
 
 *…and not Enyo, Intel App Framework, Sencha Touch, jQTouch, Kendo UI, Lungo, mgwt, etc ?*
 
-Because you can use PhoneJS without an IDE as well as **with** Visual Studio through [DevExtreme](https://www.devexpress.com/Products/HTML-JS/).
+Because you can use PhoneJS stand-alone (it's only HTML, CSS, and JavaScript) as well as **with** Visual Studio through [DevExtreme](https://www.devexpress.com/Products/HTML-JS/).
 
 DevExtreme **optimizes** PhoneJS for Visual Studio:
 
@@ -58,7 +58,7 @@ Preview:
 
 **Running locally with IIS Express**
 
-* Download PropertyCross from here. It should be a file named master.zip.
+* Download PropertyCross from here. It should be a file named *master.zip*.
 * Assuming the file has been unziped at at C:\DevExpressPhoneJS-x.y.z\Demos\TipCalculator, open a command prompt window and do:
 
 ```
