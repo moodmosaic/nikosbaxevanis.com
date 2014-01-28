@@ -12,11 +12,7 @@ slug: "What is PhoneJS, why it rocks, how it looks like."
 
 *…and not Enyo, Intel App Framework, Sencha Touch, jQTouch, Kendo UI, Lungo, mgwt, etc ?*
 
-Because you can use PhoneJS stand-alone (it's only HTML, CSS, and JavaScript) as well as **with** Visual Studio through [DevExtreme](https://www.devexpress.com/Products/HTML-JS/).
-
-DevExtreme **optimizes** PhoneJS for Visual Studio:
-
-![Image](/images/articles/2014-01-27-how-to-get-started-with-phonejs-on-windows-1.png)
+Because you can use PhoneJS stand-alone (it's only HTML, CSS, and JavaScript) as well as **with** Visual Studio through [DevExtreme](https://www.devexpress.com/Products/HTML-JS/). DevExtreme **optimizes** PhoneJS for Visual Studio.
 
 **Getting started with PhoneJS**
 
