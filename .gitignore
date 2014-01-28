@@ -11,7 +11,11 @@
 /build
 
 # Ignore the drafts directory
-/source/data/drafts
+#/source/data/drafts
+
+# Ignore the images thumbnails.
+/source/images/Thumbs.db
+/source/images/articles/Thumbs.db
 
 # Ignore Sass' cache
 /.sass-cache
