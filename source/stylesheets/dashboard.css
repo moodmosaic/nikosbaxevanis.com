@@ -178,7 +178,7 @@ section:nth-child(2n) {
 
 @media screen and (max-width: 700px) {
   section:not(#top) {
-    padding: 50px 25px;
+    padding: 100px 25px;
   }
 
   #logo {
