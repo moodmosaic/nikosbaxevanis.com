@@ -1,49 +1,12 @@
-doctype html
-html
-  head
-    meta charset="utf-8"
-    meta name="viewport" content="width=device-width"
-    title = "#{data.page.title} - Nikos Baxevanis"
-    link href='/feed' rel='alternate' type='application/rss+xml'
-    == stylesheet_link_tag "blog"
-  body
-    div#title
-      div
-        a href="/" Nikos Baxevanis
-        span &nbsp;-&nbsp;
-        a href="/blog" Blog
-        span &nbsp;-&nbsp;
-        a href="/#about" About
-      div.line
-    div#main
-      div#content
-        div.post
-          h2 = current_page.data.title
-          div.undertitle
-            span.meta by Nikos Baxevanis in 
-            - for category in current_page.data.categories
-              a class="tag" href="/blog/##{category.downcase.gsub(' ','-')}" #{category.downcase.gsub(' ','-')}
-          div.content == yield
-        - unless data.page.comments.nil?
-          - if data.page.comments.any?
-            div id="disqus_thread"
-            javascript:
-              var disqus_shortname = 'bonusbits';
-              (function() {
-                  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-                  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-                  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-              })();
-  div#side
-    <img src="/images/nikos-baxevanis-small.png" alt="Nikos Baxevanis" title="Nikos Baxevanis">
-
-  javascript:
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-24262928-1']);
-    _gaq.push(['_trackPageview']);
-
-    (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
+- wrap_layout :layout do 
+  h1=data.page.title
+  div.post
+    == yield
+  a.twitter target="_blank" href="https://twitter.com/intent/tweet?#{URI::encode_www_form("url" => "http://nikosbaxevanis.com" + current_page.url, "text" => current_page.data.title, "via" => "nikosbaxevanis")}" Tweet This
+  div.dater=article.date.strftime("%B %d, %Y")
+  div.categories
+    | Published in
+    - for category in article.categories do
+      a.category href="/category/#{category.downcase.gsub(' ', '-')}/" #{category}&nbsp;
+    |  on 
+    = article.date.strftime("%B %d, %Y")
