@@ -1,14 +1,14 @@
-<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width" name="viewport" /><title>Error Management Is Sometimes Exceptionally Difficult - Nikos Baxevanis</title><link href="/feed" rel="alternate" type="application/rss+xml" /><link href="/stylesheets/blog.css?1390930234" media="screen" rel="stylesheet" type="text/css" /></head><body><div id="title"><div><a href="/">Nikos Baxevanis</a><span>&nbsp;-&nbsp;</span><a href="/blog">Blog</a><span>&nbsp;-&nbsp;</span><a href="/#about">About</a></div><div class="line"></div></div><div id="main"><div id="content"><div class="post"><h2>Error Management Is Sometimes Exceptionally Difficult</h2><div class="undertitle"><span class="meta">by Nikos Baxevanis in </span><a class="tag" href="/blog/#castle-windsor">castle-windsor</a></div><div class="content"><p><strong>Update:&nbsp;</strong>&nbsp;Please also read <a title="Enterprise Library IContainerConfigurator implementation for Windsor" href="http://www.nikosbaxevanis.com/bonus-bits/2011/05/enterpriselibrary-and-windsorcontainerconfigurator.html" target="_blank">Part 2</a>. The source <del>is on github</del> has been <a href="http://entlibcontrib.codeplex.com/SourceControl/changeset/63545">merged</a> in Enterprise Library Contrib.</p>
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" /><meta content="width=device-width, user-scalable=no" name="viewport" /><title>Error Management Is Sometimes Exceptionally Difficult</title><link href="http://fonts.googleapis.com/css?family=Lora:400,700|Open+Sans" rel="stylesheet" type="text/css" /><link href="/stylesheets/fontello.css?1391110042" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/styles.css?1391110042" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/syntax.css?1391110042" media="screen" rel="stylesheet" type="text/css" /></head><body><div class="row"><h1>Error Management Is Sometimes Exceptionally Difficult</h1><p><strong>Update:&nbsp;</strong>&nbsp;Please also read <a title="Enterprise Library IContainerConfigurator implementation for Windsor" href="http://www.nikosbaxevanis.com/bonus-bits/2011/05/enterpriselibrary-and-windsorcontainerconfigurator.html" target="_blank">Part 2</a>. The source <del>is on github</del> has been <a href="http://entlibcontrib.codeplex.com/SourceControl/changeset/63545">merged</a> in Enterprise Library Contrib.</p>
 
 <p>I tend to simplify exception handling at layer boundaries, when&nbsp;designing a distributed application. Most of the time if an exception is propagated there I try to apply some kind of policy in order to log the exception and then re-throw&nbsp;&nbsp;a different exception.</p>
 
 <p>When I started using the<span>&nbsp;Exception Handling Application Block from Enterprise Library I found out that I had to also deploy the Unity assemblies. </span></p>
 
 <p><span>The call below resolves the registered component for the ExceptionManager class:</span></p>
-
-<pre><code class="c#">EnterpriseLibraryContainer.Current.GetInstance&lt;ExceptionManager&gt;();
-</code></pre>
-
+<pre class="highlight csharp"><span class="n">EnterpriseLibraryContainer</span><span class="p">.</span><span class="n">Current</span><span class="p">.</span><span class="n">GetInstance</span><span class="p">&lt;</span><span class="n">ExceptionManager</span><span class="p">&gt;();</span>
+</pre>
 <p>The IServiceLocator.Current property of EnterpriseLibraryContainer class sets by default the Unity container (via UnityServiceLocator adapter class).</p>
 
 <p><img src="http://farm9.staticflickr.com/8508/8398554996_e06fa74d80_b.jpg" alt="" /></p>
@@ -20,167 +20,154 @@
 <p>The first thing I did was to compile the&nbsp;<a title="Castle Windsor Adapter - CommonServiceLocator" href="http://commonservicelocator.codeplex.com/wikipage?title=Castle%20Windsor%20Adapter&amp;referringTitle=Home" target="_blank">Windsor adapter</a> of the CommonServiceLocator against the current version of Windsor that I use (and also run the unit-tests and see if they pass).</p>
 
 <p>Next, I set the IServiceLocator.Current property of the EnterpriseLibraryContainer class:</p>
-
-<pre><code class="c#">EntLibraryContainer.Current = new WindsorServiceLocator(container);
-</code></pre>
-
+<pre class="highlight csharp"><span class="n">EntLibraryContainer</span><span class="p">.</span><span class="n">Current</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">WindsorServiceLocator</span><span class="p">(</span><span class="n">container</span><span class="p">);</span>
+</pre>
 <p>The last thing I did was to call the ConfigureContainer method on the EnterpriseLibraryContainer class. This method takes an&nbsp;IContainerConfigurator and an IConfigurationSource as parameters.</p>
 
 <p>Great, so I had to provide a class implementing the IContainerConfigurator interface for the Windsor container.</p>
 
 <p>The IContainerConfigurator interface contains a single method:&nbsp;</p>
-
-<pre><code class="c#">void RegisterAll(
-     IConfigurationSource configurationSource,        
-     ITypeRegistrationsProvider rootProvider
-     );
-</code></pre>
-
+<pre class="highlight csharp"><span class="k">void</span> <span class="nf">RegisterAll</span><span class="p">(</span>
+     <span class="n">IConfigurationSource</span> <span class="n">configurationSource</span><span class="p">,</span>        
+     <span class="n">ITypeRegistrationsProvider</span> <span class="n">rootProvider</span>
+     <span class="p">);</span>
+</pre>
 <p>Below is the (currently incomplete) implementation:</p>
+<pre class="highlight csharp"><span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Collections</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Collections.Generic</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Linq</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Linq.Expressions</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Castle.MicroKernel.Registration</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Castle.Windsor</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Microsoft.Practices.EnterpriseLibrary.Common.Configuration</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Microsoft.Practices.EnterpriseLibrary.Common.Configuration.ContainerModel</span><span class="p">;</span>
 
-<pre><code class="c#">using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using Castle.MicroKernel.Registration;
-using Castle.Windsor;
-using Microsoft.Practices.EnterpriseLibrary.Common.Configuration;
-using Microsoft.Practices.EnterpriseLibrary.Common.Configuration.ContainerModel;
+<span class="k">internal</span> <span class="k">sealed</span> <span class="k">class</span> <span class="nc">WindsorContainerConfigurator</span>
+    <span class="p">:</span> <span class="n">IContainerConfigurator</span>
+<span class="p">{</span>
+    <span class="k">private</span> <span class="k">readonly</span> <span class="n">IWindsorContainer</span> <span class="n">container</span><span class="p">;</span>
 
-internal sealed class WindsorContainerConfigurator
-    : IContainerConfigurator
-{
-    private readonly IWindsorContainer container;
+    <span class="k">public</span> <span class="nf">WindsorContainerConfigurator</span><span class="p">(</span><span class="n">IWindsorContainer</span> <span class="n">container</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="n">container</span> <span class="p">=</span> <span class="n">container</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    public WindsorContainerConfigurator(IWindsorContainer container)
-    {
-        this.container = container;
-    }
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">RegisterAll</span><span class="p">(</span>
+        <span class="n">IConfigurationSource</span> <span class="n">configurationSource</span><span class="p">,</span>
+        <span class="n">ITypeRegistrationsProvider</span> <span class="n">rootProvider</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">foreach</span> <span class="p">(</span><span class="n">TypeRegistration</span> <span class="n">registration</span> 
+            <span class="k">in</span> <span class="n">rootProvider</span><span class="p">.</span><span class="nf">GetRegistrations</span><span class="p">(</span><span class="n">configurationSource</span><span class="p">))</span>
+        <span class="p">{</span>
+            <span class="nf">Register</span><span class="p">(</span><span class="n">registration</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 
-    public void RegisterAll(
-        IConfigurationSource configurationSource,
-        ITypeRegistrationsProvider rootProvider)
-    {
-        foreach (TypeRegistration registration 
-            in rootProvider.GetRegistrations(configurationSource))
-        {
-            Register(registration);
-        }
-    }
+    <span class="k">private</span> <span class="k">void</span> <span class="nf">Register</span><span class="p">(</span><span class="n">TypeRegistration</span> <span class="n">registration</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">Type</span> <span class="n">implementation</span> <span class="p">=</span> <span class="n">registration</span><span class="p">.</span><span class="n">ImplementationType</span><span class="p">;</span>
 
-    private void Register(TypeRegistration registration)
-    {
-        Type implementation = registration.ImplementationType;
+        <span class="k">if</span> <span class="p">(!</span><span class="k">this</span><span class="p">.</span><span class="n">container</span><span class="p">.</span><span class="n">Kernel</span><span class="p">.</span><span class="nf">HasComponent</span><span class="p">(</span><span class="n">implementation</span><span class="p">))</span>
+        <span class="p">{</span>
+            <span class="n">var</span> <span class="n">componentRegistration</span> <span class="p">=</span>
+                <span class="n">Component</span><span class="p">.</span><span class="nf">For</span><span class="p">(</span><span class="n">registration</span><span class="p">.</span><span class="n">ServiceType</span><span class="p">)</span>
+                            <span class="p">.</span><span class="nf">ImplementedBy</span><span class="p">(</span><span class="n">implementation</span><span class="p">);</span>
 
-        if (!this.container.Kernel.HasComponent(implementation))
-        {
-            var componentRegistration =
-                Component.For(registration.ServiceType)
-                            .ImplementedBy(implementation);
+            <span class="k">if</span> <span class="p">(</span><span class="n">registration</span><span class="p">.</span><span class="n">ConstructorParameters</span><span class="p">.</span><span class="nf">Any</span><span class="p">())</span>
+            <span class="p">{</span>
+                <span class="n">var</span> <span class="n">dependencies</span> <span class="p">=</span> <span class="nf">GetRegistrationDependencies</span><span class="p">(</span>
+                    <span class="n">componentRegistration</span><span class="p">,</span> 
+                    <span class="n">registration</span><span class="p">.</span><span class="n">ConstructorParameters</span><span class="p">);</span>
 
-            if (registration.ConstructorParameters.Any())
-            {
-                var dependencies = GetRegistrationDependencies(
-                    componentRegistration, 
-                    registration.ConstructorParameters);
+                <span class="n">componentRegistration</span> <span class="p">=</span> 
+                    <span class="n">componentRegistration</span><span class="p">.</span><span class="nf">DependsOn</span><span class="p">(</span><span class="n">dependencies</span><span class="p">);</span>
+            <span class="p">}</span>
 
-                componentRegistration = 
-                    componentRegistration.DependsOn(dependencies);
-            }
+            <span class="k">this</span><span class="p">.</span><span class="n">container</span><span class="p">.</span><span class="nf">Register</span><span class="p">(</span><span class="nf">AddLifeStyleToRegistration</span><span class="p">(</span>
+                <span class="n">componentRegistration</span><span class="p">,</span> <span class="n">registration</span><span class="p">.</span><span class="n">Lifetime</span><span class="p">));</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 
-            this.container.Register(AddLifeStyleToRegistration(
-                componentRegistration, registration.Lifetime));
-        }
-    }
+    <span class="k">private</span> <span class="n">IDictionary</span> <span class="n">GetRegistrationDependencies</span><span class="p">&lt;</span><span class="n">TInterface</span><span class="p">&gt;(</span>
+        <span class="n">ComponentRegistration</span><span class="p">&lt;</span><span class="n">TInterface</span><span class="p">&gt;</span> <span class="n">registration</span><span class="p">,</span>
+        <span class="n">IEnumerable</span><span class="p">&lt;</span><span class="n">ParameterValue</span><span class="p">&gt;</span> <span class="n">constructorParameters</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">var</span> <span class="n">dependencies</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Hashtable</span><span class="p">();</span>
 
-    private IDictionary GetRegistrationDependencies&lt;TInterface&gt;(
-        ComponentRegistration&lt;TInterface&gt; registration,
-        IEnumerable&lt;ParameterValue&gt; constructorParameters)
-    {
-        var dependencies = new Hashtable();
+        <span class="k">foreach</span> <span class="p">(</span><span class="n">ParameterValue</span> <span class="n">pv</span> <span class="k">in</span> <span class="n">constructorParameters</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">MemberExpression</span> <span class="n">exp</span> <span class="p">=</span> <span class="n">pv</span><span class="p">.</span><span class="n">Expression</span>
+                <span class="k">as</span> <span class="n">MemberExpression</span><span class="p">;</span>
 
-        foreach (ParameterValue pv in constructorParameters)
-        {
-            MemberExpression exp = pv.Expression
-                as MemberExpression;
+            <span class="k">if</span> <span class="p">(</span><span class="n">exp</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="kt">string</span> <span class="n">key</span> <span class="p">=</span> <span class="n">exp</span><span class="p">.</span><span class="n">Member</span><span class="p">.</span><span class="n">Name</span><span class="p">;</span>
+                <span class="kt">object</span> <span class="n">val</span> <span class="p">=</span> <span class="nf">GetValue</span><span class="p">(</span><span class="n">exp</span><span class="p">);</span>
 
-            if (exp != null)
-            {
-                string key = exp.Member.Name;
-                object val = GetValue(exp);
+                <span class="n">dependencies</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">val</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">else</span>
+            <span class="p">{</span>
+                <span class="c1">// TODO: pv.Expression is a MethodCallExpression.
+</span>            <span class="p">}</span>
+        <span class="p">}</span>
 
-                dependencies.Add(key, val);
-            }
-            else
-            {
-                // TODO: pv.Expression is a MethodCallExpression.
-            }
-        }
+        <span class="k">return</span> <span class="n">dependencies</span><span class="p">;</span>
+    <span class="p">}</span>
 
-        return dependencies;
-    }
+    <span class="k">private</span> <span class="k">static</span> <span class="n">ComponentRegistration</span><span class="p">&lt;</span><span class="n">TInterface</span><span class="p">&gt;</span> <span class="n">AddLifeStyleToRegistration</span><span class="p">&lt;</span><span class="n">TInterface</span><span class="p">&gt;(</span>
+        <span class="n">ComponentRegistration</span><span class="p">&lt;</span><span class="n">TInterface</span><span class="p">&gt;</span> <span class="n">registration</span><span class="p">,</span> 
+        <span class="n">TypeRegistrationLifetime</span> <span class="n">typeRegistrationLifetime</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">typeRegistrationLifetime</span> <span class="p">==</span> 
+            <span class="n">TypeRegistrationLifetime</span><span class="p">.</span><span class="n">Singleton</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">registration</span> <span class="p">=</span> <span class="n">registration</span><span class="p">.</span><span class="n">LifeStyle</span><span class="p">.</span><span class="n">Singleton</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">typeRegistrationLifetime</span> <span class="p">==</span> 
+            <span class="n">TypeRegistrationLifetime</span><span class="p">.</span><span class="n">Transient</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">registration</span> <span class="p">=</span> <span class="n">registration</span><span class="p">.</span><span class="n">LifeStyle</span><span class="p">.</span><span class="n">Transient</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+        <span class="p">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">ArgumentOutOfRangeException</span><span class="p">(</span>
+                <span class="s">&quot;typeRegistrationLifetime&quot;</span><span class="p">,</span> 
+                <span class="s">&quot;Only Transient and Singleton are supported.&quot;</span><span class="p">);</span>
+        <span class="p">}</span>
 
-    private static ComponentRegistration&lt;TInterface&gt; AddLifeStyleToRegistration&lt;TInterface&gt;(
-        ComponentRegistration&lt;TInterface&gt; registration, 
-        TypeRegistrationLifetime typeRegistrationLifetime)
-    {
-        if (typeRegistrationLifetime == 
-            TypeRegistrationLifetime.Singleton)
-        {
-            registration = registration.LifeStyle.Singleton;
-        }
-        else if (typeRegistrationLifetime == 
-            TypeRegistrationLifetime.Transient)
-        {
-            registration = registration.LifeStyle.Transient;
-        }
-        else
-        {
-            throw new ArgumentOutOfRangeException(
-                &quot;typeRegistrationLifetime&quot;, 
-                &quot;Only Transient and Singleton are supported.&quot;);
-        }
+        <span class="k">return</span> <span class="n">registration</span><span class="p">;</span>
+    <span class="p">}</span>
 
-        return registration;
-    }
+    <span class="k">private</span> <span class="k">static</span> <span class="kt">object</span> <span class="nf">GetValue</span><span class="p">(</span><span class="n">Expression</span> <span class="n">member</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">var</span> <span class="n">objectMember</span> <span class="p">=</span> <span class="n">Expression</span><span class="p">.</span><span class="nf">Convert</span><span class="p">(</span><span class="n">member</span><span class="p">,</span> <span class="k">typeof</span><span class="p">(</span><span class="kt">object</span><span class="p">));</span>
+        <span class="n">var</span> <span class="n">getterLambda</span> <span class="p">=</span> <span class="n">Expression</span><span class="p">.</span><span class="n">Lambda</span><span class="p">&lt;</span><span class="n">Func</span><span class="p">&lt;</span><span class="kt">object</span><span class="p">&gt;&gt;(</span><span class="n">objectMember</span><span class="p">);</span>
 
-    private static object GetValue(Expression member)
-    {
-        var objectMember = Expression.Convert(member, typeof(object));
-        var getterLambda = Expression.Lambda&lt;Func&lt;object&gt;&gt;(objectMember);
-
-        return getterLambda.Compile().Invoke();
-    }
-}
-</code></pre>
-
+        <span class="k">return</span> <span class="n">getterLambda</span><span class="p">.</span><span class="nf">Compile</span><span class="p">().</span><span class="nf">Invoke</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre>
 <p>I really don&rsquo;t know what to do in the case of a MethodCallExpression as you can see inside the <em>else</em> block. However, after I can finish with the code inside that block I will be able to do this:</p>
+<pre class="highlight csharp"><span class="n">var</span> <span class="n">container</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">WindsorContainer</span><span class="p">();</span>
 
-<pre><code class="c#">var container = new WindsorContainer();
+<span class="c1">// Add a SubResolver for components with IEnumerable&lt;T&gt; dependencies on .ctors.
+</span><span class="n">container</span><span class="p">.</span><span class="n">Kernel</span><span class="p">.</span><span class="n">Resolver</span><span class="p">.</span><span class="nf">AddSubResolver</span><span class="p">(</span>
+     <span class="k">new</span> <span class="nf">CollectionResolver</span><span class="p">(</span><span class="n">container</span><span class="p">.</span><span class="n">Kernel</span><span class="p">));</span>
 
-// Add a SubResolver for components with IEnumerable&lt;T&gt; dependencies on .ctors.
-container.Kernel.Resolver.AddSubResolver(
-     new CollectionResolver(container.Kernel));
+<span class="c1">// This is the Windsor specific impl. of IContainerConfigurator interface.
+</span><span class="n">var</span> <span class="n">configurator</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">WindsorContainerConfigurator</span><span class="p">(</span><span class="n">container</span><span class="p">);</span>
 
-// This is the Windsor specific impl. of IContainerConfigurator interface.
-var configurator = new WindsorContainerConfigurator(container);
+<span class="c1">// Configure the Enterprise Library Container to use Windsor internally.
+</span><span class="n">EnterpriseLibraryContainer</span><span class="p">.</span><span class="nf">ConfigureContainer</span><span class="p">(</span><span class="n">configurator</span><span class="p">,</span> 
+    <span class="n">ConfigurationSourceFactory</span><span class="p">.</span><span class="nf">Create</span><span class="p">());</span>
 
-// Configure the Enterprise Library Container to use Windsor internally.
-EnterpriseLibraryContainer.ConfigureContainer(configurator, 
-    ConfigurationSourceFactory.Create());
-
-// Set Current property to a new instance of the WindsorServiceLocator adapter.
-EnterpriseLibraryContainer.Current = new WindsorServiceLocator(container);
-</code></pre>
-
+<span class="c1">// Set Current property to a new instance of the WindsorServiceLocator adapter.
+</span><span class="n">EnterpriseLibraryContainer</span><span class="p">.</span><span class="n">Current</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">WindsorServiceLocator</span><span class="p">(</span><span class="n">container</span><span class="p">);</span>
+</pre>
 <p>I will try to update the code as soon as I have done any changes.</p>
-</div></div><div id="disqus_thread"></div><script type="text/javascript">var disqus_shortname = 'bonusbits';
-(function() {
-    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-})();</script></div></div></body><div id="side"><img src="/images/nikos-baxevanis-small.png" alt="Nikos Baxevanis" title="Nikos Baxevanis"></div><script type="text/javascript">var _gaq = _gaq || [];
+<a class="twitter" href="https://twitter.com/intent/tweet?url=http%3A%2F%2Fnikosbaxevanis.com%2Fblog%2F2011%2F05%2F11%2Ferror-management-is-sometimes-exceptionally-difficult%2F&text=Error+Management+Is+Sometimes+Exceptionally+Difficult&via=nikosbaxevanis" target="_blank">Tweet This</a><div class="dater">May 11, 2011</div><div class="categories">Published in<a class="category" href="/category/castle-windsor/">Castle Windsor&nbsp;</a> on May 11, 2011</div></div><div class="homer"><a href="/"><i class="icon-tape" style="font-size:32px;"></i></a></div><script type="text/javascript">var _gaq = _gaq || [];
 _gaq.push(['_setAccount', 'UA-24262928-1']);
 _gaq.push(['_trackPageview']);
 
@@ -188,4 +175,4 @@ _gaq.push(['_trackPageview']);
   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-})();</script></html>
+})();</script></body></html>

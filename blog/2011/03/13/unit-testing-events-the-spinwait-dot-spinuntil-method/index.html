@@ -1,47 +1,40 @@
-<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width" name="viewport" /><title>Unit Testing Events (The SpinWait.SpinUntil Method) - Nikos Baxevanis</title><link href="/feed" rel="alternate" type="application/rss+xml" /><link href="/stylesheets/blog.css?1390930234" media="screen" rel="stylesheet" type="text/css" /></head><body><div id="title"><div><a href="/">Nikos Baxevanis</a><span>&nbsp;-&nbsp;</span><a href="/blog">Blog</a><span>&nbsp;-&nbsp;</span><a href="/#about">About</a></div><div class="line"></div></div><div id="main"><div id="content"><div class="post"><h2>Unit Testing Events (The SpinWait.SpinUntil Method)</h2><div class="undertitle"><span class="meta">by Nikos Baxevanis in </span><a class="tag" href="/blog/#unit-testing">unit-testing</a><a class="tag" href="/blog/#async">async</a></div><div class="content"><p>The&nbsp;<a title="Spins until the specified condition is satisfied." href="http://msdn.microsoft.com/en-us/library/system.threading.spinwait.spinuntil.aspx" target="_blank">SpinWait.SpinUntil</a>&nbsp;method spins until a specified condition is satisfied.&nbsp;This&nbsp;greatly improves the unit testing of events.</p>
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" /><meta content="width=device-width, user-scalable=no" name="viewport" /><title>Unit Testing Events (The SpinWait.SpinUntil Method)</title><link href="http://fonts.googleapis.com/css?family=Lora:400,700|Open+Sans" rel="stylesheet" type="text/css" /><link href="/stylesheets/fontello.css?1391110042" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/styles.css?1391110042" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/syntax.css?1391110042" media="screen" rel="stylesheet" type="text/css" /></head><body><div class="row"><h1>Unit Testing Events (The SpinWait.SpinUntil Method)</h1><p>The&nbsp;<a title="Spins until the specified condition is satisfied." href="http://msdn.microsoft.com/en-us/library/system.threading.spinwait.spinuntil.aspx" target="_blank">SpinWait.SpinUntil</a>&nbsp;method spins until a specified condition is satisfied.&nbsp;This&nbsp;greatly improves the unit testing of events.</p>
 
 <p>Let&rsquo;s see first, how we test an event using hybrid thread synchronization constructs:</p>
-
-<pre><code class="c#">[Fact]
-public void FooEvent()
-{
-    bool raised = false;
-    ManualResetEventSlim done = new ManualResetEventSlim(false);
-    ThreadPool.QueueUserWorkItem(delegate
-    {
-        Foo += new EventHandler&lt;FooEventArgs&gt;(
-            (sender, e) =&gt; { raised = true; done.Set(); });
-        RaiseFoo();
-    }, null);
-    done.Wait();
-    Assert.True(raised);
-}
-</code></pre>
-
+<pre class="highlight csharp"><span class="na">[Fact]</span>
+<span class="k">public</span> <span class="k">void</span> <span class="nf">FooEvent</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">bool</span> <span class="n">raised</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
+    <span class="n">ManualResetEventSlim</span> <span class="n">done</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">ManualResetEventSlim</span><span class="p">(</span><span class="k">false</span><span class="p">);</span>
+    <span class="n">ThreadPool</span><span class="p">.</span><span class="nf">QueueUserWorkItem</span><span class="p">(</span><span class="k">delegate</span>
+    <span class="p">{</span>
+        <span class="n">Foo</span> <span class="p">+=</span> <span class="k">new</span> <span class="n">EventHandler</span><span class="p">&lt;</span><span class="n">FooEventArgs</span><span class="p">&gt;(</span>
+            <span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span> <span class="n">raised</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span> <span class="n">done</span><span class="p">.</span><span class="nf">Set</span><span class="p">();</span> <span class="p">});</span>
+        <span class="nf">RaiseFoo</span><span class="p">();</span>
+    <span class="p">},</span> <span class="k">null</span><span class="p">);</span>
+    <span class="n">done</span><span class="p">.</span><span class="nf">Wait</span><span class="p">();</span>
+    <span class="n">Assert</span><span class="p">.</span><span class="nf">True</span><span class="p">(</span><span class="n">raised</span><span class="p">);</span>
+<span class="p">}</span>
+</pre>
 <p>Here is how the above test looks like when using&nbsp;the SpinWait.SpinUntil&nbsp;method:</p>
-
-<pre><code class="c#">[Fact]
-public void FooEvent()
-{
-    bool raised = false;
-    ThreadPool.QueueUserWorkItem(delegate
-    {
-        Foo += new EventHandler&lt;FooEventArgs&gt;(
-            (sender, e) =&gt; { raised = true; });
-        RaiseFoo();
-    }, null);
-    SpinWait.SpinUntil(() =&gt; raised == true);
-    Assert.True(raised);
-}
-</code></pre>
-
+<pre class="highlight csharp"><span class="na">[Fact]</span>
+<span class="k">public</span> <span class="k">void</span> <span class="nf">FooEvent</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">bool</span> <span class="n">raised</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
+    <span class="n">ThreadPool</span><span class="p">.</span><span class="nf">QueueUserWorkItem</span><span class="p">(</span><span class="k">delegate</span>
+    <span class="p">{</span>
+        <span class="n">Foo</span> <span class="p">+=</span> <span class="k">new</span> <span class="n">EventHandler</span><span class="p">&lt;</span><span class="n">FooEventArgs</span><span class="p">&gt;(</span>
+            <span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span> <span class="n">raised</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span> <span class="p">});</span>
+        <span class="nf">RaiseFoo</span><span class="p">();</span>
+    <span class="p">},</span> <span class="k">null</span><span class="p">);</span>
+    <span class="n">SpinWait</span><span class="p">.</span><span class="nf">SpinUntil</span><span class="p">(()</span> <span class="p">=&gt;</span> <span class="n">raised</span> <span class="p">==</span> <span class="k">true</span><span class="p">);</span>
+    <span class="n">Assert</span><span class="p">.</span><span class="nf">True</span><span class="p">(</span><span class="n">raised</span><span class="p">);</span>
+<span class="p">}</span>
+</pre>
 <p>The above tests are exactly the same. The one with the SpinWait.SpinUntil method is easier to read and it also requires less code. Pretty cool.</p>
-</div></div><div id="disqus_thread"></div><script type="text/javascript">var disqus_shortname = 'bonusbits';
-(function() {
-    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-})();</script></div></div></body><div id="side"><img src="/images/nikos-baxevanis-small.png" alt="Nikos Baxevanis" title="Nikos Baxevanis"></div><script type="text/javascript">var _gaq = _gaq || [];
+<a class="twitter" href="https://twitter.com/intent/tweet?url=http%3A%2F%2Fnikosbaxevanis.com%2Fblog%2F2011%2F03%2F13%2Funit-testing-events-the-spinwait-dot-spinuntil-method%2F&text=Unit+Testing+Events+%28The+SpinWait.SpinUntil+Method%29&via=nikosbaxevanis" target="_blank">Tweet This</a><div class="dater">March 13, 2011</div><div class="categories">Published in<a class="category" href="/category/unit-testing/">Unit Testing&nbsp;</a><a class="category" href="/category/async/">Async&nbsp;</a> on March 13, 2011</div></div><div class="homer"><a href="/"><i class="icon-tape" style="font-size:32px;"></i></a></div><script type="text/javascript">var _gaq = _gaq || [];
 _gaq.push(['_setAccount', 'UA-24262928-1']);
 _gaq.push(['_trackPageview']);
 
@@ -49,4 +42,4 @@ _gaq.push(['_trackPageview']);
   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-})();</script></html>
+})();</script></body></html>

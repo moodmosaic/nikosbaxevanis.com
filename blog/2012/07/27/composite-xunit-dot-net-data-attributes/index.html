@@ -1,92 +1,86 @@
-<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width" name="viewport" /><title>Composite xUnit.net Data Attributes - Nikos Baxevanis</title><link href="/feed" rel="alternate" type="application/rss+xml" /><link href="/stylesheets/blog.css?1390930234" media="screen" rel="stylesheet" type="text/css" /></head><body><div id="title"><div><a href="/">Nikos Baxevanis</a><span>&nbsp;-&nbsp;</span><a href="/blog">Blog</a><span>&nbsp;-&nbsp;</span><a href="/#about">About</a></div><div class="line"></div></div><div id="main"><div id="content"><div class="post"><h2>Composite xUnit.net Data Attributes</h2><div class="undertitle"><span class="meta">by Nikos Baxevanis in </span><a class="tag" href="/blog/#xunit.net">xunit.net</a><a class="tag" href="/blog/#unit-testing">unit-testing</a></div><div class="content"><p><a href="http://xunit.codeplex.com/">xUnit.net</a> <a href="http://nuget.org/packages/xunit.extensions">extensions</a> support data-driven tests called <a href="http://xunit.codeplex.com/wikipage?title=Comparisons#note4">Theories</a>. Such tests are similar to regular xUnit.net tests but instead of being decorated with <code>[Fact]</code> they are decorated with <code>[Theory]</code>.</p>
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" /><meta content="width=device-width, user-scalable=no" name="viewport" /><title>Composite xUnit.net Data Attributes</title><link href="http://fonts.googleapis.com/css?family=Lora:400,700|Open+Sans" rel="stylesheet" type="text/css" /><link href="/stylesheets/fontello.css?1391110042" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/styles.css?1391110042" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/syntax.css?1391110042" media="screen" rel="stylesheet" type="text/css" /></head><body><div class="row"><h1>Composite xUnit.net Data Attributes</h1><p><a href="http://xunit.codeplex.com/">xUnit.net</a> <a href="http://nuget.org/packages/xunit.extensions">extensions</a> support data-driven tests called <a href="http://xunit.codeplex.com/wikipage?title=Comparisons#note4">Theories</a>. Such tests are similar to regular xUnit.net tests but instead of being decorated with <code>[Fact]</code> they are decorated with <code>[Theory]</code>.</p>
 
 <p>Below is a data-driven test with the data coming a Microsoft Excel (.xls) spreadsheet.</p>
-
-<pre><code class="c#">[Theory]
-[ExcelData(&quot;UnitTestData.xls&quot;, &quot;SELECT x, y FROM Data&quot;)]
-public void Foo(object x, object y)
-{
-    // &#39;x&#39; and &#39;y&#39; are values from the .xls spreadsheet.
-}
-</code></pre>
-
+<pre class="highlight csharp"><span class="na">[Theory]</span>
+<span class="na">[ExcelData(&quot;UnitTestData.xls&quot;, &quot;SELECT x, y FROM Data&quot;)]</span>
+<span class="k">public</span> <span class="k">void</span> <span class="nf">Foo</span><span class="p">(</span><span class="kt">object</span> <span class="n">x</span><span class="p">,</span> <span class="kt">object</span> <span class="n">y</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="c1">// 'x' and 'y' are values from the .xls spreadsheet.
+</span><span class="p">}</span>
+</pre>
 <p>Also, a data-driven test with the data coming from a type implementing the IEnumerable<object[]>.</p>
+<pre class="highlight csharp"><span class="na">[Theory]</span>
+<span class="na">[ClassData(typeof(CollectionOfSpecifiedString))]</span>
+<span class="k">public</span> <span class="k">void</span> <span class="nf">Bar</span><span class="p">(</span><span class="kt">object</span> <span class="n">x</span><span class="p">,</span> <span class="kt">object</span> <span class="n">y</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="c1">// 'x' and 'y' are values from the IEnumerable&lt;object[]&gt; type.
+</span><span class="p">}</span>
 
-<pre><code class="c#">[Theory]
-[ClassData(typeof(CollectionOfSpecifiedString))]
-public void Bar(object x, object y)
-{
-    // &#39;x&#39; and &#39;y&#39; are values from the IEnumerable&lt;object[]&gt; type.
-}
+<span class="k">internal</span> <span class="k">class</span> <span class="nc">CollectionOfSpecifiedString</span> <span class="p">:</span> <span class="n">IEnumerable</span><span class="p">&lt;</span><span class="kt">object</span><span class="p">[</span><span class="k">]&gt;</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="n">IEnumerator</span><span class="p">&lt;</span><span class="kt">object</span><span class="p">[</span><span class="k">]&gt;</span> <span class="nf">GetEnumerator</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">yield</span> <span class="k">return</span> <span class="k">new</span> <span class="kt">object</span><span class="p">[]</span>
+        <span class="p">{</span>
+            <span class="s">&quot;foo&quot;</span><span class="p">,</span> <span class="s">&quot;zoo&quot;</span>
+        <span class="p">};</span>
+    <span class="p">}</span>
 
-internal class CollectionOfSpecifiedString : IEnumerable&lt;object[]&gt;
-{
-    public IEnumerator&lt;object[]&gt; GetEnumerator()
-    {
-        yield return new object[]
-        {
-            &quot;foo&quot;, &quot;zoo&quot;
-        };
-    }
-
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return this.GetEnumerator();
-    }
-}
-</code></pre>
-
+    <span class="n">IEnumerator</span> <span class="n">IEnumerable</span><span class="p">.</span><span class="nf">GetEnumerator</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nf">GetEnumerator</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre>
 <p>In the above samples, <code>[ExcelData]</code> and <code>[ClassData]</code> are attributes representing a data source for a data-driven test.</p>
 
 <p><strong>Using data from multiple attributes</strong></p>
 
 <p>Below is a data-driven test with the data coming from a type implementing the IEnumerable<object[]> combined with the data coming from an .xls spreadsheet.</p>
+<pre class="highlight csharp"><span class="na">[Theory]</span>
+<span class="p">[</span><span class="nf">ClassExcelData</span><span class="p">(</span>
+    <span class="k">typeof</span><span class="p">(</span><span class="n">CollectionOfSpecifiedString</span><span class="p">),</span>
+    <span class="s">&quot;UnitTestData.xls&quot;</span><span class="p">,</span> <span class="s">&quot;SELECT x, y FROM Data&quot;</span><span class="p">)]</span>
+<span class="k">public</span> <span class="k">void</span> <span class="nf">Zoo</span><span class="p">(</span><span class="kt">object</span> <span class="n">x</span><span class="p">,</span> <span class="kt">object</span> <span class="n">y</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="c1">// 'x' is coming from the IEnumerable&lt;object[]&gt; type.
+</span>    <span class="c1">// 'y' is coming from the .xls spreadsheet.
+</span><span class="p">}</span>
 
-<pre><code class="c#">[Theory]
-[ClassExcelData(
-    typeof(CollectionOfSpecifiedString),
-    &quot;UnitTestData.xls&quot;, &quot;SELECT x, y FROM Data&quot;)]
-public void Zoo(object x, object y)
-{
-    // &#39;x&#39; is coming from the IEnumerable&lt;object[]&gt; type.
-    // &#39;y&#39; is coming from the .xls spreadsheet.
-}
+<span class="k">internal</span> <span class="k">class</span> <span class="nc">CollectionOfSpecifiedString</span> <span class="p">:</span> <span class="n">IEnumerable</span><span class="p">&lt;</span><span class="kt">object</span><span class="p">[</span><span class="k">]&gt;</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="n">IEnumerator</span><span class="p">&lt;</span><span class="kt">object</span><span class="p">[</span><span class="k">]&gt;</span> <span class="nf">GetEnumerator</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">yield</span> <span class="k">return</span> <span class="k">new</span> <span class="kt">object</span><span class="p">[]</span>
+        <span class="p">{</span>
+            <span class="s">&quot;foo&quot;</span>
+        <span class="p">};</span>
+    <span class="p">}</span>
 
-internal class CollectionOfSpecifiedString : IEnumerable&lt;object[]&gt;
-{
-    public IEnumerator&lt;object[]&gt; GetEnumerator()
-    {
-        yield return new object[]
-        {
-            &quot;foo&quot;
-        };
-    }
-
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return this.GetEnumerator();
-    }
-}
-</code></pre>
-
+    <span class="n">IEnumerator</span> <span class="n">IEnumerable</span><span class="p">.</span><span class="nf">GetEnumerator</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nf">GetEnumerator</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre>
 <p><strong>Creating a composite attribute</strong></p>
 
 <p>The <code>[ClassExcelData]</code> from the previous example is a <a href="http://en.wikipedia.org/wiki/Composite_pattern">composite</a> of two xUnit.net&#39;s data attributes <code>[ClassData]</code> and <code>[ExcelData]</code>.</p>
 
 <p>All we have to do is create a type deriving from <code>CompositeDataAttribute</code>, passing in its base constructor an array of the data attributes we would like to compose.</p>
-
-<pre><code class="c#">[AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
-internal class ClassExcelDataAttribute : CompositeDataAttribute
-{
-    internal ClassExcelDataAttribute(Type type, string filename, string selectStatement)
-        : base(new DataAttribute[] { 
-                new ClassDataAttribute(type), 
-                new ExcelDataAttribute(filename, selectStatement) })
-    {
-    }
-}
-</code></pre>
-
+<pre class="highlight csharp"><span class="na">[AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]</span>
+<span class="k">internal</span> <span class="k">class</span> <span class="nc">ClassExcelDataAttribute</span> <span class="p">:</span> <span class="n">CompositeDataAttribute</span>
+<span class="p">{</span>
+    <span class="k">internal</span> <span class="nf">ClassExcelDataAttribute</span><span class="p">(</span><span class="n">Type</span> <span class="n">type</span><span class="p">,</span> <span class="kt">string</span> <span class="n">filename</span><span class="p">,</span> <span class="kt">string</span> <span class="n">selectStatement</span><span class="p">)</span>
+        <span class="p">:</span> <span class="k">base</span><span class="p">(</span><span class="k">new</span> <span class="n">DataAttribute</span><span class="p">[]</span> <span class="p">{</span> 
+                <span class="k">new</span> <span class="nf">ClassDataAttribute</span><span class="p">(</span><span class="n">type</span><span class="p">),</span> 
+                <span class="k">new</span> <span class="nf">ExcelDataAttribute</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">selectStatement</span><span class="p">)</span> <span class="p">})</span>
+    <span class="p">{</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre>
 <p>The description for the <code>CompositeDataAttribute</code> algorithm can be found <a href="http://nikosbaxevanis.com/2011/08/25/combining-data-theories-in-autofixture-xunit-extension/">here</a>. </p>
 
 <blockquote>
@@ -96,12 +90,7 @@ internal class ClassExcelDataAttribute : CompositeDataAttribute
 <p><strong>Obtaining the CompositeDataAttribute class</strong></p>
 
 <p>CompositeDataAttribute is currently bundled with <a href="https://github.com/AutoFixture/AutoFixture">AutoFixture</a> <a href="http://feed.nuget.org/packages/AutoFixture.Xunit">extension</a> for xUnit.net. You can use it by installing the <a href="http://feed.nuget.org/packages/AutoFixture.Xunit">AutoFixture.Xunit NuGet package</a>.</p>
-</div></div><div id="disqus_thread"></div><script type="text/javascript">var disqus_shortname = 'bonusbits';
-(function() {
-    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-})();</script></div></div></body><div id="side"><img src="/images/nikos-baxevanis-small.png" alt="Nikos Baxevanis" title="Nikos Baxevanis"></div><script type="text/javascript">var _gaq = _gaq || [];
+<a class="twitter" href="https://twitter.com/intent/tweet?url=http%3A%2F%2Fnikosbaxevanis.com%2Fblog%2F2012%2F07%2F27%2Fcomposite-xunit-dot-net-data-attributes%2F&text=Composite+xUnit.net+Data+Attributes&via=nikosbaxevanis" target="_blank">Tweet This</a><div class="dater">July 27, 2012</div><div class="categories">Published in<a class="category" href="/category/xunit.net/">xUnit.net&nbsp;</a><a class="category" href="/category/unit-testing/">Unit Testing&nbsp;</a> on July 27, 2012</div></div><div class="homer"><a href="/"><i class="icon-tape" style="font-size:32px;"></i></a></div><script type="text/javascript">var _gaq = _gaq || [];
 _gaq.push(['_setAccount', 'UA-24262928-1']);
 _gaq.push(['_trackPageview']);
 
@@ -109,4 +98,4 @@ _gaq.push(['_trackPageview']);
   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-})();</script></html>
+})();</script></body></html>

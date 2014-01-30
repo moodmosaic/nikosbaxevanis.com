@@ -1,32 +1,31 @@
-<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width" name="viewport" /><title>Async REST Client for the Scrumy API - Nikos Baxevanis</title><link href="/feed" rel="alternate" type="application/rss+xml" /><link href="/stylesheets/blog.css?1390930234" media="screen" rel="stylesheet" type="text/css" /></head><body><div id="title"><div><a href="/">Nikos Baxevanis</a><span>&nbsp;-&nbsp;</span><a href="/blog">Blog</a><span>&nbsp;-&nbsp;</span><a href="/#about">About</a></div><div class="line"></div></div><div id="main"><div id="content"><div class="post"><h2>Async REST Client for the Scrumy API</h2><div class="undertitle"><span class="meta">by Nikos Baxevanis in </span><a class="tag" href="/blog/#rest">rest</a></div><div class="content"><p>I am a big fan of <a title="Scrumy is a simple and intuitive virtual task board based on some concepts of Scrum that helps organize and manage your projects." href="http://scrumy.com/" target="_blank">Scrumy</a>, I must admit that! Scrumy is <em>a simple and intuitive virtual task board based on some concepts of Scrum that helps organize and manage your projects (scrumy.com)</em>.&nbsp;</p>
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" /><meta content="width=device-width, user-scalable=no" name="viewport" /><title>Async REST Client for the Scrumy API</title><link href="http://fonts.googleapis.com/css?family=Lora:400,700|Open+Sans" rel="stylesheet" type="text/css" /><link href="/stylesheets/fontello.css?1391110042" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/styles.css?1391110042" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/syntax.css?1391110042" media="screen" rel="stylesheet" type="text/css" /></head><body><div class="row"><h1>Async REST Client for the Scrumy API</h1><p>I am a big fan of <a title="Scrumy is a simple and intuitive virtual task board based on some concepts of Scrum that helps organize and manage your projects." href="http://scrumy.com/" target="_blank">Scrumy</a>, I must admit that! Scrumy is <em>a simple and intuitive virtual task board based on some concepts of Scrum that helps organize and manage your projects (scrumy.com)</em>.&nbsp;</p>
 
 <p>The last weeks I have been thinking of a Visual Studio Extension for viewing (and interacting with) an entire Scrum (Sprints, Stories, Tasks, etc) from inside the IDE.&nbsp;I started building a client library around the Scrumy REST API. I wanted it to be fully asynchronous because I would like to make the Extension UI responsive.</p>
 
 <p>Back a few months ago, I was watching a 5hr webcast on Windows Azure called <a title="Windows Azure Deep Dive with Jeffrey Richter: Explore the Benefits of Windows Azure Data Storage and Compute Services" href="http://www.wintellect.com/CS/blogs/jeffreyr/archive/2011/04/05/windows-azure-deep-dive-with-jeffrey-richter-explore-the-benefits-of-windows-azure-data-storage-and-compute-services.aspx" target="_blank">Windows Azure Deep Dive with Jeffrey Richter</a> were Jeffrey Richter&nbsp;shared among the (fantastic code samples) a fully asynchronous HttpRestClient class. This class is making heavy use of the&nbsp;<a title="AsyncEnumerator uses C# language features to simplify asynchronous programming." href="http://msdn.microsoft.com/en-us/magazine/cc721613.aspx" target="_blank">AsyncEnumerator</a> class (which I am big fan of, till C# 5.0 with async is out) so I though I should build my client around the HttpRestClient class and make also use of the AsyncEnumerator class.</p>
 
 <p>I started by looking at the GET response:</p>
+<pre class="highlight python"><span class="o">&lt;</span><span class="n">scrumy</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="n">created</span><span class="o">-</span><span class="n">at</span><span class="o">&gt;</span><span class="mi">2011</span><span class="o">-</span><span class="mo">06</span><span class="o">-</span><span class="mi">24</span><span class="n">T21</span><span class="p">:</span><span class="mi">49</span><span class="p">:</span><span class="mi">57</span><span class="n">Z</span><span class="o">&lt;/</span><span class="n">created</span><span class="o">-</span><span class="n">at</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="n">time</span><span class="o">-</span><span class="n">zone</span><span class="o">&gt;</span><span class="n">Central</span> <span class="n">Time</span> <span class="p">(</span><span class="n">US</span> <span class="o">&amp;</span> <span class="n">Canada</span><span class="p">)</span><span class="o">&lt;/</span><span class="n">time</span><span class="o">-</span><span class="n">zone</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="n">updated</span><span class="o">-</span><span class="n">at</span><span class="o">&gt;</span><span class="mi">2011</span><span class="o">-</span><span class="mo">06</span><span class="o">-</span><span class="mi">24</span><span class="n">T23</span><span class="p">:</span><span class="mi">38</span><span class="p">:</span><span class="mi">50</span><span class="n">Z</span><span class="o">&lt;/</span><span class="n">updated</span><span class="o">-</span><span class="n">at</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="n">url</span><span class="o">&gt;</span><span class="n">nikos</span><span class="o">&lt;/</span><span class="n">url</span><span class="o">&gt;</span>
+<span class="o">&lt;/</span><span class="n">scrumy</span><span class="o">&gt;</span>
 
-<pre><code class="python">&lt;scrumy&gt;
-    &lt;created-at&gt;2011-06-24T21:49:57Z&lt;/created-at&gt;
-    &lt;time-zone&gt;Central Time (US &amp; Canada)&lt;/time-zone&gt;
-    &lt;updated-at&gt;2011-06-24T23:38:50Z&lt;/updated-at&gt;
-    &lt;url&gt;nikos&lt;/url&gt;
-&lt;/scrumy&gt;
-
-&lt;sprints type=&quot;array&quot;&gt;
-    &lt;sprint&gt;
-        &lt;created-at&gt;2011-06-24T21:50:53Z&lt;/created-at&gt;
-        &lt;id&gt;186884&lt;/id&gt;
-        &lt;start-date&gt;2011-06-24&lt;/start-date&gt;
-        &lt;updated-at&gt;2011-06-24T21:50:53Z&lt;/updated-at&gt;
-        &lt;scrumy-url&gt;nikos&lt;/scrumy-url&gt;
-    &lt;/sprint&gt;
-&lt;/sprints&gt;
-</code></pre>
-
+<span class="o">&lt;</span><span class="n">sprints</span> <span class="nb">type</span><span class="o">=</span><span class="s">&quot;array&quot;</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="n">sprint</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="n">created</span><span class="o">-</span><span class="n">at</span><span class="o">&gt;</span><span class="mi">2011</span><span class="o">-</span><span class="mo">06</span><span class="o">-</span><span class="mi">24</span><span class="n">T21</span><span class="p">:</span><span class="mi">50</span><span class="p">:</span><span class="mi">53</span><span class="n">Z</span><span class="o">&lt;/</span><span class="n">created</span><span class="o">-</span><span class="n">at</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="nb">id</span><span class="o">&gt;</span><span class="mi">186884</span><span class="o">&lt;/</span><span class="nb">id</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="n">start</span><span class="o">-</span><span class="n">date</span><span class="o">&gt;</span><span class="mi">2011</span><span class="o">-</span><span class="mo">06</span><span class="o">-</span><span class="mi">24</span><span class="o">&lt;/</span><span class="n">start</span><span class="o">-</span><span class="n">date</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="n">updated</span><span class="o">-</span><span class="n">at</span><span class="o">&gt;</span><span class="mi">2011</span><span class="o">-</span><span class="mo">06</span><span class="o">-</span><span class="mi">24</span><span class="n">T21</span><span class="p">:</span><span class="mi">50</span><span class="p">:</span><span class="mi">53</span><span class="n">Z</span><span class="o">&lt;/</span><span class="n">updated</span><span class="o">-</span><span class="n">at</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="n">scrumy</span><span class="o">-</span><span class="n">url</span><span class="o">&gt;</span><span class="n">nikos</span><span class="o">&lt;/</span><span class="n">scrumy</span><span class="o">-</span><span class="n">url</span><span class="o">&gt;</span>
+    <span class="o">&lt;/</span><span class="n">sprint</span><span class="o">&gt;</span>
+<span class="o">&lt;/</span><span class="n">sprints</span><span class="o">&gt;</span>
+</pre>
 <p>Then I created the corresponding&nbsp;classes:</p>
-
-<pre><code class="c#">/// &lt;example&gt;
+<pre class="highlight csharp"><span class="c1">/// &lt;example&gt;
 ///     &lt;scrumy&gt;
 ///         &lt;created-at&gt;2011-06-24T21:49:57Z&lt;/created-at&gt;
 ///         &lt;time-zone&gt;Central Time (US &amp; Canada)&lt;/time-zone&gt;
@@ -35,18 +34,18 @@
 ///     &lt;/scrumy&gt;
 /// Editable fields: url, time_zone
 /// &lt;/example&gt;
-public sealed class Scrumy
-{
-    public DateTimeOffset CreatedAt { get; set; }
+</span><span class="k">public</span> <span class="k">sealed</span> <span class="k">class</span> <span class="nc">Scrumy</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="n">DateTimeOffset</span> <span class="n">CreatedAt</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
 
-    public string TimeZone { get; set; }
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">TimeZone</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
 
-    public DateTimeOffset UpdatedAt { get; set; }
+    <span class="k">public</span> <span class="n">DateTimeOffset</span> <span class="n">UpdatedAt</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
 
-    public string Url { get; set; }
-}
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">Url</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+<span class="p">}</span>
 
-/// &lt;example&gt;
+<span class="c1">/// &lt;example&gt;
 ///     &lt;sprints type=&quot;array&quot;&gt;
 ///        &lt;sprint&gt;
 ///            &lt;created-at&gt;2011-06-24T21:50:53Z&lt;/created-at&gt;
@@ -58,121 +57,109 @@ public sealed class Scrumy
 ///    &lt;/sprints&gt;
 /// Editable fields: url, time_zone
 /// &lt;/example&gt;
-public sealed class Sprint
-{
-    public DateTimeOffset CreatedAt { get; set; }
+</span><span class="k">public</span> <span class="k">sealed</span> <span class="k">class</span> <span class="nc">Sprint</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="n">DateTimeOffset</span> <span class="n">CreatedAt</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
 
-    public int Id { get; set; }
+    <span class="k">public</span> <span class="kt">int</span> <span class="n">Id</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
 
-    public DateTimeOffset StartDate { get; set; }
+    <span class="k">public</span> <span class="n">DateTimeOffset</span> <span class="n">StartDate</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
 
-    public DateTimeOffset UpdatedAt { get; set; }
+    <span class="k">public</span> <span class="n">DateTimeOffset</span> <span class="n">UpdatedAt</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
 
-    public string ScrumyUrl { get; set; }
-}
-</code></pre>
-
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">ScrumyUrl</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+<span class="p">}</span>
+</pre>
 <p>Next I included generic Begin/End methods for supporting the APM inside my class:</p>
+<pre class="highlight csharp"><span class="k">private</span> <span class="n">IAsyncResult</span> <span class="nf">BeginRequest</span><span class="p">(</span>
+     <span class="n">ScrumyRequest</span> <span class="n">request</span><span class="p">,</span> 
+     <span class="n">Func</span><span class="p">&lt;</span><span class="n">XElement</span><span class="p">,</span> <span class="n">ScrumyResponse</span><span class="p">&gt;</span> <span class="n">processor</span><span class="p">,</span> 
+     <span class="n">AsyncCallback</span> <span class="n">callback</span> <span class="p">=</span> <span class="k">null</span><span class="p">,</span>
+     <span class="kt">object</span> <span class="n">state</span> <span class="p">=</span> <span class="k">null</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">var</span> <span class="n">ae</span> <span class="p">=</span> <span class="k">new</span> <span class="n">AsyncEnumerator</span><span class="p">&lt;</span><span class="n">ScrumyResponse</span><span class="p">&gt;(</span>
+         <span class="kt">string</span><span class="p">.</span><span class="nf">Format</span><span class="p">(</span><span class="s">&quot;Method={0}, Uri={1}&quot;</span><span class="p">,</span> <span class="n">request</span><span class="p">.</span><span class="n">Method</span><span class="p">,</span> <span class="n">request</span><span class="p">.</span><span class="n">Uri</span><span class="p">));</span>
+    <span class="n">ae</span><span class="p">.</span><span class="n">SyncContext</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">apmWrap</span><span class="p">.</span><span class="nf">Return</span><span class="p">(</span><span class="n">ae</span><span class="p">,</span>
+        <span class="n">ae</span><span class="p">.</span><span class="nf">BeginExecute</span><span class="p">(</span><span class="nf">MakeRequest</span><span class="p">(</span><span class="n">ae</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">processor</span><span class="p">),</span>
+            <span class="n">apmWrap</span><span class="p">.</span><span class="nf">Callback</span><span class="p">(</span><span class="n">ae</span><span class="p">,</span> <span class="n">callback</span><span class="p">),</span> <span class="n">state</span><span class="p">));</span>
+<span class="p">}</span>
 
-<pre><code class="c#">private IAsyncResult BeginRequest(
-     ScrumyRequest request, 
-     Func&lt;XElement, ScrumyResponse&gt; processor, 
-     AsyncCallback callback = null,
-     object state = null)
-{
-    var ae = new AsyncEnumerator&lt;ScrumyResponse&gt;(
-         string.Format(&quot;Method={0}, Uri={1}&quot;, request.Method, request.Uri));
-    ae.SyncContext = null;
-    return apmWrap.Return(ae,
-        ae.BeginExecute(MakeRequest(ae, request, processor),
-            apmWrap.Callback(ae, callback), state));
-}
+<span class="k">private</span> <span class="k">new</span> <span class="n">TResponse</span> <span class="n">EndRequest</span><span class="p">&lt;</span><span class="n">TResponse</span><span class="p">&gt;(</span><span class="n">IAsyncResult</span> <span class="n">result</span><span class="p">)</span> 
+     <span class="n">where</span> <span class="n">TResponse</span> <span class="p">:</span> <span class="n">ScrumyResponse</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">TResponse</span><span class="p">)</span><span class="n">apmWrap</span><span class="p">.</span><span class="nf">Unwrap</span><span class="p">(</span><span class="k">ref</span> <span class="n">result</span><span class="p">).</span><span class="nf">EndExecute</span><span class="p">(</span><span class="n">result</span><span class="p">);</span>
+<span class="p">}</span>
 
-private new TResponse EndRequest&lt;TResponse&gt;(IAsyncResult result) 
-     where TResponse : ScrumyResponse
-{
-    return (TResponse)apmWrap.Unwrap(ref result).EndExecute(result);
-}
+<span class="k">private</span> <span class="n">IEnumerator</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;</span> <span class="nf">MakeRequest</span><span class="p">(</span>
+     <span class="n">AsyncEnumerator</span><span class="p">&lt;</span><span class="n">ScrumyResponse</span><span class="p">&gt;</span> <span class="n">ae</span><span class="p">,</span> 
+     <span class="n">ScrumyRequest</span> <span class="n">request</span><span class="p">,</span> 
+     <span class="n">Func</span><span class="p">&lt;</span><span class="n">XElement</span><span class="p">,</span> <span class="n">ScrumyResponse</span><span class="p">&gt;</span> <span class="n">processor</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">base</span><span class="p">.</span><span class="nf">BeginRequest</span><span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="n">Method</span><span class="p">,</span> <span class="n">request</span><span class="p">.</span><span class="n">Uri</span><span class="p">,</span> <span class="n">ae</span><span class="p">.</span><span class="nf">End</span><span class="p">());</span>
+    <span class="k">yield</span> <span class="k">return</span> <span class="m">1</span><span class="p">;</span>
 
-private IEnumerator&lt;int&gt; MakeRequest(
-     AsyncEnumerator&lt;ScrumyResponse&gt; ae, 
-     ScrumyRequest request, 
-     Func&lt;XElement, ScrumyResponse&gt; processor)
-{
-    base.BeginRequest(request.Method, request.Uri, ae.End());
-    yield return 1;
+    <span class="n">XElement</span> <span class="n">element</span> <span class="p">=</span> <span class="k">base</span><span class="p">.</span><span class="nf">EndRequestXElement</span><span class="p">(</span><span class="n">ae</span><span class="p">.</span><span class="nf">DequeueAsyncResult</span><span class="p">());</span>
 
-    XElement element = base.EndRequestXElement(ae.DequeueAsyncResult());
-
-    ae.Result = processor.Invoke(element);
-} 
-</code></pre>
-
+    <span class="n">ae</span><span class="p">.</span><span class="n">Result</span> <span class="p">=</span> <span class="n">processor</span><span class="p">.</span><span class="nf">Invoke</span><span class="p">(</span><span class="n">element</span><span class="p">);</span>
+<span class="p">}</span> 
+</pre>
 <p>With these helper methods, dealing with the APM was trivial when implementing methods for the Scrumy client. Here are the methods I had to write for getting the Sprints:</p>
+<pre class="highlight csharp"><span class="k">public</span> <span class="n">IAsyncResult</span> <span class="nf">BeginGetScrumy</span><span class="p">(</span>
+     <span class="n">GetScrumyRequest</span> <span class="n">request</span><span class="p">,</span> 
+     <span class="n">AsyncCallback</span> <span class="n">callback</span> <span class="p">=</span> <span class="k">null</span><span class="p">,</span> 
+     <span class="kt">object</span> <span class="n">state</span> <span class="p">=</span> <span class="k">null</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">Func</span><span class="p">&lt;</span><span class="n">XElement</span><span class="p">,</span> <span class="n">GetScrumyResponse</span><span class="p">&gt;</span> <span class="n">processor</span> <span class="p">=</span> <span class="n">element</span> <span class="p">=&gt;</span>
+    <span class="p">{</span>
+        <span class="n">DateTimeOffset</span> <span class="n">createdAt</span><span class="p">;</span>
+        <span class="n">DateTimeOffset</span><span class="p">.</span><span class="nf">TryParse</span><span class="p">(</span>
+             <span class="n">element</span><span class="p">.</span><span class="nf">Element</span><span class="p">(</span><span class="s">&quot;created-at&quot;</span><span class="p">).</span><span class="n">Value</span><span class="p">,</span> <span class="k">out</span> <span class="n">createdAt</span><span class="p">);</span>
 
-<pre><code class="c#">public IAsyncResult BeginGetScrumy(
-     GetScrumyRequest request, 
-     AsyncCallback callback = null, 
-     object state = null)
-{
-    Func&lt;XElement, GetScrumyResponse&gt; processor = element =&gt;
-    {
-        DateTimeOffset createdAt;
-        DateTimeOffset.TryParse(
-             element.Element(&quot;created-at&quot;).Value, out createdAt);
+        <span class="n">DateTimeOffset</span> <span class="n">updatedAt</span><span class="p">;</span>
+        <span class="n">DateTimeOffset</span><span class="p">.</span><span class="nf">TryParse</span><span class="p">(</span>
+             <span class="n">element</span><span class="p">.</span><span class="nf">Element</span><span class="p">(</span><span class="s">&quot;updated-at&quot;</span><span class="p">).</span><span class="n">Value</span><span class="p">,</span> <span class="k">out</span> <span class="n">updatedAt</span><span class="p">);</span>
 
-        DateTimeOffset updatedAt;
-        DateTimeOffset.TryParse(
-             element.Element(&quot;updated-at&quot;).Value, out updatedAt);
+        <span class="n">var</span> <span class="n">scrumy</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Scrumy</span>
+        <span class="p">{</span>
+            <span class="n">CreatedAt</span> <span class="p">=</span> <span class="n">createdAt</span><span class="p">,</span>
+            <span class="n">TimeZone</span> <span class="p">=</span> <span class="n">element</span><span class="p">.</span><span class="nf">Element</span><span class="p">(</span><span class="s">&quot;time-zone&quot;</span><span class="p">).</span><span class="n">Value</span><span class="p">,</span>
+            <span class="n">UpdatedAt</span> <span class="p">=</span> <span class="n">updatedAt</span><span class="p">,</span>
+            <span class="n">Url</span> <span class="p">=</span> <span class="n">element</span><span class="p">.</span><span class="nf">Element</span><span class="p">(</span><span class="s">&quot;url&quot;</span><span class="p">).</span><span class="n">Value</span>
+        <span class="p">};</span>
 
-        var scrumy = new Scrumy
-        {
-            CreatedAt = createdAt,
-            TimeZone = element.Element(&quot;time-zone&quot;).Value,
-            UpdatedAt = updatedAt,
-            Url = element.Element(&quot;url&quot;).Value
-        };
+        <span class="k">return</span> <span class="k">new</span> <span class="n">GetScrumyResponse</span> <span class="p">{</span> <span class="n">Scrumy</span> <span class="p">=</span> <span class="n">scrumy</span> <span class="p">};</span>
+    <span class="p">};</span>
 
-        return new GetScrumyResponse { Scrumy = scrumy };
-    };
+    <span class="k">return</span> <span class="nf">BeginRequest</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">processor</span><span class="p">,</span> <span class="n">callback</span><span class="p">,</span> <span class="n">state</span><span class="p">);</span>
+<span class="p">}</span>
 
-    return BeginRequest(request, processor, callback, state);
-}
-
-public GetScrumyResponse EndGetScrumy(IAsyncResult ar)
-{
-    return EndRequest&lt;GetScrumyResponse&gt;(ar);
-} 
-</code></pre>
-
+<span class="k">public</span> <span class="n">GetScrumyResponse</span> <span class="nf">EndGetScrumy</span><span class="p">(</span><span class="n">IAsyncResult</span> <span class="n">ar</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="n">EndRequest</span><span class="p">&lt;</span><span class="n">GetScrumyResponse</span><span class="p">&gt;(</span><span class="n">ar</span><span class="p">);</span>
+<span class="p">}</span> 
+</pre>
 <p>As you notice, only the logic that creates a Sprint object from an XElement is inside the Begin part. Everything else is handled by the helper classes.</p>
 
 <p>Finally, here is how to use it:</p>
+<pre class="highlight csharp"><span class="n">AsyncEnumerator</span> <span class="n">ae</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">AsyncEnumerator</span><span class="p">();</span>            
+<span class="n">ae</span><span class="p">.</span><span class="nf">BeginExecute</span><span class="p">(</span><span class="nf">GetSprint</span><span class="p">(</span><span class="n">ae</span><span class="p">),</span> <span class="n">ae</span><span class="p">.</span><span class="n">EndExecute</span><span class="p">);</span>
 
-<pre><code class="c#">AsyncEnumerator ae = new AsyncEnumerator();            
-ae.BeginExecute(GetSprint(ae), ae.EndExecute);
+<span class="k">private</span> <span class="n">IEnumerator</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;</span> <span class="nf">GetSprint</span><span class="p">(</span><span class="n">AsyncEnumerator</span> <span class="n">ae</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">var</span> <span class="n">request</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">GetSprintRequest</span><span class="p">(</span><span class="n">client</span><span class="p">.</span><span class="n">ProjectName</span><span class="p">);</span>
 
-private IEnumerator&lt;int&gt; GetSprint(AsyncEnumerator ae)
-{
-    var request = new GetSprintRequest(client.ProjectName);
+    <span class="n">client</span><span class="p">.</span><span class="nf">BeginGetSprint</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">ae</span><span class="p">.</span><span class="nf">End</span><span class="p">());</span>
+    <span class="k">yield</span> <span class="k">return</span> <span class="m">1</span><span class="p">;</span>
 
-    client.BeginGetSprint(request, ae.End());
-    yield return 1;
-
-    var response = client.EndGetSprint(ae.DequeueAsyncResult());
-    Assert.NotEmpty(response.Sprints);
-}
-</code></pre>
-
+    <span class="n">var</span> <span class="n">response</span> <span class="p">=</span> <span class="n">client</span><span class="p">.</span><span class="nf">EndGetSprint</span><span class="p">(</span><span class="n">ae</span><span class="p">.</span><span class="nf">DequeueAsyncResult</span><span class="p">());</span>
+    <span class="n">Assert</span><span class="p">.</span><span class="nf">NotEmpty</span><span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="n">Sprints</span><span class="p">);</span>
+<span class="p">}</span>
+</pre>
 <p>I am looking forward building as much as I can and then to continue with the Visual Studio Extension.</p>
 
 <p>A gist with all the source code can be found <a title="Asynchronous .NET Client Implementation around the Scrumy REST API." href="https://gist.github.com/2850410" target="_blank">here</a>.</p>
-</div></div><div id="disqus_thread"></div><script type="text/javascript">var disqus_shortname = 'bonusbits';
-(function() {
-    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-})();</script></div></div></body><div id="side"><img src="/images/nikos-baxevanis-small.png" alt="Nikos Baxevanis" title="Nikos Baxevanis"></div><script type="text/javascript">var _gaq = _gaq || [];
+<a class="twitter" href="https://twitter.com/intent/tweet?url=http%3A%2F%2Fnikosbaxevanis.com%2Fblog%2F2011%2F07%2F17%2Fasync-rest-client-for-the-scrumy-api%2F&text=Async+REST+Client+for+the+Scrumy+API&via=nikosbaxevanis" target="_blank">Tweet This</a><div class="dater">July 17, 2011</div><div class="categories">Published in<a class="category" href="/category/rest/">REST&nbsp;</a> on July 17, 2011</div></div><div class="homer"><a href="/"><i class="icon-tape" style="font-size:32px;"></i></a></div><script type="text/javascript">var _gaq = _gaq || [];
 _gaq.push(['_setAccount', 'UA-24262928-1']);
 _gaq.push(['_trackPageview']);
 
@@ -180,4 +167,4 @@ _gaq.push(['_trackPageview']);
   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-})();</script></html>
+})();</script></body></html>

@@ -1,4 +1,6 @@
-<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width" name="viewport" /><title>Hosting Agatha in a Managed Application - Nikos Baxevanis</title><link href="/feed" rel="alternate" type="application/rss+xml" /><link href="/stylesheets/blog.css?1390930234" media="screen" rel="stylesheet" type="text/css" /></head><body><div id="title"><div><a href="/">Nikos Baxevanis</a><span>&nbsp;-&nbsp;</span><a href="/blog">Blog</a><span>&nbsp;-&nbsp;</span><a href="/#about">About</a></div><div class="line"></div></div><div id="main"><div id="content"><div class="post"><h2>Hosting Agatha in a Managed Application</h2><div class="undertitle"><span class="meta">by Nikos Baxevanis in </span><a class="tag" href="/blog/#wcf">wcf</a></div><div class="content"><p>When designing your <a href="http://en.wikipedia.org/wiki/Enterprise_Service_Layer" target="_blank" title="The Enterprise Service Layer (ESL) is the highest level of abstraction in a SOA architecture.">Service Layer</a> you need to choose a communication mechanism according to your needs. Duplex, Fire and Forget, Reliable Sessions and <a href="http://en.wikipedia.org/wiki/Request-response" target="_blank" title="Request-response, also known as request-reply, is a message exchange pattern in which a requestor sends a request message to a replier system which receives and processes the request, ultimately returning a message in response.">Request Response</a> are the most common messaging patterns.</p>
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" /><meta content="width=device-width, user-scalable=no" name="viewport" /><title>Hosting Agatha in a Managed Application</title><link href="http://fonts.googleapis.com/css?family=Lora:400,700|Open+Sans" rel="stylesheet" type="text/css" /><link href="/stylesheets/fontello.css?1391110042" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/styles.css?1391110042" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/syntax.css?1391110042" media="screen" rel="stylesheet" type="text/css" /></head><body><div class="row"><h1>Hosting Agatha in a Managed Application</h1><p>When designing your <a href="http://en.wikipedia.org/wiki/Enterprise_Service_Layer" target="_blank" title="The Enterprise Service Layer (ESL) is the highest level of abstraction in a SOA architecture.">Service Layer</a> you need to choose a communication mechanism according to your needs. Duplex, Fire and Forget, Reliable Sessions and <a href="http://en.wikipedia.org/wiki/Request-response" target="_blank" title="Request-response, also known as request-reply, is a message exchange pattern in which a requestor sends a request message to a replier system which receives and processes the request, ultimately returning a message in response.">Request Response</a> are the most common messaging patterns.</p>
 
 <p>With Request-response, the client expects to receive a response for every message that&#39;s been sent. You can design such a Service Layer using an <a href="http://en.wikipedia.org/wiki/Enterprise_service_bus#ESB_architecture" target="_blank" title="In an enterprise architecture making use of an ESB, an application will communicate via the bus, which acts as a message broker between applications.">ESB architecture</a> if you need to connect different applications (even from different platforms). Though, if you need to write a typical client - back-end - database application you can choose not to go with an ESB (Rhino ServiceBus, NServiceBus) and use WCF.</p>
 
@@ -13,75 +15,69 @@
 </blockquote>
 
 <p>With Agatha, you can host your services easily on IIS or in a Console Application using <a href="http://www.coretechnologies.com/products/AlwaysUp/" target="_blank" title="AlwaysUp runs your application (32/64-bit executable, batch file, shortcut, java, perl, etc.) as a Windows Service, managing and monitoring it constantly to ensure 100% uptime.">AlwaysUp</a>. If you choose the latter there are a few things to do inside your Main() method.</p>
+<pre class="highlight csharp"><span class="n">Uri</span>  <span class="n">baseAddress</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Uri</span><span class="p">(</span><span class="s">&quot;&lt;uriString goes here&gt;&quot;</span><span class="p">);</span>
+<span class="n">ServiceHost</span> <span class="n">host</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">ServiceHost</span><span class="p">(</span><span class="k">typeof</span><span class="p">(</span><span class="n">WcfRequestProcessor</span><span class="p">),</span> <span class="n">baseAddress</span><span class="p">);</span>
+<span class="n">host</span><span class="p">.</span><span class="nf">Open</span><span class="p">();</span>
 
-<pre><code class="c#">Uri  baseAddress = new Uri(&quot;&lt;uriString goes here&gt;&quot;);
-ServiceHost host = new ServiceHost(typeof(WcfRequestProcessor), baseAddress);
-host.Open();
-
-// Agatha&#39;s WcfRequestProcessor handles the requests.
+<span class="c1">// Agatha's WcfRequestProcessor handles the requests.
 // Your service is up. There is really nothing else to do here.
-
-System.Console.ReadKey(false);
-host.Close();
-</code></pre>
-
+</span>
+<span class="n">System</span><span class="p">.</span><span class="n">Console</span><span class="p">.</span><span class="nf">ReadKey</span><span class="p">(</span><span class="k">false</span><span class="p">);</span>
+<span class="n">host</span><span class="p">.</span><span class="nf">Close</span><span class="p">();</span>
+</pre>
 <p>Here I create an instance of the <a href="http://msdn.microsoft.com/en-us/library/system.servicemodel.servicehost.aspx" target="_blank" title="Provides a host for services.">ServiceHost</a> class, passing a <a href="http://code.google.com/p/agatha-rrsl/source/browse/trunk/Agatha.ServiceLayer/WCF/WcfRequestProcessor.cs" target="_blank" title="Agatha.ServiceLayer.WCF.WcfRequestProcessor">WcfRequestProcessor</a>&#0160;type that represents the service type and the base address Uniform Resource Identifier (URI) to the ServiceHost.</p>
 
 <p>Here is the generic app.config that Agatha needs:</p>
-
-<pre><code class="python">&lt;?xml version=&quot;1.0&quot;?&gt;
-&lt;configuration&gt;
-  &lt;system.serviceModel&gt;
-    &lt;services&gt;
-      &lt;service name=&quot;Agatha.ServiceLayer.WCF.WcfRequestProcessor&quot;
-               behaviorConfiguration=&quot;RequestProcessorBehavior&quot;&gt;
-        &lt;endpoint address=&quot;&quot;
-                  contract=&quot;Agatha.Common.WCF.IWcfRequestProcessor&quot;
-                  binding=&quot;basicHttpBinding&quot;
-                  bindingConfiguration=&quot;RequestProcessorBinding&quot;/&gt;
-      &lt;/service&gt;
-    &lt;/services&gt;
-    &lt;bindings&gt;
-      &lt;basicHttpBinding&gt;
-        &lt;binding name=&quot;RequestProcessorBinding&quot;
-                 maxReceivedMessageSize=&quot;2147483647&quot;
-                 receiveTimeout=&quot;00:30:00&quot;
-                 sendTimeout=&quot;00:30:00&quot;&gt;
-          &lt;readerQuotas maxStringContentLength=&quot;2147483647&quot;
-                        maxArrayLength=&quot;2147483647&quot;/&gt;
-          &lt;security mode=&quot;None&quot; /&gt;
-        &lt;/binding&gt;
-      &lt;/basicHttpBinding&gt;
-    &lt;/bindings&gt;
-    &lt;behaviors&gt;
-      &lt;serviceBehaviors&gt;
-        &lt;behavior name=&quot;RequestProcessorBehavior&quot;&gt;
-          &lt;serviceMetadata httpGetEnabled=&quot;true&quot;/&gt;
-          &lt;serviceDebug includeExceptionDetailInFaults=&quot;true&quot;/&gt;
-          &lt;dataContractSerializer maxItemsInObjectGraph=&quot;2147483647&quot;/&gt;
-          &lt;serviceThrottling maxConcurrentCalls=&quot;500&quot;
-                             maxConcurrentInstances=&quot;500&quot;/&gt;
-        &lt;/behavior&gt;
-      &lt;/serviceBehaviors&gt;
-    &lt;/behaviors&gt;
-  &lt;/system.serviceModel&gt;
-  &lt;startup&gt;
-    &lt;supportedRuntime version=&quot;v4.0&quot;
-                      sku=&quot;.NETFramework,Version=v4.0&quot;/&gt;
-  &lt;/startup&gt;
-  &lt;runtime&gt;
-    &lt;gcServer enabled=&quot;true&quot;/&gt;
-  &lt;/runtime&gt;
-&lt;/configuration&gt;
-</code></pre>
-
+<pre class="highlight python"><span class="o">&lt;</span><span class="err">?</span><span class="n">xml</span> <span class="n">version</span><span class="o">=</span><span class="s">&quot;1.0&quot;</span><span class="err">?</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">configuration</span><span class="o">&gt;</span>
+  <span class="o">&lt;</span><span class="n">system</span><span class="o">.</span><span class="n">serviceModel</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="n">services</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="n">service</span> <span class="n">name</span><span class="o">=</span><span class="s">&quot;Agatha.ServiceLayer.WCF.WcfRequestProcessor&quot;</span>
+               <span class="n">behaviorConfiguration</span><span class="o">=</span><span class="s">&quot;RequestProcessorBehavior&quot;</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="n">endpoint</span> <span class="n">address</span><span class="o">=</span><span class="s">&quot;&quot;</span>
+                  <span class="n">contract</span><span class="o">=</span><span class="s">&quot;Agatha.Common.WCF.IWcfRequestProcessor&quot;</span>
+                  <span class="nb">bin</span><span class="n">ding</span><span class="o">=</span><span class="s">&quot;basicHttpBinding&quot;</span>
+                  <span class="nb">bin</span><span class="n">dingConfiguration</span><span class="o">=</span><span class="s">&quot;RequestProcessorBinding&quot;</span><span class="o">/&gt;</span>
+      <span class="o">&lt;/</span><span class="n">service</span><span class="o">&gt;</span>
+    <span class="o">&lt;/</span><span class="n">services</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="nb">bin</span><span class="n">dings</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="n">basicHttpBinding</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="nb">bin</span><span class="n">ding</span> <span class="n">name</span><span class="o">=</span><span class="s">&quot;RequestProcessorBinding&quot;</span>
+                 <span class="nb">max</span><span class="n">ReceivedMessageSize</span><span class="o">=</span><span class="s">&quot;2147483647&quot;</span>
+                 <span class="n">receiveTimeout</span><span class="o">=</span><span class="s">&quot;00:30:00&quot;</span>
+                 <span class="n">sendTimeout</span><span class="o">=</span><span class="s">&quot;00:30:00&quot;</span><span class="o">&gt;</span>
+          <span class="o">&lt;</span><span class="n">readerQuotas</span> <span class="nb">max</span><span class="n">StringContentLength</span><span class="o">=</span><span class="s">&quot;2147483647&quot;</span>
+                        <span class="nb">max</span><span class="n">ArrayLength</span><span class="o">=</span><span class="s">&quot;2147483647&quot;</span><span class="o">/&gt;</span>
+          <span class="o">&lt;</span><span class="n">security</span> <span class="n">mode</span><span class="o">=</span><span class="s">&quot;None&quot;</span> <span class="o">/&gt;</span>
+        <span class="o">&lt;/</span><span class="nb">bin</span><span class="n">ding</span><span class="o">&gt;</span>
+      <span class="o">&lt;/</span><span class="n">basicHttpBinding</span><span class="o">&gt;</span>
+    <span class="o">&lt;/</span><span class="nb">bin</span><span class="n">dings</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="n">behaviors</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="n">serviceBehaviors</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="n">behavior</span> <span class="n">name</span><span class="o">=</span><span class="s">&quot;RequestProcessorBehavior&quot;</span><span class="o">&gt;</span>
+          <span class="o">&lt;</span><span class="n">serviceMetadata</span> <span class="n">httpGetEnabled</span><span class="o">=</span><span class="s">&quot;true&quot;</span><span class="o">/&gt;</span>
+          <span class="o">&lt;</span><span class="n">serviceDebug</span> <span class="n">includeExceptionDetailInFaults</span><span class="o">=</span><span class="s">&quot;true&quot;</span><span class="o">/&gt;</span>
+          <span class="o">&lt;</span><span class="n">dataContractSerializer</span> <span class="nb">max</span><span class="n">ItemsInObjectGraph</span><span class="o">=</span><span class="s">&quot;2147483647&quot;</span><span class="o">/&gt;</span>
+          <span class="o">&lt;</span><span class="n">serviceThrottling</span> <span class="nb">max</span><span class="n">ConcurrentCalls</span><span class="o">=</span><span class="s">&quot;500&quot;</span>
+                             <span class="nb">max</span><span class="n">ConcurrentInstances</span><span class="o">=</span><span class="s">&quot;500&quot;</span><span class="o">/&gt;</span>
+        <span class="o">&lt;/</span><span class="n">behavior</span><span class="o">&gt;</span>
+      <span class="o">&lt;/</span><span class="n">serviceBehaviors</span><span class="o">&gt;</span>
+    <span class="o">&lt;/</span><span class="n">behaviors</span><span class="o">&gt;</span>
+  <span class="o">&lt;/</span><span class="n">system</span><span class="o">.</span><span class="n">serviceModel</span><span class="o">&gt;</span>
+  <span class="o">&lt;</span><span class="n">startup</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="n">supportedRuntime</span> <span class="n">version</span><span class="o">=</span><span class="s">&quot;v4.0&quot;</span>
+                      <span class="n">sku</span><span class="o">=</span><span class="s">&quot;.NETFramework,Version=v4.0&quot;</span><span class="o">/&gt;</span>
+  <span class="o">&lt;/</span><span class="n">startup</span><span class="o">&gt;</span>
+  <span class="o">&lt;</span><span class="n">runtime</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="n">gcServer</span> <span class="n">enabled</span><span class="o">=</span><span class="s">&quot;true&quot;</span><span class="o">/&gt;</span>
+  <span class="o">&lt;/</span><span class="n">runtime</span><span class="o">&gt;</span>
+<span class="o">&lt;/</span><span class="n">configuration</span><span class="o">&gt;</span>
+</pre>
 <p>I included the&#0160;<a href="http://msdn.microsoft.com/en-us/library/ms229357.aspx" target="_blank" title="Specifies whether the common language runtime runs server garbage collection.">&lt;gcServer&gt;</a>&#0160;element to instruct CLR to use&#0160;server garbage collection. Inside your Main() method you can include the code below:</p>
-
-<pre><code class="c#">Console.WriteLine(&quot;{0} is {1}running with server GC.&quot;,
-    Assembly.GetEntryAssembly().GetName().Name,
-    GCSettings.IsServerGC == true ? string.Empty : &quot;not &quot;);
-</code></pre>
-
+<pre class="highlight csharp"><span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">&quot;{0} is {1}running with server GC.&quot;</span><span class="p">,</span>
+    <span class="n">Assembly</span><span class="p">.</span><span class="nf">GetEntryAssembly</span><span class="p">().</span><span class="nf">GetName</span><span class="p">().</span><span class="n">Name</span><span class="p">,</span>
+    <span class="n">GCSettings</span><span class="p">.</span><span class="n">IsServerGC</span> <span class="p">==</span> <span class="k">true</span> <span class="p">?</span> <span class="kt">string</span><span class="p">.</span><span class="n">Empty</span> <span class="p">:</span> <span class="s">&quot;not &quot;</span><span class="p">);</span>
+</pre>
 <p>I would really like to share how it looks in <a href="http://technet.microsoft.com/en-us/sysinternals/bb896653.aspx" target="_blank" title="Process Explorer by Mark Russinovich">Process Explorer</a> when handling 6000 requests using Agatha.</p>
 
 <p><img src="http://farm9.staticflickr.com/8194/8397465885_bb9b3f236e_o.png" alt="" /></p>
@@ -101,12 +97,7 @@ host.Close();
 <p>The sample application can be found <a href="https://github.com/moodmosaic/BonusBits.CodeSamples" target="_blank" title="BonusBits Blog source-code.">here</a>.</p>
 
 <p>Make sure you are running the application with elevated priviledges else a System.ServiceModel.AddressAccessDeniedException will be thrown indicating that your process does not have access rights to get registered at the base address were your service is hosted.</p>
-</div></div><div id="disqus_thread"></div><script type="text/javascript">var disqus_shortname = 'bonusbits';
-(function() {
-    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-})();</script></div></div></body><div id="side"><img src="/images/nikos-baxevanis-small.png" alt="Nikos Baxevanis" title="Nikos Baxevanis"></div><script type="text/javascript">var _gaq = _gaq || [];
+<a class="twitter" href="https://twitter.com/intent/tweet?url=http%3A%2F%2Fnikosbaxevanis.com%2Fblog%2F2010%2F10%2F23%2Fhosting-agatha-in-a-managed-application%2F&text=Hosting+Agatha+in+a+Managed+Application&via=nikosbaxevanis" target="_blank">Tweet This</a><div class="dater">October 23, 2010</div><div class="categories">Published in<a class="category" href="/category/wcf/">WCF&nbsp;</a> on October 23, 2010</div></div><div class="homer"><a href="/"><i class="icon-tape" style="font-size:32px;"></i></a></div><script type="text/javascript">var _gaq = _gaq || [];
 _gaq.push(['_setAccount', 'UA-24262928-1']);
 _gaq.push(['_trackPageview']);
 
@@ -114,4 +105,4 @@ _gaq.push(['_trackPageview']);
   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-})();</script></html>
+})();</script></body></html>

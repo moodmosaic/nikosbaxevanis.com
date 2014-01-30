@@ -1,4 +1,6 @@
-<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width" name="viewport" /><title>The Task-based Asynchronous Pattern - Part 1 (The Basics) - Nikos Baxevanis</title><link href="/feed" rel="alternate" type="application/rss+xml" /><link href="/stylesheets/blog.css?1390930234" media="screen" rel="stylesheet" type="text/css" /></head><body><div id="title"><div><a href="/">Nikos Baxevanis</a><span>&nbsp;-&nbsp;</span><a href="/blog">Blog</a><span>&nbsp;-&nbsp;</span><a href="/#about">About</a></div><div class="line"></div></div><div id="main"><div id="content"><div class="post"><h2>The Task-based Asynchronous Pattern - Part 1 (The Basics)</h2><div class="undertitle"><span class="meta">by Nikos Baxevanis in </span><a class="tag" href="/blog/#async">async</a></div><div class="content"><blockquote>
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" /><meta content="width=device-width, user-scalable=no" name="viewport" /><title>The Task-based Asynchronous Pattern - Part 1 (The Basics)</title><link href="http://fonts.googleapis.com/css?family=Lora:400,700|Open+Sans" rel="stylesheet" type="text/css" /><link href="/stylesheets/fontello.css?1391110042" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/styles.css?1391110042" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/syntax.css?1391110042" media="screen" rel="stylesheet" type="text/css" /></head><body><div class="row"><h1>The Task-based Asynchronous Pattern - Part 1 (The Basics)</h1><blockquote>
 <p>The future of asynchronous programming in C# adheres to&#0160;a new language feature and a new framework pattern.&#0160;</p>
 <p>Asynchronous&#0160;programming will be similar to synchronous programming.</p>
 </blockquote>
@@ -15,53 +17,47 @@
 <p>I like the APM because with a good IAsyncResult implementation in hand you can easily expose&#0160;asynchronous&#0160;features to all versions of the .NET Framework (1.0-today) and also target Microsoft&#0160;Silverlight, Windows Phone 7, etc.&#0160;</p>
 
 <p>To start, here is some code that executes&#0160;synchronously:</p>
-
-<pre><code class="c#">private void FetchStockQuotesSync(WebService svc)
-{
-    // This blocks. You don&#39;t know when the FetchStockQuotes
-    // method returns. It may takes from minutes, to hours or
-    // it may not return at all.
-    IStockQuote qt = svc.FetchStockQuotes();
-}
-</code></pre>
-
+<pre class="highlight csharp"><span class="k">private</span> <span class="k">void</span> <span class="nf">FetchStockQuotesSync</span><span class="p">(</span><span class="n">WebService</span> <span class="n">svc</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="c1">// This blocks. You don't know when the FetchStockQuotes
+</span>    <span class="c1">// method returns. It may takes from minutes, to hours or
+</span>    <span class="c1">// it may not return at all.
+</span>    <span class="n">IStockQuote</span> <span class="n">qt</span> <span class="p">=</span> <span class="n">svc</span><span class="p">.</span><span class="nf">FetchStockQuotes</span><span class="p">();</span>
+<span class="p">}</span>
+</pre>
 <p>Fortunately the WebService class implements the <a href="http://msdn.microsoft.com/en-us/library/system.iasyncresult.aspx" target="_blank" title="Represents the status of an asynchronous operation.">IAsyncResult</a> interface, so the same code can be executed asynchronously:</p>
+<pre class="highlight csharp"><span class="k">private</span> <span class="k">void</span> <span class="nf">FetchStockQuotesApm</span><span class="p">(</span><span class="n">WebService</span> <span class="n">svc</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="c1">// This never blocks. Your code returns immediately.
+</span>    <span class="n">svc</span><span class="p">.</span><span class="nf">BeginFetchStockQuotes</span><span class="p">(</span><span class="n">FetchStockQuotesApmCallback</span><span class="p">,</span> <span class="n">svc</span><span class="p">);</span>
+<span class="p">}</span>
 
-<pre><code class="c#">private void FetchStockQuotesApm(WebService svc)
-{
-    // This never blocks. Your code returns immediately.
-    svc.BeginFetchStockQuotes(FetchStockQuotesApmCallback, svc);
-}
-
-private void FetchStockQuotesApmCallback(IAsyncResult ar)
-{
-    // The operation completed asynchrnously.
-    WebService svc = (WebService)ar.AsyncState;
-    IStockQuote qt = svc.EndFetchStockQuotes(ar);
-}
-</code></pre>
-
+<span class="k">private</span> <span class="k">void</span> <span class="nf">FetchStockQuotesApmCallback</span><span class="p">(</span><span class="n">IAsyncResult</span> <span class="n">ar</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="c1">// The operation completed asynchrnously.
+</span>    <span class="n">WebService</span> <span class="n">svc</span> <span class="p">=</span> <span class="p">(</span><span class="n">WebService</span><span class="p">)</span><span class="n">ar</span><span class="p">.</span><span class="n">AsyncState</span><span class="p">;</span>
+    <span class="n">IStockQuote</span> <span class="n">qt</span> <span class="p">=</span> <span class="n">svc</span><span class="p">.</span><span class="nf">EndFetchStockQuotes</span><span class="p">(</span><span class="n">ar</span><span class="p">);</span>
+<span class="p">}</span>
+</pre>
 <p>Event if the WebService class does not implement the IAsyncResult interface, you can define a delegate and invoke it&#0160;asynchronously,&#0160;via BeginInvoke.</p>
 
 <blockquote>
 <p style="text-align: justify;">The following code below is here just for the demo.&#0160;There is a known performance hit when calling delegates compared to direct method calls. (See the Delegates section <a href="http://msdn.microsoft.com/en-us/library/ms973852.aspx" target="_blank" title="Writing Faster Managed Code: Know What Things Cost by Jan Gray.">here</a>).</p>
 </blockquote>
+<pre class="highlight csharp"><span class="k">private</span> <span class="k">void</span> <span class="nf">FetchStockQuotesApm</span><span class="p">(</span><span class="n">WebService</span> <span class="n">svc</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="c1">// This never blocks. Your code returns immediately.
+</span>    <span class="n">Func</span><span class="p">&lt;</span><span class="n">IStockQuote</span><span class="p">&gt;</span> <span class="n">@delegate</span> <span class="p">=</span> <span class="n">svc</span><span class="p">.</span><span class="n">FetchStockQuotes</span><span class="p">;</span>
+    <span class="n">@delegate</span><span class="p">.</span><span class="nf">BeginInvoke</span><span class="p">(</span><span class="n">FetchStockQuotesApmCallback</span><span class="p">,</span> <span class="n">@delegate</span><span class="p">);</span>
+<span class="p">}</span>
 
-<pre><code class="c#">private void FetchStockQuotesApm(WebService svc)
-{
-    // This never blocks. Your code returns immediately.
-    Func&lt;IStockQuote&gt; @delegate = svc.FetchStockQuotes;
-    @delegate.BeginInvoke(FetchStockQuotesApmCallback, @delegate);
-}
-
-private void FetchStockQuotesApmCallback(IAsyncResult ar)
-{
-    // The operation completed asynchrnously.
-    Func&lt;IStockQuote&gt; @delegate = (Func&lt;IStockQuote&gt;)ar.AsyncState;
-    IStockQuote qt  = @delegate.EndInvoke(ar);
-}
-</code></pre>
-
+<span class="k">private</span> <span class="k">void</span> <span class="nf">FetchStockQuotesApmCallback</span><span class="p">(</span><span class="n">IAsyncResult</span> <span class="n">ar</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="c1">// The operation completed asynchrnously.
+</span>    <span class="n">Func</span><span class="p">&lt;</span><span class="n">IStockQuote</span><span class="p">&gt;</span> <span class="n">@delegate</span> <span class="p">=</span> <span class="p">(</span><span class="n">Func</span><span class="p">&lt;</span><span class="n">IStockQuote</span><span class="p">&gt;)</span><span class="n">ar</span><span class="p">.</span><span class="n">AsyncState</span><span class="p">;</span>
+    <span class="n">IStockQuote</span> <span class="n">qt</span>  <span class="p">=</span> <span class="n">@delegate</span><span class="p">.</span><span class="nf">EndInvoke</span><span class="p">(</span><span class="n">ar</span><span class="p">);</span>
+<span class="p">}</span>
+</pre>
 <blockquote>
 <p style="text-align: justify;">Unfortunately,&#0160;it turns out that the APM does not look so sexy and most of the developers just don&#39;t use it.&#0160;</p>
 </blockquote>
@@ -70,26 +66,22 @@ private void FetchStockQuotesApmCallback(IAsyncResult ar)
 </p>
 
 <p>The new language features <code>async</code> and <code>await</code> and the TAP allow you to do this:</p>
-
-<pre><code class="c#">private async void FetchStockQuotesAsyncCtp(WebService svc)
-{
-    IStockQuote qt = await svc.FetchStockQuotesTaskAsync();
-}
-</code></pre>
-
+<pre class="highlight csharp"><span class="k">private</span> <span class="n">async</span> <span class="k">void</span> <span class="nf">FetchStockQuotesAsyncCtp</span><span class="p">(</span><span class="n">WebService</span> <span class="n">svc</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">IStockQuote</span> <span class="n">qt</span> <span class="p">=</span> <span class="n">await</span> <span class="n">svc</span><span class="p">.</span><span class="nf">FetchStockQuotesTaskAsync</span><span class="p">();</span>
+<span class="p">}</span>
+</pre>
 <p>Well, this is exciting. &#0160;The method is marked as async. This means that the method body is compiled specially, allowing parts of&#0160;it to be turned into callbacks.&#0160;The FetchStockQuotesTaskAsync method returns a Task&lt;IStockQuote&gt; by converting the BeginFetchStockQuotes/EndFetchStockQuotes methods into a task. Until the task completes, there is nothing to do but await for it.</p>
 
 <p>Here is how the&#0160;FetchStockQuotesTaskAsync method is written:</p>
-
-<pre><code class="c#">public static Task&lt;IStockQuote&gt; FetchStockQuotesTaskAsync(this IWebService svc)
-{
-    return Task&lt;IStockQuote&gt;.Factory.FromAsync(
-        svc.BeginFetchStockQuotes, // BeginPart
-        svc.EndFetchStockQuotes,   // EndPart
-        null);                     // State, Options
-}
-</code></pre>
-
+<pre class="highlight csharp"><span class="k">public</span> <span class="k">static</span> <span class="n">Task</span><span class="p">&lt;</span><span class="n">IStockQuote</span><span class="p">&gt;</span> <span class="nf">FetchStockQuotesTaskAsync</span><span class="p">(</span><span class="k">this</span> <span class="n">IWebService</span> <span class="n">svc</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="n">Task</span><span class="p">&lt;</span><span class="n">IStockQuote</span><span class="p">&gt;.</span><span class="n">Factory</span><span class="p">.</span><span class="nf">FromAsync</span><span class="p">(</span>
+        <span class="n">svc</span><span class="p">.</span><span class="n">BeginFetchStockQuotes</span><span class="p">,</span> <span class="c1">// BeginPart
+</span>        <span class="n">svc</span><span class="p">.</span><span class="n">EndFetchStockQuotes</span><span class="p">,</span>   <span class="c1">// EndPart
+</span>        <span class="k">null</span><span class="p">);</span>                     <span class="c1">// State, Options
+</span><span class="p">}</span>
+</pre>
 <blockquote>
 <p style="text-align: justify;">FetchStockQuotesTaskAsync&#0160;is an extension method, because adding this feature directly to the WebService class will break compatibility with previous versions of the .NET Framework (1.0, 1.1, 2.0). Also, if you don&#39;t own the code of the WebService class you would define it as an extension method anyway.</p>
 </blockquote>
@@ -97,12 +89,7 @@ private void FetchStockQuotesApmCallback(IAsyncResult ar)
 <p>It becomes very clear that in the near future it&#39;s the programming language that will handle most of the asynchronous stuff and not the programmer. Currently, you can download and install the <a href="http://go.microsoft.com/fwlink/?LinkId=203690" target="_blank" title="Download a CTP with new syntax and APIs for asynchronous development.">Async CTP</a>. For more information around the new features you can visit the official website&#0160;<a href="http://msdn.microsoft.com/en-us/vstudio/async.aspx" target="_blank" title="Asynchronous Programming for C# and Visual Basic">here</a>.</p>
 
 <p>The sample application can be found <a href="https://github.com/moodmosaic/BonusBits.CodeSamples" target="_blank" title="BonusBits Blog source-code.">here</a>.</p>
-</div></div><div id="disqus_thread"></div><script type="text/javascript">var disqus_shortname = 'bonusbits';
-(function() {
-    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-})();</script></div></div></body><div id="side"><img src="/images/nikos-baxevanis-small.png" alt="Nikos Baxevanis" title="Nikos Baxevanis"></div><script type="text/javascript">var _gaq = _gaq || [];
+<a class="twitter" href="https://twitter.com/intent/tweet?url=http%3A%2F%2Fnikosbaxevanis.com%2Fblog%2F2010%2F10%2F31%2Fthe-task-based-asynchronous-pattern-part-1-the-basics%2F&text=The+Task-based+Asynchronous+Pattern+-+Part+1+%28The+Basics%29&via=nikosbaxevanis" target="_blank">Tweet This</a><div class="dater">October 31, 2010</div><div class="categories">Published in<a class="category" href="/category/async/">Async&nbsp;</a> on October 31, 2010</div></div><div class="homer"><a href="/"><i class="icon-tape" style="font-size:32px;"></i></a></div><script type="text/javascript">var _gaq = _gaq || [];
 _gaq.push(['_setAccount', 'UA-24262928-1']);
 _gaq.push(['_trackPageview']);
 
@@ -110,4 +97,4 @@ _gaq.push(['_trackPageview']);
   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-})();</script></html>
+})();</script></body></html>

@@ -1,4 +1,6 @@
-<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width" name="viewport" /><title>Don&#39;t Rely on SQL Membership Provider database schema - Nikos Baxevanis</title><link href="/feed" rel="alternate" type="application/rss+xml" /><link href="/stylesheets/blog.css?1390930234" media="screen" rel="stylesheet" type="text/css" /></head><body><div id="title"><div><a href="/">Nikos Baxevanis</a><span>&nbsp;-&nbsp;</span><a href="/blog">Blog</a><span>&nbsp;-&nbsp;</span><a href="/#about">About</a></div><div class="line"></div></div><div id="main"><div id="content"><div class="post"><h2>Don&#39;t Rely on SQL Membership Provider database schema</h2><div class="undertitle"><span class="meta">by Nikos Baxevanis in </span><a class="tag" href="/blog/#nhibernate">nhibernate</a></div><div class="content"><p>You take the blue pill and the story <a href="http://blogs.teamb.com/craigstuntz/2010/03/05/38558/">ends</a>.</p>
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" /><meta content="width=device-width, user-scalable=no" name="viewport" /><title>Don't Rely on SQL Membership Provider database schema</title><link href="http://fonts.googleapis.com/css?family=Lora:400,700|Open+Sans" rel="stylesheet" type="text/css" /><link href="/stylesheets/fontello.css?1391110042" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/styles.css?1391110042" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/syntax.css?1391110042" media="screen" rel="stylesheet" type="text/css" /></head><body><div class="row"><h1>Don't Rely on SQL Membership Provider database schema</h1><p>You take the blue pill and the story <a href="http://blogs.teamb.com/craigstuntz/2010/03/05/38558/">ends</a>.</p>
 
 <p>However, due to the role-centric nature of many applications, entities rely on the user and it&#39;s role(s).&#0160;On registration, the user choose one or more roles. Each role is associated with behaviors. For each behavior one or more restriction policies apply, etc.&#0160;</p>
 
@@ -7,212 +9,197 @@
 <p>Fabio has a <a href="http://fabiomaulo.blogspot.com/2010/03/conform-mapping-aspnet-membership.html" target="_blank" title="ConfORM: &quot;Mapping&quot; ASP.NET Membership">post</a> on how you can do this using ConfORM. In this post I will map only the User and Role tables. In addition, I will demonstrate an elegant approach of assigning different behaviors on the Role entity and mapping them with the RoleName column on the database.</p>
 
 <p><strong>Entities</strong></p>
+<pre class="highlight csharp"><span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Collections.Generic</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Collections.ObjectModel</span><span class="p">;</span>
 
-<pre><code class="c#">using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+<span class="k">public</span> <span class="k">class</span> <span class="nc">User</span> <span class="p">:</span> <span class="n">Entity</span><span class="p">&lt;</span><span class="n">Guid</span><span class="p">&gt;</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">virtual</span> <span class="kt">string</span> <span class="n">UserName</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
 
-public class User : Entity&lt;Guid&gt;
-{
-    public virtual string UserName { get; set; }
+    <span class="k">public</span> <span class="k">virtual</span> <span class="n">ICollection</span><span class="p">&lt;</span><span class="n">Role</span><span class="p">&gt;</span> <span class="n">Roles</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
 
-    public virtual ICollection&lt;Role&gt; Roles { get; set; }
+    <span class="k">public</span> <span class="nf">User</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">Roles</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Collection</span><span class="p">&lt;</span><span class="n">Role</span><span class="p">&gt;();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 
-    public User()
-    {
-        Roles = new Collection&lt;Role&gt;();
-    }
-}
+<span class="k">public</span> <span class="k">class</span> <span class="nc">Role</span> <span class="p">:</span> <span class="n">Entity</span><span class="p">&lt;</span><span class="n">Guid</span><span class="p">&gt;</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">virtual</span> <span class="kt">string</span> <span class="n">RoleName</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
 
-public class Role : Entity&lt;Guid&gt;
-{
-    public virtual string RoleName { get; set; }
+    <span class="k">public</span> <span class="k">virtual</span> <span class="n">RoleType</span> <span class="n">RoleType</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
 
-    public virtual RoleType RoleType { get; set; }
+    <span class="k">public</span> <span class="k">virtual</span> <span class="n">ICollection</span><span class="p">&lt;</span><span class="n">User</span><span class="p">&gt;</span> <span class="n">Users</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
 
-    public virtual ICollection&lt;User&gt; Users { get; set; }
-
-    public Role()
-    {
-        Users = new Collection&lt;User&gt;();
-    }
-}
-</code></pre>
-
+    <span class="k">public</span> <span class="nf">Role</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">Users</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Collection</span><span class="p">&lt;</span><span class="n">User</span><span class="p">&gt;();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre>
 <p><strong>Mappings</strong></p>
+<pre class="highlight csharp"><span class="k">using</span> <span class="nn">FluentNHibernate.Mapping</span><span class="p">;</span>
 
-<pre><code class="c#">using FluentNHibernate.Mapping;
+<span class="k">public</span> <span class="k">sealed</span> <span class="k">class</span> <span class="nc">UserMap</span> <span class="p">:</span> <span class="n">ClassMap</span><span class="p">&lt;</span><span class="n">User</span><span class="p">&gt;</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="nf">UserMap</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="nf">Table</span><span class="p">(</span><span class="s">&quot;aspnet_Users&quot;</span><span class="p">);</span>
+        <span class="nf">LazyLoad</span><span class="p">();</span>
 
-public sealed class UserMap : ClassMap&lt;User&gt;
-{
-    public UserMap()
-    {
-        Table(&quot;aspnet_Users&quot;);
-        LazyLoad();
+        <span class="nf">Id</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">Id</span><span class="p">).</span><span class="n">GeneratedBy</span>
+            <span class="p">.</span><span class="nf">Assigned</span><span class="p">().</span><span class="nf">Column</span><span class="p">(</span><span class="s">&quot;UserId&quot;</span><span class="p">);</span>
 
-        Id(x =&gt; x.Id).GeneratedBy
-            .Assigned().Column(&quot;UserId&quot;);
+        <span class="nf">Map</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">UserName</span><span class="p">);</span>
 
-        Map(x =&gt; x.UserName);
+        <span class="nf">HasManyToMany</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">Roles</span><span class="p">)</span>
+            <span class="p">.</span><span class="nf">Table</span><span class="p">(</span><span class="s">&quot;aspnet_UsersInRoles&quot;</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 
-        HasManyToMany(x =&gt; x.Roles)
-            .Table(&quot;aspnet_UsersInRoles&quot;);
-    }
-}
+<span class="k">public</span> <span class="k">sealed</span> <span class="k">class</span> <span class="nc">RoleMap</span> <span class="p">:</span> <span class="n">ClassMap</span><span class="p">&lt;</span><span class="n">Role</span><span class="p">&gt;</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="nf">RoleMap</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="nf">Table</span><span class="p">(</span><span class="s">&quot;aspnet_Roles&quot;</span><span class="p">);</span>
+        <span class="nf">LazyLoad</span><span class="p">();</span>
 
-public sealed class RoleMap : ClassMap&lt;Role&gt;
-{
-    public RoleMap()
-    {
-        Table(&quot;aspnet_Roles&quot;);
-        LazyLoad();
+        <span class="nf">Id</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">Id</span><span class="p">).</span><span class="n">GeneratedBy</span>
+            <span class="p">.</span><span class="nf">Assigned</span><span class="p">().</span><span class="nf">Column</span><span class="p">(</span><span class="s">&quot;RoleId&quot;</span><span class="p">);</span>
 
-        Id(x =&gt; x.Id).GeneratedBy
-            .Assigned().Column(&quot;RoleId&quot;);
+        <span class="nf">Map</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">RoleName</span><span class="p">);</span>
 
-        Map(x =&gt; x.RoleName);
-
-        HasManyToMany(x =&gt; x.Users)
-            .Cascade.All()
-            .Inverse()
-            .Table(&quot;aspnet_UsersInRoles&quot;);
-    }
-}
-</code></pre>
-
+        <span class="nf">HasManyToMany</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">Users</span><span class="p">)</span>
+            <span class="p">.</span><span class="n">Cascade</span><span class="p">.</span><span class="nf">All</span><span class="p">()</span>
+            <span class="p">.</span><span class="nf">Inverse</span><span class="p">()</span>
+            <span class="p">.</span><span class="nf">Table</span><span class="p">(</span><span class="s">&quot;aspnet_UsersInRoles&quot;</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre>
 <p>The RoleName property on our domain model is a string, in order to get mapped with the RoleName column of the table in the database schema.</p>
 
 <p>In order to assign different behaviors on the Role entity we can follow the solution of Jimmy Bogard with the Enumeration class described <a href="http://lostechies.com/jimmybogard/2008/08/12/enumeration-classes/" target="_blank" title="Enumeration classes">here</a>.</p>
 
 <p><strong>RoleType class</strong></p>
+<pre class="highlight csharp"><span class="k">public</span> <span class="k">class</span> <span class="nc">RoleType</span> <span class="p">:</span> <span class="n">Enumeration</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">static</span> <span class="k">readonly</span> <span class="n">RoleType</span> <span class="n">Consumer</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">ConsumerType</span><span class="p">();</span>
+    <span class="k">public</span> <span class="k">static</span> <span class="k">readonly</span> <span class="n">RoleType</span> <span class="n">Provider</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">ProviderType</span><span class="p">();</span>
+    <span class="k">public</span> <span class="k">static</span> <span class="k">readonly</span> <span class="n">RoleType</span> <span class="n">Referrer</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">ReferrerType</span><span class="p">();</span>
 
-<pre><code class="c#">public class RoleType : Enumeration
-{
-    public static readonly RoleType Consumer = new ConsumerType();
-    public static readonly RoleType Provider = new ProviderType();
-    public static readonly RoleType Referrer = new ReferrerType();
+    <span class="k">public</span> <span class="k">static</span> <span class="k">readonly</span> <span class="n">RoleType</span> <span class="n">Administrator</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">AdministratorType</span><span class="p">();</span>
 
-    public static readonly RoleType Administrator = new AdministratorType();
+    <span class="k">private</span> <span class="nf">RoleType</span><span class="p">()</span> <span class="p">{</span> <span class="p">}</span>
+    <span class="k">private</span> <span class="nf">RoleType</span><span class="p">(</span><span class="kt">int</span> <span class="k">value</span><span class="p">,</span> <span class="kt">string</span> <span class="n">displayName</span><span class="p">)</span>
+        <span class="p">:</span> <span class="k">base</span><span class="p">(</span><span class="k">value</span><span class="p">,</span> <span class="n">displayName</span><span class="p">)</span> <span class="p">{</span> <span class="p">}</span>
 
-    private RoleType() { }
-    private RoleType(int value, string displayName)
-        : base(value, displayName) { }
+    <span class="k">private</span> <span class="k">sealed</span> <span class="k">class</span> <span class="nc">ConsumerType</span> <span class="p">:</span> <span class="n">RoleType</span>
+    <span class="p">{</span>
+        <span class="k">public</span> <span class="nf">ConsumerType</span><span class="p">()</span>
+            <span class="p">:</span> <span class="k">base</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="s">&quot;Consumer&quot;</span><span class="p">)</span> <span class="p">{</span> <span class="p">}</span>
 
-    private sealed class ConsumerType : RoleType
-    {
-        public ConsumerType()
-            : base(0, &quot;Consumer&quot;) { }
+        <span class="c1">// TODO: Add behavior for Consumer.
+</span>    <span class="p">}</span>
 
-        // TODO: Add behavior for Consumer.
-    }
+    <span class="k">private</span> <span class="k">sealed</span> <span class="k">class</span> <span class="nc">ProviderType</span> <span class="p">:</span> <span class="n">RoleType</span>
+    <span class="p">{</span>
+        <span class="k">public</span> <span class="nf">ProviderType</span><span class="p">()</span>
+            <span class="p">:</span> <span class="k">base</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="s">&quot;Provider&quot;</span><span class="p">)</span> <span class="p">{</span> <span class="p">}</span>
 
-    private sealed class ProviderType : RoleType
-    {
-        public ProviderType()
-            : base(1, &quot;Provider&quot;) { }
+        <span class="c1">// TODO: Add behavior for Provider.
+</span>    <span class="p">}</span>
 
-        // TODO: Add behavior for Provider.
-    }
+    <span class="k">private</span> <span class="k">sealed</span> <span class="k">class</span> <span class="nc">ReferrerType</span> <span class="p">:</span> <span class="n">RoleType</span>
+    <span class="p">{</span>
+        <span class="k">public</span> <span class="nf">ReferrerType</span><span class="p">()</span>
+            <span class="p">:</span> <span class="k">base</span><span class="p">(</span><span class="m">2</span><span class="p">,</span> <span class="s">&quot;Referrer&quot;</span><span class="p">)</span> <span class="p">{</span> <span class="p">}</span>
 
-    private sealed class ReferrerType : RoleType
-    {
-        public ReferrerType()
-            : base(2, &quot;Referrer&quot;) { }
+        <span class="c1">// TODO: Add behavior for Referrer.
+</span>    <span class="p">}</span>
 
-        // TODO: Add behavior for Referrer.
-    }
+    <span class="k">private</span> <span class="k">sealed</span> <span class="k">class</span> <span class="nc">AdministratorType</span> <span class="p">:</span> <span class="n">RoleType</span>
+    <span class="p">{</span>
+        <span class="k">public</span> <span class="nf">AdministratorType</span><span class="p">()</span>
+            <span class="p">:</span> <span class="k">base</span><span class="p">(</span><span class="m">3</span><span class="p">,</span> <span class="s">&quot;Administrator&quot;</span><span class="p">)</span> <span class="p">{</span> <span class="p">}</span>
 
-    private sealed class AdministratorType : RoleType
-    {
-        public AdministratorType()
-            : base(3, &quot;Administrator&quot;) { }
-
-        // TODO: Add behavior for Administrator.
-    }
-}
-</code></pre>
-
+        <span class="c1">// TODO: Add behavior for Administrator.
+</span>    <span class="p">}</span>
+<span class="p">}</span>
+</pre>
 <p>Adding an IPostLoadEventListener on NHibernate configuration we can easily add logic to set a specific RoleType to each Role entity.</p>
+<pre class="highlight csharp"><span class="k">private</span> <span class="k">sealed</span> <span class="k">class</span> <span class="nc">RoleToRoleTypeEventListener</span> <span class="p">:</span> <span class="n">IPostLoadEventListener</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">OnPostLoad</span><span class="p">(</span><span class="n">PostLoadEvent</span> <span class="n">@event</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">User</span> <span class="n">user</span> <span class="p">=</span> <span class="n">@event</span><span class="p">.</span><span class="n">Entity</span> <span class="k">as</span> <span class="n">User</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">user</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">foreach</span> <span class="p">(</span><span class="n">Role</span> <span class="n">role</span> <span class="k">in</span> <span class="n">user</span><span class="p">.</span><span class="n">Roles</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="nf">AssignRoleTypeToRole</span><span class="p">(</span><span class="n">role</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+        <span class="p">{</span>
+            <span class="n">Role</span> <span class="n">role</span> <span class="p">=</span> <span class="n">@event</span><span class="p">.</span><span class="n">Entity</span> <span class="k">as</span> <span class="n">Role</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">role</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="nf">AssignRoleTypeToRole</span><span class="p">(</span><span class="n">role</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 
-<pre><code class="c#">private sealed class RoleToRoleTypeEventListener : IPostLoadEventListener
-{
-    public void OnPostLoad(PostLoadEvent @event)
-    {
-        User user = @event.Entity as User;
-        if (user != null)
-        {
-            foreach (Role role in user.Roles)
-            {
-                AssignRoleTypeToRole(role);
-            }
-        }
-        else
-        {
-            Role role = @event.Entity as Role;
-            if (role != null)
-            {
-                AssignRoleTypeToRole(role);
-            }
-        }
-    }
+    <span class="k">private</span> <span class="k">static</span> <span class="k">void</span> <span class="nf">AssignRoleTypeToRole</span><span class="p">(</span><span class="n">Role</span> <span class="n">role</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">switch</span> <span class="p">(</span><span class="n">role</span><span class="p">.</span><span class="n">RoleName</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">case</span> <span class="s">&quot;Consumer&quot;</span><span class="p">:</span>
+                <span class="n">role</span><span class="p">.</span><span class="n">RoleType</span> <span class="p">=</span> <span class="n">RoleType</span><span class="p">.</span><span class="n">Consumer</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
 
-    private static void AssignRoleTypeToRole(Role role)
-    {
-        switch (role.RoleName)
-        {
-            case &quot;Consumer&quot;:
-                role.RoleType = RoleType.Consumer;
-                break;
+            <span class="k">case</span> <span class="s">&quot;Provider&quot;</span><span class="p">:</span>
+                <span class="n">role</span><span class="p">.</span><span class="n">RoleType</span> <span class="p">=</span> <span class="n">RoleType</span><span class="p">.</span><span class="n">Provider</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
 
-            case &quot;Provider&quot;:
-                role.RoleType = RoleType.Provider;
-                break;
+            <span class="k">case</span> <span class="s">&quot;Referrer&quot;</span><span class="p">:</span>
+                <span class="n">role</span><span class="p">.</span><span class="n">RoleType</span> <span class="p">=</span> <span class="n">RoleType</span><span class="p">.</span><span class="n">Referrer</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
 
-            case &quot;Referrer&quot;:
-                role.RoleType = RoleType.Referrer;
-                break;
-
-            case &quot;Administrator&quot;:
-                role.RoleType = RoleType.Administrator;
-                break;
-        }
-    }
-}
-</code></pre>
-
+            <span class="k">case</span> <span class="s">&quot;Administrator&quot;</span><span class="p">:</span>
+                <span class="n">role</span><span class="p">.</span><span class="n">RoleType</span> <span class="p">=</span> <span class="n">RoleType</span><span class="p">.</span><span class="n">Administrator</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre>
 <p>The complete Configuration for the ISessionFactory is (or, could be) below:</p>
+<pre class="highlight csharp"><span class="k">public</span> <span class="k">static</span> <span class="n">ISessionFactory</span> <span class="nf">BuildSessionFactory</span><span class="p">(</span><span class="n">IKernel</span> <span class="n">kernel</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">var</span> <span class="n">configuration</span> <span class="p">=</span> <span class="nf">CreateConfiguration</span><span class="p">(</span><span class="n">ForMsSql2008</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">configuration</span><span class="p">.</span><span class="nf">BuildSessionFactory</span><span class="p">();</span>
+<span class="p">}</span>
 
-<pre><code class="c#">public static ISessionFactory BuildSessionFactory(IKernel kernel)
-{
-    var configuration = CreateConfiguration(ForMsSql2008);
-    return configuration.BuildSessionFactory();
-}
+<span class="k">public</span> <span class="k">static</span> <span class="n">FluentConfiguration</span> <span class="nf">CreateConfiguration</span><span class="p">(</span>
+     <span class="n">Action</span><span class="p">&lt;</span><span class="n">IDbIntegrationConfigurationProperties</span><span class="p">&gt;</span> <span class="n">db</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">var</span> <span class="n">cfg</span> <span class="p">=</span> <span class="k">new</span> <span class="n">NHibernate</span><span class="p">.</span><span class="n">Cfg</span><span class="p">.</span><span class="nf">Configuration</span><span class="p">();</span>
+    <span class="n">cfg</span><span class="p">.</span><span class="nf">DataBaseIntegration</span><span class="p">(</span><span class="n">db</span><span class="p">)</span>
+        <span class="p">.</span><span class="nf">Proxy</span><span class="p">(</span><span class="n">p</span> <span class="p">=&gt;</span> <span class="n">p</span><span class="p">.</span><span class="n">ProxyFactoryFactory</span><span class="p">&lt;</span><span class="n">ProxyFactoryFactory</span><span class="p">&gt;())</span>
+        <span class="p">.</span><span class="nf">SessionFactory</span><span class="p">()</span>
+            <span class="p">.</span><span class="nf">GenerateStatistics</span><span class="p">();</span>
 
-public static FluentConfiguration CreateConfiguration(
-     Action&lt;IDbIntegrationConfigurationProperties&gt; db)
-{
-    var cfg = new NHibernate.Cfg.Configuration();
-    cfg.DataBaseIntegration(db)
-        .Proxy(p =&gt; p.ProxyFactoryFactory&lt;ProxyFactoryFactory&gt;())
-        .SessionFactory()
-            .GenerateStatistics();
+    <span class="n">cfg</span><span class="p">.</span><span class="n">EventListeners</span><span class="p">.</span><span class="n">PostLoadEventListeners</span> <span class="p">=</span> 
+        <span class="k">new</span> <span class="n">IPostLoadEventListener</span><span class="p">[]</span> <span class="p">{</span> 
+            <span class="k">new</span> <span class="nf">RoleToRoleTypeEventListener</span><span class="p">()</span> <span class="p">};</span>
 
-    cfg.EventListeners.PostLoadEventListeners = 
-        new IPostLoadEventListener[] { 
-            new RoleToRoleTypeEventListener() };
-
-        return Fluently.Configure(cfg)
-            .Mappings(AddMappingTypes);
-}
-</code></pre>
-
+        <span class="k">return</span> <span class="n">Fluently</span><span class="p">.</span><span class="nf">Configure</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span>
+            <span class="p">.</span><span class="nf">Mappings</span><span class="p">(</span><span class="n">AddMappingTypes</span><span class="p">);</span>
+<span class="p">}</span>
+</pre>
 <p>..However we already took the red pill and staying in wonderland!</p>
-</div></div><div id="disqus_thread"></div><script type="text/javascript">var disqus_shortname = 'bonusbits';
-(function() {
-    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-})();</script></div></div></body><div id="side"><img src="/images/nikos-baxevanis-small.png" alt="Nikos Baxevanis" title="Nikos Baxevanis"></div><script type="text/javascript">var _gaq = _gaq || [];
+<a class="twitter" href="https://twitter.com/intent/tweet?url=http%3A%2F%2Fnikosbaxevanis.com%2Fblog%2F2011%2F06%2F23%2Fdont-rely-on-sql-membership-provider-database-schema%2F&text=Don%27t+Rely+on+SQL+Membership+Provider+database+schema&via=nikosbaxevanis" target="_blank">Tweet This</a><div class="dater">June 23, 2011</div><div class="categories">Published in<a class="category" href="/category/nhibernate/">NHibernate&nbsp;</a> on June 23, 2011</div></div><div class="homer"><a href="/"><i class="icon-tape" style="font-size:32px;"></i></a></div><script type="text/javascript">var _gaq = _gaq || [];
 _gaq.push(['_setAccount', 'UA-24262928-1']);
 _gaq.push(['_trackPageview']);
 
@@ -220,4 +207,4 @@ _gaq.push(['_trackPageview']);
   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-})();</script></html>
+})();</script></body></html>

@@ -1,10 +1,11 @@
-<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width" name="viewport" /><title>Semantic Equality Comparison in F# - Nikos Baxevanis</title><link href="/feed" rel="alternate" type="application/rss+xml" /><link href="/stylesheets/blog.css?1390930234" media="screen" rel="stylesheet" type="text/css" /></head><body><div id="title"><div><a href="/">Nikos Baxevanis</a><span>&nbsp;-&nbsp;</span><a href="/blog">Blog</a><span>&nbsp;-&nbsp;</span><a href="/#about">About</a></div><div class="line"></div></div><div id="main"><div id="content"><div class="post"><h2>Semantic Equality Comparison in F#</h2><div class="undertitle"><span class="meta">by Nikos Baxevanis in </span><a class="tag" href="/blog/#fsharp">fsharp</a></div><div class="content"><p>This post demonstrates a way to perform semantic equality for complex object graphs with <a href="https://github.com/AutoFixture/AutoFixture/blob/master/Src/SemanticComparison/SemanticComparer.cs#L175">SemanticComparer</a> including Structural Types, Entities, Value Objects, as well as Primitive Types.</p>
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" /><meta content="width=device-width, user-scalable=no" name="viewport" /><title>Semantic Equality Comparison in F#</title><link href="http://fonts.googleapis.com/css?family=Lora:400,700|Open+Sans" rel="stylesheet" type="text/css" /><link href="/stylesheets/fontello.css?1391110042" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/styles.css?1391110042" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/syntax.css?1391110042" media="screen" rel="stylesheet" type="text/css" /></head><body><div class="row"><h1>Semantic Equality Comparison in F#</h1><p>This post demonstrates a way to perform semantic equality for complex object graphs with <a href="https://github.com/AutoFixture/AutoFixture/blob/master/Src/SemanticComparison/SemanticComparer.cs#L175">SemanticComparer</a> including Structural Types, Entities, Value Objects, as well as Primitive Types.</p>
 
 <p><strong>Scenario</strong></p>
 
 <p>The equality algorithm for <code>ComplexType</code> should use the default equality for <code>record</code>, <code>number</code>, <code>text</code>, <code>version</code> and <code>value</code>, while it should use custom equality for <code>os</code> and <code>entity</code>:</p>
-
-<pre><code class="f#">type ComplexType(entity, value, record, number, text, version, os) = 
+<pre class="highlight text">type ComplexType(entity, value, record, number, text, version, os) = 
     member this.Entity  = entity
     member this.Value   = value
     member this.Record  = record
@@ -12,13 +13,11 @@
     member this.Text    = text
     member this.Version = version
     member this.OS      = os
-</code></pre>
-
+</pre>
 <p><strong>Context</strong></p>
 
 <p>The <code>record</code> is a simple aggregate of named values (an F# Record type) with an explicit implementation of <code>Equals</code> and no auto-generated comparisons:</p>
-
-<pre><code class="f#">[&lt;CustomEquality; NoComparison&gt;]
+<pre class="highlight text">[&lt;CustomEquality; NoComparison&gt;]
 type StructuralType =
     { Value: int;
       Other: string } 
@@ -29,11 +28,9 @@ type StructuralType =
         | _ -&gt; false
 
     override x.GetHashCode() = hash x.Value
-</code></pre>
-
+</pre>
 <p>The <code>value</code> follows <strong>value semantics</strong> and has no conceptual identity:</p>
-
-<pre><code class="f#">type ValueObject(x: int, y: int) =
+<pre class="highlight text">type ValueObject(x: int, y: int) =
     member this.X = x
     member this.Y = y
 
@@ -47,11 +44,9 @@ type StructuralType =
     override this.GetHashCode() = 
         hash this.X ^^^ 
         hash this.Y
-</code></pre>
-
+</pre>
 <p>The <code>entity</code> type has a <strong>conceptual identity</strong> as the following (rather incomplete) implementation demonstrates:</p>
-
-<pre><code class="f#">type Entity(name: string) = 
+<pre class="highlight text">type Entity(name: string) = 
     member this.Name = name
     member this.Id   = Guid.NewGuid()
 
@@ -61,8 +56,7 @@ type StructuralType =
         | _  -&gt; Object.Equals(this, other)
 
     override this.GetHashCode() = hash this.Id
-</code></pre>
-
+</pre>
 <p>The remaining types are defined in BCL: <code>version</code> overrides its Equals method using value semantics while <code>os</code> represents instances of the <code>OperatingSystem</code> type which uses its default reference equality.</p>
 
 <p><strong>Sample test data</strong></p>
@@ -70,8 +64,7 @@ type StructuralType =
 <p>All the following tests are parameterized with xUnit.net&#39;s <code>[&lt;PropertyData&gt;]</code> attribute which means that the test data is coming from a property.</p>
 
 <p>The property below yields <strong>3</strong> tests cases:</p>
-
-<pre><code class="f#">let RecursiveComparisonTestCases : seq&lt;obj[]&gt; = 
+<pre class="highlight text">let RecursiveComparisonTestCases : seq&lt;obj[]&gt; = 
     seq {
             yield 
                 [| 
@@ -159,13 +152,11 @@ type StructuralType =
 
                     false // Expected result
                 |] }
-</code></pre>
-
+</pre>
 <p><strong>Approach</strong></p>
 
 <p>Semantic equality can be modeled with <a href="https://github.com/AutoFixture/AutoFixture/blob/master/Src/SemanticComparison/SemanticComparer.cs#L175">SemanticComparer</a>, as the following parameterized xUnit.net test demonstrates:</p>
-
-<pre><code class="f#">[&lt;Theory; PropertyData(&quot;RecursiveComparisonTestCases&quot;)&gt;]
+<pre class="highlight text">[&lt;Theory; PropertyData(&quot;RecursiveComparisonTestCases&quot;)&gt;]
 let ``Equals returns correct result for ComplexType`` value other expected =
 
     // Fixture setup
@@ -212,8 +203,7 @@ let ``Equals returns correct result for ComplexType`` value other expected =
     Assert.Equal(expected, actual)
 
     // Teardown
-</code></pre>
-
+</pre>
 <p><strong>How it works</strong></p>
 
 <ul>
@@ -229,8 +219,7 @@ let ``Equals returns correct result for ComplexType`` value other expected =
 <p>The idiomatic way of turning a Custom Assertion into a test-specific override of an object&#39;s equality method is called <a href="http://blog.ploeh.dk/2012/06/21/TheResemblanceidiom/">Resemblance</a>.</p>
 
 <p>A Resemblance <a href="http://nikosbaxevanis.com/blog/2012/02/20/dynamic-proxy-overriding-equals-in-autofixture-likeness/">can be emitted dynamically</a> as the following test demonstrates:</p>
-
-<pre><code class="f#">[&lt;Theory; PropertyData(&quot;RecursiveComparisonTestCases&quot;)&gt;]
+<pre class="highlight text">[&lt;Theory; PropertyData(&quot;RecursiveComparisonTestCases&quot;)&gt;]
 let ``Likeness returns correct result for ComplexType`` value other expected =
 
     // (Same setup code as above.)
@@ -252,23 +241,15 @@ let ``Likeness returns correct result for ComplexType`` value other expected =
     Assert.Equal(expected, actual)
 
     // Teardown
-</code></pre>
-
+</pre>
 <p><strong>Running the tests</strong></p>
 
 <p>The tests require SemanticComparison and xUnit.net data theories. Both can be installed through NuGet:</p>
-
-<pre><code>PM&gt; Install-Package SemanticComparison
+<pre class="highlight text">PM&gt; Install-Package SemanticComparison
 PM&gt; Install-Package Xunit.Extensions
-</code></pre>
-
+</pre>
 <p>For added convinience all the above code is also stored in a <a href="https://gist.github.com/moodmosaic/7838293">Gist</a>.</p>
-</div></div><div id="disqus_thread"></div><script type="text/javascript">var disqus_shortname = 'bonusbits';
-(function() {
-    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-})();</script></div></div></body><div id="side"><img src="/images/nikos-baxevanis-small.png" alt="Nikos Baxevanis" title="Nikos Baxevanis"></div><script type="text/javascript">var _gaq = _gaq || [];
+<a class="twitter" href="https://twitter.com/intent/tweet?url=http%3A%2F%2Fnikosbaxevanis.com%2Fblog%2F2013%2F12%2F07%2Fsemantic-equality-comparison-in-f-number%2F&text=Semantic+Equality+Comparison+in+F%23&via=nikosbaxevanis" target="_blank">Tweet This</a><div class="dater">December 07, 2013</div><div class="categories">Published in<a class="category" href="/category/fsharp/">FSharp&nbsp;</a> on December 07, 2013</div></div><div class="homer"><a href="/"><i class="icon-tape" style="font-size:32px;"></i></a></div><script type="text/javascript">var _gaq = _gaq || [];
 _gaq.push(['_setAccount', 'UA-24262928-1']);
 _gaq.push(['_trackPageview']);
 
@@ -276,4 +257,4 @@ _gaq.push(['_trackPageview']);
   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-})();</script></html>
+})();</script></body></html>

@@ -1,87 +1,78 @@
-<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width" name="viewport" /><title>Using the Web API Dependency Resolver with Castle Windsor&#39;s Scoped Lifetime - Nikos Baxevanis</title><link href="/feed" rel="alternate" type="application/rss+xml" /><link href="/stylesheets/blog.css?1390930234" media="screen" rel="stylesheet" type="text/css" /></head><body><div id="title"><div><a href="/">Nikos Baxevanis</a><span>&nbsp;-&nbsp;</span><a href="/blog">Blog</a><span>&nbsp;-&nbsp;</span><a href="/#about">About</a></div><div class="line"></div></div><div id="main"><div id="content"><div class="post"><h2>Using the Web API Dependency Resolver with Castle Windsor&#39;s Scoped Lifetime</h2><div class="undertitle"><span class="meta">by Nikos Baxevanis in </span><a class="tag" href="/blog/#web-api">web-api</a><a class="tag" href="/blog/#castle-windsor">castle-windsor</a></div><div class="content"><p><strong>Update</strong>: <a href="http://blog.ploeh.dk/">Mark Seemann</a> has provided a <a href="http://blog.ploeh.dk/2012/10/03/DependencyInjectionInASPNETWebAPIWithCastleWindsor.aspx">solution</a> without using the IDependencyResolver interface.</p>
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" /><meta content="width=device-width, user-scalable=no" name="viewport" /><title>Using the Web API Dependency Resolver with Castle Windsor's Scoped Lifetime</title><link href="http://fonts.googleapis.com/css?family=Lora:400,700|Open+Sans" rel="stylesheet" type="text/css" /><link href="/stylesheets/fontello.css?1391110042" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/styles.css?1391110042" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/syntax.css?1391110042" media="screen" rel="stylesheet" type="text/css" /></head><body><div class="row"><h1>Using the Web API Dependency Resolver with Castle Windsor's Scoped Lifetime</h1><p><strong>Update</strong>: <a href="http://blog.ploeh.dk/">Mark Seemann</a> has provided a <a href="http://blog.ploeh.dk/2012/10/03/DependencyInjectionInASPNETWebAPIWithCastleWindsor.aspx">solution</a> without using the IDependencyResolver interface.</p>
 
 <blockquote>
 <p>This post is the result of a very good <a href="http://nikosbaxevanis.com/2012/06/04/using-the-web-api-dependency-resolver-with-castle-windsor-part-2/#comment-568630441">suggestion</a> in the comments section of the <a href="http://nikosbaxevanis.com/2012/06/04/using-the-web-api-dependency-resolver-with-castle-windsor-part-2">previous</a> post.</p>
 </blockquote>
 
 <p>The WindsorDependencyScope from the previous post has been modified to use the Scoped lifetime <a href="http://docs.castleproject.org/Windsor.Whats-New-In-Windsor-3.ashx#Added_two_new_lifestyles:_scoped_and_bound_2">available</a> in Castle Windsor 3.</p>
+<pre class="highlight csharp"><span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Collections.Generic</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Linq</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Web.Http.Dependencies</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Castle.MicroKernel.Lifestyle</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Castle.Windsor</span><span class="p">;</span>
 
-<pre><code class="c#">using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Http.Dependencies;
-using Castle.MicroKernel.Lifestyle;
-using Castle.Windsor;
+<span class="k">internal</span> <span class="k">sealed</span> <span class="k">class</span> <span class="nc">WindsorDependencyScope</span> <span class="p">:</span> <span class="n">IDependencyScope</span>
+<span class="p">{</span>
+    <span class="k">private</span> <span class="k">readonly</span> <span class="n">IWindsorContainer</span> <span class="n">container</span><span class="p">;</span>
+    <span class="k">private</span> <span class="k">readonly</span> <span class="n">IDisposable</span> <span class="n">scope</span><span class="p">;</span>
 
-internal sealed class WindsorDependencyScope : IDependencyScope
-{
-    private readonly IWindsorContainer container;
-    private readonly IDisposable scope;
+    <span class="k">public</span> <span class="nf">WindsorDependencyScope</span><span class="p">(</span><span class="n">IWindsorContainer</span> <span class="n">container</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">container</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">ArgumentNullException</span><span class="p">(</span><span class="s">&quot;container&quot;</span><span class="p">);</span>
+        <span class="p">}</span>
 
-    public WindsorDependencyScope(IWindsorContainer container)
-    {
-        if (container == null)
-        {
-            throw new ArgumentNullException(&quot;container&quot;);
-        }
+        <span class="k">this</span><span class="p">.</span><span class="n">container</span> <span class="p">=</span> <span class="n">container</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="n">scope</span> <span class="p">=</span> <span class="n">container</span><span class="p">.</span><span class="nf">BeginScope</span><span class="p">();</span>
+    <span class="p">}</span>
 
-        this.container = container;
-        this.scope = container.BeginScope();
-    }
+    <span class="k">public</span> <span class="kt">object</span> <span class="nf">GetService</span><span class="p">(</span><span class="n">Type</span> <span class="n">t</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="n">container</span><span class="p">.</span><span class="n">Kernel</span><span class="p">.</span><span class="nf">HasComponent</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="p">?</span> <span class="k">this</span><span class="p">.</span><span class="n">container</span><span class="p">.</span><span class="nf">Resolve</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="p">:</span> <span class="k">null</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    public object GetService(Type t)
-    {
-        return this.container.Kernel.HasComponent(t) ? this.container.Resolve(t) : null;
-    }
+    <span class="k">public</span> <span class="n">IEnumerable</span><span class="p">&lt;</span><span class="kt">object</span><span class="p">&gt;</span> <span class="nf">GetServices</span><span class="p">(</span><span class="n">Type</span> <span class="n">t</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="n">container</span><span class="p">.</span><span class="nf">ResolveAll</span><span class="p">(</span><span class="n">t</span><span class="p">).</span><span class="n">Cast</span><span class="p">&lt;</span><span class="kt">object</span><span class="p">&gt;().</span><span class="nf">ToArray</span><span class="p">();</span>
+    <span class="p">}</span>
 
-    public IEnumerable&lt;object&gt; GetServices(Type t)
-    {
-        return this.container.ResolveAll(t).Cast&lt;object&gt;().ToArray();
-    }
-
-    public void Dispose()
-    {
-        this.scope.Dispose();
-    }
-}
-</code></pre>
-
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Dispose</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="n">scope</span><span class="p">.</span><span class="nf">Dispose</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre>
 <p>The <code>BeginScope</code> is an extension method for the <code>IWindsorContainer</code> type. It returns by default an instance of a <code>CallContextLifetimeScope</code> type. It uses the <a href="http://msdn.microsoft.com/en-us/library/system.runtime.remoting.messaging.callcontext.aspx">Call Context</a> so it can be associated with thread pool threads and manually created threads within a <em>single</em> AppDomain (it does not use the <em>Logical</em> Call Context).</p>
 
 <p>On each request the Web API calls the <a href="http://aspnetwebstack.codeplex.com/SourceControl/changeset/view/a1b7c04f7227#src%2fSystem.Web.Http%2fHttpRequestMessageExtensions.cs">GetDependencyScope</a> extension method of the <a href="http://msdn.microsoft.com/en-us/library/system.net.http.httprequestmessage.aspx">HttpRequestMessage</a> type, which, in return, calls it&#39;s own <a href="http://aspnetwebstack.codeplex.com/SourceControl/changeset/view/a1b7c04f7227#src%2fSystem.Web.Http%2fDependencies%2fIDependencyResolver.cs">BeginScope</a> method to start a new resolution scope. Using our own implementation of the <a href="http://aspnetwebstack.codeplex.com/SourceControl/changeset/view/a1b7c04f7227#src%2fSystem.Web.Http%2fDependencies%2fIDependencyResolver.cs">IDependencyResolver</a> interface we always return a new instance of the WindsorDependencyScope type.</p>
-
-<pre><code class="c#">internal sealed class WindsorDependencyResolver : IDependencyResolver
-{    
-    // &#39;using&#39; Directives and other type members removed for brevity.
-
-    public IDependencyScope BeginScope()
-    {
-        return new WindsorDependencyScope(this.container);
-    }
-}
-</code></pre>
-
+<pre class="highlight csharp"><span class="k">internal</span> <span class="k">sealed</span> <span class="k">class</span> <span class="nc">WindsorDependencyResolver</span> <span class="p">:</span> <span class="n">IDependencyResolver</span>
+<span class="p">{</span>    
+    <span class="c1">// 'using' Directives and other type members removed for brevity.
+</span>
+    <span class="k">public</span> <span class="n">IDependencyScope</span> <span class="nf">BeginScope</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nf">WindsorDependencyScope</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="n">container</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre>
 <p>Since we use the Scoped lifetime we need to define it also in the registration code. Then, we will always have at most one instance of each requested type per resolution scope (that is, a request).</p>
-
-<pre><code class="c#">internal sealed class WebWindsorInstaller : IWindsorInstaller
-{
-    public void Install(IWindsorContainer container, IConfigurationStore store)
-    {
-        container.Register(Classes
-            .FromAssemblyContaining&lt;ValuesController&gt;()
-            .BasedOn&lt;IHttpController&gt;()
-            .LifestyleScoped());
-    }
-}
-</code></pre>
-
+<pre class="highlight csharp"><span class="k">internal</span> <span class="k">sealed</span> <span class="k">class</span> <span class="nc">WebWindsorInstaller</span> <span class="p">:</span> <span class="n">IWindsorInstaller</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Install</span><span class="p">(</span><span class="n">IWindsorContainer</span> <span class="n">container</span><span class="p">,</span> <span class="n">IConfigurationStore</span> <span class="n">store</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">container</span><span class="p">.</span><span class="nf">Register</span><span class="p">(</span><span class="n">Classes</span>
+            <span class="p">.</span><span class="n">FromAssemblyContaining</span><span class="p">&lt;</span><span class="n">ValuesController</span><span class="p">&gt;()</span>
+            <span class="p">.</span><span class="n">BasedOn</span><span class="p">&lt;</span><span class="n">IHttpController</span><span class="p">&gt;()</span>
+            <span class="p">.</span><span class="nf">LifestyleScoped</span><span class="p">());</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre>
 <p>The source code can be found <a href="http://nikosbaxevanis.com/downloads/WebApiScopedLifetimeDependencyResolverSample.zip">here</a>.</p>
-</div></div><div id="disqus_thread"></div><script type="text/javascript">var disqus_shortname = 'bonusbits';
-(function() {
-    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-})();</script></div></div></body><div id="side"><img src="/images/nikos-baxevanis-small.png" alt="Nikos Baxevanis" title="Nikos Baxevanis"></div><script type="text/javascript">var _gaq = _gaq || [];
+<a class="twitter" href="https://twitter.com/intent/tweet?url=http%3A%2F%2Fnikosbaxevanis.com%2Fblog%2F2012%2F07%2F16%2Fusing-the-web-api-dependency-resolver-with-castle-windsors-scoped-lifetime%2F&text=Using+the+Web+API+Dependency+Resolver+with+Castle+Windsor%27s+Scoped+Lifetime&via=nikosbaxevanis" target="_blank">Tweet This</a><div class="dater">July 16, 2012</div><div class="categories">Published in<a class="category" href="/category/web-api/">Web API&nbsp;</a><a class="category" href="/category/castle-windsor/">Castle Windsor&nbsp;</a> on July 16, 2012</div></div><div class="homer"><a href="/"><i class="icon-tape" style="font-size:32px;"></i></a></div><script type="text/javascript">var _gaq = _gaq || [];
 _gaq.push(['_setAccount', 'UA-24262928-1']);
 _gaq.push(['_trackPageview']);
 
@@ -89,4 +80,4 @@ _gaq.push(['_trackPageview']);
   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-})();</script></html>
+})();</script></body></html>

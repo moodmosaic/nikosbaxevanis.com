@@ -1,4 +1,6 @@
-<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width" name="viewport" /><title>A Sneak Preview of WebSocket-enabled WCF Services - Nikos Baxevanis</title><link href="/feed" rel="alternate" type="application/rss+xml" /><link href="/stylesheets/blog.css?1390930234" media="screen" rel="stylesheet" type="text/css" /></head><body><div id="title"><div><a href="/">Nikos Baxevanis</a><span>&nbsp;-&nbsp;</span><a href="/blog">Blog</a><span>&nbsp;-&nbsp;</span><a href="/#about">About</a></div><div class="line"></div></div><div id="main"><div id="content"><div class="post"><h2>A Sneak Preview of WebSocket-enabled WCF Services</h2><div class="undertitle"><span class="meta">by Nikos Baxevanis in </span><a class="tag" href="/blog/#wcf">wcf</a></div><div class="content"><p>Recently the Interoperability Bridges and Labs Center (run by the Microsoft Interoperability Strategy Group) released a prototype&#0160;&#0160;implementation (in managed code) of two drafts of the WebSockets protocol specification:</p>
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" /><meta content="width=device-width, user-scalable=no" name="viewport" /><title>A Sneak Preview of WebSocket-enabled WCF Services</title><link href="http://fonts.googleapis.com/css?family=Lora:400,700|Open+Sans" rel="stylesheet" type="text/css" /><link href="/stylesheets/fontello.css?1391110042" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/styles.css?1391110042" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/syntax.css?1391110042" media="screen" rel="stylesheet" type="text/css" /></head><body><div class="row"><h1>A Sneak Preview of WebSocket-enabled WCF Services</h1><p>Recently the Interoperability Bridges and Labs Center (run by the Microsoft Interoperability Strategy Group) released a prototype&#0160;&#0160;implementation (in managed code) of two drafts of the WebSockets protocol specification:</p>
 
 <ul>
 <li><a href="http://tools.ietf.org/html/draft-hixie-thewebsocketprotocol-75" target="_blank" title="The Web Socket protocol draft-hixie-thewebsocketprotocol-75">draft-hixie-thewebsocketprotocol-75</a></li>
@@ -10,25 +12,21 @@
 <p>What I noticed is that a WebSocket-enabled service in .NET will be written like any other WCF service with <span style="text-decoration: underline;">two differences</span>:</p>
 
 <p>The service implementation has to derive from the base WebSocketService class:</p>
-
-<pre><code class="c#">[ServiceBehavior(
-    InstanceContextMode=InstanceContextMode.PerSession, 
-    ConcurrencyMode=ConcurrencyMode.Multiple)]
-internal sealed class NotificationService : WebSocketsService
-{
-    // ...
-}
-</code></pre>
-
+<pre class="highlight csharp"><span class="p">[</span><span class="nf">ServiceBehavior</span><span class="p">(</span>
+    <span class="n">InstanceContextMode</span><span class="p">=</span><span class="n">InstanceContextMode</span><span class="p">.</span><span class="n">PerSession</span><span class="p">,</span> 
+    <span class="n">ConcurrencyMode</span><span class="p">=</span><span class="n">ConcurrencyMode</span><span class="p">.</span><span class="n">Multiple</span><span class="p">)]</span>
+<span class="k">internal</span> <span class="k">sealed</span> <span class="k">class</span> <span class="nc">NotificationService</span> <span class="p">:</span> <span class="n">WebSocketsService</span>
+<span class="p">{</span>
+    <span class="c1">// ...
+</span><span class="p">}</span>
+</pre>
 <p>The service host is a type deriving from the <a href="http://msdn.microsoft.com/en-us/library/system.servicemodel.servicehost.aspx" target="_blank" title="Provides a host for services.">ServiceHost</a>&#0160;named&#0160;WebSocketsHost:</p>
-
-<pre><code class="c#">Uri baseAddress = new Uri(&quot;&lt;uriString goes here&gt;&quot;);            
-WebSocketsHost&lt;NotificationService&gt; host =
-    new WebSocketsHost&lt;NotificationService&gt;(baseAddress);
-host.AddWebSocketsEndpoint();
-host.Open();
-</code></pre>
-
+<pre class="highlight csharp"><span class="n">Uri</span> <span class="n">baseAddress</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Uri</span><span class="p">(</span><span class="s">&quot;&lt;uriString goes here&gt;&quot;</span><span class="p">);</span>            
+<span class="n">WebSocketsHost</span><span class="p">&lt;</span><span class="n">NotificationService</span><span class="p">&gt;</span> <span class="n">host</span> <span class="p">=</span>
+    <span class="k">new</span> <span class="n">WebSocketsHost</span><span class="p">&lt;</span><span class="n">NotificationService</span><span class="p">&gt;(</span><span class="n">baseAddress</span><span class="p">);</span>
+<span class="n">host</span><span class="p">.</span><span class="nf">AddWebSocketsEndpoint</span><span class="p">();</span>
+<span class="n">host</span><span class="p">.</span><span class="nf">Open</span><span class="p">();</span>
+</pre>
 <p>Notice, that since your specify <a href="http://msdn.microsoft.com/en-us/library/system.servicemodel.concurrencymode.aspx" target="_self" title="Specifies whether a service class supports single-threaded or multi-threaded modes of operation.">ConcurrencyMode.Multipe</a> you have to manually handle synchronization and state using a synchronization construct. That means if the clients need only write-access to the data you can use a mutual exclusive lock (like the <a href="http://msdn.microsoft.com/en-us/library/system.threading.monitor.aspx" target="_blank" title="Provides a mechanism that synchronizes access to objects.">Monitor Class</a>)&#0160;otherwise you can use a lock like the <a href="http://msdn.microsoft.com/en-us/library/system.threading.readerwriterlockslim.aspx" target="_blank" title="Represents a lock that is used to manage access to a resource, allowing multiple threads for reading or exclusive access for writing.">ReaderWriterLockSlim Class</a>&#0160;(or a faster one).</p>
 
 <p>Here is a summary of links about the WebSocket prototype for .NET:</p>
@@ -40,12 +38,7 @@ host.Open();
 </ul>
 
 <p><a href="http://www.codeproject.com/script/Articles/BlogFeedList.aspx?amid=5962224" rel="tag" style="display: none;">CodeProject</a></p>
-</div></div><div id="disqus_thread"></div><script type="text/javascript">var disqus_shortname = 'bonusbits';
-(function() {
-    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-})();</script></div></div></body><div id="side"><img src="/images/nikos-baxevanis-small.png" alt="Nikos Baxevanis" title="Nikos Baxevanis"></div><script type="text/javascript">var _gaq = _gaq || [];
+<a class="twitter" href="https://twitter.com/intent/tweet?url=http%3A%2F%2Fnikosbaxevanis.com%2Fblog%2F2010%2F12%2F25%2Fa-sneak-preview-of-websocket-enabled-wcf-services%2F&text=A+Sneak+Preview+of+WebSocket-enabled+WCF+Services&via=nikosbaxevanis" target="_blank">Tweet This</a><div class="dater">December 25, 2010</div><div class="categories">Published in<a class="category" href="/category/wcf/">WCF&nbsp;</a> on December 25, 2010</div></div><div class="homer"><a href="/"><i class="icon-tape" style="font-size:32px;"></i></a></div><script type="text/javascript">var _gaq = _gaq || [];
 _gaq.push(['_setAccount', 'UA-24262928-1']);
 _gaq.push(['_trackPageview']);
 
@@ -53,4 +46,4 @@ _gaq.push(['_trackPageview']);
   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-})();</script></html>
+})();</script></body></html>

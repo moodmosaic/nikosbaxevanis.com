@@ -1,4 +1,6 @@
-<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width" name="viewport" /><title>Database Schema Synchronization with SqlPackage.exe - Nikos Baxevanis</title><link href="/feed" rel="alternate" type="application/rss+xml" /><link href="/stylesheets/blog.css?1390930234" media="screen" rel="stylesheet" type="text/css" /></head><body><div id="title"><div><a href="/">Nikos Baxevanis</a><span>&nbsp;-&nbsp;</span><a href="/blog">Blog</a><span>&nbsp;-&nbsp;</span><a href="/#about">About</a></div><div class="line"></div></div><div id="main"><div id="content"><div class="post"><h2>Database Schema Synchronization with SqlPackage.exe</h2><div class="undertitle"><span class="meta">by Nikos Baxevanis in </span><a class="tag" href="/blog/#visual-studio">visual-studio</a></div><div class="content"><p><a href="http://msdn.microsoft.com/en-us/library/hh550080.aspx">SqlPackage</a> is the descendant of <a href="http://msdn.microsoft.com/en-us/library/dd193283.aspx">VsDbCmd</a> command-line tool. It creates, deploys, and packages SQL Server databases snapshots into a portable artifact called a DAC package, also known as a DACPAC.</p>
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" /><meta content="width=device-width, user-scalable=no" name="viewport" /><title>Database Schema Synchronization with SqlPackage.exe</title><link href="http://fonts.googleapis.com/css?family=Lora:400,700|Open+Sans" rel="stylesheet" type="text/css" /><link href="/stylesheets/fontello.css?1391110042" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/styles.css?1391110042" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/syntax.css?1391110042" media="screen" rel="stylesheet" type="text/css" /></head><body><div class="row"><h1>Database Schema Synchronization with SqlPackage.exe</h1><p><a href="http://msdn.microsoft.com/en-us/library/hh550080.aspx">SqlPackage</a> is the descendant of <a href="http://msdn.microsoft.com/en-us/library/dd193283.aspx">VsDbCmd</a> command-line tool. It creates, deploys, and packages SQL Server databases snapshots into a portable artifact called a DAC package, also known as a DACPAC.</p>
 
 <p><strong>Manual Database Schema Synchronization</strong></p>
 
@@ -30,8 +32,7 @@
 <li>Copy the created &#39;.dacpac&#39; file from SQL Server Database Project build output path to the same folder as SqlPackage.</li>
 <li>Open a command console and execute the following command:</li>
 </ul>
-
-<pre><code>sqlpackage.exe 
+<pre class="highlight text">sqlpackage.exe 
   /a:Script 
   /sf:[Yourdatabaseproject.dacpac] 
   /tcs:&quot;Data Source=[connectionString]&quot;
@@ -43,8 +44,7 @@
   /p:IgnoreRoleMembership=True 
   /v:Path1=&quot;[Path1]&quot; 
   /v:Path2=&quot;[Path2]&quot;
-</code></pre>
-
+</pre>
 <ul>
 <li>Replace:
 
@@ -79,12 +79,7 @@
 <li>Microsoft.SqlServer.Dac.dll</li>
 <li>Microsoft.SqlServer.TransactSql.ScriptDom.dll</li>
 </ul>
-</div></div><div id="disqus_thread"></div><script type="text/javascript">var disqus_shortname = 'bonusbits';
-(function() {
-    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-})();</script></div></div></body><div id="side"><img src="/images/nikos-baxevanis-small.png" alt="Nikos Baxevanis" title="Nikos Baxevanis"></div><script type="text/javascript">var _gaq = _gaq || [];
+<a class="twitter" href="https://twitter.com/intent/tweet?url=http%3A%2F%2Fnikosbaxevanis.com%2Fblog%2F2013%2F02%2F11%2Fdatabase-schema-synchronization-with-sqlpackage-dot-exe%2F&text=Database+Schema+Synchronization+with+SqlPackage.exe&via=nikosbaxevanis" target="_blank">Tweet This</a><div class="dater">February 11, 2013</div><div class="categories">Published in<a class="category" href="/category/visual-studio/">Visual Studio&nbsp;</a> on February 11, 2013</div></div><div class="homer"><a href="/"><i class="icon-tape" style="font-size:32px;"></i></a></div><script type="text/javascript">var _gaq = _gaq || [];
 _gaq.push(['_setAccount', 'UA-24262928-1']);
 _gaq.push(['_trackPageview']);
 
@@ -92,4 +87,4 @@ _gaq.push(['_trackPageview']);
   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-})();</script></html>
+})();</script></body></html>

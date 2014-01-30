@@ -1,4 +1,6 @@
-<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width" name="viewport" /><title>Enterprise Library IContainerConfigurator implementation for Windsor - Nikos Baxevanis</title><link href="/feed" rel="alternate" type="application/rss+xml" /><link href="/stylesheets/blog.css?1390930234" media="screen" rel="stylesheet" type="text/css" /></head><body><div id="title"><div><a href="/">Nikos Baxevanis</a><span>&nbsp;-&nbsp;</span><a href="/blog">Blog</a><span>&nbsp;-&nbsp;</span><a href="/#about">About</a></div><div class="line"></div></div><div id="main"><div id="content"><div class="post"><h2>Enterprise Library IContainerConfigurator implementation for Windsor</h2><div class="undertitle"><span class="meta">by Nikos Baxevanis in </span><a class="tag" href="/blog/#castle-windsor">castle-windsor</a></div><div class="content"><blockquote>
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" /><meta content="width=device-width, user-scalable=no" name="viewport" /><title>Enterprise Library IContainerConfigurator implementation for Windsor</title><link href="http://fonts.googleapis.com/css?family=Lora:400,700|Open+Sans" rel="stylesheet" type="text/css" /><link href="/stylesheets/fontello.css?1391110042" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/styles.css?1391110042" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/syntax.css?1391110042" media="screen" rel="stylesheet" type="text/css" /></head><body><div class="row"><h1>Enterprise Library IContainerConfigurator implementation for Windsor</h1><blockquote>
 <p>Alternative title: &ldquo;<a title="Error Management Is Sometimes Exceptionally Difficult" href="http://www.nikosbaxevanis.com/bonus-bits/2011/05/error-management-is-sometimes-exceptionally-difficult.html" target="_blank">Error Management Is Sometimes Exceptionally Difficult</a>, Part 2&rdquo;</p>
 </blockquote>
 
@@ -20,70 +22,61 @@
 <p>The <a title="WindsorContainerConfigurator.cs" href="http://entlibcontrib.codeplex.com/SourceControl/changeset/63545" target="_blank">current</a> implementation relies heavily on Windsor&rsquo;s Property classes and it is based on the UnityContainerConfigurator.</p>
 
 <p>Below is the WindsorParameterVisitor,</p>
+<pre class="highlight csharp"><span class="k">private</span> <span class="k">sealed</span> <span class="k">class</span> <span class="nc">WindsorParameterVisitor</span> <span class="p">:</span> <span class="n">ParameterValueVisitor</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="n">Property</span><span class="p">[]</span> <span class="n">InjectionParameters</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
 
-<pre><code class="c#">private sealed class WindsorParameterVisitor : ParameterValueVisitor
-{
-    public Property[] InjectionParameters { get; private set; }
+    <span class="k">protected</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">VisitConstantParameterValue</span><span class="p">(</span>
+         <span class="n">ConstantParameterValue</span> <span class="n">parameterValue</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">string</span> <span class="n">key</span> <span class="p">=</span> <span class="p">((</span><span class="n">MemberExpression</span><span class="p">)</span><span class="n">parameterValue</span><span class="p">.</span><span class="n">Expression</span><span class="p">).</span><span class="n">Member</span><span class="p">.</span><span class="n">Name</span><span class="p">;</span>
+        <span class="n">InjectionParameters</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Property</span><span class="p">[]</span> 
+        <span class="p">{</span>
+             <span class="n">Property</span><span class="p">.</span><span class="nf">ForKey</span><span class="p">(</span><span class="n">key</span><span class="p">).</span><span class="nf">Eq</span><span class="p">(</span><span class="n">parameterValue</span><span class="p">.</span><span class="n">Value</span><span class="p">)</span> 
+        <span class="p">};</span>
+    <span class="p">}</span>
 
-    protected override void VisitConstantParameterValue(
-         ConstantParameterValue parameterValue)
-    {
-        string key = ((MemberExpression)parameterValue.Expression).Member.Name;
-        InjectionParameters = new Property[] 
-        {
-             Property.ForKey(key).Eq(parameterValue.Value) 
-        };
-    }
+    <span class="k">protected</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">VisitResolvedParameterValue</span><span class="p">(</span>
+         <span class="n">ContainerResolvedParameter</span> <span class="n">parameterValue</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">InjectionParameters</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Property</span><span class="p">[]</span> 
+        <span class="p">{</span>
+             <span class="n">Property</span><span class="p">.</span><span class="nf">ForKey</span><span class="p">(</span><span class="n">parameterValue</span><span class="p">.</span><span class="n">Type</span><span class="p">).</span><span class="nf">Is</span><span class="p">(</span><span class="n">parameterValue</span><span class="p">.</span><span class="n">Name</span><span class="p">)</span> 
+        <span class="p">};</span>
+    <span class="p">}</span>
 
-    protected override void VisitResolvedParameterValue(
-         ContainerResolvedParameter parameterValue)
-    {
-        InjectionParameters = new Property[] 
-        {
-             Property.ForKey(parameterValue.Type).Is(parameterValue.Name) 
-        };
-    }
-
-    protected override void VisitEnumerableParameterValue(
-         ContainerResolvedEnumerableParameter parameterValue)
-    {
-        InjectionParameters = parameterValue.Names
-           .Select(name =&gt; Property.ForKey(parameterValue.ElementType).Is(name))
-           .ToArray();
-    }
-}
-</code></pre>
-
+    <span class="k">protected</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">VisitEnumerableParameterValue</span><span class="p">(</span>
+         <span class="n">ContainerResolvedEnumerableParameter</span> <span class="n">parameterValue</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">InjectionParameters</span> <span class="p">=</span> <span class="n">parameterValue</span><span class="p">.</span><span class="n">Names</span>
+           <span class="p">.</span><span class="nf">Select</span><span class="p">(</span><span class="n">name</span> <span class="p">=&gt;</span> <span class="n">Property</span><span class="p">.</span><span class="nf">ForKey</span><span class="p">(</span><span class="n">parameterValue</span><span class="p">.</span><span class="n">ElementType</span><span class="p">).</span><span class="nf">Is</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+           <span class="p">.</span><span class="nf">ToArray</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre>
 <p>The ParameterValueVisitor class is needed because most TypeRegistrations are quite complex coming with both ConstructorParameters and InjectedProperties and all this stuff must be routed on the .DependsOn() method of Windsor (actually Castle.MicroKernel).</p>
 
 <p>Below is some basic setup for configuring the Enterprise Library to use Windsor,</p>
+<pre class="highlight csharp"><span class="n">var</span> <span class="n">container</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">WindsorContainer</span><span class="p">();</span>
 
-<pre><code class="c#">var container = new WindsorContainer();
+<span class="c1">// Add a SubResolver for components with IEnumerable&lt;T&gt; dependencies on .ctors.
+</span><span class="n">container</span><span class="p">.</span><span class="n">Kernel</span><span class="p">.</span><span class="n">Resolver</span><span class="p">.</span><span class="nf">AddSubResolver</span><span class="p">(</span>
+     <span class="k">new</span> <span class="nf">CollectionResolver</span><span class="p">(</span><span class="n">container</span><span class="p">.</span><span class="n">Kernel</span><span class="p">));</span>
 
-// Add a SubResolver for components with IEnumerable&lt;T&gt; dependencies on .ctors.
-container.Kernel.Resolver.AddSubResolver(
-     new CollectionResolver(container.Kernel));
+<span class="c1">// This is the Windsor specific impl. of IContainerConfigurator interface.
+</span><span class="n">var</span> <span class="n">configurator</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">WindsorContainerConfigurator</span><span class="p">(</span><span class="n">container</span><span class="p">);</span>
 
-// This is the Windsor specific impl. of IContainerConfigurator interface.
-var configurator = new WindsorContainerConfigurator(container);
+<span class="c1">// Configure the Enterprise Library Container to use Windsor internally.
+</span><span class="n">EnterpriseLibraryContainer</span><span class="p">.</span><span class="nf">ConfigureContainer</span><span class="p">(</span><span class="n">configurator</span><span class="p">,</span> 
+    <span class="n">ConfigurationSourceFactory</span><span class="p">.</span><span class="nf">Create</span><span class="p">());</span>
 
-// Configure the Enterprise Library Container to use Windsor internally.
-EnterpriseLibraryContainer.ConfigureContainer(configurator, 
-    ConfigurationSourceFactory.Create());
-
-// Set Current property to a new instance of the WindsorServiceLocator adapter.
-EnterpriseLibraryContainer.Current = new WindsorServiceLocator(container);
-</code></pre>
-
+<span class="c1">// Set Current property to a new instance of the WindsorServiceLocator adapter.
+</span><span class="n">EnterpriseLibraryContainer</span><span class="p">.</span><span class="n">Current</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">WindsorServiceLocator</span><span class="p">(</span><span class="n">container</span><span class="p">);</span>
+</pre>
 <p>The source can be found <a href="http://entlibcontrib.codeplex.com/SourceControl/changeset/63545" target="_blank">here</a>.</p>
 
 <p>This is tested with Exception Handling application block and I was able to resolve the ExceptionManager class.</p>
-</div></div><div id="disqus_thread"></div><script type="text/javascript">var disqus_shortname = 'bonusbits';
-(function() {
-    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-})();</script></div></div></body><div id="side"><img src="/images/nikos-baxevanis-small.png" alt="Nikos Baxevanis" title="Nikos Baxevanis"></div><script type="text/javascript">var _gaq = _gaq || [];
+<a class="twitter" href="https://twitter.com/intent/tweet?url=http%3A%2F%2Fnikosbaxevanis.com%2Fblog%2F2011%2F05%2F15%2Fenterprise-library-icontainerconfigurator-implementation-for-windsor%2F&text=Enterprise+Library+IContainerConfigurator+implementation+for+Windsor&via=nikosbaxevanis" target="_blank">Tweet This</a><div class="dater">May 15, 2011</div><div class="categories">Published in<a class="category" href="/category/castle-windsor/">Castle Windsor&nbsp;</a> on May 15, 2011</div></div><div class="homer"><a href="/"><i class="icon-tape" style="font-size:32px;"></i></a></div><script type="text/javascript">var _gaq = _gaq || [];
 _gaq.push(['_setAccount', 'UA-24262928-1']);
 _gaq.push(['_trackPageview']);
 
@@ -91,4 +84,4 @@ _gaq.push(['_trackPageview']);
   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-})();</script></html>
+})();</script></body></html>

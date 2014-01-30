@@ -1,30 +1,25 @@
-<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width" name="viewport" /><title>XCOPY deployment for Code Contracts - Nikos Baxevanis</title><link href="/feed" rel="alternate" type="application/rss+xml" /><link href="/stylesheets/blog.css?1390930234" media="screen" rel="stylesheet" type="text/css" /></head><body><div id="title"><div><a href="/">Nikos Baxevanis</a><span>&nbsp;-&nbsp;</span><a href="/blog">Blog</a><span>&nbsp;-&nbsp;</span><a href="/#about">About</a></div><div class="line"></div></div><div id="main"><div id="content"><div class="post"><h2>XCOPY deployment for Code Contracts</h2><div class="undertitle"><span class="meta">by Nikos Baxevanis in </span><a class="tag" href="/blog/#visual-studio">visual-studio</a></div><div class="content"><p>If you don&#39;t wish to install <a href="http://research.microsoft.com/en-us/projects/contracts/">Code Contracts</a> through the Windows Installer:</p>
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" /><meta content="width=device-width, user-scalable=no" name="viewport" /><title>XCOPY deployment for Code Contracts</title><link href="http://fonts.googleapis.com/css?family=Lora:400,700|Open+Sans" rel="stylesheet" type="text/css" /><link href="/stylesheets/fontello.css?1391110042" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/styles.css?1391110042" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/syntax.css?1391110042" media="screen" rel="stylesheet" type="text/css" /></head><body><div class="row"><h1>XCOPY deployment for Code Contracts</h1><p>If you don&#39;t wish to install <a href="http://research.microsoft.com/en-us/projects/contracts/">Code Contracts</a> through the Windows Installer:</p>
 
 <ul>
 <li>Go to <code>\Program Files (x86)\MSBuild\(version)\Microsoft.Common.Targets\ImportAfter</code> folder.</li>
 <li>Create a new file with name <code>CodeContractsAfter.targets</code> and paste the following XML:</li>
 </ul>
-
-<pre><code class="xml">&lt;Project xmlns=&quot;http://schemas.microsoft.com/developer/msbuild/2003&quot;&gt;
-  &lt;PropertyGroup&gt;
-    &lt;CodeContractsInstallDir Condition=&quot;&#39;$(CodeContractsInstallDir)&#39;==&#39;&#39;&quot;&gt;CONTRACTS_PATH&lt;/CodeContractsInstallDir&gt;
-  &lt;/PropertyGroup&gt;
-  &lt;Import Condition=&quot;&#39;$(CodeContractsImported)&#39; != &#39;true&#39; AND &#39;$(DontImportCodeContracts)&#39; != &#39;true&#39;&quot; 
-          Project=&quot;$(CodeContractsInstallDir)MsBuild\v4.0\Microsoft.CodeContracts.targets&quot; /&gt;
-&lt;/Project&gt;
-</code></pre>
-
+<pre class="highlight xml"><span class="nt">&lt;Project</span> <span class="na">xmlns=</span><span class="s">&quot;http://schemas.microsoft.com/developer/msbuild/2003&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;PropertyGroup&gt;</span>
+    <span class="nt">&lt;CodeContractsInstallDir</span> <span class="na">Condition=</span><span class="s">&quot;'$(CodeContractsInstallDir)'==''&quot;</span><span class="nt">&gt;</span>CONTRACTS_PATH<span class="nt">&lt;/CodeContractsInstallDir&gt;</span>
+  <span class="nt">&lt;/PropertyGroup&gt;</span>
+  <span class="nt">&lt;Import</span> <span class="na">Condition=</span><span class="s">&quot;'$(CodeContractsImported)' != 'true' AND '$(DontImportCodeContracts)' != 'true'&quot;</span> 
+          <span class="na">Project=</span><span class="s">&quot;$(CodeContractsInstallDir)MsBuild\v4.0\Microsoft.CodeContracts.targets&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/Project&gt;</span>
+</pre>
 <ul>
 <li>Extract the contents from the Code Contracts Windows Installer using the <a href="https://code.google.com/p/lessmsi/">lessmsi</a> tool.</li>
 <li>Locate the <code>Contracts</code> folder in the extracted contents.</li>
 <li>Replace the <code>CONTRACTS_PATH</code> in <code>CodeContractsAfter.targets</code> with the actual <code>Contracts</code> folder location.</li>
 </ul>
-</div></div><div id="disqus_thread"></div><script type="text/javascript">var disqus_shortname = 'bonusbits';
-(function() {
-    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-})();</script></div></div></body><div id="side"><img src="/images/nikos-baxevanis-small.png" alt="Nikos Baxevanis" title="Nikos Baxevanis"></div><script type="text/javascript">var _gaq = _gaq || [];
+<a class="twitter" href="https://twitter.com/intent/tweet?url=http%3A%2F%2Fnikosbaxevanis.com%2Fblog%2F2013%2F03%2F04%2Fxcopy-deployment-for-code-contracts%2F&text=XCOPY+deployment+for+Code+Contracts&via=nikosbaxevanis" target="_blank">Tweet This</a><div class="dater">March 04, 2013</div><div class="categories">Published in<a class="category" href="/category/visual-studio/">Visual Studio&nbsp;</a> on March 04, 2013</div></div><div class="homer"><a href="/"><i class="icon-tape" style="font-size:32px;"></i></a></div><script type="text/javascript">var _gaq = _gaq || [];
 _gaq.push(['_setAccount', 'UA-24262928-1']);
 _gaq.push(['_trackPageview']);
 
@@ -32,4 +27,4 @@ _gaq.push(['_trackPageview']);
   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-})();</script></html>
+})();</script></body></html>

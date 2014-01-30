@@ -1,110 +1,106 @@
-<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width" name="viewport" /><title>NHibernate SessionPerRequest with WcfOperationSessionContext (Part 2) - Nikos Baxevanis</title><link href="/feed" rel="alternate" type="application/rss+xml" /><link href="/stylesheets/blog.css?1390930234" media="screen" rel="stylesheet" type="text/css" /></head><body><div id="title"><div><a href="/">Nikos Baxevanis</a><span>&nbsp;-&nbsp;</span><a href="/blog">Blog</a><span>&nbsp;-&nbsp;</span><a href="/#about">About</a></div><div class="line"></div></div><div id="main"><div id="content"><div class="post"><h2>NHibernate SessionPerRequest with WcfOperationSessionContext (Part 2)</h2><div class="undertitle"><span class="meta">by Nikos Baxevanis in </span><a class="tag" href="/blog/#nhibernate">nhibernate</a><a class="tag" href="/blog/#wcf">wcf</a></div><div class="content"><p>In the <a title="NHibernate Session Per Request with WcfOperationSessionContext." href="http://www.nikosbaxevanis.com/bonus-bits/2011/03/nhibernate-session-per-request-with-wcfoperationsessioncontext.html" target="_blank">previous</a> post I gave a brief description on how&nbsp;WcfOperationSessionContext can be configured to work.&nbsp;In this post I am going through all the basic steps required to set up a <em>test project</em> that uses WCF for out of process communication and NHibernate for persistence.</p>
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" /><meta content="width=device-width, user-scalable=no" name="viewport" /><title>NHibernate SessionPerRequest with WcfOperationSessionContext (Part 2)</title><link href="http://fonts.googleapis.com/css?family=Lora:400,700|Open+Sans" rel="stylesheet" type="text/css" /><link href="/stylesheets/fontello.css?1391110042" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/styles.css?1391110042" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/syntax.css?1391110042" media="screen" rel="stylesheet" type="text/css" /></head><body><div class="row"><h1>NHibernate SessionPerRequest with WcfOperationSessionContext (Part 2)</h1><p>In the <a title="NHibernate Session Per Request with WcfOperationSessionContext." href="http://www.nikosbaxevanis.com/bonus-bits/2011/03/nhibernate-session-per-request-with-wcfoperationsessioncontext.html" target="_blank">previous</a> post I gave a brief description on how&nbsp;WcfOperationSessionContext can be configured to work.&nbsp;In this post I am going through all the basic steps required to set up a <em>test project</em> that uses WCF for out of process communication and NHibernate for persistence.</p>
 
 <p><strong>Hosting the WCF Service in a Managed Application</strong></p>
 
 <p>To host the service inside a managed application, define an endpoint for the service either imperatively in code, declaratively through configuration, or using default endpoints, and then create an instance of ServiceHost.</p>
+<pre class="highlight csharp"><span class="k">internal</span> <span class="k">sealed</span> <span class="k">class</span> <span class="nc">Program</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">static</span> <span class="k">void</span> <span class="nf">Main</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">var</span> <span class="n">svh</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">ServiceHost</span><span class="p">(</span>
+            <span class="k">typeof</span><span class="p">(</span><span class="n">WcfOperationSessionContextTestService</span><span class="p">));</span>
+        <span class="n">svh</span><span class="p">.</span><span class="nf">AddServiceEndpoint</span><span class="p">(</span><span class="k">typeof</span><span class="p">(</span><span class="n">ICurrentSessionContextTestService</span><span class="p">),</span>
+            <span class="k">new</span> <span class="nf">NetTcpBinding</span><span class="p">(),</span> <span class="s">&quot;net.tcp://localhost:56789&quot;</span><span class="p">);</span>
 
-<pre><code class="c#">internal sealed class Program
-{
-    public static void Main()
-    {
-        var svh = new ServiceHost(
-            typeof(WcfOperationSessionContextTestService));
-        svh.AddServiceEndpoint(typeof(ICurrentSessionContextTestService),
-            new NetTcpBinding(), &quot;net.tcp://localhost:56789&quot;);
+        <span class="n">Bootstrapper</span><span class="p">.</span><span class="nf">Initialize</span><span class="p">();</span>
+        <span class="n">svh</span><span class="p">.</span><span class="nf">Open</span><span class="p">();</span>
 
-        Bootstrapper.Initialize();
-        svh.Open();
-
-        Console.WriteLine(&quot;Server ready. Press any key to exit..&quot;);
-        Console.ReadKey(false);
-        svh.Close();
-    }
-}
-</code></pre>
-
+        <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">&quot;Server ready. Press any key to exit..&quot;</span><span class="p">);</span>
+        <span class="n">Console</span><span class="p">.</span><span class="nf">ReadKey</span><span class="p">(</span><span class="k">false</span><span class="p">);</span>
+        <span class="n">svh</span><span class="p">.</span><span class="nf">Close</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre>
 <p>Before putting the service to start receiving messages, initialize NHibernate by calling Boostrapper&rsquo;s Initialize method. This creates the ISessionFactory instance that will be used through the entire application. Then call Open on ServiceHost. This creates and opens the listener for the service.</p>
 
 <p><strong>Building the default SessionFactory</strong></p>
+<pre class="highlight csharp"><span class="k">internal</span> <span class="k">static</span> <span class="k">class</span> <span class="nc">Bootstrapper</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">static</span> <span class="k">void</span> <span class="nf">Initialize</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">SessionFactoryHolder</span><span class="p">.</span><span class="n">DefaultSessionFactory</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
 
-<pre><code class="c#">internal static class Bootstrapper
-{
-    public static void Initialize()
-    {
-        if (SessionFactoryHolder.DefaultSessionFactory != null)
-        {
-            return;
-        }
+        <span class="n">var</span> <span class="n">cfg</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Configuration</span><span class="p">();</span>
+        <span class="n">cfg</span><span class="p">.</span><span class="n">CurrentSessionContext</span><span class="p">&lt;</span><span class="n">WcfOperationSessionContext</span><span class="p">&gt;()</span>
+           <span class="p">.</span><span class="nf">DataBaseIntegration</span><span class="p">(</span><span class="n">ForSQLiteInMemory</span><span class="p">)</span>
+           <span class="p">.</span><span class="nf">Proxy</span><span class="p">(</span><span class="n">p</span> <span class="p">=&gt;</span> <span class="n">p</span><span class="p">.</span><span class="n">ProxyFactoryFactory</span><span class="p">&lt;</span><span class="n">ProxyFactoryFactory</span><span class="p">&gt;())</span>
+           <span class="p">.</span><span class="nf">SessionFactory</span><span class="p">()</span>
+               <span class="p">.</span><span class="nf">GenerateStatistics</span><span class="p">();</span>
 
-        var cfg = new Configuration();
-        cfg.CurrentSessionContext&lt;WcfOperationSessionContext&gt;()
-           .DataBaseIntegration(ForSQLiteInMemory)
-           .Proxy(p =&gt; p.ProxyFactoryFactory&lt;ProxyFactoryFactory&gt;())
-           .SessionFactory()
-               .GenerateStatistics();
+        <span class="n">SessionFactoryHolder</span><span class="p">.</span><span class="n">DefaultSessionFactory</span> <span class="p">=</span> <span class="n">cfg</span><span class="p">.</span><span class="nf">BuildSessionFactory</span><span class="p">();</span>
+    <span class="p">}</span>
 
-        SessionFactoryHolder.DefaultSessionFactory = cfg.BuildSessionFactory();
-    }
-
-    private static void ForSQLiteInMemory(
-        IDbIntegrationConfigurationProperties db)
-    {
-        db.ConnectionString = &quot;data source=:memory:&quot;;
-        db.ConnectionReleaseMode = ConnectionReleaseMode.OnClose;
-        db.Dialect&lt;SQLiteDialect&gt;();
-        db.ConnectionProvider&lt;DriverConnectionProvider&gt;();
-        db.Driver&lt;SQLite20Driver&gt;();
-        db.BatchSize = 100;
-    }
-}
-</code></pre>
-
+    <span class="k">private</span> <span class="k">static</span> <span class="k">void</span> <span class="nf">ForSQLiteInMemory</span><span class="p">(</span>
+        <span class="n">IDbIntegrationConfigurationProperties</span> <span class="n">db</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">db</span><span class="p">.</span><span class="n">ConnectionString</span> <span class="p">=</span> <span class="s">&quot;data source=:memory:&quot;</span><span class="p">;</span>
+        <span class="n">db</span><span class="p">.</span><span class="n">ConnectionReleaseMode</span> <span class="p">=</span> <span class="n">ConnectionReleaseMode</span><span class="p">.</span><span class="n">OnClose</span><span class="p">;</span>
+        <span class="n">db</span><span class="p">.</span><span class="n">Dialect</span><span class="p">&lt;</span><span class="n">SQLiteDialect</span><span class="p">&gt;();</span>
+        <span class="n">db</span><span class="p">.</span><span class="n">ConnectionProvider</span><span class="p">&lt;</span><span class="n">DriverConnectionProvider</span><span class="p">&gt;();</span>
+        <span class="n">db</span><span class="p">.</span><span class="n">Driver</span><span class="p">&lt;</span><span class="n">SQLite20Driver</span><span class="p">&gt;();</span>
+        <span class="n">db</span><span class="p">.</span><span class="n">BatchSize</span> <span class="p">=</span> <span class="m">100</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre>
 <p>The above steps to build the SessionFactory are straightforward. The new&nbsp;Loquacious extension methods are used for the configuration.</p>
 
 <p><strong>Creating a WCF Service for testing the&nbsp;WcfOperationSessionContext</strong></p>
+<pre class="highlight csharp">
+<span class="na">[NHibernateWcfContext]</span>
+<span class="p">[</span><span class="nf">ServiceBehavior</span><span class="p">(</span>
+    <span class="n">InstanceContextMode</span> <span class="p">=</span> <span class="n">InstanceContextMode</span><span class="p">.</span><span class="n">PerSession</span><span class="p">)]</span>
+<span class="k">internal</span> <span class="k">sealed</span> <span class="k">class</span> <span class="nc">WcfOperationSessionContextTestService</span>
+    <span class="p">:</span> <span class="n">ICurrentSessionContextTestService</span>
+<span class="p">{</span>
+    <span class="k">private</span> <span class="k">static</span> <span class="k">readonly</span> <span class="n">ISessionFactory</span> <span class="n">sessionFactory</span>
+        <span class="p">=</span> <span class="n">SessionFactoryHolder</span><span class="p">.</span><span class="n">DefaultSessionFactory</span><span class="p">;</span>
 
-<pre><code class="c#">
-[NHibernateWcfContext]
-[ServiceBehavior(
-    InstanceContextMode = InstanceContextMode.PerSession)]
-internal sealed class WcfOperationSessionContextTestService
-    : ICurrentSessionContextTestService
-{
-    private static readonly ISessionFactory sessionFactory
-        = SessionFactoryHolder.DefaultSessionFactory;
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">RunTests</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="c1">// Show the current session Id for each request.
+</span>        <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">&quot;SessionId={0}&quot;</span><span class="p">,</span> 
+            <span class="n">sessionFactory</span><span class="p">.</span><span class="nf">GetCurrentSession</span><span class="p">()</span>
+                <span class="p">.</span><span class="nf">GetSessionImplementation</span><span class="p">().</span><span class="n">SessionId</span><span class="p">);</span>
 
-    public void RunTests()
-    {
-        // Show the current session Id for each request.
-        Console.WriteLine(&quot;SessionId={0}&quot;, 
-            sessionFactory.GetCurrentSession()
-                .GetSessionImplementation().SessionId);
+        <span class="c1">// Calling GetCurrentSession 2 times returns the SAME instance.
+</span>        <span class="n">Debug</span><span class="p">.</span><span class="nf">Assert</span><span class="p">(</span><span class="kt">object</span><span class="p">.</span><span class="nf">ReferenceEquals</span><span class="p">(</span>
+            <span class="n">sessionFactory</span><span class="p">.</span><span class="nf">GetCurrentSession</span><span class="p">(),</span> 
+            <span class="n">sessionFactory</span><span class="p">.</span><span class="nf">GetCurrentSession</span><span class="p">())</span> <span class="p">==</span> <span class="k">true</span><span class="p">);</span>
+        <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">&quot;Passed..&quot;</span><span class="p">);</span>
 
-        // Calling GetCurrentSession 2 times returns the SAME instance.
-        Debug.Assert(object.ReferenceEquals(
-            sessionFactory.GetCurrentSession(), 
-            sessionFactory.GetCurrentSession()) == true);
-        Console.WriteLine(&quot;Passed..&quot;);
-
-        // Since session is NOT thread-safe GetCurrentSession does
-        // not work from other thread than the one it was created.
-        var done = new ManualResetEventSlim(false);
-        ThreadPool.QueueUserWorkItem((state) =&gt; {
-            try
-            {
-                ((ISessionFactory)state).GetCurrentSession();
-            }
-            catch (NullReferenceException)
-            { 
-                Console.WriteLine(&quot;Passed..&quot;);
-            }
-            done.Set();
-        }, sessionFactory);
-        done.Wait();
-    }
-}
-</code></pre>
-
+        <span class="c1">// Since session is NOT thread-safe GetCurrentSession does
+</span>        <span class="c1">// not work from other thread than the one it was created.
+</span>        <span class="n">var</span> <span class="n">done</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">ManualResetEventSlim</span><span class="p">(</span><span class="k">false</span><span class="p">);</span>
+        <span class="n">ThreadPool</span><span class="p">.</span><span class="nf">QueueUserWorkItem</span><span class="p">((</span><span class="n">state</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+            <span class="k">try</span>
+            <span class="p">{</span>
+                <span class="p">((</span><span class="n">ISessionFactory</span><span class="p">)</span><span class="n">state</span><span class="p">).</span><span class="nf">GetCurrentSession</span><span class="p">();</span>
+            <span class="p">}</span>
+            <span class="k">catch</span> <span class="p">(</span><span class="n">NullReferenceException</span><span class="p">)</span>
+            <span class="p">{</span> 
+                <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">&quot;Passed..&quot;</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="n">done</span><span class="p">.</span><span class="nf">Set</span><span class="p">();</span>
+        <span class="p">},</span> <span class="n">sessionFactory</span><span class="p">);</span>
+        <span class="n">done</span><span class="p">.</span><span class="nf">Wait</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre>
 <blockquote>
 <p>You may find more information about the&nbsp;NHibernateWcfContext attribute in&nbsp;the&nbsp;<a title="NHibernate Session Per Request with WcfOperationSessionContext." href="http://www.nikosbaxevanis.com/bonus-bits/2011/03/nhibernate-session-per-request-with-wcfoperationsessioncontext.html" target="_blank">previous</a>&nbsp;post.</p>
 </blockquote>
@@ -120,39 +116,32 @@ internal sealed class WcfOperationSessionContextTestService
 <p><strong>WCF Client Configuration</strong></p>
 
 <p>Here is how the client connects to the service in order to run the test method.</p>
+<pre class="highlight csharp"><span class="k">internal</span> <span class="k">sealed</span> <span class="k">class</span> <span class="nc">Program</span>
+<span class="p">{</span>
+    <span class="k">private</span> <span class="k">static</span> <span class="k">void</span> <span class="nf">Main</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">&quot;Press any key when server is ready..&quot;</span><span class="p">);</span>
+        <span class="n">Console</span><span class="p">.</span><span class="nf">ReadKey</span><span class="p">(</span><span class="k">false</span><span class="p">);</span>
 
-<pre><code class="c#">internal sealed class Program
-{
-    private static void Main()
-    {
-        Console.WriteLine(&quot;Press any key when server is ready..&quot;);
-        Console.ReadKey(false);
+        <span class="n">var</span> <span class="n">proxy</span> <span class="p">=</span> <span class="k">new</span> <span class="n">ChannelFactory</span><span class="p">&lt;</span><span class="n">ICurrentSessionContextTestSer</span><span class="p">&gt;(</span>
+            <span class="k">new</span> <span class="nf">NetTcpBinding</span><span class="p">(),</span> <span class="s">&quot;net.tcp://localhost:56789&quot;</span><span class="p">);</span>
+        <span class="n">ICurrentSessionContextTestService</span> <span class="n">svc</span> <span class="p">=</span> <span class="n">proxy</span><span class="p">.</span><span class="nf">CreateChannel</span><span class="p">();</span>
 
-        var proxy = new ChannelFactory&lt;ICurrentSessionContextTestSer&gt;(
-            new NetTcpBinding(), &quot;net.tcp://localhost:56789&quot;);
-        ICurrentSessionContextTestService svc = proxy.CreateChannel();
+        <span class="c1">// Start our loop.
+</span>        <span class="kt">char</span> <span class="n">operation</span> <span class="p">=</span> <span class="p">(</span><span class="kt">char</span><span class="p">)</span><span class="m">0</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">operation</span> <span class="p">!=</span> <span class="sc">'Q'</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">&quot;R=Run Tests, Q=Quit?&quot;</span><span class="p">);</span>
+            <span class="n">operation</span> <span class="p">=</span> <span class="kt">char</span><span class="p">.</span><span class="nf">ToUpper</span><span class="p">(</span><span class="n">Console</span><span class="p">.</span><span class="nf">ReadKey</span><span class="p">(</span><span class="k">true</span><span class="p">).</span><span class="n">KeyChar</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">operation</span> <span class="p">==</span> <span class="sc">'R'</span><span class="p">)</span> <span class="p">{</span> <span class="n">svc</span><span class="p">.</span><span class="nf">RunTests</span><span class="p">();</span> <span class="p">}</span>
+        <span class="p">}</span> 
 
-        // Start our loop.
-        char operation = (char)0;
-        while (operation != &#39;Q&#39;)
-        {
-            Console.WriteLine(&quot;R=Run Tests, Q=Quit?&quot;);
-            operation = char.ToUpper(Console.ReadKey(true).KeyChar);
-            if (operation == &#39;R&#39;) { svc.RunTests(); }
-        } 
-
-        proxy.Close();
-    }
-}
-</code></pre>
-
+        <span class="n">proxy</span><span class="p">.</span><span class="nf">Close</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre>
 <p>The code can be found <a title="BonusBits Blog source-code." href="https://github.com/moodmosaic/BonusBits.CodeSamples" target="_blank">here</a>.</p>
-</div></div><div id="disqus_thread"></div><script type="text/javascript">var disqus_shortname = 'bonusbits';
-(function() {
-    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-})();</script></div></div></body><div id="side"><img src="/images/nikos-baxevanis-small.png" alt="Nikos Baxevanis" title="Nikos Baxevanis"></div><script type="text/javascript">var _gaq = _gaq || [];
+<a class="twitter" href="https://twitter.com/intent/tweet?url=http%3A%2F%2Fnikosbaxevanis.com%2Fblog%2F2011%2F04%2F15%2Fnhibernate-sessionperrequest-with-wcfoperationsessioncontext-part-2%2F&text=NHibernate+SessionPerRequest+with+WcfOperationSessionContext+%28Part+2%29&via=nikosbaxevanis" target="_blank">Tweet This</a><div class="dater">April 15, 2011</div><div class="categories">Published in<a class="category" href="/category/nhibernate/">NHibernate&nbsp;</a><a class="category" href="/category/wcf/">WCF&nbsp;</a> on April 15, 2011</div></div><div class="homer"><a href="/"><i class="icon-tape" style="font-size:32px;"></i></a></div><script type="text/javascript">var _gaq = _gaq || [];
 _gaq.push(['_setAccount', 'UA-24262928-1']);
 _gaq.push(['_trackPageview']);
 
@@ -160,4 +149,4 @@ _gaq.push(['_trackPageview']);
   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-})();</script></html>
+})();</script></body></html>

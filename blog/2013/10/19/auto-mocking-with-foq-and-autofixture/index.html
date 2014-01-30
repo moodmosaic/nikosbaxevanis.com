@@ -1,4 +1,6 @@
-<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width" name="viewport" /><title>Auto-Mocking with Foq and AutoFixture - Nikos Baxevanis</title><link href="/feed" rel="alternate" type="application/rss+xml" /><link href="/stylesheets/blog.css?1390930234" media="screen" rel="stylesheet" type="text/css" /></head><body><div id="title"><div><a href="/">Nikos Baxevanis</a><span>&nbsp;-&nbsp;</span><a href="/blog">Blog</a><span>&nbsp;-&nbsp;</span><a href="/#about">About</a></div><div class="line"></div></div><div id="main"><div id="content"><div class="post"><h2>Auto-Mocking with Foq and AutoFixture</h2><div class="undertitle"><span class="meta">by Nikos Baxevanis in </span><a class="tag" href="/blog/#autofixture">autofixture</a><a class="tag" href="/blog/#fsharp">fsharp</a></div><div class="content"><p>A new Auto-mocking extension have been recently added to <a href="http://github.com/autofixture/autofixture">AutoFixture</a> allowing the mock instances to be created by <a href="http://foq.codeplex.com/">Foq</a>. </p>
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" /><meta content="width=device-width, user-scalable=no" name="viewport" /><title>Auto-Mocking with Foq and AutoFixture</title><link href="http://fonts.googleapis.com/css?family=Lora:400,700|Open+Sans" rel="stylesheet" type="text/css" /><link href="/stylesheets/fontello.css?1391110042" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/styles.css?1391110042" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/syntax.css?1391110042" media="screen" rel="stylesheet" type="text/css" /></head><body><div class="row"><h1>Auto-Mocking with Foq and AutoFixture</h1><p>A new Auto-mocking extension have been recently added to <a href="http://github.com/autofixture/autofixture">AutoFixture</a> allowing the mock instances to be created by <a href="http://foq.codeplex.com/">Foq</a>. </p>
 
 <p>This brings the total number of Auto-mocking extensions for AutoFixture up to five:</p>
 
@@ -13,20 +15,15 @@
 <p><strong>Install</strong></p>
 
 <p>To install AutoFixture with Auto Mocking using Foq, run the following command in the Package Manager Console:</p>
-
-<pre><code>PM&gt; Install-Package AutoFixture.AutoFoq
-</code></pre>
-
+<pre class="highlight text">PM&gt; Install-Package AutoFixture.AutoFoq
+</pre>
 <p>To use it, add an <code>AutoFoqCustomization</code> to the <code>Fixture</code> instance:</p>
-
-<pre><code class="f#">let fixture = Fixture().Customize(AutoFoqCustomization())
-</code></pre>
-
+<pre class="highlight text">let fixture = Fixture().Customize(AutoFoqCustomization())
+</pre>
 <p><strong>Typical usage</strong></p>
 
 <p>In the test below the mocked instance is created automatically by Foq:</p>
-
-<pre><code class="f#">[&lt;Fact&gt;]
+<pre class="highlight text">[&lt;Fact&gt;]
 let AutoMockInterfaceAndSetupExpectations() =
     // Fixture setup
     let fixture = Fixture().Customize(AutoFoqCustomization())
@@ -37,33 +34,23 @@ let AutoMockInterfaceAndSetupExpectations() =
     // Verify outcome
     Mock.Verify(&lt;@ sut.MakeIt(dummy) @&gt;, Times.Once)
     // Teardown
-</code></pre>
-
+</pre>
 <p><strong>Declarative usage</strong></p>
 
 <p>The above test can be written declaratively using <a href="http://blog.ploeh.dk/2010/10/08/AutoDataTheoriesWithAutoFixture.aspx">AutoData</a> theories:</p>
-
-<pre><code>[&lt;Theory&gt;][&lt;AutoFoqData&gt;]
+<pre class="highlight text">[&lt;Theory&gt;][&lt;AutoFoqData&gt;]
 let AutoMockInterfaceAndSetupExpectationsDeclaratively 
   (sut: IInterface, dummy: obj) =
     sut.MakeIt(dummy) |&gt; ignore
     Mock.Verify(&lt;@ sut.MakeIt(dummy) @&gt;, Times.Once)
-</code></pre>
-
+</pre>
 <p>The <code>[AutoFoqData]</code> attribute is defined as:</p>
-
-<pre><code>type AutoFoqDataAttribute() = 
+<pre class="highlight text">type AutoFoqDataAttribute() = 
     inherit AutoDataAttribute(
         Fixture().Customize(AutoFoqCustomization()))
-</code></pre>
-
+</pre>
 <p>An automatically published release created from the latest successful build can be also downloaded from <a href="http://autofixture.codeplex.com/releases/">here</a>.</p>
-</div></div><div id="disqus_thread"></div><script type="text/javascript">var disqus_shortname = 'bonusbits';
-(function() {
-    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-})();</script></div></div></body><div id="side"><img src="/images/nikos-baxevanis-small.png" alt="Nikos Baxevanis" title="Nikos Baxevanis"></div><script type="text/javascript">var _gaq = _gaq || [];
+<a class="twitter" href="https://twitter.com/intent/tweet?url=http%3A%2F%2Fnikosbaxevanis.com%2Fblog%2F2013%2F10%2F19%2Fauto-mocking-with-foq-and-autofixture%2F&text=Auto-Mocking+with+Foq+and+AutoFixture&via=nikosbaxevanis" target="_blank">Tweet This</a><div class="dater">October 19, 2013</div><div class="categories">Published in<a class="category" href="/category/autofixture/">AutoFixture&nbsp;</a><a class="category" href="/category/fsharp/">FSharp&nbsp;</a> on October 19, 2013</div></div><div class="homer"><a href="/"><i class="icon-tape" style="font-size:32px;"></i></a></div><script type="text/javascript">var _gaq = _gaq || [];
 _gaq.push(['_setAccount', 'UA-24262928-1']);
 _gaq.push(['_trackPageview']);
 
@@ -71,4 +58,4 @@ _gaq.push(['_trackPageview']);
   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-})();</script></html>
+})();</script></body></html>

@@ -1,41 +1,36 @@
-<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width" name="viewport" /><title>Persistence specification testing combined with AutoFixture - Nikos Baxevanis</title><link href="/feed" rel="alternate" type="application/rss+xml" /><link href="/stylesheets/blog.css?1390930234" media="screen" rel="stylesheet" type="text/css" /></head><body><div id="title"><div><a href="/">Nikos Baxevanis</a><span>&nbsp;-&nbsp;</span><a href="/blog">Blog</a><span>&nbsp;-&nbsp;</span><a href="/#about">About</a></div><div class="line"></div></div><div id="main"><div id="content"><div class="post"><h2>Persistence specification testing combined with AutoFixture</h2><div class="undertitle"><span class="meta">by Nikos Baxevanis in </span><a class="tag" href="/blog/#unit-testing">unit-testing</a><a class="tag" href="/blog/#nhibernate">nhibernate</a></div><div class="content"><p>When working with NHibernate you need to make sure that your mappings are correct. At least, you have to make sure that when you&nbsp;save an item you can also qet that item back.</p>
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" /><meta content="width=device-width, user-scalable=no" name="viewport" /><title>Persistence specification testing combined with AutoFixture</title><link href="http://fonts.googleapis.com/css?family=Lora:400,700|Open+Sans" rel="stylesheet" type="text/css" /><link href="/stylesheets/fontello.css?1391110042" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/styles.css?1391110042" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/syntax.css?1391110042" media="screen" rel="stylesheet" type="text/css" /></head><body><div class="row"><h1>Persistence specification testing combined with AutoFixture</h1><p>When working with NHibernate you need to make sure that your mappings are correct. At least, you have to make sure that when you&nbsp;save an item you can also qet that item back.</p>
 
 <p>If you are using FluentNHibernate you can use the <a href="https://github.com/jagregory/fluent-nhibernate/tree/master/src/FluentNHibernate/Testing" target="_blank">PersistenceSpecification&lt;T&gt; class</a>. However, the&nbsp;PersistenceSpecification&lt;T&gt; class requires that you pass the property to check and also a value for that property.</p>
 
 <p>By using <a title="AutoFixture makes it easier for developers to do Test-Driven Development by automating non-relevant Test Fixture Setup, allowing the Test Developer to focus on the essentials of each test case." href="http://autofixture.codeplex.com/" target="_blank">AutoFixture</a> you can easily create objects that you can pass inside the CheckXx methods:</p>
+<pre class="highlight csharp"><span class="na">[Fact]</span>
+<span class="k">public</span> <span class="k">void</span> <span class="nf">ShouldVerifyTheMappings</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">var</span> <span class="n">fixture</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Fixture</span><span class="p">();</span>
 
-<pre><code class="c#">[Fact]
-public void ShouldVerifyTheMappings()
-{
-    var fixture = new Fixture();
-
-    using (session)
-    {
-        new PersistenceSpecification&lt;EventType&gt;(session)
-            .CheckProperty(x =&gt; x.EventTypeId, 
-                fixture.CreateAnonymous&lt;long&gt;())
-            .CheckProperty(x =&gt; x.EventTypeName, 
-                fixture.CreateAnonymous&lt;string&gt;())
-            .CheckProperty(x =&gt; x.ExchangeServerId, 
-                fixture.CreateAnonymous&lt;int&gt;())
-            .CheckProperty(x =&gt; x.LastUpdatedOn, 
-                DateTime.Today)
-            .CheckProperty(x =&gt; x.NextMarketId, 
-                fixture.CreateAnonymous&lt;long&gt;())
-            .CheckReference(x =&gt; x.Bookmaker, 
-                fixture.CreateAnonymous&lt;Bookmaker&gt;())
-            .VerifyTheMappings();
-    }
-}
-</code></pre>
-
+    <span class="k">using</span> <span class="p">(</span><span class="n">session</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">new</span> <span class="n">PersistenceSpecification</span><span class="p">&lt;</span><span class="n">EventType</span><span class="p">&gt;(</span><span class="n">session</span><span class="p">)</span>
+            <span class="p">.</span><span class="nf">CheckProperty</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">EventTypeId</span><span class="p">,</span> 
+                <span class="n">fixture</span><span class="p">.</span><span class="n">CreateAnonymous</span><span class="p">&lt;</span><span class="kt">long</span><span class="p">&gt;())</span>
+            <span class="p">.</span><span class="nf">CheckProperty</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">EventTypeName</span><span class="p">,</span> 
+                <span class="n">fixture</span><span class="p">.</span><span class="n">CreateAnonymous</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;())</span>
+            <span class="p">.</span><span class="nf">CheckProperty</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">ExchangeServerId</span><span class="p">,</span> 
+                <span class="n">fixture</span><span class="p">.</span><span class="n">CreateAnonymous</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;())</span>
+            <span class="p">.</span><span class="nf">CheckProperty</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">LastUpdatedOn</span><span class="p">,</span> 
+                <span class="n">DateTime</span><span class="p">.</span><span class="n">Today</span><span class="p">)</span>
+            <span class="p">.</span><span class="nf">CheckProperty</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">NextMarketId</span><span class="p">,</span> 
+                <span class="n">fixture</span><span class="p">.</span><span class="n">CreateAnonymous</span><span class="p">&lt;</span><span class="kt">long</span><span class="p">&gt;())</span>
+            <span class="p">.</span><span class="nf">CheckReference</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">Bookmaker</span><span class="p">,</span> 
+                <span class="n">fixture</span><span class="p">.</span><span class="n">CreateAnonymous</span><span class="p">&lt;</span><span class="n">Bookmaker</span><span class="p">&gt;())</span>
+            <span class="p">.</span><span class="nf">VerifyTheMappings</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre>
 <p>Combining&nbsp;AutoFixture with the PersistenceSpecification&lt;T&gt; class results in&nbsp;writing less code when testing NHibernate mappings, specially when dealing with complex types.</p>
-</div></div><div id="disqus_thread"></div><script type="text/javascript">var disqus_shortname = 'bonusbits';
-(function() {
-    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-})();</script></div></div></body><div id="side"><img src="/images/nikos-baxevanis-small.png" alt="Nikos Baxevanis" title="Nikos Baxevanis"></div><script type="text/javascript">var _gaq = _gaq || [];
+<a class="twitter" href="https://twitter.com/intent/tweet?url=http%3A%2F%2Fnikosbaxevanis.com%2Fblog%2F2011%2F03%2F13%2Fpersistence-specification-testing-combined-with-autofixture%2F&text=Persistence+specification+testing+combined+with+AutoFixture&via=nikosbaxevanis" target="_blank">Tweet This</a><div class="dater">March 13, 2011</div><div class="categories">Published in<a class="category" href="/category/unit-testing/">Unit Testing&nbsp;</a><a class="category" href="/category/nhibernate/">NHibernate&nbsp;</a> on March 13, 2011</div></div><div class="homer"><a href="/"><i class="icon-tape" style="font-size:32px;"></i></a></div><script type="text/javascript">var _gaq = _gaq || [];
 _gaq.push(['_setAccount', 'UA-24262928-1']);
 _gaq.push(['_trackPageview']);
 
@@ -43,4 +38,4 @@ _gaq.push(['_trackPageview']);
   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-})();</script></html>
+})();</script></body></html>

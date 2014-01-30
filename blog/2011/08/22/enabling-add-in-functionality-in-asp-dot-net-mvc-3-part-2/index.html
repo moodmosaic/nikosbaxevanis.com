@@ -1,62 +1,55 @@
-<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width" name="viewport" /><title>Enabling Add-In functionality in ASP.NET MVC 3 (Part 2) - Nikos Baxevanis</title><link href="/feed" rel="alternate" type="application/rss+xml" /><link href="/stylesheets/blog.css?1390930234" media="screen" rel="stylesheet" type="text/css" /></head><body><div id="title"><div><a href="/">Nikos Baxevanis</a><span>&nbsp;-&nbsp;</span><a href="/blog">Blog</a><span>&nbsp;-&nbsp;</span><a href="/#about">About</a></div><div class="line"></div></div><div id="main"><div id="content"><div class="post"><h2>Enabling Add-In functionality in ASP.NET MVC 3 (Part 2)</h2><div class="undertitle"><span class="meta">by Nikos Baxevanis in </span><a class="tag" href="/blog/#asp.net-mvc">asp.net-mvc</a></div><div class="content"><p>In this <a href="http://www.nikosbaxevanis.com/bonus-bits/2011/08/enabling-add-in-functionality-in-aspnet-mvc3.html" target="_blank" title="Enabling Add-In functionality in ASP.NET MVC 3">post</a> I discussed the implementation of a&#0160;Unity-specific controller factory &#0160;that could take&#0160;a delegate as a parameter in the constructor acting as the fallback factory when the DI container can not supply a controller.</p>
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" /><meta content="width=device-width, user-scalable=no" name="viewport" /><title>Enabling Add-In functionality in ASP.NET MVC 3 (Part 2)</title><link href="http://fonts.googleapis.com/css?family=Lora:400,700|Open+Sans" rel="stylesheet" type="text/css" /><link href="/stylesheets/fontello.css?1391110042" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/styles.css?1391110042" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/syntax.css?1391110042" media="screen" rel="stylesheet" type="text/css" /></head><body><div class="row"><h1>Enabling Add-In functionality in ASP.NET MVC 3 (Part 2)</h1><p>In this <a href="http://www.nikosbaxevanis.com/bonus-bits/2011/08/enabling-add-in-functionality-in-aspnet-mvc3.html" target="_blank" title="Enabling Add-In functionality in ASP.NET MVC 3">post</a> I discussed the implementation of a&#0160;Unity-specific controller factory &#0160;that could take&#0160;a delegate as a parameter in the constructor acting as the fallback factory when the DI container can not supply a controller.</p>
 
 <p>However, I did not really like the initial design. There are cases when the UnityControllerFactory can be used standalone without third party extensiblity in mind.</p>
 
 <p>One possible improvement in the design is to introduce a <a href="http://en.wikipedia.org/wiki/Composite_pattern" target="_blank" title="Composite Pattern">composite</a> implementation for an IControllerFactory. That way, we still have the chance to supply a MEF-specific controller factory.</p>
 
 <p>A possible implementation of the <a href="http://msdn.microsoft.com/en-us/library/system.web.mvc.icontrollerfactory.createcontroller.aspx" target="_blank" title="Creates the specified controller by using the specified request context.">CreateController</a> method is the one below:</p>
-
-<pre><code class="c#">public override IController CreateController(
-   RequestContext requestContext, 
-   string controllerName)
-{
-    return (from factory in this.Factories
-            let controller = factory.CreateController(
-                requestContext, controllerName)
-            where controller != null
-            select controller).FirstOrDefault();
-}
-</code></pre>
-
+<pre class="highlight csharp"><span class="k">public</span> <span class="k">override</span> <span class="n">IController</span> <span class="nf">CreateController</span><span class="p">(</span>
+   <span class="n">RequestContext</span> <span class="n">requestContext</span><span class="p">,</span> 
+   <span class="kt">string</span> <span class="n">controllerName</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">from</span> <span class="n">factory</span> <span class="k">in</span> <span class="k">this</span><span class="p">.</span><span class="n">Factories</span>
+            <span class="n">let</span> <span class="n">controller</span> <span class="p">=</span> <span class="n">factory</span><span class="p">.</span><span class="nf">CreateController</span><span class="p">(</span>
+                <span class="n">requestContext</span><span class="p">,</span> <span class="n">controllerName</span><span class="p">)</span>
+            <span class="n">where</span> <span class="n">controller</span> <span class="p">!=</span> <span class="k">null</span>
+            <span class="n">select</span> <span class="n">controller</span><span class="p">).</span><span class="nf">FirstOrDefault</span><span class="p">();</span>
+<span class="p">}</span>
+</pre>
 <p>It will iterate through all controller factories calling their CreateController method. The first IController instance provided by the controller factories is returned.</p>
 
 <p>With this implementation, if the Unity-specific controller factory can not provide an IController instance we will ask the next controller factory (MEF-specific controller factory in this example) to provide the IController instance, and so on.</p>
 
 <p>The&#0160;<a href="http://msdn.microsoft.com/en-us/library/dd460275.aspx" target="_blank" title="Sets the specified controller factory.">SetControllerFactory</a>&#0160;method can accept an instance of a CompositeControllerFactory type as shown below:</p>
+<pre class="highlight csharp"><span class="k">private</span> <span class="k">static</span> <span class="k">void</span> <span class="nf">BootstrapContainer</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="c1">// No direct reference on the container outside this method.
+</span>    <span class="n">var</span> <span class="n">unityControllerFactory</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">UnityControllerFactory</span><span class="p">(</span>
+        <span class="k">new</span> <span class="nf">UnityContainer</span><span class="p">()</span>
+            <span class="p">.</span><span class="nf">Install</span><span class="p">(</span><span class="n">Registrator</span><span class="p">.</span><span class="n">ForControllers</span><span class="p">,</span>
+                     <span class="n">Registrator</span><span class="p">.</span><span class="n">ForServices</span><span class="p">,</span>
+                     <span class="n">Registrator</span><span class="p">.</span><span class="n">ForEnterpriseLibrary</span><span class="p">));</span>
 
-<pre><code class="c#">private static void BootstrapContainer()
-{
-    // No direct reference on the container outside this method.
-    var unityControllerFactory = new UnityControllerFactory(
-        new UnityContainer()
-            .Install(Registrator.ForControllers,
-                     Registrator.ForServices,
-                     Registrator.ForEnterpriseLibrary));
 
+    <span class="kt">string</span> <span class="n">extensionsPath</span> <span class="p">=</span> <span class="n">Path</span><span class="p">.</span><span class="nf">Combine</span><span class="p">(</span>
+        <span class="n">AppDomain</span><span class="p">.</span><span class="n">CurrentDomain</span><span class="p">.</span><span class="n">BaseDirectory</span><span class="p">,</span> <span class="s">&quot;Extensions&quot;</span><span class="p">);</span>
 
-    string extensionsPath = Path.Combine(
-        AppDomain.CurrentDomain.BaseDirectory, &quot;Extensions&quot;);
+    <span class="n">var</span> <span class="n">discoverableControllerFactory</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">DiscoverableControllerFactory</span><span class="p">(</span>
+        <span class="k">new</span> <span class="nf">CompositionContainer</span><span class="p">(</span>
+            <span class="k">new</span> <span class="nf">DirectoryCatalog</span><span class="p">(</span><span class="n">extensionsPath</span><span class="p">))</span>
+            <span class="p">);</span>
 
-    var discoverableControllerFactory = new DiscoverableControllerFactory(
-        new CompositionContainer(
-            new DirectoryCatalog(extensionsPath))
-            );
-
-    ControllerBuilder.Current.SetControllerFactory(
-        new CompositeControllerFactory(
-            unityControllerFactory, 
-            discoverableControllerFactory)
-            );
-}
-</code></pre>
-
+    <span class="n">ControllerBuilder</span><span class="p">.</span><span class="n">Current</span><span class="p">.</span><span class="nf">SetControllerFactory</span><span class="p">(</span>
+        <span class="k">new</span> <span class="nf">CompositeControllerFactory</span><span class="p">(</span>
+            <span class="n">unityControllerFactory</span><span class="p">,</span> 
+            <span class="n">discoverableControllerFactory</span><span class="p">)</span>
+            <span class="p">);</span>
+<span class="p">}</span>
+</pre>
 <p><a href="https://github.com/moodmosaic/System.Web.Mvc.Composition/blob/master/Src/System.Web.Mvc.Composition/CompositeControllerFactory.cs" target="_blank" title="CompositeControllerFactory.cs">Implementation</a>,&#0160;<a href="https://github.com/moodmosaic/System.Web.Mvc.Composition/blob/master/Src/System.Web.Mvc.CompositionUnitTest/CompositeControllerFactoryFacts.cs" target="_blank" title="CompositeControllerFactoryFacts.cs">Unit tests</a>&#0160;and <a href="http://nuget.org/List/Packages/System.Web.Mvc.Composition" target="_blank" title="System.Web.Mvc.Composition">NuGet Package</a>.&#0160;Sample application available <a href="http://goo.gl/bcye3" target="_blank" title="ExtensibleMvcApplicationDemo-Part2.zip">here</a>.</p>
-</div></div><div id="disqus_thread"></div><script type="text/javascript">var disqus_shortname = 'bonusbits';
-(function() {
-    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-})();</script></div></div></body><div id="side"><img src="/images/nikos-baxevanis-small.png" alt="Nikos Baxevanis" title="Nikos Baxevanis"></div><script type="text/javascript">var _gaq = _gaq || [];
+<a class="twitter" href="https://twitter.com/intent/tweet?url=http%3A%2F%2Fnikosbaxevanis.com%2Fblog%2F2011%2F08%2F22%2Fenabling-add-in-functionality-in-asp-dot-net-mvc-3-part-2%2F&text=Enabling+Add-In+functionality+in+ASP.NET+MVC+3+%28Part+2%29&via=nikosbaxevanis" target="_blank">Tweet This</a><div class="dater">August 22, 2011</div><div class="categories">Published in<a class="category" href="/category/asp.net-mvc/">ASP.NET MVC&nbsp;</a> on August 22, 2011</div></div><div class="homer"><a href="/"><i class="icon-tape" style="font-size:32px;"></i></a></div><script type="text/javascript">var _gaq = _gaq || [];
 _gaq.push(['_setAccount', 'UA-24262928-1']);
 _gaq.push(['_trackPageview']);
 
@@ -64,4 +57,4 @@ _gaq.push(['_trackPageview']);
   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-})();</script></html>
+})();</script></body></html>

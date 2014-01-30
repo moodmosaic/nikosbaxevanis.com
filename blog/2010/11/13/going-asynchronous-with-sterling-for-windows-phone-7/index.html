@@ -1,4 +1,6 @@
-<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width" name="viewport" /><title>Going Asynchronous with Sterling for Windows Phone 7 - Nikos Baxevanis</title><link href="/feed" rel="alternate" type="application/rss+xml" /><link href="/stylesheets/blog.css?1390930234" media="screen" rel="stylesheet" type="text/css" /></head><body><div id="title"><div><a href="/">Nikos Baxevanis</a><span>&nbsp;-&nbsp;</span><a href="/blog">Blog</a><span>&nbsp;-&nbsp;</span><a href="/#about">About</a></div><div class="line"></div></div><div id="main"><div id="content"><div class="post"><h2>Going Asynchronous with Sterling for Windows Phone 7</h2><div class="undertitle"><span class="meta">by Nikos Baxevanis in </span><a class="tag" href="/blog/#async">async</a></div><div class="content"><blockquote>
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" /><meta content="width=device-width, user-scalable=no" name="viewport" /><title>Going Asynchronous with Sterling for Windows Phone 7</title><link href="http://fonts.googleapis.com/css?family=Lora:400,700|Open+Sans" rel="stylesheet" type="text/css" /><link href="/stylesheets/fontello.css?1391110042" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/styles.css?1391110042" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/syntax.css?1391110042" media="screen" rel="stylesheet" type="text/css" /></head><body><div class="row"><h1>Going Asynchronous with Sterling for Windows Phone 7</h1><blockquote>
 <p>In this post I discuss about the various programming models that can be used with Sterling Isolated Storage Database for Windows Phone 7. Further, I discuss how one can benefit from the Power Threading Library when using Sterling.</p>
 </blockquote>
 
@@ -7,24 +9,22 @@
 <p>I have <a href="http://www.nikosbaxevanis.com/bonus-bits/2010/11/testing-domain-driven-design-with-sterling-for-windows-phone-7.html" target="_blank" title="Testing Domain-Driven Design with Sterling for Windows Phone 7.">already discussed</a> about the basics of Sterling Isolated Storage Database (Sterling)&#0160;when building application for Windows Phone 7 (WP7). At times you might want to do some operation on the background while your code executes something else.</p>
 
 <p>Sterling supports the&#0160;Event-based Asynchronous Pattern (EAP) which means you can write the following code against the&#0160;<a href="http://sterling.codeplex.com/SourceControl/changeset/view/68865#1253296" target="_blank" title="Wintellect.Sterling.ISterlingDatabaseInstance">ISterlingDatabaseInstance</a> interface:</p>
+<pre class="highlight csharp"><span class="k">private</span> <span class="k">void</span> <span class="nf">ExecuteWithEventBased</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">IList</span><span class="p">&lt;</span><span class="n">Cargo</span><span class="p">&gt;</span> <span class="n">cargos</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Cargo</span><span class="p">&gt;();</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">n</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">n</span> <span class="p">&lt;</span> <span class="n">iterations</span><span class="p">;</span> <span class="n">n</span><span class="p">++)</span>
+    <span class="p">{</span>
+        <span class="n">Cargo</span> <span class="n">cargo</span> <span class="p">=</span> <span class="n">CargoFactory</span><span class="p">.</span><span class="nf">CreateNew</span><span class="p">(</span><span class="s">&quot;Glyfada&quot;</span> <span class="p">+</span> <span class="n">n</span><span class="p">,</span> <span class="s">&quot;Perachora&quot;</span> <span class="p">+</span> <span class="n">n</span><span class="p">);</span>
+        <span class="n">cargos</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">cargo</span><span class="p">);</span>
+    <span class="p">}</span>
 
-<pre><code class="c#">private void ExecuteWithEventBased()
-{
-    IList&lt;Cargo&gt; cargos = new List&lt;Cargo&gt;();
-    for (int n = 0; n &lt; iterations; n++)
-    {
-        Cargo cargo = CargoFactory.CreateNew(&quot;Glyfada&quot; + n, &quot;Perachora&quot; + n);
-        cargos.Add(cargo);
-    }
+    <span class="n">var</span> <span class="n">bw</span> <span class="p">=</span> <span class="n">App</span><span class="p">.</span><span class="n">Database</span><span class="p">.</span><span class="n">SaveAsync</span><span class="p">&lt;</span><span class="n">Cargo</span><span class="p">&gt;(</span><span class="n">cargos</span><span class="p">);</span>
+    <span class="n">bw</span><span class="p">.</span><span class="n">RunWorkerCompleted</span> <span class="p">+=</span> <span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+        <span class="nf">SetStatus</span><span class="p">(</span><span class="s">&quot;Event-based completed.&quot;</span><span class="p">,</span> <span class="n">StatusState</span><span class="p">.</span><span class="n">Ready</span><span class="p">);</span> <span class="p">};</span>
 
-    var bw = App.Database.SaveAsync&lt;Cargo&gt;(cargos);
-    bw.RunWorkerCompleted += (sender, e) =&gt; {
-        SetStatus(&quot;Event-based completed.&quot;, StatusState.Ready); };
-
-    bw.RunWorkerAsync();
-}
-</code></pre>
-
+    <span class="n">bw</span><span class="p">.</span><span class="nf">RunWorkerAsync</span><span class="p">();</span>
+<span class="p">}</span>
+</pre>
 <p>I can imagine, the reason the EAP is implemented is because you can have progress notification while the I/O executes in the background and also for handling the <a href="http://msdn.microsoft.com/en-us/library/system.threading.synchronizationcontext.aspx" target="_blank" title="Provides the basic functionality for propagating a synchronization context in various synchronization models.">SynchronizationContext</a>&#0160;and/or the <a href="http://msdn.microsoft.com/en-us/library/system.windows.threading.dispatcher.aspx" target="_blank" title="Provides services for managing the queue of work items for a thread.">Dispatcher</a>&#0160;internally.</p>
 
 <p>In my applications, I prefer to use the&#0160;<a href="http://msdn.microsoft.com/en-us/magazine/cc163467.aspx" target="_blank" title="Implementing the CLR Asynchronous Programming Model by Jeffrey Richter.">IAsyncResult</a>, the CLR’s Asynchronous Programming Model (APM). For that reason, I wrote some extension methods for the ISterlingDatabaseInstance interface that allows you to use the APM when working with Sterling.</p>
@@ -32,95 +32,86 @@
 <p><img src="http://farm9.staticflickr.com/8324/8398554702_77b7df68b4_o.png" alt="" /></p>
 
 <p>Power Threading library comes with an implementation of the IAsyncResult interface, so one can take a method that executes synchronously and implement the APM. In the code above you can see the APM for the&#0160;<span style="font-family: Consolas; font-size: 13px;"><span style="color: blue;">object</span> Save&lt;T&gt;(T instance) <span style="color: blue;">where</span> T : <span style="color: blue;">class</span>, <span style="color: blue;">new</span>();&#0160;</span>method in ISterlingDatabaseInstance interface.</p>
-
-<pre><code class="c#">/// &lt;summary&gt;
+<pre class="highlight csharp"><span class="c1">/// &lt;summary&gt;
 /// Asynchronous version of ISterlingDatabaseInstance Save method (Begin part).
 /// &lt;/summary&gt;
-public static IAsyncResult BeginSave&lt;T&gt;(
-    this ISterlingDatabaseInstance sterling,
-    T instance,
-    AsyncCallback callback,
-    object state) where T : class, new()
-{
-    // Create IAsyncResult object identifying the asynchronous operation.
-    AsyncResult ar = new AsyncResult(callback, state);
+</span><span class="k">public</span> <span class="k">static</span> <span class="n">IAsyncResult</span> <span class="n">BeginSave</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;(</span>
+    <span class="k">this</span> <span class="n">ISterlingDatabaseInstance</span> <span class="n">sterling</span><span class="p">,</span>
+    <span class="n">T</span> <span class="n">instance</span><span class="p">,</span>
+    <span class="n">AsyncCallback</span> <span class="n">callback</span><span class="p">,</span>
+    <span class="kt">object</span> <span class="n">state</span><span class="p">)</span> <span class="n">where</span> <span class="n">T</span> <span class="p">:</span> <span class="k">class</span><span class="err">,</span> <span class="nc">new</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="c1">// Create IAsyncResult object identifying the asynchronous operation.
+</span>    <span class="n">AsyncResult</span> <span class="n">ar</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">AsyncResult</span><span class="p">(</span><span class="n">callback</span><span class="p">,</span> <span class="n">state</span><span class="p">);</span>
 
-    // Use a thread pool thread to perform the operation.
-    ThreadPool.QueueUserWorkItem((obj) =&gt;
-    {
-        var asyncResult = (AsyncResult)obj;
-        try
-        {
-            // Perform the operation.
-            sterling.Save&lt;T&gt;(instance);
-            asyncResult.SetAsCompleted(null, false);
-        }
-        catch (Exception e)
-        {
-            // If operation fails, set the exception.
-            asyncResult.SetAsCompleted(e, false);
-        }
-    }, ar);
+    <span class="c1">// Use a thread pool thread to perform the operation.
+</span>    <span class="n">ThreadPool</span><span class="p">.</span><span class="nf">QueueUserWorkItem</span><span class="p">((</span><span class="n">obj</span><span class="p">)</span> <span class="p">=&gt;</span>
+    <span class="p">{</span>
+        <span class="n">var</span> <span class="n">asyncResult</span> <span class="p">=</span> <span class="p">(</span><span class="n">AsyncResult</span><span class="p">)</span><span class="n">obj</span><span class="p">;</span>
+        <span class="k">try</span>
+        <span class="p">{</span>
+            <span class="c1">// Perform the operation.
+</span>            <span class="n">sterling</span><span class="p">.</span><span class="n">Save</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;(</span><span class="n">instance</span><span class="p">);</span>
+            <span class="n">asyncResult</span><span class="p">.</span><span class="nf">SetAsCompleted</span><span class="p">(</span><span class="k">null</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">catch</span> <span class="p">(</span><span class="n">Exception</span> <span class="n">e</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="c1">// If operation fails, set the exception.
+</span>            <span class="n">asyncResult</span><span class="p">.</span><span class="nf">SetAsCompleted</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">},</span> <span class="n">ar</span><span class="p">);</span>
 
-    return ar; // Return the IAsyncResult to the caller.
-}
+    <span class="k">return</span> <span class="n">ar</span><span class="p">;</span> <span class="c1">// Return the IAsyncResult to the caller.
+</span><span class="p">}</span>
 
-///&lt;summary&gt;
+<span class="c1">///&lt;summary&gt;
 /// Asynchronous version of ISterlingDatabaseInstance Save method (End part).
 /// &lt;/summary&gt;
-public static void EndSave(
-    this ISterlingDatabaseInstance instance,
-    IAsyncResult asyncResult)
-{
-    AsyncResult ar = (AsyncResult)asyncResult;
-    ar.EndInvoke();
-}
-</code></pre>
-
+</span><span class="k">public</span> <span class="k">static</span> <span class="k">void</span> <span class="nf">EndSave</span><span class="p">(</span>
+    <span class="k">this</span> <span class="n">ISterlingDatabaseInstance</span> <span class="n">instance</span><span class="p">,</span>
+    <span class="n">IAsyncResult</span> <span class="n">asyncResult</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">AsyncResult</span> <span class="n">ar</span> <span class="p">=</span> <span class="p">(</span><span class="n">AsyncResult</span><span class="p">)</span><span class="n">asyncResult</span><span class="p">;</span>
+    <span class="n">ar</span><span class="p">.</span><span class="nf">EndInvoke</span><span class="p">();</span>
+<span class="p">}</span>
+</pre>
 <blockquote>
 <p>AsyncResult class resides in the PowerThreading library. It is written by Jeffrey Richter and can be obtained from the&#0160;<a href="http://www.wintellect.com/" target="_blank" title="Wintellect is a nationally recognized consulting, training and debugging firm dedicated to helping companies build better software, faster through a concentration on .NET and Windows technologies.">Wintellect</a>&#0160;website.&#0160;</p>
 <p>Sterling Isolated Storage Database can be obtained from the <a href="http://sterling.codeplex.com/" target="_blank" title="Sterling Isolated Storage Database with LINQ for Silverlight and Windows Phone 7.">CodePlex</a> website.</p>
 </blockquote>
 
 <p>Armed with the above extension method you can write the following code which combines the APM implementation with the <a href="http://msdn.microsoft.com/en-gb/magazine/cc546608.aspx" target="_blank" title="Simplified APM With The AsyncEnumerator by Jeffrey Richter.">AsyncEnumerator</a> class.</p>
-
-<pre><code class="c#">// Inside your method create an instance of an AsyncEnumerator class,
+<pre class="highlight csharp"><span class="c1">// Inside your method create an instance of an AsyncEnumerator class,
 // specifying the iterator method to be driven by the AsyncEnumerator.
-AsyncEnumerator ae = new AsyncEnumerator();
-ae.BeginExecute(ExecuteWithAsyncEnumerator(ae), ae.EndExecute, null);
+</span><span class="n">AsyncEnumerator</span> <span class="n">ae</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">AsyncEnumerator</span><span class="p">();</span>
+<span class="n">ae</span><span class="p">.</span><span class="nf">BeginExecute</span><span class="p">(</span><span class="nf">ExecuteWithAsyncEnumerator</span><span class="p">(</span><span class="n">ae</span><span class="p">),</span> <span class="n">ae</span><span class="p">.</span><span class="n">EndExecute</span><span class="p">,</span> <span class="k">null</span><span class="p">);</span>
 
-private IEnumerator&lt;int&gt; ExecuteWithAsyncEnumerator(AsyncEnumerator ae)
-{
-    for (int n = 0; n &lt; iterations; n++)
-    {
-        Cargo cargo = CargoFactory.CreateNew(&quot;Glyfada&quot; + n, &quot;Perachora&quot; + n);
-        App.Database.BeginSave&lt;Cargo&gt;(cargo, ae.End(), null);
-    }
+<span class="k">private</span> <span class="n">IEnumerator</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;</span> <span class="nf">ExecuteWithAsyncEnumerator</span><span class="p">(</span><span class="n">AsyncEnumerator</span> <span class="n">ae</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">n</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">n</span> <span class="p">&lt;</span> <span class="n">iterations</span><span class="p">;</span> <span class="n">n</span><span class="p">++)</span>
+    <span class="p">{</span>
+        <span class="n">Cargo</span> <span class="n">cargo</span> <span class="p">=</span> <span class="n">CargoFactory</span><span class="p">.</span><span class="nf">CreateNew</span><span class="p">(</span><span class="s">&quot;Glyfada&quot;</span> <span class="p">+</span> <span class="n">n</span><span class="p">,</span> <span class="s">&quot;Perachora&quot;</span> <span class="p">+</span> <span class="n">n</span><span class="p">);</span>
+        <span class="n">App</span><span class="p">.</span><span class="n">Database</span><span class="p">.</span><span class="n">BeginSave</span><span class="p">&lt;</span><span class="n">Cargo</span><span class="p">&gt;(</span><span class="n">cargo</span><span class="p">,</span> <span class="n">ae</span><span class="p">.</span><span class="nf">End</span><span class="p">(),</span> <span class="k">null</span><span class="p">);</span>
+    <span class="p">}</span>
 
-    // AsyncEnumerator captures the calling thread&#39;s SynchronizationContext.
-    // Set the SyncContext to null so that the callback continues
-    // on a ThreadPool thread.
-    ae.SyncContext = null;
+    <span class="c1">// AsyncEnumerator captures the calling thread's SynchronizationContext.
+</span>    <span class="c1">// Set the SyncContext to null so that the callback continues
+</span>    <span class="c1">// on a ThreadPool thread.
+</span>    <span class="n">ae</span><span class="p">.</span><span class="n">SyncContext</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>
 
-    yield return iterations;
+    <span class="k">yield</span> <span class="k">return</span> <span class="n">iterations</span><span class="p">;</span>
 
-    for (Int32 n = 0; n &lt; iterations; n++)
-    {
-        App.Database.EndSave(ae.DequeueAsyncResult());
-    }
+    <span class="k">for</span> <span class="p">(</span><span class="n">Int32</span> <span class="n">n</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">n</span> <span class="p">&lt;</span> <span class="n">iterations</span><span class="p">;</span> <span class="n">n</span><span class="p">++)</span>
+    <span class="p">{</span>
+        <span class="n">App</span><span class="p">.</span><span class="n">Database</span><span class="p">.</span><span class="nf">EndSave</span><span class="p">(</span><span class="n">ae</span><span class="p">.</span><span class="nf">DequeueAsyncResult</span><span class="p">());</span>
+    <span class="p">}</span>
 
-    // AsyncEnumerator captures the synchronization context.
-    SetStatus(&quot;AsyncEnumerator completed.&quot;, StatusState.Ready);
-}
-</code></pre>
-
+    <span class="c1">// AsyncEnumerator captures the synchronization context.
+</span>    <span class="nf">SetStatus</span><span class="p">(</span><span class="s">&quot;AsyncEnumerator completed.&quot;</span><span class="p">,</span> <span class="n">StatusState</span><span class="p">.</span><span class="n">Ready</span><span class="p">);</span>
+<span class="p">}</span>
+</pre>
 <p>The sample Windows Phone 7 application can be found <a href="https://github.com/moodmosaic/BonusBits.CodeSamples" target="_blank" title="BonusBits Blog source-code.">here</a>.</p>
-</div></div><div id="disqus_thread"></div><script type="text/javascript">var disqus_shortname = 'bonusbits';
-(function() {
-    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-})();</script></div></div></body><div id="side"><img src="/images/nikos-baxevanis-small.png" alt="Nikos Baxevanis" title="Nikos Baxevanis"></div><script type="text/javascript">var _gaq = _gaq || [];
+<a class="twitter" href="https://twitter.com/intent/tweet?url=http%3A%2F%2Fnikosbaxevanis.com%2Fblog%2F2010%2F11%2F13%2Fgoing-asynchronous-with-sterling-for-windows-phone-7%2F&text=Going+Asynchronous+with+Sterling+for+Windows+Phone+7&via=nikosbaxevanis" target="_blank">Tweet This</a><div class="dater">November 13, 2010</div><div class="categories">Published in<a class="category" href="/category/async/">Async&nbsp;</a> on November 13, 2010</div></div><div class="homer"><a href="/"><i class="icon-tape" style="font-size:32px;"></i></a></div><script type="text/javascript">var _gaq = _gaq || [];
 _gaq.push(['_setAccount', 'UA-24262928-1']);
 _gaq.push(['_trackPageview']);
 
@@ -128,4 +119,4 @@ _gaq.push(['_trackPageview']);
   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-})();</script></html>
+})();</script></body></html>

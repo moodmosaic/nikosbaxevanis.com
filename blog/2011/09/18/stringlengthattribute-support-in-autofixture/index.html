@@ -1,14 +1,14 @@
-<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width" name="viewport" /><title>StringLengthAttribute support in AutoFixture - Nikos Baxevanis</title><link href="/feed" rel="alternate" type="application/rss+xml" /><link href="/stylesheets/blog.css?1390930234" media="screen" rel="stylesheet" type="text/css" /></head><body><div id="title"><div><a href="/">Nikos Baxevanis</a><span>&nbsp;-&nbsp;</span><a href="/blog">Blog</a><span>&nbsp;-&nbsp;</span><a href="/#about">About</a></div><div class="line"></div></div><div id="main"><div id="content"><div class="post"><h2>StringLengthAttribute support in AutoFixture</h2><div class="undertitle"><span class="meta">by Nikos Baxevanis in </span><a class="tag" href="/blog/#autofixture">autofixture</a></div><div class="content"><p>Continuing the support of DataAnnotations as described <a href="http://www.nikosbaxevanis.com/bonus-bits/2011/09/rangeattribute-support-in-autofixture.html" target="_blank" title="RangeAttribute support in AutoFixture">here</a>, there is now added support for the&#0160;<a href="http://msdn.microsoft.com/en-us/library/system.componentmodel.dataannotations.stringlengthattribute(v=VS.90).aspx" target="_blank" title="Specifies the maximum length of characters that are allowed in a data field.">StringLengthAttribute</a> class. Starting with version 2.4.0, when this attribute is applied on a data field it can specify the maximum length of characters that are allowed.</p>
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" /><meta content="width=device-width, user-scalable=no" name="viewport" /><title>StringLengthAttribute support in AutoFixture</title><link href="http://fonts.googleapis.com/css?family=Lora:400,700|Open+Sans" rel="stylesheet" type="text/css" /><link href="/stylesheets/fontello.css?1391110042" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/styles.css?1391110042" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/syntax.css?1391110042" media="screen" rel="stylesheet" type="text/css" /></head><body><div class="row"><h1>StringLengthAttribute support in AutoFixture</h1><p>Continuing the support of DataAnnotations as described <a href="http://www.nikosbaxevanis.com/bonus-bits/2011/09/rangeattribute-support-in-autofixture.html" target="_blank" title="RangeAttribute support in AutoFixture">here</a>, there is now added support for the&#0160;<a href="http://msdn.microsoft.com/en-us/library/system.componentmodel.dataannotations.stringlengthattribute(v=VS.90).aspx" target="_blank" title="Specifies the maximum length of characters that are allowed in a data field.">StringLengthAttribute</a> class. Starting with version 2.4.0, when this attribute is applied on a data field it can specify the maximum length of characters that are allowed.</p>
 
 <p>Let&#39;s take as an example the following type:</p>
-
-<pre><code class="c#">public class StringLengthValidatedType
-{
-    [StringLength(3)]
-    public string Property { get; set; }
-}
-</code></pre>
-
+<pre class="highlight csharp"><span class="k">public</span> <span class="k">class</span> <span class="nc">StringLengthValidatedType</span>
+<span class="p">{</span>
+    <span class="p">[</span><span class="nf">StringLength</span><span class="p">(</span><span class="m">3</span><span class="p">)]</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">Property</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+<span class="p">}</span>
+</pre>
 <p>Prior to version 2.4.0 if&#0160;we request an anonymous instance from AutoFixture, by <em>default</em> we would get back an instance of the above type with it&#39;s Property containing a value similar to the one below.</p>
 
 <p><img src="http://farm9.staticflickr.com/8476/8398548352_20a167088e_o.png" title="Prior verion 2.4.0" alt="Prior verion 2.4.0" /></p>
@@ -18,12 +18,7 @@
 <p><img src="http://farm9.staticflickr.com/8084/8398548324_cfb75590cd_o.png" title="After verion 2.4.0" alt="After verion 2.4.0" /></p>
 
 <p>An automatically published release created from the latest successful build can be downloaded from&#0160;<a href="http://autofixture.codeplex.com/releases/view/73545" target="_blank" title="AutoFixture - Downloads">here</a>.&#0160;The latest version is also live on&#0160;<a href="http://nuget.org/List/Packages/AutoFixture" target="_blank" title="AutoFixture - Package">NuGet</a>.</p>
-</div></div><div id="disqus_thread"></div><script type="text/javascript">var disqus_shortname = 'bonusbits';
-(function() {
-    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-})();</script></div></div></body><div id="side"><img src="/images/nikos-baxevanis-small.png" alt="Nikos Baxevanis" title="Nikos Baxevanis"></div><script type="text/javascript">var _gaq = _gaq || [];
+<a class="twitter" href="https://twitter.com/intent/tweet?url=http%3A%2F%2Fnikosbaxevanis.com%2Fblog%2F2011%2F09%2F18%2Fstringlengthattribute-support-in-autofixture%2F&text=StringLengthAttribute+support+in+AutoFixture&via=nikosbaxevanis" target="_blank">Tweet This</a><div class="dater">September 18, 2011</div><div class="categories">Published in<a class="category" href="/category/autofixture/">AutoFixture&nbsp;</a> on September 18, 2011</div></div><div class="homer"><a href="/"><i class="icon-tape" style="font-size:32px;"></i></a></div><script type="text/javascript">var _gaq = _gaq || [];
 _gaq.push(['_setAccount', 'UA-24262928-1']);
 _gaq.push(['_trackPageview']);
 
@@ -31,4 +26,4 @@ _gaq.push(['_trackPageview']);
   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-})();</script></html>
+})();</script></body></html>
