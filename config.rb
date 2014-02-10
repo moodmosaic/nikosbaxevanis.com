@@ -203,7 +203,7 @@ ready do
   proxy "/projects/index.html"     , "/thingies.html"     , :locals => { :entries => projects, :title => "Projects" }
   proxy "/feed/index.xml"          , "/feed.xml"          , :locals => { :items => zipped }
   proxy "/testimonials/index.html" , "/testimonials.html"
-  proxy "/background/index.html"   , "/background.html"
+  # proxy "/background/index.html"   , "/background.html"
 
   # Calculate some statistics that we can use in the about page
   stats_all_time = zipped
