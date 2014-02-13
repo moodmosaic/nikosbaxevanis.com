@@ -7,7 +7,7 @@ The images are hosted on Flickr while the text is hosted here, on GitHub.
 Technology
 -------
 
-The data is transformed, from the [master](https://github.com/moodmosaic/nikosbaxevanis.com/tree/master) branch, into a static site by [Middleman](http://middlemanapp.com/) with help from:
+The data is transformed into a static site by [Middleman](http://middlemanapp.com/) with help from:
 
 * [LiveReload](http://livereload.com/)
 * [Slim](http://slim-lang.com/)
@@ -15,13 +15,7 @@ The data is transformed, from the [master](https://github.com/moodmosaic/nikosba
 * [Stringex](https://github.com/rsl/stringex)
 * [Nokogiri](http://nokogiri.org/)
 
-
-Theme
--------
-
-The current theme is a composition of [Marijn Haverbeke](http://marijnhaverbeke.nl/) and [Koa](http://koajs.com/) sites' HTML5/CSS3.
-
 Credits
 -------
 
-The *config.rb* file used in [Middleman](http://middlemanapp.com/) to generate the static site is a modified version of [James Hughes'](http://yobriefca.se/) blog configuration.
+The theme used in [Middleman](http://middlemanapp.com/) to generate the static site is a modified version of [James Hughes'](http://yobriefca.se/) site theme.
