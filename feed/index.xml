@@ -5,7 +5,7 @@
   <author>
     <name>Nikos Baxevanis</name>
   </author>
-  <updated>2014-02-13T16:00:57+02:00</updated>
+  <updated>2014-02-14T12:09:32+02:00</updated>
   <link href="http://nikosbaxevanis.com/" rel="alternate"/>
   <link href="http://nikosbaxevanis.com/feed/" rel="self"/>
   <id>http://nikosbaxevanis.com/</id>
@@ -50,7 +50,7 @@
     </author>
     <content type="html">&lt;p&gt;&lt;u&gt;Note&lt;/u&gt;: After following this post, the end result is pretty awesome:&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-17.png?1392300051" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-17.png?1392372566" /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Radio Edit (tl;dr)&lt;/strong&gt;&lt;/p&gt;
 
@@ -79,7 +79,7 @@
 
 &lt;p&gt;Create a new Virtual Machine on Windows Azure to install and access TeamCity.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-1.png?1392300051" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-1.png?1392372566" /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;Turn off Internet Explorer&amp;#39;s Enhanced Security Configuration.&lt;/li&gt;
@@ -90,7 +90,7 @@
 &lt;/ul&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-3.png?1392300051" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-3.png?1392372566" /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;Install Karma and karma-teamcity-reporter plugin:&lt;br&gt;&lt;pre&gt;&lt;code&gt;  npm install -g karma
@@ -107,19 +107,19 @@
 &lt;/ul&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-4.png?1392300051" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-4.png?1392372566" /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;u&gt;Optional&lt;/u&gt;: &lt;a href="https://help.github.com/articles/generating-ssh-keys"&gt;Generate SSH keys&lt;/a&gt; if you use SSH keys to establish a secure connection between the Virtual Machine and Git.&lt;/p&gt;
 
 &lt;p&gt;Install TeamCity and choose a port so it can be accessed from a browser (e.g. port 80).&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-5.png?1392300051" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-5.png?1392372566" /&gt;&lt;/p&gt;
 
 &lt;p&gt;If you use SSH keys to establish a secure connection between the Virtual Machine and Git, make sure to run TeamCity Server under a user account that can access the path where the SSH keys are saved.&lt;/p&gt;
 
 &lt;p&gt;Use the &lt;code&gt;whoami&lt;/code&gt; command in the Command Prompt to find out the Virtual Machine&amp;#39;s domain name.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-6.png?1392300051" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-6.png?1392372566" /&gt;&lt;/p&gt;
 
 &lt;p&gt;Add a new inbound rule to Windows Firewall with the TeamCity Server port that was entered during installation.&lt;/p&gt;
 
@@ -129,7 +129,7 @@
 
 &lt;p&gt;On Windows Azure Management Portal add a new endpoint with the selected TeamCity Server port that was entered during installation.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-7.png?1392300051" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-7.png?1392372566" /&gt;&lt;/p&gt;
 
 &lt;p&gt;Log in to the TeamCity Server:&lt;/p&gt;
 
@@ -139,20 +139,20 @@
 &lt;li&gt;Attach a new VCS root on Build Configuration for Git.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-8.png?1392300051" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-8.png?1392372566" /&gt;&lt;/p&gt;
 
 &lt;p&gt;For the demo, I forked the &lt;a href="https://github.com/moodmosaic/angular-phonecat"&gt;angular-phonecat&lt;/a&gt; project.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-9.png?1392300050" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-9.png?1392372566" /&gt;&lt;/p&gt;
 
 &lt;p&gt;Select an authentication method and test the connection.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-10.png?1392300051" /&gt;
-&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-11.png?1392300051" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-10.png?1392372566" /&gt;
+&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-11.png?1392372566" /&gt;&lt;/p&gt;
 
 &lt;p&gt;Add a Build Step and attach the newly created Build Configuration.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-12.png?1392300051" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-12.png?1392372566" /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;In the runner type select Command Line.&lt;/li&gt;
@@ -162,20 +162,20 @@
 &lt;li&gt;In the command parameters option enter &lt;code&gt;start karma.conf.js --reporters teamcity --single-run&lt;/code&gt;.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-13.png?1392300051" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-13.png?1392372566" /&gt;&lt;/p&gt;
 
 &lt;p&gt;As a last step, include the &lt;code&gt;karma-teamcity-reporter&lt;/code&gt; plugin in the karma.conf.js file.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-14.png?1392300051" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-14.png?1392372566" /&gt;&lt;/p&gt;
 
 &lt;p&gt;Push to Git to trigger the build process and see the commit on TeamCity Server.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-15.png?1392300051" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-15.png?1392372566" /&gt;&lt;/p&gt;
 
 &lt;p&gt;The end result is pretty awesome:&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-16.png?1392300051" /&gt;
-&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-17.png?1392300051" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-16.png?1392372566" /&gt;
+&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-17.png?1392372566" /&gt;&lt;/p&gt;
 </content>
   </entry>
   <entry>
@@ -555,31 +555,31 @@ PM&amp;gt; Install-Package Xunit.Extensions
 
 &lt;p&gt;&lt;a href="http://msdn.microsoft.com/en-us/library/bb298736.aspx"&gt;Enumerable.ToArray&lt;/a&gt; &amp;#8594; &lt;a href="http://msdn.microsoft.com/en-us/library/ee340263.aspx"&gt;Seq.toArray&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-1.png?1392300051" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-1.png?1392372566" /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;AsEnumerable&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;a href="http://msdn.microsoft.com/en-us/library/bb335435.aspx"&gt;Enumerable.AsEnumerable&lt;/a&gt; &amp;#8594; &lt;code&gt;seq { }&lt;/code&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-2.png?1392300051" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-2.png?1392372566" /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;First&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;a href="http://msdn.microsoft.com/en-us/library/bb291976.aspx"&gt;Enumerable.First&lt;/a&gt; &amp;#8594; &lt;a href="http://msdn.microsoft.com/en-us/library/ee340330.aspx"&gt;Seq.head&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-3.png?1392300051" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-3.png?1392372566" /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Count&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;a href="http://msdn.microsoft.com/en-us/library/bb338038.aspx"&gt;Enumerable.Count&lt;/a&gt; &amp;#8594; &lt;a href="http://msdn.microsoft.com/en-us/library/ee370547.aspx"&gt;Seq.length&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-4.png?1392300051" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-4.png?1392372566" /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;SequenceEqual&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;a href="http://msdn.microsoft.com/en-us/library/bb348567.aspx"&gt;Enumerable.SequenceEqual&lt;/a&gt; &amp;#8594; &lt;a href="http://msdn.microsoft.com/en-us/library/ee353659.aspx"&gt;Seq.compareWith&lt;/a&gt; &lt;a href="http://msdn.microsoft.com/en-us/library/ee353429.aspx"&gt;Operators.compare&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-5.png?1392300051" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-5.png?1392372566" /&gt;&lt;/p&gt;
 </content>
   </entry>
   <entry>
@@ -676,7 +676,7 @@ let AutoMockInterfaceAndSetupExpectationsDeclaratively
 
 &lt;p&gt;The most important changes are shown below. You can also see the diff as an image &lt;a href="/images/articles/2013-10-04-how-to-configure-msbuild-to-locate-the-fsharp-build-targets.png"&gt;here&lt;/a&gt;:&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-04-how-to-configure-msbuild-to-locate-the-fsharp-build-targets.png?1392300050" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-04-how-to-configure-msbuild-to-locate-the-fsharp-build-targets.png?1392372566" /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;A note for VS 2012 users&lt;/strong&gt;&lt;/p&gt;
 
@@ -972,13 +972,25 @@ C:\Program Files (x86)\MSBuild\Microsoft\VisualStudio\v11.0\CodeAnalysis&lt;/p&g
     <author>
       <name>Nikos Baxevanis</name>
     </author>
-    <content type="html">&lt;p&gt;&lt;strong&gt;Updated&lt;/strong&gt;: July 29, 2013.&lt;/p&gt;
+    <content type="html">&lt;p&gt;&lt;strong&gt;Updated&lt;/strong&gt;: February 13, 2013.&lt;/p&gt;
 
 &lt;p&gt;&lt;em&gt;The complete list can be found &lt;a href="http://stackoverflow.com/questions/tagged/autofixture"&gt;here&lt;/a&gt;.&lt;/em&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;AutoFixture.Auto[Moq/RhinoMocks/FakeItEasy/NSubstitute]&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Using AutoFixture in F#&lt;/strong&gt;&lt;/p&gt;
 
 &lt;ul&gt;
+&lt;li&gt;&lt;a href="http://stackoverflow.com/a/20816487/467754"&gt;Specifying readonly property values via constructor arguments when instantiating immutable objects with AutoFixture&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;AutoFixture.Auto[Moq/RhinoMocks/FakeItEasy/NSubstitute/Foq]&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="http://stackoverflow.com/questions/20955757/always-freeze-mocks-using-autofixture-xunit-and-moq"&gt;Always Freeze mocks using AutoFixture, XUnit, and Moq&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://stackoverflow.com/questions/20284177/verifying-a-set-of-objects-have-been-mapped-correctly"&gt;Verifying a set of objects have been mapped correctly&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://stackoverflow.com/questions/20003224/autofixture-with-automoq-and-concrete-object-injection"&gt;AutoFixture with AutoMoq and concrete object injection&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://stackoverflow.com/questions/18497489/handling-specimen-creation-inconsistencies-between-autofixture-and-moq"&gt;Handling specimen creation inconsistencies between AutoFixture and Moq&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://stackoverflow.com/questions/18342322/example-of-how-to-use-autofixture-with-nsubstitute"&gt;How to use AutoFixture with NSubstitute?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://stackoverflow.com/questions/18155015/why-does-autofixture-w-automoqcustomization-stop-complaining-about-lack-of-para"&gt;Why does AutoFixture stops complaining about lack of parameterless constructor when class is sealed?&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="http://stackoverflow.com/questions/4845065/what-is-autofixture-automoq"&gt;What is AutoFixture AutoMoq?&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="http://stackoverflow.com/questions/5786628/what-are-the-differences-between-moq-and-autofixture"&gt;Differences between Moq and AutoFixture&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="http://stackoverflow.com/questions/8069164/how-do-i-verify-a-method-was-called"&gt;How to verify a method was called&lt;/a&gt;&lt;/li&gt;
@@ -1002,7 +1014,7 @@ C:\Program Files (x86)\MSBuild\Microsoft\VisualStudio\v11.0\CodeAnalysis&lt;/p&g
 &lt;p&gt;&lt;strong&gt;AutoFixture.Idioms&lt;/strong&gt;&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="http://stackoverflow.com/questions/11452539/generalised-func-wrapping-with-anonymous-values-equivalent-to-autofixture-with"&gt;When I pass &lt;em&gt;input&lt;/em&gt; to the parameter &lt;em&gt;x&lt;/em&gt; of a method, supplying the other parameters anonymously, the result is ..&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://stackoverflow.com/questions/11452539/generalised-func-wrapping-with-anonymous-values-equivalent-to-autofixture-with"&gt;When I pass input to the parameter x of a method, supplying the other parameters anonymously, the result is &amp;hellip;&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="http://stackoverflow.com/questions/12051087/how-to-simplify-unit-testing-ddd-value-objects-equality-with-autofixture"&gt;Simplifing Unit Testing DDD Value objects Equality&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="http://stackoverflow.com/questions/15078400/autofixture-test-for-invalid-constructor-parameter"&gt;Verify invalid constructor parameters&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
@@ -1010,6 +1022,9 @@ C:\Program Files (x86)\MSBuild\Microsoft\VisualStudio\v11.0\CodeAnalysis&lt;/p&g
 &lt;p&gt;&lt;strong&gt;AutoFixture.Xunit&lt;/strong&gt;&lt;/p&gt;
 
 &lt;ul&gt;
+&lt;li&gt;&lt;a href="http://stackoverflow.com/questions/21195872/how-to-use-autodata-in-unit-tests-to-supply-n-objects-of-a-type-in-test-argument"&gt;How to use AutoData in unit tests to supply N objects of a type in test arguments?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://stackoverflow.com/questions/18852608/autofixture-compositedataattribute-does-not-work-with-propertydataattribute"&gt;CompositeDataAttribute does not seem to work with PropertyDataAttribute&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://stackoverflow.com/questions/18238348/can-a-particular-constructor-argument-of-an-injected-sut-using-autodata-xunit-th"&gt;Inject a particular constructor argument in the SUT using xUnit Theories and AutoData&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="http://stackoverflow.com/questions/11958110/technique-for-using-autofixture-to-integration-test-an-application-using-castle"&gt;Integration Test an application using Castle Windsor&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="http://stackoverflow.com/questions/13960681/autofixture-with-weak-types"&gt;AutoFixture with &amp;#39;weak&amp;#39; types&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="http://stackoverflow.com/questions/14391146/using-autofixture-in-my-data-integration-tests-to-create-proxies"&gt;Proxies in data integration tests&lt;/a&gt;&lt;/li&gt;
@@ -1026,6 +1041,16 @@ C:\Program Files (x86)\MSBuild\Microsoft\VisualStudio\v11.0\CodeAnalysis&lt;/p&g
 &lt;p&gt;&lt;strong&gt;Customizations&lt;/strong&gt;&lt;/p&gt;
 
 &lt;ul&gt;
+&lt;li&gt;&lt;a href="http://stackoverflow.com/questions/21590491/customizations-vs-residue-collectors"&gt;Customizations vs Residue collectors&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://stackoverflow.com/questions/20209469/how-can-i-register-a-generic-object-factory"&gt;How can I register a generic object factory?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://stackoverflow.com/questions/19908385/automocking-web-api-2-controller"&gt;Automocking Web Api 2 controller&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://stackoverflow.com/questions/20712686/need-to-create-convention-for-apicontrollers"&gt;Web Api 2 controller conventions&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://stackoverflow.com/questions/19345400/autofixture-create-property-with-internal-setter"&gt;How to create property with internal setter?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://stackoverflow.com/questions/19286476/autofixture-how-do-i-assign-a-property-on-only-a-subrange-of-items-in-a-list"&gt;How do I assign a property on only a subrange of items in a list?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://stackoverflow.com/questions/18953714/how-to-generate-a-stub-object-of-an-arbitrary-type-not-known-at-compile-time-usi"&gt;How to generate a stub object of an arbitrary Type not known at compile time using AutoFixture&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://stackoverflow.com/questions/18346803/how-can-i-instruct-autofixture-to-not-bother-filling-out-some-properties"&gt;How can I instruct AutoFixture to not bother filling out some properties?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://stackoverflow.com/questions/18307975/autofixture-constructer-injection-lazy-loading"&gt;Constructor injection lazy loading&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://stackoverflow.com/questions/17978607/preventing-autofixture-from-filling-child-collections"&gt;Preventing Autofixture from filling child collections&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="http://stackoverflow.com/questions/17867566/unit-testing-order-of-items-in-a-list"&gt;Unit testing the order of items in a list&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="http://stackoverflow.com/questions/17795863/empty-dummy-collections"&gt;Empty dummy collections&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="http://stackoverflow.com/questions/17672861/autofixture-create-a-float-double-or-decimal-with-remainder"&gt;Create a float, double or decimal with remainder&lt;/a&gt;&lt;/li&gt;
@@ -1059,6 +1084,9 @@ C:\Program Files (x86)\MSBuild\Microsoft\VisualStudio\v11.0\CodeAnalysis&lt;/p&g
 &lt;p&gt;&lt;strong&gt;Freeze, Inject&lt;/strong&gt;&lt;/p&gt;
 
 &lt;ul&gt;
+&lt;li&gt;&lt;a href="http://stackoverflow.com/questions/21611107/freeze-enum-value-in-autofixture"&gt;Freeze enum value in AutoFixture&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://stackoverflow.com/questions/18925608/autofixture-xunits-frozen-not-working"&gt;AutoFixture.Xunit&amp;#39;s Frozen attribute not working&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://stackoverflow.com/questions/18161127/autofixture-cant-grasp-the-difference-between-freeze-inject-register"&gt;Can&amp;#39;t grasp the difference between Freeze/Inject/Register&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="http://stackoverflow.com/questions/17867566/unit-testing-order-of-items-in-a-list"&gt;Unit testing the order of items in a list&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="http://stackoverflow.com/questions/8069164/how-do-i-verify-a-method-was-called"&gt;How to verify a method was called&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="http://stackoverflow.com/questions/12218206/how-can-i-freeze-a-null-instance-in-autofixture"&gt;How to Freeze a Null Reference&lt;/a&gt;&lt;/li&gt;
@@ -1087,6 +1115,16 @@ C:\Program Files (x86)\MSBuild\Microsoft\VisualStudio\v11.0\CodeAnalysis&lt;/p&g
 &lt;li&gt;&lt;a href="http://stackoverflow.com/questions/2622334/autofixture-refactoring"&gt;Minimizing the Arrange phase&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="http://stackoverflow.com/questions/10493510/repetitive-code-in-unit-tests"&gt;Repetitive code in Unit Tests&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="http://stackoverflow.com/questions/16455511/new-to-autofixture-trying-to-get-my-head-around-it-and-i-cant-see-it-helping-me"&gt;Imperative to Declarative Unit Test&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;Procedural programming, Entity Framework, enums, etc&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="http://stackoverflow.com/questions/18598719/how-can-i-use-custom-ispecimenbuilders-with-omitonrecursionbehavior"&gt;Circular references related question&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://stackoverflow.com/questions/19328224/how-to-mockup-entity-framework-6-with-moq-autofixture"&gt;DbContext exposing DbSet properties related question&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://stackoverflow.com/questions/19840537/creating-a-domain-model-without-circular-references-in-entity-framework#comment29586458_19840537"&gt;Another circular references related question &lt;em&gt;(comments)&lt;/em&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://stackoverflow.com/questions/20957010/create-anonymous-enum-value-from-a-subset-of-all-values"&gt;Create anonymous enum value from a subset of all values&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://stackoverflow.com/questions/21611107/freeze-enum-value-in-autofixture"&gt;Freeze enum value in AutoFixture&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 </content>
   </entry>
