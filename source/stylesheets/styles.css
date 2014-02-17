@@ -21,7 +21,7 @@ h1 {
 
 blockquote {
 	color:#666;
-	background:#eee;
+	background:#fafafa;
 	margin-left:0px;
 	margin-right:0px;
 	padding: 0.1rem 2rem;
@@ -90,10 +90,19 @@ a {
 }
 
 pre {
-	overflow-x: scroll;
-	padding-left:1rem;
-	margin: 2rem 1rem 2rem 0;
-	font-size: 0.8rem;
+  line-height: 18px;
+  font-size: 13px;
+  margin: 7px 0 21px;
+  padding: 5px 10px;
+  overflow: auto;
+  background-color: #fafafa;
+  border: 1px solid #e6e6e6;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  -moz-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  -webkit-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
 
 p img {
