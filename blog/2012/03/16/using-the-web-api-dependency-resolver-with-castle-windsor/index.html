@@ -1,6 +1,6 @@
-<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" /><meta content="width=device-width, user-scalable=no" name="viewport" /><title>Using the Web API Dependency Resolver with Castle Windsor</title><link href="http://fonts.googleapis.com/css?family=Lora:400,700|Open+Sans" rel="stylesheet" type="text/css" /><link href="/stylesheets/fontello.css?1392664185" media="screen" rel="stylesheet" type="text/css" />
-<link href="/stylesheets/styles.css?1392664185" media="screen" rel="stylesheet" type="text/css" />
-<link href="/stylesheets/syntax.css?1392664185" media="screen" rel="stylesheet" type="text/css" /></head><body><div class="row"><h1>Using the Web API Dependency Resolver with Castle Windsor</h1><div class="post"><blockquote>
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" /><meta content="width=device-width, user-scalable=no" name="viewport" /><title>Using the Web API Dependency Resolver with Castle Windsor</title><link href="http://fonts.googleapis.com/css?family=Lora:400,700|Open+Sans" rel="stylesheet" type="text/css" /><link href="/stylesheets/fontello.css?1393091639" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/styles.css?1393091639" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/syntax.css?1393091639" media="screen" rel="stylesheet" type="text/css" /></head><body><div class="row"><h1>Using the Web API Dependency Resolver with Castle Windsor</h1><div class="post"><blockquote>
 <p>The code in this post requires the ASP.NET MVC 4 Beta. If you use the RC version use the code from <a href="http://nikosbaxevanis.com/2012/06/04/using-the-web-api-dependency-resolver-with-castle-windsor-part-2/">this</a> post.</p>
 </blockquote>
 
@@ -16,153 +16,153 @@
 <p>Followed by a request for an instance of the ILogger type and so on.</p>
 <p><img src="http://farm9.staticflickr.com/8073/8398547788_242021568e_o.png" alt="ILogger type is requested" /></p>
 <p>The first thing we want to do is to create a type implementing the IHttpControllerFactory interface.</p></p>
-<pre class="highlight csharp"><span class="k">using</span> <span class="nn">System.Web.Http</span><span class="p">;</span>
-<span class="k">using</span> <span class="nn">System.Web.Http.Controllers</span><span class="p">;</span>
-<span class="k">using</span> <span class="nn">System.Web.Http.Dispatcher</span><span class="p">;</span>
-<span class="k">using</span> <span class="nn">Castle.MicroKernel</span><span class="p">;</span>
+<pre class="highlight text">using System.Web.Http;
+using System.Web.Http.Controllers;
+using System.Web.Http.Dispatcher;
+using Castle.MicroKernel;
 
-<span class="k">internal</span> <span class="k">class</span> <span class="nc">WindsorHttpControllerFactory</span> <span class="p">:</span> <span class="n">IHttpControllerFactory</span>
-<span class="p">{</span>
-    <span class="k">private</span> <span class="k">readonly</span> <span class="n">HttpConfiguration</span> <span class="n">configuration</span><span class="p">;</span>
-    <span class="k">private</span> <span class="k">readonly</span> <span class="n">IKernel</span> <span class="n">kernel</span><span class="p">;</span>
+internal class WindsorHttpControllerFactory : IHttpControllerFactory
+{
+    private readonly HttpConfiguration configuration;
+    private readonly IKernel kernel;
 
-    <span class="k">public</span> <span class="nf">WindsorHttpControllerFactory</span><span class="p">(</span>
-        <span class="n">HttpConfiguration</span> <span class="n">configuration</span><span class="p">,</span> 
-        <span class="n">IKernel</span> <span class="n">kernel</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="n">configuration</span> <span class="p">=</span> <span class="n">configuration</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="n">kernel</span> <span class="p">=</span> <span class="n">kernel</span><span class="p">;</span>
-    <span class="p">}</span>
+    public WindsorHttpControllerFactory(
+        HttpConfiguration configuration, 
+        IKernel kernel)
+    {
+        this.configuration = configuration;
+        this.kernel = kernel;
+    }
 
-    <span class="k">public</span> <span class="n">IHttpController</span> <span class="nf">CreateController</span><span class="p">(</span>
-        <span class="n">HttpControllerContext</span> <span class="n">controllerContext</span><span class="p">,</span> 
-        <span class="kt">string</span> <span class="n">controllerName</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">var</span> <span class="n">controller</span> <span class="p">=</span> <span class="k">this</span><span class="p">.</span><span class="n">kernel</span><span class="p">.</span><span class="n">Resolve</span><span class="p">&lt;</span><span class="n">IHttpController</span><span class="p">&gt;(</span><span class="n">controllerName</span><span class="p">);</span>
+    public IHttpController CreateController(
+        HttpControllerContext controllerContext, 
+        string controllerName)
+    {
+        var controller = this.kernel.Resolve&lt;IHttpController&gt;(controllerName);
 
-        <span class="n">controllerContext</span><span class="p">.</span><span class="n">Controller</span> <span class="p">=</span> <span class="n">controller</span><span class="p">;</span>
-        <span class="n">controllerContext</span><span class="p">.</span><span class="n">ControllerDescriptor</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">HttpControllerDescriptor</span><span class="p">(</span>
-            <span class="k">this</span><span class="p">.</span><span class="n">configuration</span><span class="p">,</span> 
-            <span class="n">controllerName</span><span class="p">,</span> 
-            <span class="n">controller</span><span class="p">.</span><span class="nf">GetType</span><span class="p">());</span>
+        controllerContext.Controller = controller;
+        controllerContext.ControllerDescriptor = new HttpControllerDescriptor(
+            this.configuration, 
+            controllerName, 
+            controller.GetType());
 
-        <span class="k">return</span> <span class="n">controllerContext</span><span class="p">.</span><span class="n">Controller</span><span class="p">;</span>
-    <span class="p">}</span>
+        return controllerContext.Controller;
+    }
 
-    <span class="k">public</span> <span class="k">void</span> <span class="nf">ReleaseController</span><span class="p">(</span><span class="n">IHttpController</span> <span class="n">controller</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="n">kernel</span><span class="p">.</span><span class="nf">ReleaseComponent</span><span class="p">(</span><span class="n">controller</span><span class="p">);</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+    public void ReleaseController(IHttpController controller)
+    {
+        this.kernel.ReleaseComponent(controller);
+    }
+}
 </pre>
 <p>Note that inside the WindsorHttpControllerFactory class the CreateController method&nbsp;&nbsp;takes a string for the name of the controller. That means we need to use the Windsor&rsquo;s&nbsp;<em>Named&nbsp;</em>method to set a name for each controller registration. (We can also trim the &ldquo;Controller&rdquo; part from the name and also pluralize the remaining part.)</p>
-<pre class="highlight csharp"><span class="k">foreach</span> <span class="p">(</span><span class="n">Type</span> <span class="n">controller</span> <span class="k">in</span> <span class="k">typeof</span><span class="p">(</span><span class="n">OrderController</span><span class="p">).</span><span class="n">Assembly</span><span class="p">.</span><span class="nf">GetTypes</span><span class="p">()</span>
-    <span class="p">.</span><span class="nf">Where</span><span class="p">(</span><span class="n">type</span> <span class="p">=&gt;</span> <span class="k">typeof</span><span class="p">(</span><span class="n">IHttpController</span><span class="p">).</span><span class="nf">IsAssignableFrom</span><span class="p">(</span><span class="n">type</span><span class="p">)))</span>
-<span class="p">{</span>
-    <span class="c1">// https://github.com/srkirkland/Inflector/
-</span>    <span class="kt">string</span> <span class="n">name</span> <span class="p">=</span> <span class="n">Inflector</span><span class="p">.</span><span class="nf">Pluralize</span><span class="p">(</span>
-        <span class="n">controller</span><span class="p">.</span><span class="n">Name</span><span class="p">.</span><span class="nf">Replace</span><span class="p">(</span><span class="s">&quot;Controller&quot;</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">));</span>
+<pre class="highlight text">foreach (Type controller in typeof(OrderController).Assembly.GetTypes()
+    .Where(type =&gt; typeof(IHttpController).IsAssignableFrom(type)))
+{
+    // https://github.com/srkirkland/Inflector/
+    string name = Inflector.Pluralize(
+        controller.Name.Replace(&quot;Controller&quot;, &quot;&quot;));
 
-    <span class="n">container</span><span class="p">.</span><span class="nf">Register</span><span class="p">(</span><span class="n">Component</span>
-        <span class="p">.</span><span class="nf">For</span><span class="p">(</span><span class="n">controller</span><span class="p">)</span>
-        <span class="p">.</span><span class="nf">Named</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
-        <span class="p">.</span><span class="nf">LifestylePerWebRequest</span><span class="p">());</span>
-<span class="p">}</span>
+    container.Register(Component
+        .For(controller)
+        .Named(name)
+        .LifestylePerWebRequest());
+}
 </pre>
 <p>Let&rsquo;s also create a NullLogger implementing the ILogger interface.</p>
-<pre class="highlight csharp"><span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
-<span class="k">using</span> <span class="nn">System.Diagnostics</span><span class="p">;</span>
-<span class="k">using</span> <span class="nn">System.Web.Http.Common</span><span class="p">;</span>
+<pre class="highlight text">using System;
+using System.Diagnostics;
+using System.Web.Http.Common;
 
-<span class="k">internal</span> <span class="k">class</span> <span class="nc">NullLogger</span> <span class="p">:</span> <span class="n">ILogger</span>
-<span class="p">{</span>
-    <span class="k">public</span> <span class="k">void</span> <span class="nf">Log</span><span class="p">(</span><span class="kt">string</span> <span class="n">category</span><span class="p">,</span> <span class="n">TraceLevel</span> <span class="n">level</span><span class="p">,</span> 
-        <span class="n">Func</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;</span> <span class="n">messageCallback</span><span class="p">)</span>
-    <span class="p">{</span>
-    <span class="p">}</span>
+internal class NullLogger : ILogger
+{
+    public void Log(string category, TraceLevel level, 
+        Func&lt;string&gt; messageCallback)
+    {
+    }
 
-    <span class="k">public</span> <span class="k">void</span> <span class="nf">LogException</span><span class="p">(</span><span class="kt">string</span> <span class="n">category</span><span class="p">,</span> <span class="n">TraceLevel</span> <span class="n">level</span><span class="p">,</span> 
-        <span class="n">Exception</span> <span class="n">exception</span><span class="p">)</span>
-    <span class="p">{</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+    public void LogException(string category, TraceLevel level, 
+        Exception exception)
+    {
+    }
+}
 </pre>
 <p>For all the other instances that the framework requests there are default implementations in the System.Web.* assemblies and we can now create a Windsor&nbsp;<a href="http://stw.castleproject.org/Default.aspx?Page=Installers&amp;NS=Windsor&amp;AspxAutoDetectCookieSupport=1" target="_blank">Installer</a>&nbsp;to encapsulate the registration logic.</p>
-<pre class="highlight csharp"><span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
-<span class="k">using</span> <span class="nn">System.Linq</span><span class="p">;</span>
-<span class="k">using</span> <span class="nn">System.Net.Http.Formatting</span><span class="p">;</span>
-<span class="k">using</span> <span class="nn">System.Web.Http</span><span class="p">;</span>
-<span class="k">using</span> <span class="nn">System.Web.Http.Common</span><span class="p">;</span>
-<span class="k">using</span> <span class="nn">System.Web.Http.Controllers</span><span class="p">;</span>
-<span class="k">using</span> <span class="nn">System.Web.Http.Dispatcher</span><span class="p">;</span>
-<span class="k">using</span> <span class="nn">System.Web.Http.Metadata</span><span class="p">;</span>
-<span class="k">using</span> <span class="nn">System.Web.Http.Metadata.Providers</span><span class="p">;</span>
-<span class="k">using</span> <span class="nn">System.Web.Http.ModelBinding</span><span class="p">;</span>
-<span class="k">using</span> <span class="nn">Castle.MicroKernel.Registration</span><span class="p">;</span>
-<span class="k">using</span> <span class="nn">Castle.MicroKernel.SubSystems.Configuration</span><span class="p">;</span>
-<span class="k">using</span> <span class="nn">Castle.Windsor</span><span class="p">;</span>
+<pre class="highlight text">using System;
+using System.Linq;
+using System.Net.Http.Formatting;
+using System.Web.Http;
+using System.Web.Http.Common;
+using System.Web.Http.Controllers;
+using System.Web.Http.Dispatcher;
+using System.Web.Http.Metadata;
+using System.Web.Http.Metadata.Providers;
+using System.Web.Http.ModelBinding;
+using Castle.MicroKernel.Registration;
+using Castle.MicroKernel.SubSystems.Configuration;
+using Castle.Windsor;
 
-<span class="k">internal</span> <span class="k">class</span> <span class="nc">WebApiInstaller</span> <span class="p">:</span> <span class="n">IWindsorInstaller</span>
-<span class="p">{</span>
-    <span class="k">public</span> <span class="k">void</span> <span class="nf">Install</span><span class="p">(</span><span class="n">IWindsorContainer</span> <span class="n">container</span><span class="p">,</span> <span class="n">IConfigurationStore</span> <span class="n">store</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">container</span><span class="p">.</span><span class="nf">Register</span><span class="p">(</span>
-            <span class="n">Component</span><span class="p">.</span><span class="n">For</span><span class="p">&lt;</span><span class="n">IHttpControllerFactory</span><span class="p">&gt;()</span>
-               <span class="p">.</span><span class="n">ImplementedBy</span><span class="p">&lt;</span><span class="n">WindsorHttpControllerFactory</span><span class="p">&gt;()</span>
-               <span class="p">.</span><span class="nf">LifestyleSingleton</span><span class="p">(),</span>
+internal class WebApiInstaller : IWindsorInstaller
+{
+    public void Install(IWindsorContainer container, IConfigurationStore store)
+    {
+        container.Register(
+            Component.For&lt;IHttpControllerFactory&gt;()
+               .ImplementedBy&lt;WindsorHttpControllerFactory&gt;()
+               .LifestyleSingleton(),
 
-            <span class="n">Component</span><span class="p">.</span><span class="n">For</span><span class="p">&lt;</span><span class="n">ILogger</span><span class="p">&gt;()</span>
-               <span class="p">.</span><span class="n">ImplementedBy</span><span class="p">&lt;</span><span class="n">NullLogger</span><span class="p">&gt;()</span>
-               <span class="p">.</span><span class="nf">LifestyleSingleton</span><span class="p">(),</span>
+            Component.For&lt;ILogger&gt;()
+               .ImplementedBy&lt;NullLogger&gt;()
+               .LifestyleSingleton(),
 
-            <span class="n">Component</span><span class="p">.</span><span class="n">For</span><span class="p">&lt;</span><span class="n">IFormatterSelector</span><span class="p">&gt;()</span>
-               <span class="p">.</span><span class="n">ImplementedBy</span><span class="p">&lt;</span><span class="n">FormatterSelector</span><span class="p">&gt;()</span>
-               <span class="p">.</span><span class="nf">LifestyleSingleton</span><span class="p">(),</span>
+            Component.For&lt;IFormatterSelector&gt;()
+               .ImplementedBy&lt;FormatterSelector&gt;()
+               .LifestyleSingleton(),
 
-            <span class="n">Component</span><span class="p">.</span><span class="n">For</span><span class="p">&lt;</span><span class="n">IHttpControllerActivator</span><span class="p">&gt;()</span>
-               <span class="p">.</span><span class="n">ImplementedBy</span><span class="p">&lt;</span><span class="n">DefaultHttpControllerActivator</span><span class="p">&gt;()</span>
-               <span class="p">.</span><span class="nf">LifestyleTransient</span><span class="p">(),</span>
+            Component.For&lt;IHttpControllerActivator&gt;()
+               .ImplementedBy&lt;DefaultHttpControllerActivator&gt;()
+               .LifestyleTransient(),
 
-            <span class="n">Component</span><span class="p">.</span><span class="n">For</span><span class="p">&lt;</span><span class="n">IHttpActionSelector</span><span class="p">&gt;()</span>
-               <span class="p">.</span><span class="n">ImplementedBy</span><span class="p">&lt;</span><span class="n">ApiControllerActionSelector</span><span class="p">&gt;()</span>
-               <span class="p">.</span><span class="nf">LifestyleTransient</span><span class="p">(),</span>
+            Component.For&lt;IHttpActionSelector&gt;()
+               .ImplementedBy&lt;ApiControllerActionSelector&gt;()
+               .LifestyleTransient(),
 
-            <span class="n">Component</span><span class="p">.</span><span class="n">For</span><span class="p">&lt;</span><span class="n">IActionValueBinder</span><span class="p">&gt;()</span>
-               <span class="p">.</span><span class="n">ImplementedBy</span><span class="p">&lt;</span><span class="n">DefaultActionValueBinder</span><span class="p">&gt;()</span>
-               <span class="p">.</span><span class="nf">LifestyleTransient</span><span class="p">(),</span>
+            Component.For&lt;IActionValueBinder&gt;()
+               .ImplementedBy&lt;DefaultActionValueBinder&gt;()
+               .LifestyleTransient(),
 
-            <span class="n">Component</span><span class="p">.</span><span class="n">For</span><span class="p">&lt;</span><span class="n">IHttpActionInvoker</span><span class="p">&gt;()</span>
-               <span class="p">.</span><span class="n">ImplementedBy</span><span class="p">&lt;</span><span class="n">ApiControllerActionInvoker</span><span class="p">&gt;()</span>
-               <span class="p">.</span><span class="nf">LifestyleTransient</span><span class="p">(),</span>
+            Component.For&lt;IHttpActionInvoker&gt;()
+               .ImplementedBy&lt;ApiControllerActionInvoker&gt;()
+               .LifestyleTransient(),
 
-            <span class="n">Component</span><span class="p">.</span><span class="n">For</span><span class="p">&lt;</span><span class="n">ModelMetadataProvider</span><span class="p">&gt;()</span>
-               <span class="p">.</span><span class="n">ImplementedBy</span><span class="p">&lt;</span><span class="n">CachedDataAnnotationsModelMetadataProvider</span><span class="p">&gt;()</span>
-               <span class="p">.</span><span class="nf">LifestyleTransient</span><span class="p">(),</span>
+            Component.For&lt;ModelMetadataProvider&gt;()
+               .ImplementedBy&lt;CachedDataAnnotationsModelMetadataProvider&gt;()
+               .LifestyleTransient(),
 
-            <span class="n">Component</span><span class="p">.</span><span class="n">For</span><span class="p">&lt;</span><span class="n">HttpConfiguration</span><span class="p">&gt;()</span>
-               <span class="p">.</span><span class="nf">Instance</span><span class="p">(</span><span class="n">GlobalConfiguration</span><span class="p">.</span><span class="n">Configuration</span><span class="p">));</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+            Component.For&lt;HttpConfiguration&gt;()
+               .Instance(GlobalConfiguration.Configuration));
+    }
+}
 </pre>
 <p>In the&nbsp;Application_Start method we add the installer and set the delegates for the SetResolver method. That way when the framework requests an IHttpControllerFactory instance, Windsor will supply the one we created earlier.</p>
-<pre class="highlight csharp"><span class="k">this</span><span class="p">.</span><span class="n">container</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">WindsorContainer</span><span class="p">()</span>
-    <span class="p">.</span><span class="nf">Install</span><span class="p">(</span><span class="k">new</span> <span class="nf">WebApiInstaller</span><span class="p">());</span>
+<pre class="highlight text">this.container = new WindsorContainer()
+    .Install(new WebApiInstaller());
 
-<span class="n">GlobalConfiguration</span><span class="p">.</span><span class="n">Configuration</span><span class="p">.</span><span class="n">ServiceResolver</span><span class="p">.</span><span class="nf">SetResolver</span><span class="p">(</span>
-    <span class="n">serviceType</span> <span class="p">=&gt;</span> <span class="n">container</span><span class="p">.</span><span class="nf">Resolve</span><span class="p">(</span><span class="n">serviceType</span><span class="p">),</span>
-    <span class="n">serviceType</span> <span class="p">=&gt;</span> <span class="n">container</span><span class="p">.</span><span class="nf">ResolveAll</span><span class="p">(</span><span class="n">serviceType</span><span class="p">).</span><span class="n">Cast</span><span class="p">&lt;</span><span class="kt">object</span><span class="p">&gt;());</span>
+GlobalConfiguration.Configuration.ServiceResolver.SetResolver(
+    serviceType =&gt; container.Resolve(serviceType),
+    serviceType =&gt; container.ResolveAll(serviceType).Cast&lt;object&gt;());
 </pre>
 <p>In order to have Windsor resolve regular controllers (side by side) we can create and add another installer as well as an implementation of the IControllerFactory interface.</p>
-<pre class="highlight csharp"><span class="k">this</span><span class="p">.</span><span class="n">container</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">WindsorContainer</span><span class="p">()</span>
-    <span class="p">.</span><span class="nf">Install</span><span class="p">(</span><span class="k">new</span> <span class="nf">WebMvcInstaller</span><span class="p">())</span>
-    <span class="p">.</span><span class="nf">Install</span><span class="p">(</span><span class="k">new</span> <span class="nf">WebApiInstaller</span><span class="p">());</span>
+<pre class="highlight text">this.container = new WindsorContainer()
+    .Install(new WebMvcInstaller())
+    .Install(new WebApiInstaller());
 
-<span class="n">GlobalConfiguration</span><span class="p">.</span><span class="n">Configuration</span><span class="p">.</span><span class="n">ServiceResolver</span><span class="p">.</span><span class="nf">SetResolver</span><span class="p">(</span>
-    <span class="n">serviceType</span> <span class="p">=&gt;</span> <span class="n">container</span><span class="p">.</span><span class="nf">Resolve</span><span class="p">(</span><span class="n">serviceType</span><span class="p">),</span>
-    <span class="n">serviceType</span> <span class="p">=&gt;</span> <span class="n">container</span><span class="p">.</span><span class="nf">ResolveAll</span><span class="p">(</span><span class="n">serviceType</span><span class="p">).</span><span class="n">Cast</span><span class="p">&lt;</span><span class="kt">object</span><span class="p">&gt;());</span>
+GlobalConfiguration.Configuration.ServiceResolver.SetResolver(
+    serviceType =&gt; container.Resolve(serviceType),
+    serviceType =&gt; container.ResolveAll(serviceType).Cast&lt;object&gt;());
 
-<span class="n">ControllerBuilder</span><span class="p">.</span><span class="n">Current</span><span class="p">.</span><span class="nf">SetControllerFactory</span><span class="p">(</span>
-    <span class="k">new</span> <span class="nf">WindsorControllerFactory</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="n">container</span><span class="p">));</span>
+ControllerBuilder.Current.SetControllerFactory(
+    new WindsorControllerFactory(this.container));
 </pre>
 <p>Finally, a&nbsp;gist with all the source code can be found <a href="https://gist.github.com/2044349" target="_blank">here</a>.</p>
 

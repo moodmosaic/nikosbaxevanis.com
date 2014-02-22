@@ -1,29 +1,29 @@
-<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" /><meta content="width=device-width, user-scalable=no" name="viewport" /><title>Heuristics for Static Factory Methods in AutoFixture</title><link href="http://fonts.googleapis.com/css?family=Lora:400,700|Open+Sans" rel="stylesheet" type="text/css" /><link href="/stylesheets/fontello.css?1392664185" media="screen" rel="stylesheet" type="text/css" />
-<link href="/stylesheets/styles.css?1392664185" media="screen" rel="stylesheet" type="text/css" />
-<link href="/stylesheets/syntax.css?1392664185" media="screen" rel="stylesheet" type="text/css" /></head><body><div class="row"><h1>Heuristics for Static Factory Methods in AutoFixture</h1><div class="post"><p>Here is a type with a private constructor:</p>
-<pre class="highlight csharp"><span class="k">public</span> <span class="k">class</span> <span class="nc">TypeWithFactoryMethod</span>
-<span class="p">{</span>
-    <span class="k">private</span> <span class="nf">TypeWithFactoryMethod</span><span class="p">()</span> 
-    <span class="p">{</span>
-    <span class="p">}</span>
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" /><meta content="width=device-width, user-scalable=no" name="viewport" /><title>Heuristics for Static Factory Methods in AutoFixture</title><link href="http://fonts.googleapis.com/css?family=Lora:400,700|Open+Sans" rel="stylesheet" type="text/css" /><link href="/stylesheets/fontello.css?1393091639" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/styles.css?1393091639" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/syntax.css?1393091639" media="screen" rel="stylesheet" type="text/css" /></head><body><div class="row"><h1>Heuristics for Static Factory Methods in AutoFixture</h1><div class="post"><p>Here is a type with a private constructor:</p>
+<pre class="highlight text">public class TypeWithFactoryMethod
+{
+    private TypeWithFactoryMethod() 
+    {
+    }
 
-    <span class="k">public</span> <span class="k">static</span> <span class="n">TypeWithFactoryMethod</span> <span class="nf">Create</span><span class="p">()</span>
-    <span class="p">{</span>
-        <span class="k">return</span> <span class="k">new</span> <span class="nf">TypeWithFactoryMethod</span><span class="p">();</span>
-    <span class="p">}</span>
+    public static TypeWithFactoryMethod Create()
+    {
+        return new TypeWithFactoryMethod();
+    }
 
-    <span class="k">public</span> <span class="k">static</span> <span class="n">TypeWithFactoryMethod</span> <span class="nf">Create</span><span class="p">(</span><span class="kt">object</span> <span class="n">argument</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="k">return</span> <span class="k">new</span> <span class="nf">TypeWithFactoryMethod</span><span class="p">();</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+    public static TypeWithFactoryMethod Create(object argument)
+    {
+        return new TypeWithFactoryMethod();
+    }
+}
 </pre>
 <p>In order to create an instance of that type we have to call one of it&#39;s static factory methods, for example:</p>
-<pre class="highlight csharp"><span class="n">var</span> <span class="n">instance</span> <span class="p">=</span> <span class="n">TypeWithFactoryMethod</span><span class="p">.</span><span class="nf">Create</span><span class="p">();</span>
+<pre class="highlight text">var instance = TypeWithFactoryMethod.Create();
 </pre>
 <p>If we try to create an <a href="http://blogs.msdn.com/b/ploeh/archive/2008/11/17/anonymous-variables.aspx" target="_blank" title="Anonymous Variables">Anonymous Variable</a> with <a href="http://autofixture.codeplex.com" target="_blank" title="AutoFixture makes it easier for developers to do Test-Driven Development by automating non-relevant Test Fixture Setup, allowing the Test Developer to focus on the essentials of each test case.">AutoFixture</a> right now (version 2.1) it will throw an exception since there are no public constructors:</p>
-<pre class="highlight csharp"><span class="n">var</span> <span class="n">fixture</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Fixture</span><span class="p">();</span>
-<span class="n">var</span> <span class="n">result</span> <span class="p">=</span> <span class="n">fixture</span><span class="p">.</span><span class="n">CreateAnonymous</span><span class="p">&lt;</span><span class="n">TypeWithFactoryMethod</span><span class="p">&gt;();</span>
+<pre class="highlight text">var fixture = new Fixture();
+var result = fixture.CreateAnonymous&lt;TypeWithFactoryMethod&gt;();
 </pre>
 <p>Using the latest version from&#0160;<a href="http://autofixture.codeplex.com/SourceControl/list/changesets" target="_blank" title="AutoFixture (changesets)">trunk</a>&#0160;(and on the next public release) the above code will work.&#0160;It will successfully return an instance of the type by using&#0160;a set of heuristics that enable AutoFixture to search for static factory methods.</p>
 

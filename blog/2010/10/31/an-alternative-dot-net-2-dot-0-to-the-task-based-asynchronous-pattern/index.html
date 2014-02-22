@@ -1,6 +1,6 @@
-<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" /><meta content="width=device-width, user-scalable=no" name="viewport" /><title>An alternative (.NET 2.0) to the Task-based Asynchronous Pattern</title><link href="http://fonts.googleapis.com/css?family=Lora:400,700|Open+Sans" rel="stylesheet" type="text/css" /><link href="/stylesheets/fontello.css?1392664185" media="screen" rel="stylesheet" type="text/css" />
-<link href="/stylesheets/styles.css?1392664185" media="screen" rel="stylesheet" type="text/css" />
-<link href="/stylesheets/syntax.css?1392664185" media="screen" rel="stylesheet" type="text/css" /></head><body><div class="row"><h1>An alternative (.NET 2.0) to the Task-based Asynchronous Pattern</h1><div class="post"><blockquote>
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" /><meta content="width=device-width, user-scalable=no" name="viewport" /><title>An alternative (.NET 2.0) to the Task-based Asynchronous Pattern</title><link href="http://fonts.googleapis.com/css?family=Lora:400,700|Open+Sans" rel="stylesheet" type="text/css" /><link href="/stylesheets/fontello.css?1393091639" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/styles.css?1393091639" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/syntax.css?1393091639" media="screen" rel="stylesheet" type="text/css" /></head><body><div class="row"><h1>An alternative (.NET 2.0) to the Task-based Asynchronous Pattern</h1><div class="post"><blockquote>
 <p>Write code that looks like&#0160;synchronous but actually executes&#0160;asynchronously with the PowerThreading library and the AsyncEnumerator class.</p>
 </blockquote>
 
@@ -11,27 +11,27 @@
 </blockquote>
 
 <p>I will start, again, with some code that executes&#0160;synchronously:</p>
-<pre class="highlight csharp"><span class="k">private</span> <span class="k">void</span> <span class="nf">FetchStockQuotesSync</span><span class="p">(</span><span class="n">WebService</span> <span class="n">svc</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="c1">// This blocks. You don't know when the FetchStockQuotes
-</span>    <span class="c1">// method returns. It may takes from minutes, to hours or
-</span>    <span class="c1">// it may not return at all.
-</span>    <span class="n">IStockQuote</span> <span class="n">qt</span> <span class="p">=</span> <span class="n">svc</span><span class="p">.</span><span class="nf">FetchStockQuotes</span><span class="p">();</span>
-<span class="p">}</span>
+<pre class="highlight text">private void FetchStockQuotesSync(WebService svc)
+{
+    // This blocks. You don't know when the FetchStockQuotes
+    // method returns. It may takes from minutes, to hours or
+    // it may not return at all.
+    IStockQuote qt = svc.FetchStockQuotes();
+}
 </pre>
 <p>Fortunately the WebService class implements the&#0160;<a href="http://msdn.microsoft.com/en-us/library/system.iasyncresult.aspx" target="_blank" title="Represents the status of an asynchronous operation.">IAsyncResult</a>&#0160;interface, so the same code can be executed asynchronously using the AsyncEnumerator class:</p>
-<pre class="highlight csharp"><span class="c1">// Inside your method create an instance of an AsyncEnumerator class,
+<pre class="highlight text">// Inside your method create an instance of an AsyncEnumerator class,
 // specifying the iterator method to be driven by the AsyncEnumerator.
-</span><span class="n">AsyncEnumerator</span> <span class="n">ae</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">AsyncEnumerator</span><span class="p">();</span>
-<span class="n">ae</span><span class="p">.</span><span class="nf">BeginExecute</span><span class="p">(</span><span class="nf">GetStockQuotesAsyncEnumerator</span><span class="p">(</span><span class="n">ae</span><span class="p">,</span> <span class="n">svc</span><span class="p">),</span> <span class="n">ae</span><span class="p">.</span><span class="n">EndExecute</span><span class="p">);</span>
+AsyncEnumerator ae = new AsyncEnumerator();
+ae.BeginExecute(GetStockQuotesAsyncEnumerator(ae, svc), ae.EndExecute);
 
-<span class="k">private</span> <span class="k">static</span> <span class="n">IEnumerator</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;</span> <span class="nf">GetStockQuotesAsyncEnumerator</span><span class="p">(</span>
-    <span class="n">AsyncEnumerator</span> <span class="n">ae</span><span class="p">,</span> <span class="n">WebService</span> <span class="n">svc</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="n">svc</span><span class="p">.</span><span class="nf">BeginGetStockQuotes</span><span class="p">(</span><span class="n">ae</span><span class="p">.</span><span class="nf">End</span><span class="p">(),</span> <span class="k">null</span><span class="p">);</span>
-    <span class="k">yield</span> <span class="k">return</span> <span class="m">1</span><span class="p">;</span>
-    <span class="n">IStockQuote</span> <span class="n">qt</span> <span class="p">=</span> <span class="n">svc</span><span class="p">.</span><span class="nf">EndGetStockQuotes</span><span class="p">(</span><span class="n">ae</span><span class="p">.</span><span class="nf">DequeueAsyncResult</span><span class="p">());</span>
-<span class="p">}</span>
+private static IEnumerator&lt;int&gt; GetStockQuotesAsyncEnumerator(
+    AsyncEnumerator ae, WebService svc)
+{
+    svc.BeginGetStockQuotes(ae.End(), null);
+    yield return 1;
+    IStockQuote qt = svc.EndGetStockQuotes(ae.DequeueAsyncResult());
+}
 </pre>
 <p>This technique is similar to the <a href="http://msdn.microsoft.com/en-us/vstudio/async.aspx" target="_blank" title="Async CTP">new language features</a> for asynchronous programming. In fact, what I&#39;ve discussed works from .NET 2.0 up to any future version.</p>
 

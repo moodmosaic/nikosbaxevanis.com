@@ -1,13 +1,13 @@
-<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" /><meta content="width=device-width, user-scalable=no" name="viewport" /><title>AutoFixture, xUnit.net, and Auto Mocking</title><link href="http://fonts.googleapis.com/css?family=Lora:400,700|Open+Sans" rel="stylesheet" type="text/css" /><link href="/stylesheets/fontello.css?1392664185" media="screen" rel="stylesheet" type="text/css" />
-<link href="/stylesheets/styles.css?1392664185" media="screen" rel="stylesheet" type="text/css" />
-<link href="/stylesheets/syntax.css?1392664185" media="screen" rel="stylesheet" type="text/css" /></head><body><div class="row"><h1>AutoFixture, xUnit.net, and Auto Mocking</h1><div class="post"><p><strong>Update</strong>: In AutoFixture 3 <a href="https://github.com/AutoFixture/AutoFixture/wiki/AutoFixture-3.0-Release-Notes#numbers-are-random">numbers are random</a>.</p>
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" /><meta content="width=device-width, user-scalable=no" name="viewport" /><title>AutoFixture, xUnit.net, and Auto Mocking</title><link href="http://fonts.googleapis.com/css?family=Lora:400,700|Open+Sans" rel="stylesheet" type="text/css" /><link href="/stylesheets/fontello.css?1393091639" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/styles.css?1393091639" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/syntax.css?1393091639" media="screen" rel="stylesheet" type="text/css" /></head><body><div class="row"><h1>AutoFixture, xUnit.net, and Auto Mocking</h1><div class="post"><p><strong>Update</strong>: In AutoFixture 3 <a href="https://github.com/AutoFixture/AutoFixture/wiki/AutoFixture-3.0-Release-Notes#numbers-are-random">numbers are random</a>.</p>
 
 <blockquote>
 <p>The features discussed in this post are available when using <a href="https://github.com/AutoFixture/AutoFixture">AutoFixture</a> <a href="http://blog.ploeh.dk/2010/10/08/AutoDataTheoriesWithAutoFixture.aspx">decleratively</a> with the xUnit.net <a href="http://nuget.org/packages/AutoFixture.Xunit/">extension</a>. In addition, it is required to have at least one of the extensions for Auto Mocking using <a href="http://nuget.org/packages/AutoFixture.AutoMoq">AutoMoq</a>, <a href="http://nuget.org/packages/AutoFixture.AutoRhinoMocks">AutoRhinoMocks</a>, <a href="http://nuget.org/packages/AutoFixture.AutoFakeItEasy">AutoFakeItEasy</a>, or <a href="http://nuget.org/packages/AutoFixture.AutoNSubstitute">AutoNSubstitute</a>.</p>
 </blockquote>
 
 <p>To install AutoFixture with xUnit.net data theories, run the following command in the Package Manager Console:</p>
-<pre class="highlight csharp"><span class="n">PM</span><span class="p">&gt;</span> <span class="n">Install</span><span class="p">-</span><span class="n">Package</span> <span class="n">AutoFixture</span><span class="p">.</span><span class="n">Xunit</span>
+<pre class="highlight text">PM&gt; Install-Package AutoFixture.Xunit
 </pre>
 <p>In the test method below we would like to use xUnit.net data theories to provide:</p>
 
@@ -16,16 +16,16 @@
 <li>Auto-generated data specimens for <code>_</code>, <code>s</code>, <code>i</code>, <code>a</code>, and inline values for <code>d</code>.</li>
 <li>Auto-generated data specimens for <code>_</code>, <code>_</code>, <code>i</code>, <code>a</code>, and inline values for <code>d</code>, <code>s</code>.</li>
 </ol>
-<pre class="highlight csharp"><span class="k">public</span> <span class="k">void</span> <span class="nf">TestMethod</span><span class="p">(</span>
-    <span class="kt">double</span> <span class="n">d</span><span class="p">,</span> <span class="kt">string</span> <span class="n">s</span><span class="p">,</span> <span class="n">IInterface</span> <span class="n">i</span><span class="p">,</span> <span class="n">AbstractType</span> <span class="n">a</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="n">Assert</span><span class="p">.</span><span class="nf">True</span><span class="p">(</span>
-        <span class="n">d</span> <span class="p">!=</span> <span class="m">0</span>    <span class="p">&amp;&amp;</span>
-        <span class="n">s</span> <span class="p">!=</span> <span class="k">null</span> <span class="p">&amp;&amp;</span>
-        <span class="n">i</span> <span class="p">!=</span> <span class="k">null</span> <span class="p">&amp;&amp;</span>
-        <span class="n">a</span> <span class="p">!=</span> <span class="k">null</span>
-        <span class="p">);</span>
-<span class="p">}</span>
+<pre class="highlight text">public void TestMethod(
+    double d, string s, IInterface i, AbstractType a)
+{
+    Assert.True(
+        d != 0    &amp;&amp;
+        s != null &amp;&amp;
+        i != null &amp;&amp;
+        a != null
+        );
+}
 </pre>
 <blockquote>
 <p>That fact that argument <code>i</code> is an interface and argument <code>a</code> is an abstract class prevents us from using <code>[InlineData]</code>, <code>[AutoData]</code>, or <code>[InlineAutoData]</code> attributes.</p>
@@ -41,18 +41,18 @@
 <p><strong>Auto Mocking using Moq</strong></p>
 
 <p>To install AutoFixture with Auto Mocking using Moq, run the following command in the Package Manager Console:</p>
-<pre class="highlight csharp"><span class="n">PM</span><span class="p">&gt;</span> <span class="n">Install</span><span class="p">-</span><span class="n">Package</span> <span class="n">AutoFixture</span><span class="p">.</span><span class="n">AutoMoq</span>
+<pre class="highlight text">PM&gt; Install-Package AutoFixture.AutoMoq
 </pre>
 <p>We decorate the test method with AutoMoqData and InlineAutoMoqData attributes:</p>
-<pre class="highlight csharp"><span class="na">[Theory]</span>
-<span class="na">[AutoMoqData]</span>
-<span class="na">[InlineAutoMoqData(2)]</span>
-<span class="na">[InlineAutoMoqData(3, &quot;foo&quot;)]</span>
-<span class="k">public</span> <span class="k">void</span> <span class="nf">WithMoq</span><span class="p">(</span>
-    <span class="kt">double</span> <span class="n">d</span><span class="p">,</span> <span class="kt">string</span> <span class="n">s</span><span class="p">,</span> <span class="n">IInterface</span> <span class="n">i</span><span class="p">,</span> <span class="n">AbstractType</span> <span class="n">a</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="nf">Write</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">a</span><span class="p">);</span>
-<span class="p">}</span>
+<pre class="highlight text">[Theory]
+[AutoMoqData]
+[InlineAutoMoqData(2)]
+[InlineAutoMoqData(3, &quot;foo&quot;)]
+public void WithMoq(
+    double d, string s, IInterface i, AbstractType a)
+{
+    Write(d, s, i, a);
+}
 </pre>
 <p>Output:</p>
 <pre class="highlight python"><span class="n">AutoMoqData</span><span class="p">:</span>
@@ -74,40 +74,40 @@
   <span class="n">a</span> <span class="o">=</span> <span class="n">Castle</span><span class="o">.</span><span class="n">Proxies</span><span class="o">.</span><span class="n">AbstractTypeProxy</span>
 </pre>
 <p>Source code:</p>
-<pre class="highlight csharp"><span class="k">internal</span> <span class="k">class</span> <span class="nc">AutoMoqDataAttribute</span> <span class="p">:</span> <span class="n">AutoDataAttribute</span>
-<span class="p">{</span>
-    <span class="k">internal</span> <span class="nf">AutoMoqDataAttribute</span><span class="p">()</span>
-        <span class="p">:</span> <span class="k">base</span><span class="p">(</span><span class="k">new</span> <span class="nf">Fixture</span><span class="p">().</span><span class="nf">Customize</span><span class="p">(</span><span class="k">new</span> <span class="nf">AutoMoqCustomization</span><span class="p">()))</span>
-    <span class="p">{</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+<pre class="highlight text">internal class AutoMoqDataAttribute : AutoDataAttribute
+{
+    internal AutoMoqDataAttribute()
+        : base(new Fixture().Customize(new AutoMoqCustomization()))
+    {
+    }
+}
 
-<span class="k">internal</span> <span class="k">class</span> <span class="nc">InlineAutoMoqDataAttribute</span> <span class="p">:</span> <span class="n">CompositeDataAttribute</span>
-<span class="p">{</span>
-    <span class="k">internal</span> <span class="nf">InlineAutoMoqDataAttribute</span><span class="p">(</span><span class="k">params</span> <span class="kt">object</span><span class="p">[]</span> <span class="n">values</span><span class="p">)</span>
-        <span class="p">:</span> <span class="k">base</span><span class="p">(</span><span class="k">new</span> <span class="n">DataAttribute</span><span class="p">[]</span> <span class="p">{</span> 
-            <span class="k">new</span> <span class="nf">InlineDataAttribute</span><span class="p">(</span><span class="n">values</span><span class="p">),</span> <span class="k">new</span> <span class="nf">AutoMoqDataAttribute</span><span class="p">()</span> <span class="p">})</span>
-    <span class="p">{</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+internal class InlineAutoMoqDataAttribute : CompositeDataAttribute
+{
+    internal InlineAutoMoqDataAttribute(params object[] values)
+        : base(new DataAttribute[] { 
+            new InlineDataAttribute(values), new AutoMoqDataAttribute() })
+    {
+    }
+}
 </pre>
 <p>More information on AutoFixture with Auto Mocking using Moq can be found at <a href="http://blog.ploeh.dk/2010/08/19/AutoFixtureAsAnAutomockingContainer.aspx">AutoFixture as an auto-mocking container</a> blog post.</p>
 
 <p><strong>Auto Mocking using Rhino Mocks</strong></p>
 
 <p>To install AutoFixture with Auto Mocking using Rhino Mocks, run the following command in the Package Manager Console:</p>
-<pre class="highlight csharp"><span class="n">PM</span><span class="p">&gt;</span> <span class="n">Install</span><span class="p">-</span><span class="n">Package</span> <span class="n">AutoFixture</span><span class="p">.</span><span class="n">AutoRhinoMocks</span>
+<pre class="highlight text">PM&gt; Install-Package AutoFixture.AutoRhinoMocks
 </pre>
 <p>We decorate the test method with AutoRhinoMockData and InlineAutoRhinoMockData attributes:</p>
-<pre class="highlight csharp"><span class="na">[Theory]</span>
-<span class="na">[AutoRhinoMockData]</span>
-<span class="na">[InlineAutoRhinoMockData(2)]</span>
-<span class="na">[InlineAutoRhinoMockData(3, &quot;foo&quot;)]</span>
-<span class="k">public</span> <span class="k">void</span> <span class="nf">WithRhinoMocks</span><span class="p">(</span>
-    <span class="kt">double</span> <span class="n">d</span><span class="p">,</span> <span class="kt">string</span> <span class="n">s</span><span class="p">,</span> <span class="n">IInterface</span> <span class="n">i</span><span class="p">,</span> <span class="n">AbstractType</span> <span class="n">a</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="nf">Write</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">a</span><span class="p">);</span>
-<span class="p">}</span>
+<pre class="highlight text">[Theory]
+[AutoRhinoMockData]
+[InlineAutoRhinoMockData(2)]
+[InlineAutoRhinoMockData(3, &quot;foo&quot;)]
+public void WithRhinoMocks(
+    double d, string s, IInterface i, AbstractType a)
+{
+    Write(d, s, i, a);
+}
 </pre>
 <p>Ouput:</p>
 <pre class="highlight python"><span class="n">AutoRhinoMockData</span><span class="p">:</span>
@@ -129,40 +129,40 @@
   <span class="n">a</span> <span class="o">=</span> <span class="n">Castle</span><span class="o">.</span><span class="n">Proxies</span><span class="o">.</span><span class="n">AbstractTypeProxy5a86172bbda14cc098b4c675c5b7e555</span>
 </pre>
 <p>Source code:</p>
-<pre class="highlight csharp"><span class="k">internal</span> <span class="k">class</span> <span class="nc">AutoRhinoMockDataAttribute</span> <span class="p">:</span> <span class="n">AutoDataAttribute</span>
-<span class="p">{</span>
-    <span class="k">internal</span> <span class="nf">AutoRhinoMockDataAttribute</span><span class="p">()</span>
-        <span class="p">:</span> <span class="k">base</span><span class="p">(</span><span class="k">new</span> <span class="nf">Fixture</span><span class="p">().</span><span class="nf">Customize</span><span class="p">(</span><span class="k">new</span> <span class="nf">AutoRhinoMockCustomization</span><span class="p">()))</span>
-    <span class="p">{</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+<pre class="highlight text">internal class AutoRhinoMockDataAttribute : AutoDataAttribute
+{
+    internal AutoRhinoMockDataAttribute()
+        : base(new Fixture().Customize(new AutoRhinoMockCustomization()))
+    {
+    }
+}
 
-<span class="k">internal</span> <span class="k">class</span> <span class="nc">InlineAutoRhinoMockDataAttribute</span> <span class="p">:</span> <span class="n">CompositeDataAttribute</span>
-<span class="p">{</span>
-    <span class="k">internal</span> <span class="nf">InlineAutoRhinoMockDataAttribute</span><span class="p">(</span><span class="k">params</span> <span class="kt">object</span><span class="p">[]</span> <span class="n">values</span><span class="p">)</span>
-        <span class="p">:</span> <span class="k">base</span><span class="p">(</span><span class="k">new</span> <span class="n">DataAttribute</span><span class="p">[]</span> <span class="p">{</span> 
-            <span class="k">new</span> <span class="nf">InlineDataAttribute</span><span class="p">(</span><span class="n">values</span><span class="p">),</span> <span class="k">new</span> <span class="nf">AutoRhinoMockDataAttribute</span><span class="p">()</span> <span class="p">})</span>
-    <span class="p">{</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+internal class InlineAutoRhinoMockDataAttribute : CompositeDataAttribute
+{
+    internal InlineAutoRhinoMockDataAttribute(params object[] values)
+        : base(new DataAttribute[] { 
+            new InlineDataAttribute(values), new AutoRhinoMockDataAttribute() })
+    {
+    }
+}
 </pre>
 <p>More information on AutoFixture with Auto Mocking using Rhino Mocks can be found at <a href="http://blog.ploeh.dk/2010/11/13/RhinoMocksbasedAutomockingWithAutoFixture.aspx">Rhino Mocks-based auto-mocking with AutoFixture</a> blog post.</p>
 
 <p><strong>Auto Mocking using FakeItEasy</strong></p>
 
 <p>To install AutoFixture with Auto Mocking using FakeItEasy, run the following command in the Package Manager Console:</p>
-<pre class="highlight csharp"><span class="n">PM</span><span class="p">&gt;</span> <span class="n">Install</span><span class="p">-</span><span class="n">Package</span> <span class="n">AutoFixture</span><span class="p">.</span><span class="n">AutoFakeItEasy</span>
+<pre class="highlight text">PM&gt; Install-Package AutoFixture.AutoFakeItEasy
 </pre>
 <p>We decorate the test method with AutoFakeItEasyData or InlineAutoFakeItEasyData attributes:</p>
-<pre class="highlight csharp"><span class="na">[Theory]</span>
-<span class="na">[AutoFakeItEasyData]</span>
-<span class="na">[InlineAutoFakeItEasyData(2)]</span>
-<span class="na">[InlineAutoFakeItEasyData(3, &quot;foo&quot;)]</span>
-<span class="k">public</span> <span class="k">void</span> <span class="nf">WithFakeItEasy</span><span class="p">(</span>
-    <span class="kt">double</span> <span class="n">d</span><span class="p">,</span> <span class="kt">string</span> <span class="n">s</span><span class="p">,</span> <span class="n">IInterface</span> <span class="n">i</span><span class="p">,</span> <span class="n">AbstractType</span> <span class="n">a</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="nf">Write</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">a</span><span class="p">);</span>
-<span class="p">}</span>
+<pre class="highlight text">[Theory]
+[AutoFakeItEasyData]
+[InlineAutoFakeItEasyData(2)]
+[InlineAutoFakeItEasyData(3, &quot;foo&quot;)]
+public void WithFakeItEasy(
+    double d, string s, IInterface i, AbstractType a)
+{
+    Write(d, s, i, a);
+}
 </pre>
 <p>Output:</p>
 <pre class="highlight python"><span class="n">AutoFakeItEasyData</span><span class="p">:</span>
@@ -184,40 +184,40 @@
   <span class="n">a</span> <span class="o">=</span> <span class="n">Faked</span> <span class="n">AbstractType</span>
 </pre>
 <p>Source code:</p>
-<pre class="highlight csharp"><span class="k">internal</span> <span class="k">class</span> <span class="nc">AutoFakeItEasyDataAttribute</span> <span class="p">:</span> <span class="n">AutoDataAttribute</span>
-<span class="p">{</span>
-    <span class="k">internal</span> <span class="nf">AutoFakeItEasyDataAttribute</span><span class="p">()</span>
-        <span class="p">:</span> <span class="k">base</span><span class="p">(</span><span class="k">new</span> <span class="nf">Fixture</span><span class="p">().</span><span class="nf">Customize</span><span class="p">(</span><span class="k">new</span> <span class="nf">AutoFakeItEasyCustomization</span><span class="p">()))</span>
-    <span class="p">{</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+<pre class="highlight text">internal class AutoFakeItEasyDataAttribute : AutoDataAttribute
+{
+    internal AutoFakeItEasyDataAttribute()
+        : base(new Fixture().Customize(new AutoFakeItEasyCustomization()))
+    {
+    }
+}
 
-<span class="k">internal</span> <span class="k">class</span> <span class="nc">InlineAutoFakeItEasyDataAttribute</span> <span class="p">:</span> <span class="n">CompositeDataAttribute</span>
-<span class="p">{</span>
-    <span class="k">internal</span> <span class="nf">InlineAutoFakeItEasyDataAttribute</span><span class="p">(</span><span class="k">params</span> <span class="kt">object</span><span class="p">[]</span> <span class="n">values</span><span class="p">)</span>
-        <span class="p">:</span> <span class="k">base</span><span class="p">(</span><span class="k">new</span> <span class="n">DataAttribute</span><span class="p">[]</span> <span class="p">{</span> 
-            <span class="k">new</span> <span class="nf">InlineDataAttribute</span><span class="p">(</span><span class="n">values</span><span class="p">),</span> <span class="k">new</span> <span class="nf">AutoFakeItEasyDataAttribute</span><span class="p">()</span> <span class="p">})</span>
-    <span class="p">{</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+internal class InlineAutoFakeItEasyDataAttribute : CompositeDataAttribute
+{
+    internal InlineAutoFakeItEasyDataAttribute(params object[] values)
+        : base(new DataAttribute[] { 
+            new InlineDataAttribute(values), new AutoFakeItEasyDataAttribute() })
+    {
+    }
+}
 </pre>
 <p>More information on AutoFixture with Auto Mocking using FakeItEasy can be found at <a href="http://nikosbaxevanis.com/2011/12/14/auto-mocking-with-fakeiteasy-and-autofixture/">Auto-Mocking with FakeItEasy and AutoFixture</a> blog post.</p>
 
 <p><strong>Auto Mocking using NSubstitute</strong></p>
 
 <p>To install AutoFixture with Auto Mocking using NSubstitute, run the following command in the Package Manager Console:</p>
-<pre class="highlight csharp"><span class="n">PM</span><span class="p">&gt;</span> <span class="n">Install</span><span class="p">-</span><span class="n">Package</span> <span class="n">AutoFixture</span><span class="p">.</span><span class="n">AutoNSubstitute</span>
+<pre class="highlight text">PM&gt; Install-Package AutoFixture.AutoNSubstitute
 </pre>
 <p>We decorate the test method with AutoNSubstituteData or InlineAutoNSubstituteData attributes:</p>
-<pre class="highlight csharp"><span class="na">[Theory]</span>
-<span class="na">[AutoNSubstituteData]</span>
-<span class="na">[InlineAutoNSubstituteData(2)]</span>
-<span class="na">[InlineAutoNSubstituteData(3, &quot;foo&quot;)]</span>
-<span class="k">public</span> <span class="k">void</span> <span class="nf">WithNSubstitute</span><span class="p">(</span>
-    <span class="kt">double</span> <span class="n">d</span><span class="p">,</span> <span class="kt">string</span> <span class="n">s</span><span class="p">,</span> <span class="n">IInterface</span> <span class="n">i</span><span class="p">,</span> <span class="n">AbstractType</span> <span class="n">a</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="nf">Write</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">a</span><span class="p">);</span>
-<span class="p">}</span>
+<pre class="highlight text">[Theory]
+[AutoNSubstituteData]
+[InlineAutoNSubstituteData(2)]
+[InlineAutoNSubstituteData(3, &quot;foo&quot;)]
+public void WithNSubstitute(
+    double d, string s, IInterface i, AbstractType a)
+{
+    Write(d, s, i, a);
+}
 </pre>
 <p>Output:</p>
 <pre class="highlight python"><span class="n">AutoNSubstituteData</span><span class="p">:</span>
@@ -239,22 +239,22 @@
   <span class="n">a</span> <span class="o">=</span> <span class="n">Castle</span><span class="o">.</span><span class="n">Proxies</span><span class="o">.</span><span class="n">AbstractTypeProxy</span>
 </pre>
 <p>Source code:</p>
-<pre class="highlight csharp"><span class="k">internal</span> <span class="k">class</span> <span class="nc">AutoNSubstituteDataAttribute</span> <span class="p">:</span> <span class="n">AutoDataAttribute</span>
-<span class="p">{</span>
-    <span class="k">internal</span> <span class="nf">AutoNSubstituteDataAttribute</span><span class="p">()</span>
-        <span class="p">:</span> <span class="k">base</span><span class="p">(</span><span class="k">new</span> <span class="nf">Fixture</span><span class="p">().</span><span class="nf">Customize</span><span class="p">(</span><span class="k">new</span> <span class="nf">AutoNSubstituteCustomization</span><span class="p">()))</span>
-    <span class="p">{</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+<pre class="highlight text">internal class AutoNSubstituteDataAttribute : AutoDataAttribute
+{
+    internal AutoNSubstituteDataAttribute()
+        : base(new Fixture().Customize(new AutoNSubstituteCustomization()))
+    {
+    }
+}
 
-<span class="k">internal</span> <span class="k">class</span> <span class="nc">InlineAutoNSubstituteDataAttribute</span> <span class="p">:</span> <span class="n">CompositeDataAttribute</span>
-<span class="p">{</span>
-    <span class="k">internal</span> <span class="nf">InlineAutoNSubstituteDataAttribute</span><span class="p">(</span><span class="k">params</span> <span class="kt">object</span><span class="p">[]</span> <span class="n">values</span><span class="p">)</span>
-        <span class="p">:</span> <span class="k">base</span><span class="p">(</span><span class="k">new</span> <span class="n">DataAttribute</span><span class="p">[]</span> <span class="p">{</span> 
-            <span class="k">new</span> <span class="nf">InlineDataAttribute</span><span class="p">(</span><span class="n">values</span><span class="p">),</span> <span class="k">new</span> <span class="nf">AutoNSubstituteDataAttribute</span><span class="p">()</span> <span class="p">})</span>
-    <span class="p">{</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+internal class InlineAutoNSubstituteDataAttribute : CompositeDataAttribute
+{
+    internal InlineAutoNSubstituteDataAttribute(params object[] values)
+        : base(new DataAttribute[] { 
+            new InlineDataAttribute(values), new AutoNSubstituteDataAttribute() })
+    {
+    }
+}
 </pre>
 <p>More information on AutoFixture with Auto Mocking using NSubstitute can be found at <a href="http://blog.ploeh.dk/2013/01/09/NSubstituteAuto-mockingwithAutoFixture/">NSubstitute Auto-mocking with AutoFixture</a> blog post.</p>
 </div><a class="twitter" href="https://twitter.com/intent/tweet?url=http%3A%2F%2Fnikosbaxevanis.com%2Fblog%2F2012%2F07%2F31%2Fautofixture-xunit-dot-net-and-auto-mocking%2F&text=AutoFixture%2C+xUnit.net%2C+and+Auto+Mocking&via=nikosbaxevanis" target="_blank">Tweet This</a><div class="dater">July 31, 2012</div><div class="categories">Published in<a class="category" href="/category/xunit.net/">xUnit.net&nbsp;</a><a class="category" href="/category/autofixture/">AutoFixture&nbsp;</a><a class="category" href="/category/unit-testing/">Unit Testing&nbsp;</a> on July 31, 2012</div></div><div class="homer"><a href="/"><i class="icon-tape" style="font-size:32px;"></i></a></div><script type="text/javascript">var _gaq = _gaq || [];

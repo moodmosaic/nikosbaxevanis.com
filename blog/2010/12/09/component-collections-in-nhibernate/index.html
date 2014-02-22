@@ -1,11 +1,11 @@
-<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" /><meta content="width=device-width, user-scalable=no" name="viewport" /><title>Component Collections in NHibernate</title><link href="http://fonts.googleapis.com/css?family=Lora:400,700|Open+Sans" rel="stylesheet" type="text/css" /><link href="/stylesheets/fontello.css?1392664185" media="screen" rel="stylesheet" type="text/css" />
-<link href="/stylesheets/styles.css?1392664185" media="screen" rel="stylesheet" type="text/css" />
-<link href="/stylesheets/syntax.css?1392664185" media="screen" rel="stylesheet" type="text/css" /></head><body><div class="row"><h1>Component Collections in NHibernate</h1><div class="post"><p><strong>Update:</strong>&#0160;In <a href="http://www.nikosbaxevanis.com/bonus-bits/2010/12/component-base-class-nhibernate.html" target="_blank" title="ComponentBase(Of T) Class for NHibernate Components.">this post</a> I discuss further about the ComponentBase(Of T) Class.</p>
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" /><meta content="width=device-width, user-scalable=no" name="viewport" /><title>Component Collections in NHibernate</title><link href="http://fonts.googleapis.com/css?family=Lora:400,700|Open+Sans" rel="stylesheet" type="text/css" /><link href="/stylesheets/fontello.css?1393091639" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/styles.css?1393091639" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/syntax.css?1393091639" media="screen" rel="stylesheet" type="text/css" /></head><body><div class="row"><h1>Component Collections in NHibernate</h1><div class="post"><p><strong>Update:</strong>&#0160;In <a href="http://www.nikosbaxevanis.com/bonus-bits/2010/12/component-base-class-nhibernate.html" target="_blank" title="ComponentBase(Of T) Class for NHibernate Components.">this post</a> I discuss further about the ComponentBase(Of T) Class.</p>
 
 <p>Objects that are used to describe certain&#0160;aspects of a domain, and which do not have identity, are named&#0160;Value Objects (do not confuse them with .NET Value Types). Value Object is a term used in <a href="http://en.wikipedia.org/wiki/Domain-driven_design" target="_blank" title="omain-driven design (DDD) is an approach to developing software for complex needs by deeply connecting the implementation to an evolving model of the core business concepts.">Domain-driven design</a> (DDD). In NHibernate, such kind of objects are declared using the <i>component</i> tag. However, <span style="text-decoration: underline;">collections of components</span> are declared with a <i>composite-element</i> tag.</p>
 
 <p>Here is an example with <a href="http://www.fluentnhibernate.org/" target="_blank">Fluent NHibernate</a>:</p>
-<pre class="highlight csharp"><span class="cm">/*
+<pre class="highlight text">/*
 &lt;set name=&quot;MandatoryCoverages&quot;
     table=&quot;CarUseMandatoryCoverageFees&quot; mutable=&quot;true&quot;&gt;
 &lt;key&gt;
@@ -21,18 +21,18 @@
     &lt;/many-to-one&gt;
 &lt;/composite-element&gt;
 &lt;/set&gt;
-*/</span>
-<span class="n">HasMany</span><span class="p">&lt;</span><span class="n">CarCoverageFee</span><span class="p">&gt;(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">MandatoryCoverages</span><span class="p">)</span>
-    <span class="p">.</span><span class="nf">AsSet</span><span class="p">()</span>
-    <span class="p">.</span><span class="nf">Table</span><span class="p">(</span><span class="s">&quot;CarUseMandatoryCoverageFees&quot;</span><span class="p">)</span>
-    <span class="p">.</span><span class="nf">Component</span><span class="p">(</span><span class="n">fee</span> <span class="p">=&gt;</span>
-    <span class="p">{</span>
-        <span class="n">fee</span><span class="p">.</span><span class="n">References</span><span class="p">&lt;</span><span class="n">Coverage</span><span class="p">&gt;(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">Coverage</span><span class="p">).</span><span class="n">Fetch</span><span class="p">.</span><span class="nf">Join</span><span class="p">();</span>
-        <span class="n">fee</span><span class="p">.</span><span class="nf">Map</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">NetFeePercentage</span><span class="p">);</span>
-    <span class="p">});</span>
+*/
+HasMany&lt;CarCoverageFee&gt;(x =&gt; x.MandatoryCoverages)
+    .AsSet()
+    .Table(&quot;CarUseMandatoryCoverageFees&quot;)
+    .Component(fee =&gt;
+    {
+        fee.References&lt;Coverage&gt;(x =&gt; x.Coverage).Fetch.Join();
+        fee.Map(x =&gt; x.NetFeePercentage);
+    });
 </pre>
 <p><br /></p>
-<pre class="highlight csharp"><span class="cm">/*
+<pre class="highlight text">/*
 &lt;set name=&quot;OptionalCoverages&quot;
     table=&quot;CarUseOptionalCoverageFees&quot; mutable=&quot;true&quot;&gt;
 &lt;key&gt;
@@ -48,119 +48,119 @@
     &lt;/many-to-one&gt;
 &lt;/composite-element&gt;
 &lt;/set&gt;
-*/</span>
-<span class="n">HasMany</span><span class="p">&lt;</span><span class="n">CarCoverageFee</span><span class="p">&gt;(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">OptionalCoverages</span><span class="p">)</span>
-    <span class="p">.</span><span class="nf">AsSet</span><span class="p">()</span>
-    <span class="p">.</span><span class="nf">Table</span><span class="p">(</span><span class="s">&quot;CarUseOptionalCoverageFees&quot;</span><span class="p">)</span>
-    <span class="p">.</span><span class="nf">Component</span><span class="p">(</span><span class="n">fee</span> <span class="p">=&gt;</span>
-    <span class="p">{</span>
-        <span class="n">fee</span><span class="p">.</span><span class="n">References</span><span class="p">&lt;</span><span class="n">Coverage</span><span class="p">&gt;(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">Coverage</span><span class="p">).</span><span class="n">Fetch</span><span class="p">.</span><span class="nf">Join</span><span class="p">();</span>
-        <span class="n">fee</span><span class="p">.</span><span class="nf">Map</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">NetFeePercentage</span><span class="p">);</span>
-    <span class="p">});</span>
+*/
+HasMany&lt;CarCoverageFee&gt;(x =&gt; x.OptionalCoverages)
+    .AsSet()
+    .Table(&quot;CarUseOptionalCoverageFees&quot;)
+    .Component(fee =&gt;
+    {
+        fee.References&lt;Coverage&gt;(x =&gt; x.Coverage).Fetch.Join();
+        fee.Map(x =&gt; x.NetFeePercentage);
+    });
 </pre>
 <p>The&#0160;CarCoverageFee class is a component (a Value Object for DDD) so <span style="text-decoration: underline;">it does not have an identity field</span>.&#0160;This creates a lot of noise between the application and the database as we can see from the image below:</p>
 
 <p><img src="http://farm9.staticflickr.com/8183/8397466663_aa3d5e1fca_b.jpg" alt="Profiler output, without overriding Equals and GetHashCode" /></p>
 
 <p>We can define an abstract base class for our components. Inside this class we override the Equals method and immediately throw an exception to the caller indicating that this method must be overridden by the caller:</p>
-<pre class="highlight csharp"><span class="k">public</span> <span class="k">abstract</span> <span class="k">class</span> <span class="nc">ComponentBase</span>
-<span class="p">{</span>
-    <span class="c1">/// &lt;summary&gt;
-</span>    <span class="c1">/// Determines whether the specified
-</span>    <span class="c1">/// &lt;see cref=&quot;System.Object&quot;/&gt; is equal
-</span>    <span class="c1">/// to this instance.
-</span>    <span class="c1">/// &lt;/summary&gt;
-</span>    <span class="c1">/// &lt;param name=&quot;obj&quot;&gt;The &lt;see cref=&quot;System.Object&quot;/&gt;
-</span>    <span class="c1">/// to compare with this instance.&lt;/param&gt;
-</span>    <span class="c1">/// &lt;returns&gt;
-</span>    <span class="c1">///     &lt;c&gt;true&lt;/c&gt; if the specified
-</span>    <span class="c1">///     &lt;see cref=&quot;System.Object&quot;/&gt; is equal to this
-</span>    <span class="c1">///     instance; otherwise, &lt;c&gt;false&lt;/c&gt;.
-</span>    <span class="c1">/// &lt;/returns&gt;
-</span>    <span class="c1">/// &lt;exception cref=&quot;T:System.NullReferenceException&quot;&gt;
-</span>    <span class="c1">/// The &lt;paramref name=&quot;obj&quot;/&gt; parameter is null.
-</span>    <span class="c1">/// &lt;/exception&gt;
-</span>    <span class="k">public</span> <span class="k">override</span> <span class="kt">bool</span> <span class="nf">Equals</span><span class="p">(</span><span class="kt">object</span> <span class="n">obj</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="k">throw</span> <span class="k">new</span> <span class="nf">MethodAccessException</span><span class="p">(</span>
-            <span class="s">&quot;Components must be compared using property values.&quot;</span><span class="p">);</span>
-    <span class="p">}</span>
+<pre class="highlight text">public abstract class ComponentBase
+{
+    /// &lt;summary&gt;
+    /// Determines whether the specified
+    /// &lt;see cref=&quot;System.Object&quot;/&gt; is equal
+    /// to this instance.
+    /// &lt;/summary&gt;
+    /// &lt;param name=&quot;obj&quot;&gt;The &lt;see cref=&quot;System.Object&quot;/&gt;
+    /// to compare with this instance.&lt;/param&gt;
+    /// &lt;returns&gt;
+    ///     &lt;c&gt;true&lt;/c&gt; if the specified
+    ///     &lt;see cref=&quot;System.Object&quot;/&gt; is equal to this
+    ///     instance; otherwise, &lt;c&gt;false&lt;/c&gt;.
+    /// &lt;/returns&gt;
+    /// &lt;exception cref=&quot;T:System.NullReferenceException&quot;&gt;
+    /// The &lt;paramref name=&quot;obj&quot;/&gt; parameter is null.
+    /// &lt;/exception&gt;
+    public override bool Equals(object obj)
+    {
+        throw new MethodAccessException(
+            &quot;Components must be compared using property values.&quot;);
+    }
 
-    <span class="c1">/// &lt;summary&gt;
-</span>    <span class="c1">/// Returns a hash code for this instance.
-</span>    <span class="c1">/// &lt;/summary&gt;
-</span>    <span class="c1">/// &lt;returns&gt;
-</span>    <span class="c1">/// A hash code for this instance, suitable for
-</span>    <span class="c1">/// use in hashing algorithms and data structures
-</span>    <span class="c1">/// like a hash table.
-</span>    <span class="c1">/// &lt;/returns&gt;
-</span>    <span class="k">public</span> <span class="k">override</span> <span class="kt">int</span> <span class="nf">GetHashCode</span><span class="p">()</span>
-    <span class="p">{</span>
-        <span class="k">throw</span> <span class="k">new</span> <span class="nf">MethodAccessException</span><span class="p">(</span>
-            <span class="s">&quot;Components must be hashed using property values.&quot;</span><span class="p">);</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+    /// &lt;summary&gt;
+    /// Returns a hash code for this instance.
+    /// &lt;/summary&gt;
+    /// &lt;returns&gt;
+    /// A hash code for this instance, suitable for
+    /// use in hashing algorithms and data structures
+    /// like a hash table.
+    /// &lt;/returns&gt;
+    public override int GetHashCode()
+    {
+        throw new MethodAccessException(
+            &quot;Components must be hashed using property values.&quot;);
+    }
+}
 </pre>
 <p>Here is the class, modified to inherit from the ComponentBase class:</p>
-<pre class="highlight csharp"><span class="k">public</span> <span class="k">class</span> <span class="nc">CarCoverageFee</span> <span class="p">:</span> <span class="n">ComponentBase</span>
-<span class="p">{</span>
-    <span class="c1">/// &lt;summary&gt;
-</span>    <span class="c1">/// Gets or sets the coverage.
-</span>    <span class="c1">/// &lt;/summary&gt;
-</span>    <span class="c1">/// &lt;value&gt;The coverage.&lt;/value&gt;
-</span>    <span class="k">public</span> <span class="k">virtual</span> <span class="n">Coverage</span> <span class="n">Coverage</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+<pre class="highlight text">public class CarCoverageFee : ComponentBase
+{
+    /// &lt;summary&gt;
+    /// Gets or sets the coverage.
+    /// &lt;/summary&gt;
+    /// &lt;value&gt;The coverage.&lt;/value&gt;
+    public virtual Coverage Coverage { get; set; }
 
-    <span class="c1">/// &lt;summary&gt;
-</span>    <span class="c1">/// Gets or sets the fee.
-</span>    <span class="c1">/// &lt;/summary&gt;
-</span>    <span class="c1">/// &lt;value&gt;The fee.&lt;/value&gt;
-</span>    <span class="k">public</span> <span class="k">virtual</span> <span class="kt">double</span> <span class="n">NetFeePercentage</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    /// &lt;summary&gt;
+    /// Gets or sets the fee.
+    /// &lt;/summary&gt;
+    /// &lt;value&gt;The fee.&lt;/value&gt;
+    public virtual double NetFeePercentage { get; set; }
 
-    <span class="c1">/// &lt;summary&gt;
-</span>    <span class="c1">/// Determines whether the specified
-</span>    <span class="c1">/// &lt;see cref=&quot;System.Object&quot;/&gt; is equal
-</span>    <span class="c1">/// to this instance.
-</span>    <span class="c1">/// &lt;/summary&gt;
-</span>    <span class="c1">/// &lt;param name=&quot;obj&quot;&gt;The &lt;see cref=&quot;System.Object&quot;/&gt;
-</span>    <span class="c1">/// to compare with this instance.&lt;/param&gt;
-</span>    <span class="c1">/// &lt;returns&gt;
-</span>    <span class="c1">///     &lt;c&gt;true&lt;/c&gt; if the specified
-</span>    <span class="c1">///     &lt;see cref=&quot;System.Object&quot;/&gt; is equal to this
-</span>    <span class="c1">///     instance; otherwise, &lt;c&gt;false&lt;/c&gt;.
-</span>    <span class="c1">/// &lt;/returns&gt;
-</span>    <span class="c1">/// &lt;exception cref=&quot;T:System.NullReferenceException&quot;&gt;
-</span>    <span class="c1">/// The &lt;paramref name=&quot;obj&quot;/&gt; parameter is null.
-</span>    <span class="c1">/// &lt;/exception&gt;
-</span>    <span class="k">public</span> <span class="k">override</span> <span class="kt">bool</span> <span class="nf">Equals</span><span class="p">(</span><span class="kt">object</span> <span class="n">obj</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="c1">// The given object to compare to can't be null.
-</span>        <span class="k">if</span> <span class="p">(</span><span class="n">obj</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="k">false</span><span class="p">;</span> <span class="p">}</span>
+    /// &lt;summary&gt;
+    /// Determines whether the specified
+    /// &lt;see cref=&quot;System.Object&quot;/&gt; is equal
+    /// to this instance.
+    /// &lt;/summary&gt;
+    /// &lt;param name=&quot;obj&quot;&gt;The &lt;see cref=&quot;System.Object&quot;/&gt;
+    /// to compare with this instance.&lt;/param&gt;
+    /// &lt;returns&gt;
+    ///     &lt;c&gt;true&lt;/c&gt; if the specified
+    ///     &lt;see cref=&quot;System.Object&quot;/&gt; is equal to this
+    ///     instance; otherwise, &lt;c&gt;false&lt;/c&gt;.
+    /// &lt;/returns&gt;
+    /// &lt;exception cref=&quot;T:System.NullReferenceException&quot;&gt;
+    /// The &lt;paramref name=&quot;obj&quot;/&gt; parameter is null.
+    /// &lt;/exception&gt;
+    public override bool Equals(object obj)
+    {
+        // The given object to compare to can't be null.
+        if (obj == null) { return false; }
 
-        <span class="c1">// If objects are different types, they can't be equal.
-</span>        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nf">GetType</span><span class="p">()</span> <span class="p">!=</span> <span class="n">obj</span><span class="p">.</span><span class="nf">GetType</span><span class="p">())</span> <span class="p">{</span> <span class="k">return</span> <span class="k">false</span><span class="p">;</span> <span class="p">}</span>
+        // If objects are different types, they can't be equal.
+        if (this.GetType() != obj.GetType()) { return false; }
 
-        <span class="c1">// At this point, we really know that obj is really
-</span>        <span class="c1">// a CarCoverageFee object. Cast obj to CarCoverageFee.
-</span>        <span class="k">if</span> <span class="p">(</span><span class="n">Coverage</span><span class="p">.</span><span class="n">Code</span> <span class="p">!=</span> <span class="p">((</span><span class="n">CarCoverageFee</span><span class="p">)</span><span class="n">obj</span><span class="p">)</span>
-            <span class="p">.</span><span class="n">Coverage</span><span class="p">.</span><span class="n">Code</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="k">false</span><span class="p">;</span> <span class="p">}</span>
+        // At this point, we really know that obj is really
+        // a CarCoverageFee object. Cast obj to CarCoverageFee.
+        if (Coverage.Code != ((CarCoverageFee)obj)
+            .Coverage.Code) { return false; }
 
-        <span class="k">return</span> <span class="k">true</span><span class="p">;</span>
-    <span class="p">}</span>
+        return true;
+    }
 
-    <span class="c1">/// &lt;summary&gt;
-</span>    <span class="c1">/// Returns a hash code for this instance.
-</span>    <span class="c1">/// &lt;/summary&gt;
-</span>    <span class="c1">/// &lt;returns&gt;
-</span>    <span class="c1">/// A hash code for this instance, suitable for
-</span>    <span class="c1">/// use in hashing algorithms and data structures
-</span>    <span class="c1">/// like a hash table.
-</span>    <span class="c1">/// &lt;/returns&gt;
-</span>    <span class="k">public</span> <span class="k">override</span> <span class="kt">int</span> <span class="nf">GetHashCode</span><span class="p">()</span>
-    <span class="p">{</span>
-        <span class="k">return</span> <span class="n">Coverage</span><span class="p">.</span><span class="n">Name</span><span class="p">.</span><span class="nf">GetHashCode</span><span class="p">()</span>
-             <span class="p">+</span> <span class="n">Coverage</span><span class="p">.</span><span class="n">Code</span><span class="p">.</span><span class="nf">GetHashCode</span><span class="p">();</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+    /// &lt;summary&gt;
+    /// Returns a hash code for this instance.
+    /// &lt;/summary&gt;
+    /// &lt;returns&gt;
+    /// A hash code for this instance, suitable for
+    /// use in hashing algorithms and data structures
+    /// like a hash table.
+    /// &lt;/returns&gt;
+    public override int GetHashCode()
+    {
+        return Coverage.Name.GetHashCode()
+             + Coverage.Code.GetHashCode();
+    }
+}
 </pre>
 <p>After overriding Equals and GetHashCode methods, I compared the Sessions:</p>
 

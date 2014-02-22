@@ -1,84 +1,84 @@
-<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" /><meta content="width=device-width, user-scalable=no" name="viewport" /><title>NHibernate SessionPerRequest with WcfOperationSessionContext</title><link href="http://fonts.googleapis.com/css?family=Lora:400,700|Open+Sans" rel="stylesheet" type="text/css" /><link href="/stylesheets/fontello.css?1392664185" media="screen" rel="stylesheet" type="text/css" />
-<link href="/stylesheets/styles.css?1392664185" media="screen" rel="stylesheet" type="text/css" />
-<link href="/stylesheets/syntax.css?1392664185" media="screen" rel="stylesheet" type="text/css" /></head><body><div class="row"><h1>NHibernate SessionPerRequest with WcfOperationSessionContext</h1><div class="post"><p><strong>Update:&#0160;</strong>You may download a <a href="https://github.com/moodmosaic/BonusBits.CodeSamples/tree/master/BonusBits.CodeSamples.NHibernate" target="_blank" title="WcfOperationSessionContext (Sample Application with Tests)">working example</a> using NHibernate, WCF and SQLite in-memory. The example is described also <a href="http://www.nikosbaxevanis.com/bonus-bits/2011/04/nhibernate-session-per-request-with-wcfoperationsessioncontext-part2.html" target="_blank" title="NHibernate Session Per Request with WcfOperationSessionContext (Part 2).">here</a>.</p>
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" /><meta content="width=device-width, user-scalable=no" name="viewport" /><title>NHibernate SessionPerRequest with WcfOperationSessionContext</title><link href="http://fonts.googleapis.com/css?family=Lora:400,700|Open+Sans" rel="stylesheet" type="text/css" /><link href="/stylesheets/fontello.css?1393091639" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/styles.css?1393091639" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/syntax.css?1393091639" media="screen" rel="stylesheet" type="text/css" /></head><body><div class="row"><h1>NHibernate SessionPerRequest with WcfOperationSessionContext</h1><div class="post"><p><strong>Update:&#0160;</strong>You may download a <a href="https://github.com/moodmosaic/BonusBits.CodeSamples/tree/master/BonusBits.CodeSamples.NHibernate" target="_blank" title="WcfOperationSessionContext (Sample Application with Tests)">working example</a> using NHibernate, WCF and SQLite in-memory. The example is described also <a href="http://www.nikosbaxevanis.com/bonus-bits/2011/04/nhibernate-session-per-request-with-wcfoperationsessioncontext-part2.html" target="_blank" title="NHibernate Session Per Request with WcfOperationSessionContext (Part 2).">here</a>.</p>
 
 <p>NHibernate 3 comes with out of the box support for the scenario where we want to have a single Session for the lifetime of a WCF request.</p>
 
 <p>Using the <a href="http://jameskovacs.com/2011/01/21/loquacious-configuration-in-nhibernate-3/" target="_blank" title="Loquacious Configuration in NHibernate 3.">Loquacious</a>&#0160;configuration we can easily set the WcfOperationSessionContext to be the default&#0160;current session context.</p>
-<pre class="highlight csharp"><span class="n">var</span> <span class="n">cfg</span> <span class="p">=</span> <span class="n">NHibernate</span><span class="p">.</span><span class="n">Cfg</span><span class="p">.</span><span class="nf">Configuration</span><span class="p">();</span>
-<span class="n">cfg</span><span class="p">.</span><span class="nf">DataBaseIntegration</span><span class="p">(</span><span class="n">ForMySQL5</span><span class="p">)</span>
-   <span class="p">.</span><span class="n">CurrentSessionContext</span><span class="p">&lt;</span><span class="n">WcfOperationSessionContext</span><span class="p">&gt;()</span>
-   <span class="p">.</span><span class="nf">Proxy</span><span class="p">(</span><span class="n">p</span> <span class="p">=&gt;</span> <span class="n">p</span><span class="p">.</span><span class="n">ProxyFactoryFactory</span><span class="p">&lt;</span><span class="n">ProxyFactoryFactory</span><span class="p">&gt;())</span>
-   <span class="p">.</span><span class="nf">SessionFactory</span><span class="p">()</span>
-        <span class="p">.</span><span class="nf">GenerateStatistics</span><span class="p">();</span>
+<pre class="highlight text">var cfg = NHibernate.Cfg.Configuration();
+cfg.DataBaseIntegration(ForMySQL5)
+   .CurrentSessionContext&lt;WcfOperationSessionContext&gt;()
+   .Proxy(p =&gt; p.ProxyFactoryFactory&lt;ProxyFactoryFactory&gt;())
+   .SessionFactory()
+        .GenerateStatistics();
 </pre>
 <p>We also need to inspect inbound and outbound application messages prior to dispatching a request message to an operation (for binding the Session) and before returning a reply (for unbinding the Session).</p>
 
 <p>Here is a specific&#0160;<a href="http://msdn.microsoft.com/en-us/library/system.servicemodel.dispatcher.idispatchmessageinspector.aspx" target="_blank" title="Defines the methods that enable custom inspection or modification of inbound and outbound application messages in service applications.">IDispatchMessageInspector</a> implementation for that:</p>
-<pre class="highlight csharp"><span class="k">public</span> <span class="k">sealed</span> <span class="k">class</span> <span class="nc">NHibernateWcfContextInitializer</span>
-      <span class="p">:</span> <span class="n">IDispatchMessageInspector</span>
-  <span class="p">{</span>
-      <span class="k">private</span> <span class="k">static</span> <span class="k">readonly</span> <span class="n">ISessionFactory</span> <span class="n">sessionFactory</span>
-          <span class="p">=</span> <span class="n">Container</span><span class="p">.</span><span class="n">Resolve</span><span class="p">&lt;</span><span class="n">ISessionFactory</span><span class="p">&gt;();</span>
+<pre class="highlight text">public sealed class NHibernateWcfContextInitializer
+      : IDispatchMessageInspector
+  {
+      private static readonly ISessionFactory sessionFactory
+          = Container.Resolve&lt;ISessionFactory&gt;();
 
-      <span class="k">public</span> <span class="kt">object</span> <span class="nf">AfterReceiveRequest</span><span class="p">(</span>
-          <span class="k">ref</span> <span class="n">Message</span> <span class="n">request</span><span class="p">,</span>
-          <span class="n">IClientChannel</span> <span class="n">channel</span><span class="p">,</span>
-          <span class="n">InstanceContext</span> <span class="n">instanceContext</span><span class="p">)</span>
-      <span class="p">{</span>
-          <span class="n">CurrentSessionContext</span><span class="p">.</span><span class="nf">Bind</span><span class="p">(</span>
-              <span class="n">sessionFactory</span><span class="p">.</span><span class="nf">OpenSession</span><span class="p">());</span>
-          <span class="k">return</span> <span class="k">null</span><span class="p">;</span>
-      <span class="p">}</span>
+      public object AfterReceiveRequest(
+          ref Message request,
+          IClientChannel channel,
+          InstanceContext instanceContext)
+      {
+          CurrentSessionContext.Bind(
+              sessionFactory.OpenSession());
+          return null;
+      }
 
-      <span class="k">public</span> <span class="k">void</span> <span class="nf">BeforeSendReply</span><span class="p">(</span>
-          <span class="k">ref</span> <span class="n">Message</span> <span class="n">reply</span><span class="p">,</span>
-          <span class="kt">object</span> <span class="n">correlationState</span><span class="p">)</span>
-      <span class="p">{</span>
-          <span class="n">var</span> <span class="n">session</span> <span class="p">=</span> <span class="n">CurrentSessionContext</span><span class="p">.</span><span class="nf">Unbind</span><span class="p">(</span>
-               <span class="n">sessionFactory</span><span class="p">);</span>
+      public void BeforeSendReply(
+          ref Message reply,
+          object correlationState)
+      {
+          var session = CurrentSessionContext.Unbind(
+               sessionFactory);
 
-          <span class="n">session</span><span class="p">.</span><span class="nf">Dispose</span><span class="p">();</span>
-      <span class="p">}</span>
-  <span class="p">}</span>
+          session.Dispose();
+      }
+  }
 </pre>
 <p>Next, we need to define a custom Service Behavior that applies to every single endpoint of a service. To do that we need to define a class that implements the <a href="http://msdn.microsoft.com/en-us/library/system.servicemodel.description.iservicebehavior.aspx" target="_blank" title="Provides a mechanism to modify or insert custom extensions across an entire service, including the ServiceHostBase.">IServiceBehavior</a> interface.</p>
-<pre class="highlight csharp"><span class="na">[AttributeUsage(AttributeTargets.Class)]</span>
-<span class="k">public</span> <span class="k">sealed</span> <span class="k">class</span> <span class="nc">NHibernateWcfContextAttribute</span>
-    <span class="p">:</span> <span class="n">Attribute</span><span class="p">,</span> <span class="n">IServiceBehavior</span>
-<span class="p">{</span>
-    <span class="k">public</span> <span class="k">void</span> <span class="nf">AddBindingParameters</span><span class="p">(</span>
-        <span class="n">ServiceDescription</span> <span class="n">serviceDescription</span><span class="p">,</span> 
-        <span class="n">ServiceHostBase</span> <span class="n">serviceHostBase</span><span class="p">,</span> 
-        <span class="n">Collection</span><span class="p">&lt;</span><span class="n">ServiceEndpoint</span><span class="p">&gt;</span> <span class="n">endpoints</span><span class="p">,</span> 
-        <span class="n">BindingParameterCollection</span> <span class="n">bindingParameters</span><span class="p">)</span> <span class="p">{</span> <span class="p">}</span>
+<pre class="highlight text">[AttributeUsage(AttributeTargets.Class)]
+public sealed class NHibernateWcfContextAttribute
+    : Attribute, IServiceBehavior
+{
+    public void AddBindingParameters(
+        ServiceDescription serviceDescription, 
+        ServiceHostBase serviceHostBase, 
+        Collection&lt;ServiceEndpoint&gt; endpoints, 
+        BindingParameterCollection bindingParameters) { }
 
-    <span class="k">public</span> <span class="k">void</span> <span class="nf">ApplyDispatchBehavior</span><span class="p">(</span>
-        <span class="n">ServiceDescription</span> <span class="n">serviceDescription</span><span class="p">,</span> 
-        <span class="n">ServiceHostBase</span> <span class="n">serviceHostBase</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="k">foreach</span> <span class="p">(</span><span class="n">ChannelDispatcher</span> <span class="n">channelDispatcher</span> 
-            <span class="k">in</span> <span class="n">serviceHostBase</span><span class="p">.</span><span class="n">ChannelDispatchers</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="k">foreach</span> <span class="p">(</span><span class="n">var</span> <span class="n">endpoint</span> <span class="k">in</span> <span class="n">channelDispatcher</span><span class="p">.</span><span class="n">Endpoints</span><span class="p">)</span>
-            <span class="p">{</span>
-                <span class="n">endpoint</span><span class="p">.</span><span class="n">DispatchRuntime</span><span class="p">.</span><span class="n">MessageInspectors</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span>
-                    <span class="k">new</span> <span class="nf">NHibernateWcfContextInitializer</span><span class="p">());</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
+    public void ApplyDispatchBehavior(
+        ServiceDescription serviceDescription, 
+        ServiceHostBase serviceHostBase)
+    {
+        foreach (ChannelDispatcher channelDispatcher 
+            in serviceHostBase.ChannelDispatchers)
+        {
+            foreach (var endpoint in channelDispatcher.Endpoints)
+            {
+                endpoint.DispatchRuntime.MessageInspectors.Add(
+                    new NHibernateWcfContextInitializer());
+            }
+        }
+    }
 
-    <span class="k">public</span> <span class="k">void</span> <span class="nf">Validate</span><span class="p">(</span>
-        <span class="n">ServiceDescription</span> <span class="n">serviceDescription</span><span class="p">,</span> 
-        <span class="n">ServiceHostBase</span> <span class="n">serviceHostBase</span><span class="p">)</span> <span class="p">{</span> <span class="p">}</span>
-<span class="p">}</span>
+    public void Validate(
+        ServiceDescription serviceDescription, 
+        ServiceHostBase serviceHostBase) { }
+}
 </pre>
 <p>We can now decorate any WCF service implementation with [NHibernateWcfContext] attribute and we can access the Session using the ISessionFactory&#39;s GetCurrentSession method.</p>
 
 <blockquote><p>When using the&#0160;<a href="http://code.google.com/p/agatha-rrsl/" target="_blank" title="Implementation of the Request/Response Service Layer for .NET">agatha-rrsl</a>&#0160;project instead of providing a WcfRequestProcessor define a custom RequestProcessor (deriving from the&#0160;WcfRequestProcessor) and decorating it with the [NHibernateWcfContext] attribute.</p></blockquote>
-<pre class="highlight csharp"><span class="na">[NHibernateWcfContext]</span>
-<span class="k">public</span> <span class="k">sealed</span> <span class="k">class</span> <span class="nc">NHibernateWcfRequestProcessor</span>
-    <span class="p">:</span> <span class="n">Agatha</span><span class="p">.</span><span class="n">ServiceLayer</span><span class="p">.</span><span class="n">WCF</span><span class="p">.</span><span class="n">WcfRequestProcessor</span> <span class="p">{</span> <span class="p">}</span>
+<pre class="highlight text">[NHibernateWcfContext]
+public sealed class NHibernateWcfRequestProcessor
+    : Agatha.ServiceLayer.WCF.WcfRequestProcessor { }
 </pre>
 <p>I would generally recommend to try all of the NHibernate&#39;s CurrentSessionContext-derived class in order to use the one that suits better for the given context. In some projects I use the WcfOperationSessionContext for the service layer and the ThreadLocalSessionContext when running&#0160;Job Schedulers.</p>
 </div><a class="twitter" href="https://twitter.com/intent/tweet?url=http%3A%2F%2Fnikosbaxevanis.com%2Fblog%2F2011%2F03%2F30%2Fnhibernate-sessionperrequest-with-wcfoperationsessioncontext%2F&text=NHibernate+SessionPerRequest+with+WcfOperationSessionContext&via=nikosbaxevanis" target="_blank">Tweet This</a><div class="dater">March 30, 2011</div><div class="categories">Published in<a class="category" href="/category/nhibernate/">NHibernate&nbsp;</a><a class="category" href="/category/wcf/">WCF&nbsp;</a> on March 30, 2011</div></div><div class="homer"><a href="/"><i class="icon-tape" style="font-size:32px;"></i></a></div><script type="text/javascript">var _gaq = _gaq || [];

@@ -1,6 +1,6 @@
-<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" /><meta content="width=device-width, user-scalable=no" name="viewport" /><title>MVVM using POCOs with .NET 4.0 and the DynamicViewModel Class</title><link href="http://fonts.googleapis.com/css?family=Lora:400,700|Open+Sans" rel="stylesheet" type="text/css" /><link href="/stylesheets/fontello.css?1392664185" media="screen" rel="stylesheet" type="text/css" />
-<link href="/stylesheets/styles.css?1392664185" media="screen" rel="stylesheet" type="text/css" />
-<link href="/stylesheets/syntax.css?1392664185" media="screen" rel="stylesheet" type="text/css" /></head><body><div class="row"><h1>MVVM using POCOs with .NET 4.0 and the DynamicViewModel Class</h1><div class="post"><blockquote>
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" /><meta content="width=device-width, user-scalable=no" name="viewport" /><title>MVVM using POCOs with .NET 4.0 and the DynamicViewModel Class</title><link href="http://fonts.googleapis.com/css?family=Lora:400,700|Open+Sans" rel="stylesheet" type="text/css" /><link href="/stylesheets/fontello.css?1393091639" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/styles.css?1393091639" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/syntax.css?1393091639" media="screen" rel="stylesheet" type="text/css" /></head><body><div class="row"><h1>MVVM using POCOs with .NET 4.0 and the DynamicViewModel Class</h1><div class="post"><blockquote>
 <p>This post aims to provide a way to implement the Model View ViewModel (MVVM) architectural pattern using Plain Old CLR Objects (POCOs) while taking full advantage of .NET 4.0 DynamicObject Class.</p>
 </blockquote>
 
@@ -29,154 +29,154 @@
 </ol>
 
 <p>Here is the <a href="http://dynamicviewmodel.codeplex.com/SourceControl/changeset/view/9e2b2d03b705#DynamicViewModel%2fDynamicViewModel.cs" target="_blank" title="The DynamicViewModel(Of TModel) Class adds dynamic ViewModel behavior to any class at runtime.">DynamicViewModel(Of TModel)</a> Class:</p>
-<pre class="highlight csharp"><span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
-<span class="k">using</span> <span class="nn">System.Collections.Generic</span><span class="p">;</span>
-<span class="k">using</span> <span class="nn">System.ComponentModel</span><span class="p">;</span>
-<span class="k">using</span> <span class="nn">System.Dynamic</span><span class="p">;</span>
-<span class="k">using</span> <span class="nn">System.Linq</span><span class="p">;</span>
-<span class="k">using</span> <span class="nn">System.Reflection</span><span class="p">;</span>
-<span class="k">using</span> <span class="nn">System.Threading</span><span class="p">;</span>
+<pre class="highlight text">using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Dynamic;
+using System.Linq;
+using System.Reflection;
+using System.Threading;
 
-<span class="k">internal</span> <span class="k">sealed</span> <span class="k">class</span> <span class="nc">DynamicViewModel</span><span class="p">&lt;</span><span class="n">TModel</span><span class="p">&gt;</span>
-    <span class="p">:</span> <span class="n">DynamicObject</span><span class="p">,</span> <span class="n">INotifyPropertyChanged</span> <span class="n">where</span> <span class="n">TModel</span> <span class="p">:</span> <span class="k">class</span>
-<span class="err">{</span>
-    <span class="nc">private</span> <span class="k">static</span> <span class="k">readonly</span> <span class="n">IDictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="n">MethodInfo</span><span class="p">&gt;</span> <span class="n">methodInfos</span>
-        <span class="p">=</span> <span class="nf">GetPublicInstanceMethods</span><span class="p">();</span>
+internal sealed class DynamicViewModel&lt;TModel&gt;
+    : DynamicObject, INotifyPropertyChanged where TModel : class
+{
+    private static readonly IDictionary&lt;string, MethodInfo&gt; methodInfos
+        = GetPublicInstanceMethods();
 
-    <span class="k">private</span> <span class="k">static</span> <span class="k">readonly</span> <span class="n">IDictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="n">PropertyInfo</span><span class="p">&gt;</span> <span class="n">propInfos</span>
-        <span class="p">=</span> <span class="nf">GetPublicInstanceProperties</span><span class="p">();</span>
+    private static readonly IDictionary&lt;string, PropertyInfo&gt; propInfos
+        = GetPublicInstanceProperties();
 
-    <span class="k">private</span> <span class="k">readonly</span> <span class="n">TModel</span> <span class="n">model</span><span class="p">;</span>
+    private readonly TModel model;
 
-    <span class="k">private</span> <span class="n">IDictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">object</span><span class="p">&gt;</span> <span class="n">propertyValues</span><span class="p">;</span>
+    private IDictionary&lt;string, object&gt; propertyValues;
 
-    <span class="k">public</span> <span class="nf">DynamicViewModel</span><span class="p">(</span><span class="n">TModel</span> <span class="n">model</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="n">model</span> <span class="p">=</span> <span class="n">model</span><span class="p">;</span>
-        <span class="nf">NotifyChangedProperties</span><span class="p">();</span>
-    <span class="p">}</span>
+    public DynamicViewModel(TModel model)
+    {
+        this.model = model;
+        NotifyChangedProperties();
+    }
 
-    <span class="k">public</span> <span class="nf">DynamicViewModel</span><span class="p">(</span><span class="n">Func</span><span class="p">&lt;</span><span class="n">TModel</span><span class="p">&gt;</span> <span class="n">@delegate</span><span class="p">)</span>
-        <span class="p">:</span> <span class="k">this</span><span class="p">(</span><span class="n">@delegate</span><span class="p">.</span><span class="nf">Invoke</span><span class="p">())</span> <span class="p">{</span> <span class="p">}</span>
+    public DynamicViewModel(Func&lt;TModel&gt; @delegate)
+        : this(@delegate.Invoke()) { }
 
-    <span class="k">public</span> <span class="k">override</span> <span class="kt">bool</span> <span class="nf">TryInvokeMember</span><span class="p">(</span><span class="n">InvokeMemberBinder</span> <span class="n">binder</span><span class="p">,</span>
-        <span class="kt">object</span><span class="p">[]</span> <span class="n">args</span><span class="p">,</span> <span class="k">out</span> <span class="kt">object</span> <span class="n">result</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">result</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>
+    public override bool TryInvokeMember(InvokeMemberBinder binder,
+        object[] args, out object result)
+    {
+        result = null;
 
-        <span class="n">MethodInfo</span> <span class="n">methodInfo</span><span class="p">;</span>
-        <span class="k">if</span> <span class="p">(!</span><span class="n">methodInfos</span><span class="p">.</span><span class="nf">TryGetValue</span><span class="p">(</span><span class="n">binder</span><span class="p">.</span><span class="n">Name</span><span class="p">,</span>
-            <span class="k">out</span> <span class="n">methodInfo</span><span class="p">))</span> <span class="p">{</span> <span class="k">return</span> <span class="k">false</span><span class="p">;</span> <span class="p">}</span>
+        MethodInfo methodInfo;
+        if (!methodInfos.TryGetValue(binder.Name,
+            out methodInfo)) { return false; }
 
-        <span class="n">methodInfo</span><span class="p">.</span><span class="nf">Invoke</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="n">model</span><span class="p">,</span> <span class="n">args</span><span class="p">);</span>
-        <span class="nf">NotifyChangedProperties</span><span class="p">();</span>
-        <span class="k">return</span> <span class="k">true</span><span class="p">;</span>
-    <span class="p">}</span>
+        methodInfo.Invoke(this.model, args);
+        NotifyChangedProperties();
+        return true;
+    }
 
-    <span class="k">public</span> <span class="k">override</span> <span class="kt">bool</span> <span class="nf">TryGetMember</span><span class="p">(</span><span class="n">GetMemberBinder</span> <span class="n">binder</span><span class="p">,</span>
-        <span class="k">out</span> <span class="kt">object</span> <span class="n">result</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">var</span> <span class="n">propertyValues</span> <span class="p">=</span> <span class="n">Interlocked</span><span class="p">.</span><span class="nf">CompareExchange</span><span class="p">(</span>
-            <span class="k">ref</span> <span class="k">this</span><span class="p">.</span><span class="n">propertyValues</span><span class="p">,</span> <span class="nf">GetPropertyValues</span><span class="p">(),</span> <span class="k">null</span><span class="p">);</span>
+    public override bool TryGetMember(GetMemberBinder binder,
+        out object result)
+    {
+        var propertyValues = Interlocked.CompareExchange(
+            ref this.propertyValues, GetPropertyValues(), null);
 
-        <span class="k">if</span> <span class="p">(!</span><span class="n">propertyValues</span><span class="p">.</span><span class="nf">TryGetValue</span><span class="p">(</span><span class="n">binder</span><span class="p">.</span><span class="n">Name</span><span class="p">,</span>
-            <span class="k">out</span> <span class="n">result</span><span class="p">))</span> <span class="p">{</span> <span class="k">return</span> <span class="k">false</span><span class="p">;</span> <span class="p">}</span>
+        if (!propertyValues.TryGetValue(binder.Name,
+            out result)) { return false; }
 
-        <span class="k">return</span> <span class="k">true</span><span class="p">;</span>
-    <span class="p">}</span>
+        return true;
+    }
 
-    <span class="k">public</span> <span class="k">override</span> <span class="kt">bool</span> <span class="nf">TrySetMember</span><span class="p">(</span><span class="n">SetMemberBinder</span> <span class="n">binder</span><span class="p">,</span> <span class="kt">object</span> <span class="k">value</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">PropertyInfo</span> <span class="n">propInfo</span> <span class="p">=</span> <span class="n">propInfos</span><span class="p">[</span><span class="n">binder</span><span class="p">.</span><span class="n">Name</span><span class="p">];</span>
-        <span class="n">propInfo</span><span class="p">.</span><span class="nf">SetValue</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="n">model</span><span class="p">,</span> <span class="k">value</span><span class="p">,</span> <span class="k">null</span><span class="p">);</span>
+    public override bool TrySetMember(SetMemberBinder binder, object value)
+    {
+        PropertyInfo propInfo = propInfos[binder.Name];
+        propInfo.SetValue(this.model, value, null);
 
-        <span class="nf">NotifyChangedProperties</span><span class="p">();</span>
-        <span class="k">return</span> <span class="k">true</span><span class="p">;</span>
-    <span class="p">}</span>
+        NotifyChangedProperties();
+        return true;
+    }
 
-    <span class="k">public</span> <span class="k">void</span> <span class="nf">NotifyChangedProperties</span><span class="p">()</span>
-    <span class="p">{</span>
-        <span class="n">Interlocked</span><span class="p">.</span><span class="nf">CompareExchange</span><span class="p">(</span>
-            <span class="k">ref</span> <span class="k">this</span><span class="p">.</span><span class="n">propertyValues</span><span class="p">,</span> <span class="nf">GetPropertyValues</span><span class="p">(),</span> <span class="k">null</span><span class="p">);</span>
+    public void NotifyChangedProperties()
+    {
+        Interlocked.CompareExchange(
+            ref this.propertyValues, GetPropertyValues(), null);
 
-        <span class="n">IDictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">object</span><span class="p">&gt;</span> <span class="n">previousPropValues</span>
-            <span class="p">=</span> <span class="k">this</span><span class="p">.</span><span class="n">propertyValues</span><span class="p">;</span>
+        IDictionary&lt;string, object&gt; previousPropValues
+            = this.propertyValues;
 
-        <span class="n">IDictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">object</span><span class="p">&gt;</span> <span class="n">currentPropValues</span>
-            <span class="p">=</span> <span class="nf">GetPropertyValues</span><span class="p">();</span>
+        IDictionary&lt;string, object&gt; currentPropValues
+            = GetPropertyValues();
 
-        <span class="k">this</span><span class="p">.</span><span class="n">propertyValues</span>
-            <span class="p">=</span> <span class="n">currentPropValues</span><span class="p">;</span>
+        this.propertyValues
+            = currentPropValues;
 
-        <span class="k">foreach</span> <span class="p">(</span><span class="n">KeyValuePair</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">object</span><span class="p">&gt;</span> <span class="n">propValue</span>
-            <span class="k">in</span> <span class="n">currentPropValues</span><span class="p">.</span><span class="nf">Except</span><span class="p">(</span><span class="n">previousPropValues</span><span class="p">))</span>
-        <span class="p">{</span>
-            <span class="nf">RaisePropertyChanged</span><span class="p">(</span><span class="n">propValue</span><span class="p">.</span><span class="n">Key</span><span class="p">);</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
+        foreach (KeyValuePair&lt;string, object&gt; propValue
+            in currentPropValues.Except(previousPropValues))
+        {
+            RaisePropertyChanged(propValue.Key);
+        }
+    }
 
-    <span class="k">private</span> <span class="k">static</span> <span class="n">IDictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="n">MethodInfo</span><span class="p">&gt;</span> <span class="nf">GetPublicInstanceMethods</span><span class="p">()</span>
-    <span class="p">{</span>
-        <span class="n">var</span> <span class="n">methodInfoDictionary</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="n">MethodInfo</span><span class="p">&gt;();</span>
-        <span class="n">MethodInfo</span><span class="p">[]</span> <span class="n">methodInfos</span> <span class="p">=</span> <span class="k">typeof</span><span class="p">(</span><span class="n">TModel</span><span class="p">).</span><span class="nf">GetMethods</span><span class="p">(</span>
-            <span class="n">BindingFlags</span><span class="p">.</span><span class="n">Public</span> <span class="p">|</span> <span class="n">BindingFlags</span><span class="p">.</span><span class="n">Instance</span><span class="p">);</span>
-        <span class="k">foreach</span> <span class="p">(</span><span class="n">MethodInfo</span> <span class="n">methodInfo</span> <span class="k">in</span> <span class="n">methodInfos</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">methodInfo</span><span class="p">.</span><span class="n">Name</span><span class="p">.</span><span class="nf">StartsWith</span><span class="p">(</span><span class="s">&quot;get_&quot;</span><span class="p">)</span> <span class="p">||</span>
-                <span class="n">methodInfo</span><span class="p">.</span><span class="n">Name</span><span class="p">.</span><span class="nf">StartsWith</span><span class="p">(</span><span class="s">&quot;set_&quot;</span><span class="p">))</span> <span class="p">{</span> <span class="k">continue</span><span class="p">;</span> <span class="p">}</span>
-            <span class="n">methodInfoDictionary</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">methodInfo</span><span class="p">.</span><span class="n">Name</span><span class="p">,</span> <span class="n">methodInfo</span><span class="p">);</span>
-        <span class="p">}</span>
+    private static IDictionary&lt;string, MethodInfo&gt; GetPublicInstanceMethods()
+    {
+        var methodInfoDictionary = new Dictionary&lt;string, MethodInfo&gt;();
+        MethodInfo[] methodInfos = typeof(TModel).GetMethods(
+            BindingFlags.Public | BindingFlags.Instance);
+        foreach (MethodInfo methodInfo in methodInfos)
+        {
+            if (methodInfo.Name.StartsWith(&quot;get_&quot;) ||
+                methodInfo.Name.StartsWith(&quot;set_&quot;)) { continue; }
+            methodInfoDictionary.Add(methodInfo.Name, methodInfo);
+        }
 
-        <span class="k">return</span> <span class="n">methodInfoDictionary</span><span class="p">;</span>
-    <span class="p">}</span>
+        return methodInfoDictionary;
+    }
 
-    <span class="k">private</span> <span class="k">static</span> <span class="n">IDictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="n">PropertyInfo</span><span class="p">&gt;</span>
-        <span class="nf">GetPublicInstanceProperties</span><span class="p">()</span>
-    <span class="p">{</span>
-        <span class="n">var</span> <span class="n">propInfoDictionary</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="n">PropertyInfo</span><span class="p">&gt;();</span>
-        <span class="n">PropertyInfo</span><span class="p">[]</span> <span class="n">propInfos</span> <span class="p">=</span> <span class="k">typeof</span><span class="p">(</span><span class="n">TModel</span><span class="p">).</span><span class="nf">GetProperties</span><span class="p">(</span>
-            <span class="n">BindingFlags</span><span class="p">.</span><span class="n">Public</span> <span class="p">|</span> <span class="n">BindingFlags</span><span class="p">.</span><span class="n">Instance</span><span class="p">);</span>
-        <span class="k">foreach</span> <span class="p">(</span><span class="n">PropertyInfo</span> <span class="n">propInfo</span> <span class="k">in</span> <span class="n">propInfos</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="n">propInfoDictionary</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">propInfo</span><span class="p">.</span><span class="n">Name</span><span class="p">,</span> <span class="n">propInfo</span><span class="p">);</span>
-        <span class="p">}</span>
+    private static IDictionary&lt;string, PropertyInfo&gt;
+        GetPublicInstanceProperties()
+    {
+        var propInfoDictionary = new Dictionary&lt;string, PropertyInfo&gt;();
+        PropertyInfo[] propInfos = typeof(TModel).GetProperties(
+            BindingFlags.Public | BindingFlags.Instance);
+        foreach (PropertyInfo propInfo in propInfos)
+        {
+            propInfoDictionary.Add(propInfo.Name, propInfo);
+        }
 
-        <span class="k">return</span> <span class="n">propInfoDictionary</span><span class="p">;</span>
-    <span class="p">}</span>
+        return propInfoDictionary;
+    }
 
-    <span class="k">private</span> <span class="n">IDictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">object</span><span class="p">&gt;</span> <span class="nf">GetPropertyValues</span><span class="p">()</span>
-    <span class="p">{</span>
-        <span class="n">var</span> <span class="n">bindingPaths</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">object</span><span class="p">&gt;();</span>
-        <span class="n">PropertyInfo</span><span class="p">[]</span> <span class="n">propInfos</span> <span class="p">=</span> <span class="k">typeof</span><span class="p">(</span><span class="n">TModel</span><span class="p">).</span><span class="nf">GetProperties</span><span class="p">(</span>
-            <span class="n">BindingFlags</span><span class="p">.</span><span class="n">Public</span> <span class="p">|</span> <span class="n">BindingFlags</span><span class="p">.</span><span class="n">Instance</span><span class="p">);</span>
-        <span class="k">foreach</span> <span class="p">(</span><span class="n">PropertyInfo</span> <span class="n">propInfo</span> <span class="k">in</span> <span class="n">propInfos</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="n">bindingPaths</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span>
-                <span class="n">propInfo</span><span class="p">.</span><span class="n">Name</span><span class="p">,</span>
-                <span class="n">propInfo</span><span class="p">.</span><span class="nf">GetValue</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="n">model</span><span class="p">,</span> <span class="k">null</span><span class="p">));</span>
-        <span class="p">}</span>
+    private IDictionary&lt;string, object&gt; GetPropertyValues()
+    {
+        var bindingPaths = new Dictionary&lt;string, object&gt;();
+        PropertyInfo[] propInfos = typeof(TModel).GetProperties(
+            BindingFlags.Public | BindingFlags.Instance);
+        foreach (PropertyInfo propInfo in propInfos)
+        {
+            bindingPaths.Add(
+                propInfo.Name,
+                propInfo.GetValue(this.model, null));
+        }
 
-        <span class="k">return</span> <span class="n">bindingPaths</span><span class="p">;</span>
-    <span class="p">}</span>
+        return bindingPaths;
+    }
 
-    <span class="k">private</span> <span class="k">void</span> <span class="nf">RaisePropertyChanged</span><span class="p">(</span><span class="kt">string</span> <span class="n">propertyName</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="nf">OnPropertyChanged</span><span class="p">(</span><span class="k">new</span> <span class="nf">PropertyChangedEventArgs</span><span class="p">(</span><span class="n">propertyName</span><span class="p">));</span>
-    <span class="p">}</span>
+    private void RaisePropertyChanged(string propertyName)
+    {
+        OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
+    }
 
-    <span class="k">private</span> <span class="k">void</span> <span class="nf">OnPropertyChanged</span><span class="p">(</span><span class="n">PropertyChangedEventArgs</span> <span class="n">e</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">PropertyChangedEventHandler</span> <span class="n">temp</span> <span class="p">=</span>
-            <span class="n">Interlocked</span><span class="p">.</span><span class="nf">CompareExchange</span><span class="p">(</span><span class="k">ref</span> <span class="n">PropertyChanged</span><span class="p">,</span> <span class="k">null</span><span class="p">,</span> <span class="k">null</span><span class="p">);</span>
+    private void OnPropertyChanged(PropertyChangedEventArgs e)
+    {
+        PropertyChangedEventHandler temp =
+            Interlocked.CompareExchange(ref PropertyChanged, null, null);
 
-        <span class="k">if</span> <span class="p">(</span><span class="n">temp</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="nf">temp</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="n">e</span><span class="p">);</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
+        if (temp != null)
+        {
+            temp(this, e);
+        }
+    }
 
-    <span class="k">public</span> <span class="k">event</span> <span class="n">PropertyChangedEventHandler</span> <span class="n">PropertyChanged</span><span class="p">;</span>
-<span class="p">}</span>
+    public event PropertyChangedEventHandler PropertyChanged;
+}
 </pre>
 <p>The sample application for this post comes with a simple ContactView which has no specific viewModel but instead uses the DynamicViewModel(Of TModel) class.</p>
 
@@ -192,125 +192,125 @@
 </ol>
 
 <p>Here is the POCO model class that I have used:</p>
-<pre class="highlight csharp"><span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
+<pre class="highlight text">using System;
 
-<span class="k">internal</span> <span class="k">sealed</span> <span class="k">class</span> <span class="nc">ContactDetails</span>
-<span class="p">{</span> 
-    <span class="k">public</span> <span class="kt">string</span> <span class="n">FirstName</span>
-    <span class="p">{</span>
-        <span class="k">get</span>
-        <span class="p">{</span>
-            <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="n">firstName</span><span class="p">;</span>
-        <span class="p">}</span>
+internal sealed class ContactDetails
+{ 
+    public string FirstName
+    {
+        get
+        {
+            return this.firstName;
+        }
 
-        <span class="k">set</span>
-        <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="n">firstName</span> <span class="p">=</span> <span class="k">value</span><span class="p">;</span>
+        set
+        {
+            this.firstName = value;
 
-            <span class="nf">SetFullName</span><span class="p">();</span>
-            <span class="nf">SetReversedFullName</span><span class="p">();</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
+            SetFullName();
+            SetReversedFullName();
+        }
+    }
 
-    <span class="k">public</span> <span class="kt">string</span> <span class="n">LastName</span>
-    <span class="p">{</span>
-        <span class="k">get</span>
-        <span class="p">{</span>
-            <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="n">lastName</span><span class="p">;</span>
-        <span class="p">}</span>
+    public string LastName
+    {
+        get
+        {
+            return this.lastName;
+        }
 
-        <span class="k">set</span>
-        <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="n">lastName</span> <span class="p">=</span> <span class="k">value</span><span class="p">;</span>
+        set
+        {
+            this.lastName = value;
 
-            <span class="nf">SetFullName</span><span class="p">();</span>
-            <span class="nf">SetReversedFullName</span><span class="p">();</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
+            SetFullName();
+            SetReversedFullName();
+        }
+    }
 
-    <span class="k">public</span> <span class="kt">string</span> <span class="n">FullName</span>
-    <span class="p">{</span>
-        <span class="k">get</span>
-        <span class="p">{</span>
-            <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="n">fullName</span><span class="p">;</span>
-        <span class="p">}</span>
+    public string FullName
+    {
+        get
+        {
+            return this.fullName;
+        }
 
-        <span class="k">set</span>
-        <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="n">fullName</span> <span class="p">=</span> <span class="k">value</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
+        set
+        {
+            this.fullName = value;
+        }
+    }
 
-    <span class="k">public</span> <span class="k">void</span> <span class="nf">ClearFullName</span><span class="p">()</span>
-    <span class="p">{</span>
-        <span class="n">FirstName</span> <span class="p">=</span> <span class="kt">string</span><span class="p">.</span><span class="n">Empty</span><span class="p">;</span>
-        <span class="n">LastName</span>  <span class="p">=</span> <span class="kt">string</span><span class="p">.</span><span class="n">Empty</span><span class="p">;</span>
-    <span class="p">}</span>
+    public void ClearFullName()
+    {
+        FirstName = string.Empty;
+        LastName  = string.Empty;
+    }
 
-    <span class="c1">/// &lt;summary&gt;
-</span>    <span class="c1">/// Navigates to this contact's website.
-</span>    <span class="c1">/// &lt;/summary&gt;
-</span>    <span class="c1">/// &lt;param name=&quot;uriString&quot;&gt;The URI string.&lt;/param&gt;
-</span>    <span class="k">public</span> <span class="k">void</span> <span class="nf">NavigateTo</span><span class="p">(</span><span class="kt">string</span> <span class="n">uriString</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">System</span><span class="p">.</span><span class="n">Diagnostics</span><span class="p">.</span><span class="n">Process</span><span class="p">.</span><span class="nf">Start</span><span class="p">(</span><span class="n">uriString</span><span class="p">);</span>
-    <span class="p">}</span>
+    /// &lt;summary&gt;
+    /// Navigates to this contact's website.
+    /// &lt;/summary&gt;
+    /// &lt;param name=&quot;uriString&quot;&gt;The URI string.&lt;/param&gt;
+    public void NavigateTo(string uriString)
+    {
+        System.Diagnostics.Process.Start(uriString);
+    }
 
-    <span class="k">private</span> <span class="k">void</span> <span class="nf">SetFullName</span><span class="p">()</span>
-    <span class="p">{</span>
-        <span class="n">FullName</span> <span class="p">=</span> <span class="n">FirstName</span> <span class="p">+</span> <span class="s">&quot; &quot;</span> <span class="p">+</span> <span class="n">LastName</span><span class="p">;</span>
-    <span class="p">}</span>
+    private void SetFullName()
+    {
+        FullName = FirstName + &quot; &quot; + LastName;
+    }
 
-    <span class="c1">// (Less important members not shown)
-</span><span class="p">}</span>
+    // (Less important members not shown)
+}
 </pre>
 <p>As you notice, this class <em>does not implement any interface or base class</em>. In fact, this class can be used successfully in ORM scenarios too (when you need to bind on the same classes that are used in your mappings).</p>
 
 <p>Finally, I would like to show how the View&#39;s DataContext is initialized properly to accept the DynamicViewModel(Of TModel) Class wrapper around the model class:</p>
-<pre class="highlight csharp"><span class="c1">/// &lt;summary&gt;
+<pre class="highlight text">/// &lt;summary&gt;
 /// Interaction logic for ContactView.xaml
 /// &lt;/summary&gt;
-</span><span class="k">internal</span> <span class="k">partial</span> <span class="k">class</span> <span class="nc">ContactView</span> <span class="p">:</span> <span class="n">UserControl</span>
-<span class="p">{</span>
-    <span class="k">public</span> <span class="k">static</span> <span class="k">readonly</span> <span class="n">RoutedCommand</span> <span class="n">ClearNamesCommand</span>
-        <span class="p">=</span> <span class="k">new</span> <span class="nf">RoutedCommand</span><span class="p">();</span>
+internal partial class ContactView : UserControl
+{
+    public static readonly RoutedCommand ClearNamesCommand
+        = new RoutedCommand();
 
-    <span class="k">public</span> <span class="k">static</span> <span class="k">readonly</span> <span class="n">RoutedCommand</span> <span class="n">NavigateUriCommand</span>
-        <span class="p">=</span> <span class="k">new</span> <span class="nf">RoutedCommand</span><span class="p">();</span>
+    public static readonly RoutedCommand NavigateUriCommand
+        = new RoutedCommand();
 
-    <span class="k">public</span> <span class="nf">ContactView</span><span class="p">()</span>
-    <span class="p">{</span>
-        <span class="nf">InitializeComponent</span><span class="p">();</span>
+    public ContactView()
+    {
+        InitializeComponent();
 
-        <span class="c1">// Create a new instance. Once created
-</span>        <span class="c1">// do not call methods directly on this
-</span>        <span class="c1">// object. (Use the dynamic viewModel).
-</span>        <span class="n">var</span> <span class="n">instance</span>  <span class="p">=</span> <span class="k">new</span> <span class="nf">ContactDetails</span><span class="p">()</span> <span class="p">{</span>
-            <span class="n">FirstName</span> <span class="p">=</span> <span class="s">&quot;Nikos&quot;</span><span class="p">,</span>
-            <span class="n">LastName</span>  <span class="p">=</span> <span class="s">&quot;Baxevanis&quot;</span>
-        <span class="p">};</span>
+        // Create a new instance. Once created
+        // do not call methods directly on this
+        // object. (Use the dynamic viewModel).
+        var instance  = new ContactDetails() {
+            FirstName = &quot;Nikos&quot;,
+            LastName  = &quot;Baxevanis&quot;
+        };
 
-        <span class="n">dynamic</span> <span class="n">viewModel</span> <span class="p">=</span> <span class="k">new</span> <span class="n">DynamicViewModel</span><span class="p">&lt;</span><span class="n">ContactDetails</span><span class="p">&gt;(</span><span class="n">instance</span><span class="p">);</span>
+        dynamic viewModel = new DynamicViewModel&lt;ContactDetails&gt;(instance);
 
-        <span class="c1">// Wire the ClearNamesCommand from the view to the viewModel.
-</span>        <span class="n">CommandManager</span><span class="p">.</span><span class="nf">RegisterClassCommandBinding</span><span class="p">(</span><span class="k">typeof</span><span class="p">(</span><span class="n">ContactView</span><span class="p">),</span>
-            <span class="k">new</span> <span class="nf">CommandBinding</span><span class="p">(</span>
-                <span class="n">ClearNamesCommand</span><span class="p">,</span>
-                <span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span> <span class="n">viewModel</span><span class="p">.</span><span class="nf">ClearFullName</span><span class="p">();</span> <span class="p">},</span>
-                <span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span> <span class="n">e</span><span class="p">.</span><span class="n">CanExecute</span> <span class="p">=</span> <span class="p">!</span><span class="kt">string</span><span class="p">.</span><span class="nf">IsNullOrWhiteSpace</span><span class="p">(</span>
-                     <span class="n">viewModel</span><span class="p">.</span><span class="n">FullName</span><span class="p">);</span> <span class="p">}));</span>
+        // Wire the ClearNamesCommand from the view to the viewModel.
+        CommandManager.RegisterClassCommandBinding(typeof(ContactView),
+            new CommandBinding(
+                ClearNamesCommand,
+                (sender, e) =&gt; { viewModel.ClearFullName(); },
+                (sender, e) =&gt; { e.CanExecute = !string.IsNullOrWhiteSpace(
+                     viewModel.FullName); }));
 
-        <span class="c1">// Wire the NavigateUriCommand from the view to the viewModel.
-</span>        <span class="n">CommandManager</span><span class="p">.</span><span class="nf">RegisterClassCommandBinding</span><span class="p">(</span><span class="k">typeof</span><span class="p">(</span><span class="n">ContactView</span><span class="p">),</span>
-            <span class="k">new</span> <span class="nf">CommandBinding</span><span class="p">(</span>
-                <span class="n">NavigateUriCommand</span><span class="p">,</span>
-                <span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span> <span class="n">viewModel</span><span class="p">.</span><span class="nf">NavigateTo</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">Parameter</span><span class="p">);</span> <span class="p">},</span>
-                <span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span> <span class="n">e</span><span class="p">.</span><span class="n">CanExecute</span> <span class="p">=</span>                
-                    <span class="kt">string</span><span class="p">.</span><span class="nf">IsNullOrWhiteSpace</span><span class="p">(</span><span class="n">viewModel</span><span class="p">.</span><span class="n">FullName</span><span class="p">);</span> <span class="p">}));</span>
+        // Wire the NavigateUriCommand from the view to the viewModel.
+        CommandManager.RegisterClassCommandBinding(typeof(ContactView),
+            new CommandBinding(
+                NavigateUriCommand,
+                (sender, e) =&gt; { viewModel.NavigateTo(e.Parameter); },
+                (sender, e) =&gt; { e.CanExecute =                
+                    string.IsNullOrWhiteSpace(viewModel.FullName); }));
 
-        <span class="n">DataContext</span> <span class="p">=</span> <span class="n">viewModel</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+        DataContext = viewModel;
+    }
+}
 </pre>
 <p>Notice that wiring between the <a href="http://msdn.microsoft.com/en-us/library/system.windows.input.icommand.aspx" target="_blank" title="Defines a command.">ICommand</a>&#0160;Interface and the model class is done outside the dynamic ViewModel wrapper using the <a href="http://msdn.microsoft.com/en-us/library/system.windows.input.commandmanager.aspx" target="_blank" title="Provides command related utility methods that register CommandBinding and InputBinding objects for class owners and commands, add and remove command event handlers, and provides services for querying the status of a command.">CommandManager</a>&#0160;Class which acts as a <a href="http://en.wikipedia.org/wiki/Mediator_pattern" target="_blank" title="Provides a unified interface to a set of interfaces in a subsystem.">mediator</a> between the View and the ViewModel. This give us the flexibility to define static reusable commands or specific commands for each view (as I&#39;ve done above).</p>
 

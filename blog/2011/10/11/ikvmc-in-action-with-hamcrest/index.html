@@ -1,82 +1,82 @@
-<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" /><meta content="width=device-width, user-scalable=no" name="viewport" /><title>IKVMC in Action with Hamcrest</title><link href="http://fonts.googleapis.com/css?family=Lora:400,700|Open+Sans" rel="stylesheet" type="text/css" /><link href="/stylesheets/fontello.css?1392664185" media="screen" rel="stylesheet" type="text/css" />
-<link href="/stylesheets/styles.css?1392664185" media="screen" rel="stylesheet" type="text/css" />
-<link href="/stylesheets/syntax.css?1392664185" media="screen" rel="stylesheet" type="text/css" /></head><body><div class="row"><h1>IKVMC in Action with Hamcrest</h1><div class="post"><p>In <a href="http://www.nikosbaxevanis.com/bonus-bits/2011/10/using-class-libraries-from-different-platforms.html" target="_blank" title="Using class libraries from different platforms.">this</a> post, we saw two possible ways for using code written on a different platform than the one we are working on.&#0160;Now we will see a scenario where we need to use a Java class library&#0160;from .NET using the <a href="http://www.ikvm.net/userguide/ikvmc.html" target="_blank" title="The ikvmc tool converts Java bytecode to .NET dll&#39;s and exe&#39;s.">IKVMC</a>&#0160;tool.&#0160;We are going to use <a href="http://code.google.com/p/hamcrest/" target="_blank" title="Hamcrest is a framework for creating matchers, allowing match rules to be defined declaratively.">Hamcrest</a>, a library of matchers for building test expressions.</p>
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" /><meta content="width=device-width, user-scalable=no" name="viewport" /><title>IKVMC in Action with Hamcrest</title><link href="http://fonts.googleapis.com/css?family=Lora:400,700|Open+Sans" rel="stylesheet" type="text/css" /><link href="/stylesheets/fontello.css?1393091639" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/styles.css?1393091639" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/syntax.css?1393091639" media="screen" rel="stylesheet" type="text/css" /></head><body><div class="row"><h1>IKVMC in Action with Hamcrest</h1><div class="post"><p>In <a href="http://www.nikosbaxevanis.com/bonus-bits/2011/10/using-class-libraries-from-different-platforms.html" target="_blank" title="Using class libraries from different platforms.">this</a> post, we saw two possible ways for using code written on a different platform than the one we are working on.&#0160;Now we will see a scenario where we need to use a Java class library&#0160;from .NET using the <a href="http://www.ikvm.net/userguide/ikvmc.html" target="_blank" title="The ikvmc tool converts Java bytecode to .NET dll&#39;s and exe&#39;s.">IKVMC</a>&#0160;tool.&#0160;We are going to use <a href="http://code.google.com/p/hamcrest/" target="_blank" title="Hamcrest is a framework for creating matchers, allowing match rules to be defined declaratively.">Hamcrest</a>, a library of matchers for building test expressions.</p>
 
 <p>Before we pass any command line argument to IKVMC we need to&#0160;detect the dependencies between the jar files.&#0160;<a href="http://www.kirkk.com/main/Main/JarAnalyzer" target="_blank" title="JarAnalyzer is a dependency management utility for jar files.">JarAnalyser</a>&#0160;is a good choice and fortunately there is a tool&#0160;<a href="http://code.google.com/p/jar2ikvmc/" target="_blank" title="Helps to convert a big collection of Java jar files into .net dlls by analyzing dependencies between jar files.">Jar2ikvmc</a> which&#0160;uses JarAnalyser to detect dependencies between jar files and then generates command-line script for ikvmc.exe.</p>
 
 <p>The version of Hamcrest that we use is&#0160;1.3RC2 and we are going to convert&#0160;hamcrest-core.jar and hamcrest-library.jar.</p>
 
 <p>Here is the generated script from Jar2ikvmc:</p>
-<pre class="highlight csharp"><span class="n">rest</span><span class="p">-</span><span class="n">core</span><span class="p">-</span><span class="m">1.3</span><span class="p">.</span><span class="m">0</span><span class="n">RC2</span><span class="p">.</span><span class="n">jar</span> <span class="p">-</span><span class="n">target</span><span class="p">:</span><span class="n">library</span>
-<span class="n">ikvmc</span> <span class="n">hamcrest</span><span class="p">-</span><span class="n">library</span><span class="p">-</span><span class="m">1.3</span><span class="n">RC2</span><span class="p">.</span><span class="n">jar</span> <span class="p">-</span><span class="n">target</span><span class="p">:</span><span class="n">library</span> <span class="p">-</span><span class="n">r</span><span class="p">:</span><span class="n">hamcrest</span><span class="p">-</span><span class="n">core</span><span class="p">-</span><span class="m">1.3</span><span class="n">RC2</span><span class="p">.</span><span class="n">dll</span>
+<pre class="highlight text">rest-core-1.3.0RC2.jar -target:library
+ikvmc hamcrest-library-1.3RC2.jar -target:library -r:hamcrest-core-1.3RC2.dll
 </pre>
 <p>Now we can run the generated script on the ikvmc.exe tool. It will generate two .NET assemblies. We can now compare the difference in the syntax with the excellent port <a href="https://github.com/grahamrhay/NHamcrest" target="_blank">NHamcrest</a> by <a href="http://grahamrhay.wordpress.com/" target="_blank">Graham Rhay</a>.</p>
 
 <p>We are going to use the Graham Rhay&#39;s&#0160;<a href="https://github.com/grahamrhay/NHamcrest/blob/master/NHamcrest.XUnit/AssertEx.cs" target="_blank">Assert</a> class that let us use NHamcrest from xUnit.net.</p>
 
 <p>Here is the code that uses NHamcrest:</p>
-<pre class="highlight csharp"><span class="k">public</span> <span class="k">class</span> <span class="nc">Assert</span> <span class="p">:</span> <span class="n">Xunit</span><span class="p">.</span><span class="n">Assert</span>
-<span class="p">{</span>
-    <span class="k">public</span> <span class="k">static</span> <span class="k">void</span> <span class="n">That</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;(</span><span class="n">T</span> <span class="n">actual</span><span class="p">,</span> <span class="n">IMatcher</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;</span> <span class="n">matcher</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">matcher</span><span class="p">.</span><span class="nf">Matches</span><span class="p">(</span><span class="n">actual</span><span class="p">))</span>
-            <span class="k">return</span><span class="p">;</span>
+<pre class="highlight text">public class Assert : Xunit.Assert
+{
+    public static void That&lt;T&gt;(T actual, IMatcher&lt;T&gt; matcher)
+    {
+        if (matcher.Matches(actual))
+            return;
 
-        <span class="n">var</span> <span class="n">description</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">StringDescription</span><span class="p">();</span>
-        <span class="n">matcher</span><span class="p">.</span><span class="nf">DescribeTo</span><span class="p">(</span><span class="n">description</span><span class="p">);</span>
+        var description = new StringDescription();
+        matcher.DescribeTo(description);
 
-        <span class="n">var</span> <span class="n">mismatchDescription</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">StringDescription</span><span class="p">();</span>
-        <span class="n">matcher</span><span class="p">.</span><span class="nf">DescribeMismatch</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="n">mismatchDescription</span><span class="p">);</span>
+        var mismatchDescription = new StringDescription();
+        matcher.DescribeMismatch(actual, mismatchDescription);
 
-        <span class="k">throw</span> <span class="k">new</span> <span class="nf">MatchException</span><span class="p">(</span>
-            <span class="n">description</span><span class="p">.</span><span class="nf">ToString</span><span class="p">(),</span>
-            <span class="n">mismatchDescription</span><span class="p">.</span><span class="nf">ToString</span><span class="p">(),</span>
-            <span class="k">null</span><span class="p">);</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+        throw new MatchException(
+            description.ToString(),
+            mismatchDescription.ToString(),
+            null);
+    }
+}
 </pre>
 <p>Here is the code that uses Hamcrest that we coverted using IKVMC:</p>
-<pre class="highlight csharp"><span class="k">using</span> <span class="nn">org.hamcrest</span><span class="p">;</span>
+<pre class="highlight text">using org.hamcrest;
 
-<span class="k">public</span> <span class="k">class</span> <span class="nc">Assert</span> <span class="p">:</span> <span class="n">Xunit</span><span class="p">.</span><span class="n">Assert</span>
-<span class="p">{</span>
-    <span class="k">public</span> <span class="k">static</span> <span class="k">void</span> <span class="n">That</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;(</span><span class="n">T</span> <span class="n">actual</span><span class="p">,</span> <span class="n">Matcher</span> <span class="n">matcher</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">matcher</span><span class="p">.</span><span class="nf">matches</span><span class="p">(</span><span class="n">actual</span><span class="p">))</span>
-            <span class="k">return</span><span class="p">;</span>
+public class Assert : Xunit.Assert
+{
+    public static void That&lt;T&gt;(T actual, Matcher matcher)
+    {
+        if (matcher.matches(actual))
+            return;
 
-        <span class="n">var</span> <span class="n">description</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">StringDescription</span><span class="p">();</span>
-        <span class="n">matcher</span><span class="p">.</span><span class="nf">describeTo</span><span class="p">(</span><span class="n">description</span><span class="p">);</span>
+        var description = new StringDescription();
+        matcher.describeTo(description);
 
-        <span class="n">var</span> <span class="n">mismatchDescription</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">StringDescription</span><span class="p">();</span>
-        <span class="n">matcher</span><span class="p">.</span><span class="nf">describeMismatch</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="n">mismatchDescription</span><span class="p">);</span>
+        var mismatchDescription = new StringDescription();
+        matcher.describeMismatch(actual, mismatchDescription);
 
-        <span class="k">throw</span> <span class="k">new</span> <span class="nf">MatchException</span><span class="p">(</span>
-            <span class="n">description</span><span class="p">.</span><span class="nf">ToString</span><span class="p">(),</span>
-            <span class="n">mismatchDescription</span><span class="p">.</span><span class="nf">ToString</span><span class="p">(),</span>
-            <span class="k">null</span><span class="p">);</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+        throw new MatchException(
+            description.ToString(),
+            mismatchDescription.ToString(),
+            null);
+    }
+}
 </pre>
 <p>Here is a unit-test that uses NHamcrest:</p>
-<pre class="highlight csharp"><span class="k">using</span> <span class="nn">NHamcrest.Xunit</span>
-<span class="k">using</span> <span class="nn">Xunit</span><span class="p">;</span>
+<pre class="highlight text">using NHamcrest.Xunit
+using Xunit;
 
-<span class="na">[Test]</span>
-<span class="k">public</span> <span class="k">void</span> <span class="nf">Pass</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="n">Assert</span><span class="p">.</span><span class="nf">That</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="n">Is</span><span class="p">.</span><span class="nf">EqualTo</span><span class="p">(</span><span class="m">1</span><span class="p">));</span>
-<span class="p">}</span>
+[Test]
+public void Pass()
+{
+    Assert.That(1, Is.EqualTo(1));
+}
 </pre>
 <p>Here is a unit-test that uses Hamcrest that we coverted using IKVMC:</p>
-<pre class="highlight csharp"><span class="k">using</span> <span class="nn">org.hamcrest.core</span><span class="p">;</span>
-<span class="k">using</span> <span class="nn">Xunit</span><span class="p">;</span>
+<pre class="highlight text">using org.hamcrest.core;
+using Xunit;
 
-<span class="na">[Fact]</span>
-<span class="k">public</span> <span class="k">void</span> <span class="nf">EqualTo</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="n">Assert</span><span class="p">.</span><span class="nf">That</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="n">IsEqual</span><span class="p">.</span><span class="nf">equalTo</span><span class="p">(</span><span class="m">1</span><span class="p">));</span>
-<span class="p">}</span>
+[Fact]
+public void EqualTo()
+{
+    Assert.That(1, IsEqual.equalTo(1));
+}
 </pre>
 <p>A notable difference is on the different naming conventions (Java methods start with lowercase). However, we can create <a href="http://martinfowler.com/bliki/HeaderInterface.html" target="_blank" title="A header interface is an explicit interface that mimics the implicit public interface of a class.">header interfaces</a>&#0160;declaring those methods inside.</p>
 

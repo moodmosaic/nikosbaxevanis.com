@@ -1,6 +1,6 @@
-<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" /><meta content="width=device-width, user-scalable=no" name="viewport" /><title>Data-driven NHibernate with .NET 4.0 and the DynamicEntity Class</title><link href="http://fonts.googleapis.com/css?family=Lora:400,700|Open+Sans" rel="stylesheet" type="text/css" /><link href="/stylesheets/fontello.css?1392664185" media="screen" rel="stylesheet" type="text/css" />
-<link href="/stylesheets/styles.css?1392664185" media="screen" rel="stylesheet" type="text/css" />
-<link href="/stylesheets/syntax.css?1392664185" media="screen" rel="stylesheet" type="text/css" /></head><body><div class="row"><h1>Data-driven NHibernate with .NET 4.0 and the DynamicEntity Class</h1><div class="post"><p>The idea for this post came by a very good friend who wanted to modify his data access layer (DAL) in order to use NHibernate.</p>
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" /><meta content="width=device-width, user-scalable=no" name="viewport" /><title>Data-driven NHibernate with .NET 4.0 and the DynamicEntity Class</title><link href="http://fonts.googleapis.com/css?family=Lora:400,700|Open+Sans" rel="stylesheet" type="text/css" /><link href="/stylesheets/fontello.css?1393091639" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/styles.css?1393091639" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/syntax.css?1393091639" media="screen" rel="stylesheet" type="text/css" /></head><body><div class="row"><h1>Data-driven NHibernate with .NET 4.0 and the DynamicEntity Class</h1><div class="post"><p>The idea for this post came by a very good friend who wanted to modify his data access layer (DAL) in order to use NHibernate.</p>
 
 <p>The DAL contains a base class that generates SQL queries and the application were it&#39;s used is completely data-driven. There is no domain, no classes, and the behaviour&#0160;is bound in various event handler methods. Changes to the database (columns, row data, etc) dictate how the application behaves.</p>
 
@@ -13,15 +13,15 @@
 <p><img src="http://farm9.staticflickr.com/8506/8397466511_abfc4b24be_o.png" alt="The entity-name in mapping" /></p>
 
 <p>The only thing we have is the mapping, no classes. In order to create a Currency object we create the following dictionary:</p>
-<pre class="highlight csharp"><span class="n">var</span> <span class="n">currency</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">object</span><span class="p">&gt;()</span>
-<span class="p">{</span>
-    <span class="p">{</span> <span class="s">&quot;ISOCode&quot;</span><span class="p">,</span><span class="s">&quot;GBP&quot;</span> <span class="p">},</span>
-    <span class="p">{</span> <span class="s">&quot;EnglishName&quot;</span><span class="p">,</span><span class="s">&quot;United Kingdom Pound&quot;</span> <span class="p">},</span>
-    <span class="p">{</span> <span class="s">&quot;ExchangeRateEURtoCurrency&quot;</span><span class="p">,</span><span class="m">0.87780</span> <span class="p">},</span>
-    <span class="p">{</span> <span class="s">&quot;ExchangeRateUpdatedOn&quot;</span><span class="p">,</span><span class="n">DateTime</span><span class="p">.</span><span class="n">UtcNow</span> <span class="p">},</span>
-    <span class="p">{</span> <span class="s">&quot;IsEnabled&quot;</span><span class="p">,</span><span class="k">true</span> <span class="p">},</span>
-    <span class="p">{</span> <span class="s">&quot;Symbol&quot;</span><span class="p">,</span><span class="k">null</span> <span class="p">}</span>
-<span class="p">};</span>
+<pre class="highlight text">var currency = new Dictionary&lt;string, object&gt;()
+{
+    { &quot;ISOCode&quot;,&quot;GBP&quot; },
+    { &quot;EnglishName&quot;,&quot;United Kingdom Pound&quot; },
+    { &quot;ExchangeRateEURtoCurrency&quot;,0.87780 },
+    { &quot;ExchangeRateUpdatedOn&quot;,DateTime.UtcNow },
+    { &quot;IsEnabled&quot;,true },
+    { &quot;Symbol&quot;,null }
+};
 </pre>
 <p>As you can see, the above code is cumbersome. But we can do something about it.</p>
 
@@ -38,100 +38,100 @@
 </ol>
 
 <p>Here is the DynamicEntity class:</p>
-<pre class="highlight csharp"><span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
-<span class="k">using</span> <span class="nn">System.Collections.Generic</span><span class="p">;</span>
-<span class="k">using</span> <span class="nn">System.Dynamic</span><span class="p">;</span>
+<pre class="highlight text">using System;
+using System.Collections.Generic;
+using System.Dynamic;
 
-<span class="k">public</span> <span class="k">sealed</span> <span class="k">class</span> <span class="nc">DynamicEntity</span> <span class="p">:</span> <span class="n">DynamicObject</span>
-<span class="p">{</span>
-    <span class="k">private</span> <span class="k">readonly</span> <span class="n">IDictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">object</span><span class="p">&gt;</span> <span class="n">dictionary</span>
-        <span class="p">=</span> <span class="k">new</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">object</span><span class="p">&gt;();</span>
+public sealed class DynamicEntity : DynamicObject
+{
+    private readonly IDictionary&lt;string, object&gt; dictionary
+        = new Dictionary&lt;string, object&gt;();
 
-    <span class="k">private</span> <span class="k">readonly</span> <span class="kt">string</span> <span class="n">entityName</span><span class="p">;</span>
+    private readonly string entityName;
 
-    <span class="k">public</span> <span class="nf">DynamicEntity</span><span class="p">(</span><span class="kt">string</span> <span class="n">entityName</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="n">entityName</span> <span class="p">=</span> <span class="n">entityName</span><span class="p">;</span>
-    <span class="p">}</span>
+    public DynamicEntity(string entityName)
+    {
+        this.entityName = entityName;
+    }
 
-    <span class="k">public</span> <span class="kt">string</span> <span class="n">Name</span>
-    <span class="p">{</span>
-        <span class="k">get</span>
-        <span class="p">{</span>
-            <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="n">entityName</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
+    public string Name
+    {
+        get
+        {
+            return this.entityName;
+        }
+    }
 
-    <span class="k">public</span> <span class="n">IDictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">object</span><span class="p">&gt;</span> <span class="n">Map</span>
-    <span class="p">{</span>
-        <span class="k">get</span>
-        <span class="p">{</span>
-            <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="n">dictionary</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
+    public IDictionary&lt;string, object&gt; Map
+    {
+        get
+        {
+            return this.dictionary;
+        }
+    }
 
-    <span class="k">public</span> <span class="k">override</span> <span class="kt">bool</span> <span class="nf">TryGetMember</span><span class="p">(</span>
-        <span class="n">GetMemberBinder</span> <span class="n">binder</span><span class="p">,</span> <span class="k">out</span> <span class="kt">object</span> <span class="n">result</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(!</span><span class="k">this</span><span class="p">.</span><span class="n">dictionary</span><span class="p">.</span><span class="nf">TryGetValue</span><span class="p">(</span><span class="n">binder</span><span class="p">.</span><span class="n">Name</span><span class="p">,</span> <span class="k">out</span> <span class="n">result</span><span class="p">))</span>
-        <span class="p">{</span>
-            <span class="k">return</span> <span class="k">false</span><span class="p">;</span>
-        <span class="p">}</span>
+    public override bool TryGetMember(
+        GetMemberBinder binder, out object result)
+    {
+        if (!this.dictionary.TryGetValue(binder.Name, out result))
+        {
+            return false;
+        }
 
-        <span class="k">return</span> <span class="k">true</span><span class="p">;</span>
-    <span class="p">}</span>
+        return true;
+    }
 
-    <span class="k">public</span> <span class="k">override</span> <span class="kt">bool</span> <span class="nf">TrySetMember</span><span class="p">(</span>
-        <span class="n">SetMemberBinder</span> <span class="n">binder</span><span class="p">,</span> <span class="kt">object</span> <span class="k">value</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="kt">string</span> <span class="n">key</span> <span class="p">=</span> <span class="n">binder</span><span class="p">.</span><span class="n">Name</span><span class="p">;</span>
+    public override bool TrySetMember(
+        SetMemberBinder binder, object value)
+    {
+        string key = binder.Name;
 
-        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="n">dictionary</span><span class="p">.</span><span class="nf">ContainsKey</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
-        <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="n">dictionary</span><span class="p">.</span><span class="nf">Remove</span><span class="p">(</span><span class="n">key</span><span class="p">);</span>
-        <span class="p">}</span>
+        if (this.dictionary.ContainsKey(key))
+        {
+            this.dictionary.Remove(key);
+        }
 
-        <span class="k">this</span><span class="p">.</span><span class="n">dictionary</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="k">value</span><span class="p">);</span>
+        this.dictionary.Add(key, value);
 
-        <span class="k">return</span> <span class="k">true</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+        return true;
+    }
+}
 </pre>
 <p>Finally, here is an integration test in action:</p>
-<pre class="highlight csharp"><span class="na">[Fact]</span>
-<span class="k">public</span> <span class="k">void</span> <span class="nf">NHibernateShouldBeAbleToPersistCurrency</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="n">dynamic</span> <span class="n">currency</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">DynamicEntity</span><span class="p">(</span><span class="s">&quot;Currency&quot;</span><span class="p">);</span>
+<pre class="highlight text">[Fact]
+public void NHibernateShouldBeAbleToPersistCurrency()
+{
+    dynamic currency = new DynamicEntity(&quot;Currency&quot;);
 
-    <span class="n">currency</span><span class="p">.</span><span class="n">ISOCode</span>                   <span class="p">=</span> <span class="s">&quot;GBP&quot;</span><span class="p">;</span>
-    <span class="n">currency</span><span class="p">.</span><span class="n">EnglishName</span>               <span class="p">=</span> <span class="s">&quot;United Kingdom Pound&quot;</span><span class="p">;</span>
-    <span class="n">currency</span><span class="p">.</span><span class="n">ExchangeRateEURtoCurrency</span> <span class="p">=</span> <span class="m">0.87780</span><span class="p">;</span>
-    <span class="n">currency</span><span class="p">.</span><span class="n">ExchangeRateUpdatedOn</span>     <span class="p">=</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">UtcNow</span><span class="p">;</span>
-    <span class="n">currency</span><span class="p">.</span><span class="n">IsEnabled</span>                 <span class="p">=</span> <span class="k">true</span><span class="p">;</span>
-    <span class="n">currency</span><span class="p">.</span><span class="n">Symbol</span>                    <span class="p">=</span> <span class="k">null</span><span class="p">;</span>
+    currency.ISOCode                   = &quot;GBP&quot;;
+    currency.EnglishName               = &quot;United Kingdom Pound&quot;;
+    currency.ExchangeRateEURtoCurrency = 0.87780;
+    currency.ExchangeRateUpdatedOn     = DateTime.UtcNow;
+    currency.IsEnabled                 = true;
+    currency.Symbol                    = null;
 
-    <span class="kt">object</span> <span class="n">id</span><span class="p">;</span>
+    object id;
 
-    <span class="k">using</span> <span class="p">(</span><span class="n">var</span> <span class="n">tx</span> <span class="p">=</span> <span class="n">Session</span><span class="p">.</span><span class="nf">BeginTransaction</span><span class="p">())</span>
-    <span class="p">{</span>
-        <span class="n">id</span> <span class="p">=</span> <span class="n">Session</span><span class="p">.</span><span class="nf">Save</span><span class="p">(</span><span class="n">currency</span><span class="p">.</span><span class="n">Name</span><span class="p">,</span> <span class="n">currency</span><span class="p">.</span><span class="n">Map</span><span class="p">);</span>
-        <span class="n">tx</span><span class="p">.</span><span class="nf">Commit</span><span class="p">();</span>
+    using (var tx = Session.BeginTransaction())
+    {
+        id = Session.Save(currency.Name, currency.Map);
+        tx.Commit();
 
-        <span class="n">Assert</span><span class="p">.</span><span class="nf">NotNull</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
-    <span class="p">}</span>
+        Assert.NotNull(id);
+    }
 
-    <span class="n">Session</span><span class="p">.</span><span class="nf">Clear</span><span class="p">();</span>
+    Session.Clear();
 
-    <span class="k">using</span> <span class="p">(</span><span class="n">var</span> <span class="n">tx</span> <span class="p">=</span> <span class="n">Session</span><span class="p">.</span><span class="nf">BeginTransaction</span><span class="p">())</span>
-    <span class="p">{</span>
-        <span class="n">var</span> <span class="n">loadedCurrency</span> <span class="p">=</span> <span class="n">Session</span><span class="p">.</span><span class="nf">Load</span><span class="p">(</span><span class="n">currency</span><span class="p">.</span><span class="n">Name</span><span class="p">,</span> <span class="n">id</span><span class="p">);</span>
-        <span class="n">tx</span><span class="p">.</span><span class="nf">Commit</span><span class="p">();</span>
+    using (var tx = Session.BeginTransaction())
+    {
+        var loadedCurrency = Session.Load(currency.Name, id);
+        tx.Commit();
 
-        <span class="n">Assert</span><span class="p">.</span><span class="nf">NotNull</span><span class="p">(</span><span class="n">loadedCurrency</span><span class="p">);</span>
-    <span class="p">}</span>
+        Assert.NotNull(loadedCurrency);
+    }
 
-    <span class="n">Session</span><span class="p">.</span><span class="nf">Flush</span><span class="p">();</span>
-<span class="p">}</span>
+    Session.Flush();
+}
 </pre>
 <p>In the above test, for Session I use the ISession.GetSession(EntityMode.Map).</p>
 

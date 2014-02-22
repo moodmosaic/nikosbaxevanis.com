@@ -1,6 +1,6 @@
-<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" /><meta content="width=device-width, user-scalable=no" name="viewport" /><title>Enterprise Library IContainerConfigurator implementation for Windsor</title><link href="http://fonts.googleapis.com/css?family=Lora:400,700|Open+Sans" rel="stylesheet" type="text/css" /><link href="/stylesheets/fontello.css?1392664185" media="screen" rel="stylesheet" type="text/css" />
-<link href="/stylesheets/styles.css?1392664185" media="screen" rel="stylesheet" type="text/css" />
-<link href="/stylesheets/syntax.css?1392664185" media="screen" rel="stylesheet" type="text/css" /></head><body><div class="row"><h1>Enterprise Library IContainerConfigurator implementation for Windsor</h1><div class="post"><blockquote>
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" /><meta content="width=device-width, user-scalable=no" name="viewport" /><title>Enterprise Library IContainerConfigurator implementation for Windsor</title><link href="http://fonts.googleapis.com/css?family=Lora:400,700|Open+Sans" rel="stylesheet" type="text/css" /><link href="/stylesheets/fontello.css?1393091639" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/styles.css?1393091639" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/syntax.css?1393091639" media="screen" rel="stylesheet" type="text/css" /></head><body><div class="row"><h1>Enterprise Library IContainerConfigurator implementation for Windsor</h1><div class="post"><blockquote>
 <p>Alternative title: &ldquo;<a title="Error Management Is Sometimes Exceptionally Difficult" href="http://www.nikosbaxevanis.com/bonus-bits/2011/05/error-management-is-sometimes-exceptionally-difficult.html" target="_blank">Error Management Is Sometimes Exceptionally Difficult</a>, Part 2&rdquo;</p>
 </blockquote>
 
@@ -22,56 +22,56 @@
 <p>The <a title="WindsorContainerConfigurator.cs" href="http://entlibcontrib.codeplex.com/SourceControl/changeset/63545" target="_blank">current</a> implementation relies heavily on Windsor&rsquo;s Property classes and it is based on the UnityContainerConfigurator.</p>
 
 <p>Below is the WindsorParameterVisitor,</p>
-<pre class="highlight csharp"><span class="k">private</span> <span class="k">sealed</span> <span class="k">class</span> <span class="nc">WindsorParameterVisitor</span> <span class="p">:</span> <span class="n">ParameterValueVisitor</span>
-<span class="p">{</span>
-    <span class="k">public</span> <span class="n">Property</span><span class="p">[]</span> <span class="n">InjectionParameters</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+<pre class="highlight text">private sealed class WindsorParameterVisitor : ParameterValueVisitor
+{
+    public Property[] InjectionParameters { get; private set; }
 
-    <span class="k">protected</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">VisitConstantParameterValue</span><span class="p">(</span>
-         <span class="n">ConstantParameterValue</span> <span class="n">parameterValue</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="kt">string</span> <span class="n">key</span> <span class="p">=</span> <span class="p">((</span><span class="n">MemberExpression</span><span class="p">)</span><span class="n">parameterValue</span><span class="p">.</span><span class="n">Expression</span><span class="p">).</span><span class="n">Member</span><span class="p">.</span><span class="n">Name</span><span class="p">;</span>
-        <span class="n">InjectionParameters</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Property</span><span class="p">[]</span> 
-        <span class="p">{</span>
-             <span class="n">Property</span><span class="p">.</span><span class="nf">ForKey</span><span class="p">(</span><span class="n">key</span><span class="p">).</span><span class="nf">Eq</span><span class="p">(</span><span class="n">parameterValue</span><span class="p">.</span><span class="n">Value</span><span class="p">)</span> 
-        <span class="p">};</span>
-    <span class="p">}</span>
+    protected override void VisitConstantParameterValue(
+         ConstantParameterValue parameterValue)
+    {
+        string key = ((MemberExpression)parameterValue.Expression).Member.Name;
+        InjectionParameters = new Property[] 
+        {
+             Property.ForKey(key).Eq(parameterValue.Value) 
+        };
+    }
 
-    <span class="k">protected</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">VisitResolvedParameterValue</span><span class="p">(</span>
-         <span class="n">ContainerResolvedParameter</span> <span class="n">parameterValue</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">InjectionParameters</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Property</span><span class="p">[]</span> 
-        <span class="p">{</span>
-             <span class="n">Property</span><span class="p">.</span><span class="nf">ForKey</span><span class="p">(</span><span class="n">parameterValue</span><span class="p">.</span><span class="n">Type</span><span class="p">).</span><span class="nf">Is</span><span class="p">(</span><span class="n">parameterValue</span><span class="p">.</span><span class="n">Name</span><span class="p">)</span> 
-        <span class="p">};</span>
-    <span class="p">}</span>
+    protected override void VisitResolvedParameterValue(
+         ContainerResolvedParameter parameterValue)
+    {
+        InjectionParameters = new Property[] 
+        {
+             Property.ForKey(parameterValue.Type).Is(parameterValue.Name) 
+        };
+    }
 
-    <span class="k">protected</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">VisitEnumerableParameterValue</span><span class="p">(</span>
-         <span class="n">ContainerResolvedEnumerableParameter</span> <span class="n">parameterValue</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">InjectionParameters</span> <span class="p">=</span> <span class="n">parameterValue</span><span class="p">.</span><span class="n">Names</span>
-           <span class="p">.</span><span class="nf">Select</span><span class="p">(</span><span class="n">name</span> <span class="p">=&gt;</span> <span class="n">Property</span><span class="p">.</span><span class="nf">ForKey</span><span class="p">(</span><span class="n">parameterValue</span><span class="p">.</span><span class="n">ElementType</span><span class="p">).</span><span class="nf">Is</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
-           <span class="p">.</span><span class="nf">ToArray</span><span class="p">();</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+    protected override void VisitEnumerableParameterValue(
+         ContainerResolvedEnumerableParameter parameterValue)
+    {
+        InjectionParameters = parameterValue.Names
+           .Select(name =&gt; Property.ForKey(parameterValue.ElementType).Is(name))
+           .ToArray();
+    }
+}
 </pre>
 <p>The ParameterValueVisitor class is needed because most TypeRegistrations are quite complex coming with both ConstructorParameters and InjectedProperties and all this stuff must be routed on the .DependsOn() method of Windsor (actually Castle.MicroKernel).</p>
 
 <p>Below is some basic setup for configuring the Enterprise Library to use Windsor,</p>
-<pre class="highlight csharp"><span class="n">var</span> <span class="n">container</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">WindsorContainer</span><span class="p">();</span>
+<pre class="highlight text">var container = new WindsorContainer();
 
-<span class="c1">// Add a SubResolver for components with IEnumerable&lt;T&gt; dependencies on .ctors.
-</span><span class="n">container</span><span class="p">.</span><span class="n">Kernel</span><span class="p">.</span><span class="n">Resolver</span><span class="p">.</span><span class="nf">AddSubResolver</span><span class="p">(</span>
-     <span class="k">new</span> <span class="nf">CollectionResolver</span><span class="p">(</span><span class="n">container</span><span class="p">.</span><span class="n">Kernel</span><span class="p">));</span>
+// Add a SubResolver for components with IEnumerable&lt;T&gt; dependencies on .ctors.
+container.Kernel.Resolver.AddSubResolver(
+     new CollectionResolver(container.Kernel));
 
-<span class="c1">// This is the Windsor specific impl. of IContainerConfigurator interface.
-</span><span class="n">var</span> <span class="n">configurator</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">WindsorContainerConfigurator</span><span class="p">(</span><span class="n">container</span><span class="p">);</span>
+// This is the Windsor specific impl. of IContainerConfigurator interface.
+var configurator = new WindsorContainerConfigurator(container);
 
-<span class="c1">// Configure the Enterprise Library Container to use Windsor internally.
-</span><span class="n">EnterpriseLibraryContainer</span><span class="p">.</span><span class="nf">ConfigureContainer</span><span class="p">(</span><span class="n">configurator</span><span class="p">,</span> 
-    <span class="n">ConfigurationSourceFactory</span><span class="p">.</span><span class="nf">Create</span><span class="p">());</span>
+// Configure the Enterprise Library Container to use Windsor internally.
+EnterpriseLibraryContainer.ConfigureContainer(configurator, 
+    ConfigurationSourceFactory.Create());
 
-<span class="c1">// Set Current property to a new instance of the WindsorServiceLocator adapter.
-</span><span class="n">EnterpriseLibraryContainer</span><span class="p">.</span><span class="n">Current</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">WindsorServiceLocator</span><span class="p">(</span><span class="n">container</span><span class="p">);</span>
+// Set Current property to a new instance of the WindsorServiceLocator adapter.
+EnterpriseLibraryContainer.Current = new WindsorServiceLocator(container);
 </pre>
 <p>The source can be found <a href="http://entlibcontrib.codeplex.com/SourceControl/changeset/63545" target="_blank">here</a>.</p>
 

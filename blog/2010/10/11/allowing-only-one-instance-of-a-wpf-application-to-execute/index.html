@@ -1,186 +1,186 @@
-<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" /><meta content="width=device-width, user-scalable=no" name="viewport" /><title>Allowing only one instance of a WPF application to execute</title><link href="http://fonts.googleapis.com/css?family=Lora:400,700|Open+Sans" rel="stylesheet" type="text/css" /><link href="/stylesheets/fontello.css?1392664185" media="screen" rel="stylesheet" type="text/css" />
-<link href="/stylesheets/styles.css?1392664185" media="screen" rel="stylesheet" type="text/css" />
-<link href="/stylesheets/syntax.css?1392664185" media="screen" rel="stylesheet" type="text/css" /></head><body><div class="row"><h1>Allowing only one instance of a WPF application to execute</h1><div class="post"><p>Sometimes, for any reason, you want to have only one instance per application.</p>
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" /><meta content="width=device-width, user-scalable=no" name="viewport" /><title>Allowing only one instance of a WPF application to execute</title><link href="http://fonts.googleapis.com/css?family=Lora:400,700|Open+Sans" rel="stylesheet" type="text/css" /><link href="/stylesheets/fontello.css?1393091639" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/styles.css?1393091639" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/syntax.css?1393091639" media="screen" rel="stylesheet" type="text/css" /></head><body><div class="row"><h1>Allowing only one instance of a WPF application to execute</h1><div class="post"><p>Sometimes, for any reason, you want to have only one instance per application.</p>
 
 <p>Search on the internet and you will find&nbsp;<a href="http://www.google.gr/search?sourceid=chrome&amp;ie=UTF-8&amp;q=wpf+single+instance" target="_blank">many different ways</a> of doing this. However, inside Jeffrey Ricther&rsquo;s <a title="CLR via C#, Third Edition" href="http://www.microsoft.com/learning/en/us/book.aspx?ID=13874" target="_blank">excellent book</a>&nbsp;there is a way&nbsp;of allowing only one instance of an application (Console, WinForms, WPF) to execute at any given time using kernel-mode constructs.</p>
 
 <p>Using what has been described in the book and searching at <a href="http://www.pinvoke.net/default.aspx/user32/ShowWindow.html" target="_blank">P/Invoke.net</a>, I wrote some code that works with WPF applications. The code also attempts to set focus on the window and if it&rsquo;s minimized it will attempt to restore it.&nbsp;</p>
-<pre class="highlight csharp"><span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
-<span class="k">using</span> <span class="nn">System.Diagnostics</span><span class="p">;</span>
-<span class="k">using</span> <span class="nn">System.Reflection</span><span class="p">;</span>
-<span class="k">using</span> <span class="nn">System.Runtime.InteropServices</span><span class="p">;</span>
-<span class="k">using</span> <span class="nn">System.Threading</span><span class="p">;</span>
-<span class="k">using</span> <span class="nn">System.Windows</span><span class="p">;</span>
+<pre class="highlight text">using System;
+using System.Diagnostics;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Threading;
+using System.Windows;
 
-<span class="k">internal</span> <span class="k">partial</span> <span class="k">class</span> <span class="nc">App</span> <span class="p">:</span> <span class="n">Application</span>
-<span class="p">{</span>
-    <span class="k">private</span> <span class="k">static</span> <span class="k">readonly</span> <span class="n">Semaphore</span> <span class="n">singleInstanceWatcher</span><span class="p">;</span>
-    <span class="k">private</span> <span class="k">static</span> <span class="k">readonly</span> <span class="kt">bool</span> <span class="n">createdNew</span><span class="p">;</span>
+internal partial class App : Application
+{
+    private static readonly Semaphore singleInstanceWatcher;
+    private static readonly bool createdNew;
 
-    <span class="k">static</span> <span class="nf">App</span><span class="p">()</span>
-    <span class="p">{</span>
-        <span class="c1">// Ensure other instances of this application are not running.
-</span>        <span class="n">singleInstanceWatcher</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Semaphore</span><span class="p">(</span>
-            <span class="m">0</span><span class="p">,</span> <span class="c1">// Initial count.
-</span>            <span class="m">1</span><span class="p">,</span> <span class="c1">// Maximum count.
-</span>            <span class="n">Assembly</span><span class="p">.</span><span class="nf">GetExecutingAssembly</span><span class="p">().</span><span class="nf">GetName</span><span class="p">().</span><span class="n">Name</span><span class="p">,</span>
-            <span class="k">out</span> <span class="n">createdNew</span><span class="p">);</span>
+    static App()
+    {
+        // Ensure other instances of this application are not running.
+        singleInstanceWatcher = new Semaphore(
+            0, // Initial count.
+            1, // Maximum count.
+            Assembly.GetExecutingAssembly().GetName().Name,
+            out createdNew);
 
-        <span class="k">if</span> <span class="p">(</span><span class="n">createdNew</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="c1">// This thread created the kernel object so no other instance
-</span>            <span class="c1">// of this application must be running.
-</span>        <span class="p">}</span>
-        <span class="k">else</span>
-        <span class="p">{</span>
-            <span class="c1">// This thread opened an existing kernel object with the same
-</span>            <span class="c1">// string name; another instance of this app must be running now.
-</span>
-            <span class="c1">// Gets a new System.Diagnostics.Process component and the
-</span>            <span class="c1">// associates it with currently active process.
-</span>            <span class="n">Process</span> <span class="n">current</span> <span class="p">=</span> <span class="n">Process</span><span class="p">.</span><span class="nf">GetCurrentProcess</span><span class="p">();</span>
+        if (createdNew)
+        {
+            // This thread created the kernel object so no other instance
+            // of this application must be running.
+        }
+        else
+        {
+            // This thread opened an existing kernel object with the same
+            // string name; another instance of this app must be running now.
 
-            <span class="c1">// Enumerate through all the process resources on the share
-</span>            <span class="c1">// local computer that the specified process name.
-</span>            <span class="k">foreach</span> <span class="p">(</span><span class="n">Process</span> <span class="n">process</span> <span class="k">in</span>
-                 <span class="n">Process</span><span class="p">.</span><span class="nf">GetProcessesByName</span><span class="p">(</span><span class="n">current</span><span class="p">.</span><span class="n">ProcessName</span><span class="p">))</span>
-            <span class="p">{</span>
-                <span class="k">if</span> <span class="p">(</span><span class="n">process</span><span class="p">.</span><span class="n">Id</span> <span class="p">!=</span> <span class="n">current</span><span class="p">.</span><span class="n">Id</span><span class="p">)</span>
-                <span class="p">{</span>
-                    <span class="n">NativeMethods</span><span class="p">.</span><span class="nf">SetForegroundWindow</span><span class="p">(</span>
-                        <span class="n">process</span><span class="p">.</span><span class="n">MainWindowHandle</span><span class="p">);</span>
-                    <span class="n">NativeMethods</span><span class="p">.</span><span class="nf">ShowWindow</span><span class="p">(</span><span class="n">process</span><span class="p">.</span><span class="n">MainWindowHandle</span><span class="p">,</span> 
-                        <span class="n">WindowShowStyle</span><span class="p">.</span><span class="n">Restore</span><span class="p">);</span>
-                    <span class="k">break</span><span class="p">;</span>
-                <span class="p">}</span>
-            <span class="p">}</span>
+            // Gets a new System.Diagnostics.Process component and the
+            // associates it with currently active process.
+            Process current = Process.GetCurrentProcess();
 
-            <span class="c1">// Terminate this process and gives the underlying operating 
-</span>            <span class="c1">// system the specified exit code.
-</span>            <span class="n">Environment</span><span class="p">.</span><span class="nf">Exit</span><span class="p">(-</span><span class="m">2</span><span class="p">);</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
+            // Enumerate through all the process resources on the share
+            // local computer that the specified process name.
+            foreach (Process process in
+                 Process.GetProcessesByName(current.ProcessName))
+            {
+                if (process.Id != current.Id)
+                {
+                    NativeMethods.SetForegroundWindow(
+                        process.MainWindowHandle);
+                    NativeMethods.ShowWindow(process.MainWindowHandle, 
+                        WindowShowStyle.Restore);
+                    break;
+                }
+            }
 
-    <span class="k">private</span> <span class="k">static</span> <span class="k">class</span> <span class="nc">NativeMethods</span>
-    <span class="p">{</span>
-        <span class="c1">/// &lt;summary&gt;
-</span>        <span class="c1">/// Brings the thread that created the specified window into the
-</span>        <span class="c1">/// foreground and activates the window. Keyboard input is directed
-</span>        <span class="c1">/// to the window, and various visual cues are changed for the user.
-</span>        <span class="c1">/// The system assigns a slightly higher priority to the thread that
-</span>        <span class="c1">/// created the foreground window than it does to other threads.
-</span>        <span class="c1">/// &lt;/summary&gt;
-</span>        <span class="c1">/// &lt;param name=&quot;hWnd&quot;&gt;A handle to the window that should be
-</span>        <span class="c1">/// activated and brought to the foreground.
-</span>        <span class="c1">/// &lt;/param&gt;
-</span>        <span class="c1">/// &lt;returns&gt;If the window was brought to the foreground, the
-</span>        <span class="c1">/// return value is nonzero. &lt;/returns&gt;
-</span>        <span class="p">[</span><span class="nf">DllImport</span><span class="p">(</span><span class="s">&quot;user32.dll&quot;</span><span class="p">)]</span>
-        <span class="k">internal</span> <span class="k">static</span> <span class="k">extern</span> <span class="kt">bool</span> <span class="nf">SetForegroundWindow</span><span class="p">(</span><span class="n">IntPtr</span> <span class="n">hWnd</span><span class="p">);</span>
+            // Terminate this process and gives the underlying operating 
+            // system the specified exit code.
+            Environment.Exit(-2);
+        }
+    }
 
-        <span class="c1">/// &lt;summary&gt;Shows a Window&lt;/summary&gt;
-</span>        <span class="c1">/// &lt;remarks&gt;
-</span>        <span class="c1">/// &lt;para&gt;To perform certain special effects when showing or hiding a
-</span>        <span class="c1">/// window, use AnimateWindow.&lt;/para&gt;
-</span>        <span class="c1">/// &lt;para&gt;The first time an application calls ShowWindow, it should use
-</span>        <span class="c1">/// the WinMain function's nCmdShow parameter as its nCmdShow ..
-</span>        <span class="c1">/// Subsequent calls to ShowWindow must use one of the values in the
-</span>        <span class="c1">/// given list, instead of the one specified by the WinMain function's
-</span>        <span class="c1">/// nCmdShow parameter.&lt;/para&gt;
-</span>        <span class="c1">/// &lt;para&gt;As noted in the discussion of the nCmdShow parameter, the
-</span>        <span class="c1">/// nCmdShow value is ignored in the first call to ShowWindow if the
-</span>        <span class="c1">/// program that launched the application specifies startup information
-</span>        <span class="c1">/// in the structure. In this case, ShowWindow uses the information
-</span>        <span class="c1">/// specified in the STARTUPINFO structure to show the window. On
-</span>        <span class="c1">/// subsequent calls, the application must call ShowWindow with ..
-</span>        <span class="c1">/// set to SW_SHOWDEFAULT to use the startup information provided by ..
-</span>        <span class="c1">/// program that launched the application. This behavior is designed ..
-</span>        <span class="c1">/// the following situations: &lt;/para&gt;
-</span>        <span class="c1">/// &lt;list type=&quot;&quot;&gt;
-</span>        <span class="c1">///    &lt;item&gt;Applications create their main window by calling ..
-</span>        <span class="c1">///    with the WS_VISIBLE flag set. &lt;/item&gt;
-</span>        <span class="c1">///    &lt;item&gt;Applications create their main window by calling ..
-</span>        <span class="c1">///    with the WS_VISIBLE flag cleared, and later call ShowWindow ..
-</span>        <span class="c1">///    SW_SHOW flag set to make it visible.&lt;/item&gt;
-</span>        <span class="c1">/// &lt;/list&gt;&lt;/remarks&gt;
-</span>        <span class="c1">/// &lt;param name=&quot;hWnd&quot;&gt;Handle to the window.&lt;/param&gt;
-</span>        <span class="c1">/// &lt;param name=&quot;nCmdShow&quot;&gt;Specifies how the window is to be shown.
-</span>        <span class="c1">/// This parameter is ignored the first time an application calls
-</span>        <span class="c1">/// ShowWindow, if the program that launched the application provides a
-</span>        <span class="c1">/// STARTUPINFO structure. Otherwise, the first time ShowWindow .. ,
-</span>        <span class="c1">/// the value should be the value obtained by the WinMain function ..
-</span>        <span class="c1">/// nCmdShow parameter. In subsequent calls, this parameter ..
-</span>        <span class="c1">/// the WindowShowStyle members.&lt;/param&gt;
-</span>        <span class="c1">/// &lt;returns&gt;
-</span>        <span class="c1">/// If the window was previously visible, the return value is nonzero.
-</span>        <span class="c1">/// If the window was previously hidden, the return value is zero.
-</span>        <span class="c1">/// &lt;/returns&gt;
-</span>        <span class="p">[</span><span class="nf">DllImport</span><span class="p">(</span><span class="s">&quot;user32.dll&quot;</span><span class="p">)]</span>
-        <span class="k">internal</span> <span class="k">static</span> <span class="k">extern</span> <span class="kt">bool</span> <span class="nf">ShowWindow</span><span class="p">(</span><span class="n">IntPtr</span> <span class="n">hWnd</span><span class="p">,</span>
-            <span class="n">WindowShowStyle</span> <span class="n">nCmdShow</span><span class="p">);</span>
-    <span class="p">}</span>
+    private static class NativeMethods
+    {
+        /// &lt;summary&gt;
+        /// Brings the thread that created the specified window into the
+        /// foreground and activates the window. Keyboard input is directed
+        /// to the window, and various visual cues are changed for the user.
+        /// The system assigns a slightly higher priority to the thread that
+        /// created the foreground window than it does to other threads.
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;hWnd&quot;&gt;A handle to the window that should be
+        /// activated and brought to the foreground.
+        /// &lt;/param&gt;
+        /// &lt;returns&gt;If the window was brought to the foreground, the
+        /// return value is nonzero. &lt;/returns&gt;
+        [DllImport(&quot;user32.dll&quot;)]
+        internal static extern bool SetForegroundWindow(IntPtr hWnd);
 
-    <span class="c1">/// &lt;summary&gt;
-</span>    <span class="c1">/// Enumeration of the different ways of showing a window.&lt;/summary&gt;
-</span>    <span class="k">internal</span> <span class="k">enum</span> <span class="n">WindowShowStyle</span> <span class="p">:</span> <span class="kt">uint</span>
-    <span class="p">{</span>
-        <span class="c1">/// &lt;summary&gt;Hides the window and activates another window.&lt;/summary&gt;
-</span>        <span class="c1">/// &lt;remarks&gt;See SW_HIDE&lt;/remarks&gt;
-</span>        <span class="n">Hide</span> <span class="p">=</span> <span class="m">0</span><span class="p">,</span>
-        <span class="c1">/// &lt;summary&gt;Activates and displays a window. If the window ..
-</span>        <span class="c1">/// or maximized, the system restores it to its original size and
-</span>        <span class="c1">/// position. An application should specify this flag when displaying
-</span>        <span class="c1">/// the window for the first time.&lt;/summary&gt;
-</span>        <span class="c1">/// &lt;remarks&gt;See SW_SHOWNORMAL&lt;/remarks&gt;
-</span>        <span class="n">ShowNormal</span> <span class="p">=</span> <span class="m">1</span><span class="p">,</span>
-        <span class="c1">/// &lt;summary&gt;Activates the window and displays it ..&lt;/summary&gt;
-</span>        <span class="c1">/// &lt;remarks&gt;See SW_SHOWMINIMIZED&lt;/remarks&gt;
-</span>        <span class="n">ShowMinimized</span> <span class="p">=</span> <span class="m">2</span><span class="p">,</span>
-        <span class="c1">/// &lt;summary&gt;Activates the window and displays it ..&lt;/summary&gt;
-</span>        <span class="c1">/// &lt;remarks&gt;See SW_SHOWMAXIMIZED&lt;/remarks&gt;
-</span>        <span class="n">ShowMaximized</span> <span class="p">=</span> <span class="m">3</span><span class="p">,</span>
-        <span class="c1">/// &lt;summary&gt;Maximizes the specified window.&lt;/summary&gt;
-</span>        <span class="c1">/// &lt;remarks&gt;See SW_MAXIMIZE&lt;/remarks&gt;
-</span>        <span class="n">Maximize</span> <span class="p">=</span> <span class="m">3</span><span class="p">,</span>
-        <span class="c1">/// &lt;summary&gt;Displays a window in its most recent size and position.
-</span>        <span class="c1">/// This value is similar to &quot;ShowNormal&quot;, except the window is not
-</span>        <span class="c1">/// actived.&lt;/summary&gt;
-</span>        <span class="c1">/// &lt;remarks&gt;See SW_SHOWNOACTIVATE&lt;/remarks&gt;
-</span>        <span class="n">ShowNormalNoActivate</span> <span class="p">=</span> <span class="m">4</span><span class="p">,</span>
-        <span class="c1">/// &lt;summary&gt;Activates the window and displays it in its current size
-</span>        <span class="c1">/// and position.&lt;/summary&gt;
-</span>        <span class="c1">/// &lt;remarks&gt;See SW_SHOW&lt;/remarks&gt;
-</span>        <span class="n">Show</span> <span class="p">=</span> <span class="m">5</span><span class="p">,</span>
-        <span class="c1">/// &lt;summary&gt;Minimizes the specified window and activates the next
-</span>        <span class="c1">/// top-level window in the Z order.&lt;/summary&gt;
-</span>        <span class="c1">/// &lt;remarks&gt;See SW_MINIMIZE&lt;/remarks&gt;
-</span>        <span class="n">Minimize</span> <span class="p">=</span> <span class="m">6</span><span class="p">,</span>
-        <span class="c1">/// &lt;summary&gt;Displays the window as a minimized window. This value is
-</span>        <span class="c1">/// similar to &quot;ShowMinimized&quot;, except the window ..&lt;/summary&gt;
-</span>        <span class="c1">/// &lt;remarks&gt;See SW_SHOWMINNOACTIVE&lt;/remarks&gt;
-</span>        <span class="n">ShowMinNoActivate</span> <span class="p">=</span> <span class="m">7</span><span class="p">,</span>
-        <span class="c1">/// &lt;summary&gt;Displays the window in its current size and position. This
-</span>        <span class="c1">/// value is similar to &quot;Show&quot;, except the window ..&lt;/summary&gt;
-</span>        <span class="c1">/// &lt;remarks&gt;See SW_SHOWNA&lt;/remarks&gt;
-</span>        <span class="n">ShowNoActivate</span> <span class="p">=</span> <span class="m">8</span><span class="p">,</span>
-        <span class="c1">/// &lt;summary&gt;Activates and displays the window. If the window is
-</span>        <span class="c1">/// minimized or maximized, the system restores it to its original size
-</span>        <span class="c1">/// and position. An application should specify this flag ..
-</span>        <span class="c1">/// a minimized window.&lt;/summary&gt;
-</span>        <span class="c1">/// &lt;remarks&gt;See SW_RESTORE&lt;/remarks&gt;
-</span>        <span class="n">Restore</span> <span class="p">=</span> <span class="m">9</span><span class="p">,</span>
-        <span class="c1">/// &lt;summary&gt;Sets the show state based on the SW_ value specified ..
-</span>        <span class="c1">/// STARTUPINFO structure passed to the CreateProcess function by the
-</span>        <span class="c1">/// program that started the application.&lt;/summary&gt;
-</span>        <span class="c1">/// &lt;remarks&gt;See SW_SHOWDEFAULT&lt;/remarks&gt;
-</span>        <span class="n">ShowDefault</span> <span class="p">=</span> <span class="m">10</span><span class="p">,</span>
-        <span class="c1">/// &lt;summary&gt;Windows 2000/XP: Minimizes a window, even if the thread
-</span>        <span class="c1">/// that owns the window is hung. This flag should only be used when
-</span>        <span class="c1">/// minimizing windows from a different thread.&lt;/summary&gt;
-</span>        <span class="c1">/// &lt;remarks&gt;See SW_FORCEMINIMIZE&lt;/remarks&gt;
-</span>        <span class="n">ForceMinimized</span> <span class="p">=</span> <span class="m">11</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+        /// &lt;summary&gt;Shows a Window&lt;/summary&gt;
+        /// &lt;remarks&gt;
+        /// &lt;para&gt;To perform certain special effects when showing or hiding a
+        /// window, use AnimateWindow.&lt;/para&gt;
+        /// &lt;para&gt;The first time an application calls ShowWindow, it should use
+        /// the WinMain function's nCmdShow parameter as its nCmdShow ..
+        /// Subsequent calls to ShowWindow must use one of the values in the
+        /// given list, instead of the one specified by the WinMain function's
+        /// nCmdShow parameter.&lt;/para&gt;
+        /// &lt;para&gt;As noted in the discussion of the nCmdShow parameter, the
+        /// nCmdShow value is ignored in the first call to ShowWindow if the
+        /// program that launched the application specifies startup information
+        /// in the structure. In this case, ShowWindow uses the information
+        /// specified in the STARTUPINFO structure to show the window. On
+        /// subsequent calls, the application must call ShowWindow with ..
+        /// set to SW_SHOWDEFAULT to use the startup information provided by ..
+        /// program that launched the application. This behavior is designed ..
+        /// the following situations: &lt;/para&gt;
+        /// &lt;list type=&quot;&quot;&gt;
+        ///    &lt;item&gt;Applications create their main window by calling ..
+        ///    with the WS_VISIBLE flag set. &lt;/item&gt;
+        ///    &lt;item&gt;Applications create their main window by calling ..
+        ///    with the WS_VISIBLE flag cleared, and later call ShowWindow ..
+        ///    SW_SHOW flag set to make it visible.&lt;/item&gt;
+        /// &lt;/list&gt;&lt;/remarks&gt;
+        /// &lt;param name=&quot;hWnd&quot;&gt;Handle to the window.&lt;/param&gt;
+        /// &lt;param name=&quot;nCmdShow&quot;&gt;Specifies how the window is to be shown.
+        /// This parameter is ignored the first time an application calls
+        /// ShowWindow, if the program that launched the application provides a
+        /// STARTUPINFO structure. Otherwise, the first time ShowWindow .. ,
+        /// the value should be the value obtained by the WinMain function ..
+        /// nCmdShow parameter. In subsequent calls, this parameter ..
+        /// the WindowShowStyle members.&lt;/param&gt;
+        /// &lt;returns&gt;
+        /// If the window was previously visible, the return value is nonzero.
+        /// If the window was previously hidden, the return value is zero.
+        /// &lt;/returns&gt;
+        [DllImport(&quot;user32.dll&quot;)]
+        internal static extern bool ShowWindow(IntPtr hWnd,
+            WindowShowStyle nCmdShow);
+    }
+
+    /// &lt;summary&gt;
+    /// Enumeration of the different ways of showing a window.&lt;/summary&gt;
+    internal enum WindowShowStyle : uint
+    {
+        /// &lt;summary&gt;Hides the window and activates another window.&lt;/summary&gt;
+        /// &lt;remarks&gt;See SW_HIDE&lt;/remarks&gt;
+        Hide = 0,
+        /// &lt;summary&gt;Activates and displays a window. If the window ..
+        /// or maximized, the system restores it to its original size and
+        /// position. An application should specify this flag when displaying
+        /// the window for the first time.&lt;/summary&gt;
+        /// &lt;remarks&gt;See SW_SHOWNORMAL&lt;/remarks&gt;
+        ShowNormal = 1,
+        /// &lt;summary&gt;Activates the window and displays it ..&lt;/summary&gt;
+        /// &lt;remarks&gt;See SW_SHOWMINIMIZED&lt;/remarks&gt;
+        ShowMinimized = 2,
+        /// &lt;summary&gt;Activates the window and displays it ..&lt;/summary&gt;
+        /// &lt;remarks&gt;See SW_SHOWMAXIMIZED&lt;/remarks&gt;
+        ShowMaximized = 3,
+        /// &lt;summary&gt;Maximizes the specified window.&lt;/summary&gt;
+        /// &lt;remarks&gt;See SW_MAXIMIZE&lt;/remarks&gt;
+        Maximize = 3,
+        /// &lt;summary&gt;Displays a window in its most recent size and position.
+        /// This value is similar to &quot;ShowNormal&quot;, except the window is not
+        /// actived.&lt;/summary&gt;
+        /// &lt;remarks&gt;See SW_SHOWNOACTIVATE&lt;/remarks&gt;
+        ShowNormalNoActivate = 4,
+        /// &lt;summary&gt;Activates the window and displays it in its current size
+        /// and position.&lt;/summary&gt;
+        /// &lt;remarks&gt;See SW_SHOW&lt;/remarks&gt;
+        Show = 5,
+        /// &lt;summary&gt;Minimizes the specified window and activates the next
+        /// top-level window in the Z order.&lt;/summary&gt;
+        /// &lt;remarks&gt;See SW_MINIMIZE&lt;/remarks&gt;
+        Minimize = 6,
+        /// &lt;summary&gt;Displays the window as a minimized window. This value is
+        /// similar to &quot;ShowMinimized&quot;, except the window ..&lt;/summary&gt;
+        /// &lt;remarks&gt;See SW_SHOWMINNOACTIVE&lt;/remarks&gt;
+        ShowMinNoActivate = 7,
+        /// &lt;summary&gt;Displays the window in its current size and position. This
+        /// value is similar to &quot;Show&quot;, except the window ..&lt;/summary&gt;
+        /// &lt;remarks&gt;See SW_SHOWNA&lt;/remarks&gt;
+        ShowNoActivate = 8,
+        /// &lt;summary&gt;Activates and displays the window. If the window is
+        /// minimized or maximized, the system restores it to its original size
+        /// and position. An application should specify this flag ..
+        /// a minimized window.&lt;/summary&gt;
+        /// &lt;remarks&gt;See SW_RESTORE&lt;/remarks&gt;
+        Restore = 9,
+        /// &lt;summary&gt;Sets the show state based on the SW_ value specified ..
+        /// STARTUPINFO structure passed to the CreateProcess function by the
+        /// program that started the application.&lt;/summary&gt;
+        /// &lt;remarks&gt;See SW_SHOWDEFAULT&lt;/remarks&gt;
+        ShowDefault = 10,
+        /// &lt;summary&gt;Windows 2000/XP: Minimizes a window, even if the thread
+        /// that owns the window is hung. This flag should only be used when
+        /// minimizing windows from a different thread.&lt;/summary&gt;
+        /// &lt;remarks&gt;See SW_FORCEMINIMIZE&lt;/remarks&gt;
+        ForceMinimized = 11
+    }
+}
 </pre>
 <p>One improvement would be to restore the window only if it&rsquo;s minimized by checking the return value of SetForegroundWindow method. I leave this to you, go on and adapt it to your own needs.</p>
 </div><a class="twitter" href="https://twitter.com/intent/tweet?url=http%3A%2F%2Fnikosbaxevanis.com%2Fblog%2F2010%2F10%2F11%2Fallowing-only-one-instance-of-a-wpf-application-to-execute%2F&text=Allowing+only+one+instance+of+a+WPF+application+to+execute&via=nikosbaxevanis" target="_blank">Tweet This</a><div class="dater">October 11, 2010</div><div class="categories">Published in<a class="category" href="/category/wpf/">WPF&nbsp;</a> on October 11, 2010</div></div><div class="homer"><a href="/"><i class="icon-tape" style="font-size:32px;"></i></a></div><script type="text/javascript">var _gaq = _gaq || [];

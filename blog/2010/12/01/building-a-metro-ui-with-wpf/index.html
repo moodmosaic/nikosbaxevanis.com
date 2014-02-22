@@ -1,6 +1,6 @@
-<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" /><meta content="width=device-width, user-scalable=no" name="viewport" /><title>Building a Metro UI with WPF</title><link href="http://fonts.googleapis.com/css?family=Lora:400,700|Open+Sans" rel="stylesheet" type="text/css" /><link href="/stylesheets/fontello.css?1392664185" media="screen" rel="stylesheet" type="text/css" />
-<link href="/stylesheets/styles.css?1392664185" media="screen" rel="stylesheet" type="text/css" />
-<link href="/stylesheets/syntax.css?1392664185" media="screen" rel="stylesheet" type="text/css" /></head><body><div class="row"><h1>Building a Metro UI with WPF</h1><div class="post"><p><img src="http://farm9.staticflickr.com/8075/8397466987_1b6913aa26_o.png" alt="A very metro-ish image" /></p>
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" /><meta content="width=device-width, user-scalable=no" name="viewport" /><title>Building a Metro UI with WPF</title><link href="http://fonts.googleapis.com/css?family=Lora:400,700|Open+Sans" rel="stylesheet" type="text/css" /><link href="/stylesheets/fontello.css?1393091639" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/styles.css?1393091639" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/syntax.css?1393091639" media="screen" rel="stylesheet" type="text/css" /></head><body><div class="row"><h1>Building a Metro UI with WPF</h1><div class="post"><p><img src="http://farm9.staticflickr.com/8075/8397466987_1b6913aa26_o.png" alt="A very metro-ish image" /></p>
 
 <p>Have you ever used the <a href="http://www.zune.net/" target="_blank" title="The Zune software organizes the media in its library and allows users to add to the library by ripping from CDs, syncing with a Zune device, and downloading from the Zune Marketplace. The Zune software also allows one to organize song metadata. It can automatically download album art and metadata tag data for content in the library.">Zune</a> software? I guess so, but I haven&#39;t until version&#0160;4.7.1404.0 came out. This version comes with significant changes:&#0160;Windows Phone 7 support and integration with Windows Live Essentials 2011 among other.</p>
 
@@ -33,64 +33,64 @@
 <p><strong>How can we move the window?</strong></p>
 
 <p>By adding a Shape (ex. a <a href="http://msdn.microsoft.com/en-us/library/system.windows.shapes.rectangle.aspx" target="_blank" title="Draws a rectangle.">Rectangle</a>) and registering on it&#39;s&#0160;PreviewMouseDown event:</p>
-<pre class="highlight csharp"><span class="c1">// Is this a double-click?
-</span><span class="k">if</span> <span class="p">(</span><span class="n">DateTime</span><span class="p">.</span><span class="n">Now</span><span class="p">.</span><span class="nf">Subtract</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="n">headerLastClicked</span><span class="p">)</span> <span class="p">&lt;=</span> <span class="n">doubleClick</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="c1">// Execute the code inside the event handler for the
-</span>    <span class="c1">// restore button click passing null for the sender
-</span>    <span class="c1">// and null for the event args.
-</span>    <span class="nf">HandleRestoreClick</span><span class="p">(</span><span class="k">null</span><span class="p">,</span> <span class="k">null</span><span class="p">);</span>
-<span class="p">}</span>
+<pre class="highlight text">// Is this a double-click?
+if (DateTime.Now.Subtract(this.headerLastClicked) &lt;= doubleClick)
+{
+    // Execute the code inside the event handler for the
+    // restore button click passing null for the sender
+    // and null for the event args.
+    HandleRestoreClick(null, null);
+}
 
-<span class="k">this</span><span class="p">.</span><span class="n">headerLastClicked</span> <span class="p">=</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">Now</span><span class="p">;</span>
+this.headerLastClicked = DateTime.Now;
 
-<span class="k">if</span> <span class="p">(</span><span class="n">Mouse</span><span class="p">.</span><span class="n">LeftButton</span> <span class="p">==</span> <span class="n">MouseButtonState</span><span class="p">.</span><span class="n">Pressed</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="nf">DragMove</span><span class="p">();</span>
-<span class="p">}</span>
+if (Mouse.LeftButton == MouseButtonState.Pressed)
+{
+    DragMove();
+}
 </pre>
 <p><strong>How can we resize the window?</strong></p>
 
 <p>By adding Shapes (ex.&#0160;<a href="http://msdn.microsoft.com/en-us/library/system.windows.shapes.rectangle.aspx" target="_blank" title="Draws a rectangle.">Rectangles</a>) one on each side of the window (left, top, right, bottom) and registering on it&#39;s&#0160;PreviewMouseDown event:</p>
-<pre class="highlight csharp"><span class="n">Rectangle</span> <span class="n">clickedRectangle</span> <span class="p">=</span> <span class="p">(</span><span class="n">Rectangle</span><span class="p">)</span><span class="n">sender</span><span class="p">;</span>
+<pre class="highlight text">Rectangle clickedRectangle = (Rectangle)sender;
 
-<span class="k">switch</span> <span class="p">(</span><span class="n">clickedRectangle</span><span class="p">.</span><span class="n">Name</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="k">case</span> <span class="s">&quot;top&quot;</span><span class="p">:</span>
-        <span class="n">Cursor</span> <span class="p">=</span> <span class="n">Cursors</span><span class="p">.</span><span class="n">SizeNS</span><span class="p">;</span>
-        <span class="nf">ResizeWindow</span><span class="p">(</span><span class="n">ResizeDirection</span><span class="p">.</span><span class="n">Top</span><span class="p">);</span>
-        <span class="k">break</span><span class="p">;</span>
-    <span class="k">case</span> <span class="s">&quot;bottom&quot;</span><span class="p">:</span>
-        <span class="n">Cursor</span> <span class="p">=</span> <span class="n">Cursors</span><span class="p">.</span><span class="n">SizeNS</span><span class="p">;</span>
-        <span class="nf">ResizeWindow</span><span class="p">(</span><span class="n">ResizeDirection</span><span class="p">.</span><span class="n">Bottom</span><span class="p">);</span>
-        <span class="k">break</span><span class="p">;</span>
-    <span class="c1">// ...
-</span><span class="p">}</span>
+switch (clickedRectangle.Name)
+{
+    case &quot;top&quot;:
+        Cursor = Cursors.SizeNS;
+        ResizeWindow(ResizeDirection.Top);
+        break;
+    case &quot;bottom&quot;:
+        Cursor = Cursors.SizeNS;
+        ResizeWindow(ResizeDirection.Bottom);
+        break;
+    // ...
+}
 </pre>
 <p>Here is the code for resizing the window. It uses the underlying <a href="http://en.wikipedia.org/wiki/Windows_User" target="_blank" title="Windows USER is a component of the Microsoft Windows operating system that provides core functionality for building simple user interfaces. The component has existed in all versions of Windows, and includes functionality for window management, message passing, input processing and standard controls.">Windows USER</a> component.</p>
-<pre class="highlight csharp"><span class="c1">/// &lt;summary&gt;
+<pre class="highlight text">/// &lt;summary&gt;
 /// Resizes the window.
 /// &lt;/summary&gt;
 /// &lt;param name=&quot;direction&quot;&gt;The direction.&lt;/param&gt;
-</span><span class="k">private</span> <span class="k">void</span> <span class="nf">ResizeWindow</span><span class="p">(</span><span class="n">ResizeDirection</span> <span class="n">direction</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="n">NativeMethods</span><span class="p">.</span><span class="nf">SendMessage</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="n">hwndSource</span><span class="p">.</span><span class="n">Handle</span><span class="p">,</span> <span class="n">WM_SYSCOMMAND</span><span class="p">,</span>
-        <span class="p">(</span><span class="n">IntPtr</span><span class="p">)(</span><span class="m">61440</span> <span class="p">+</span> <span class="n">direction</span><span class="p">),</span> <span class="n">IntPtr</span><span class="p">.</span><span class="n">Zero</span><span class="p">);</span>
-<span class="p">}</span>
+private void ResizeWindow(ResizeDirection direction)
+{
+    NativeMethods.SendMessage(this.hwndSource.Handle, WM_SYSCOMMAND,
+        (IntPtr)(61440 + direction), IntPtr.Zero);
+}
 
-<span class="na">[DllImport(&quot;user32.dll&quot;, CharSet = CharSet.Auto)]</span>
-<span class="k">internal</span> <span class="k">static</span> <span class="k">extern</span> <span class="n">IntPtr</span> <span class="nf">SendMessage</span><span class="p">(</span>
-    <span class="n">IntPtr</span> <span class="n">hWnd</span><span class="p">,</span>
-    <span class="n">UInt32</span> <span class="n">msg</span><span class="p">,</span>
-    <span class="n">IntPtr</span> <span class="n">wParam</span><span class="p">,</span>
-    <span class="n">IntPtr</span> <span class="n">lParam</span><span class="p">);</span>
+[DllImport(&quot;user32.dll&quot;, CharSet = CharSet.Auto)]
+internal static extern IntPtr SendMessage(
+    IntPtr hWnd,
+    UInt32 msg,
+    IntPtr wParam,
+    IntPtr lParam);
 </pre>
 <p><strong>How can we add a drop shadow to the window?</strong></p>
 
 <p>At the time of this&#0160;writing, I know two ways of doing this:</p>
 
 <p>The first one (which is described <a href="http://groups.google.com/group/wpf-disciples/browse_thread/thread/82d408e569e0b5f9" target="_blank" title="OS Composed DropShadows on WPF Windows with Custom Chrome Options.">here</a>) uses the&#0160;<a href="http://msdn.microsoft.com/en-us/library/aa969540(VS.85).aspx" target="_blank" title="The desktop composition feature, introduced in Windows Vista, fundamentally changed the way applications display pixels on the screen. When desktop composition is enabled, individual windows no longer draw directly to the screen or primary display device as they did in previous versions of Windows. Instead, their drawing is redirected to off-screen surfaces in video memory, which are then rendered into a desktop image and presented on the display.">Desktop Window Manager</a>&#0160;(DWM)&#0160;API. Specifically it uses the&#0160;<a href="http://msdn.microsoft.com/en-us/library/aa969524(VS.85).aspx" target="_blank" title="Sets the value of the specified attributes for non-client rendering to apply to the window.">DwmSetWindowAttribute</a> Function combined with the &#0160;<a href="http://msdn.microsoft.com/en-us/library/aa969512(VS.85).aspx" target="_blank" title="Extends the window frame behind the client area.">DwmExtendFrameIntoClientArea </a>Function to place a drop shadow around the window area. This method works by registering at the <a href="http://msdn.microsoft.com/en-us/library/system.windows.window.sourceinitialized.aspx" target="_blank" title="This event is raised to support interoperation with Win32.">SourceInitialized</a> event. When this event is raised, it is a good place to call any code that can&#0160;interoperate&#0160;with the underlying Win32 window.</p>
-<pre class="highlight csharp"><span class="c1">/// &lt;summary&gt;
+<pre class="highlight text">/// &lt;summary&gt;
 /// Raises the &lt;see cref=&quot;FrameworkElement.Initialized&quot;/&gt; event.
 /// This method is invoked whenever
 /// &lt;see cref=&quot;P:FrameworkElement.IsInitialized&quot;/&gt;
@@ -98,46 +98,46 @@
 /// &lt;/summary&gt;
 /// &lt;param name=&quot;e&quot;&gt;The &lt;see cref=&quot;T:RoutedEventArgs&quot;/&gt;
 /// that contains the event data.&lt;/param&gt;
-</span><span class="k">protected</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">OnInitialized</span><span class="p">(</span><span class="n">EventArgs</span> <span class="n">e</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="n">AllowsTransparency</span>    <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
-    <span class="n">ResizeMode</span>            <span class="p">=</span> <span class="n">ResizeMode</span><span class="p">.</span><span class="n">NoResize</span><span class="p">;</span>
-    <span class="n">Height</span>                <span class="p">=</span> <span class="m">480</span><span class="p">;</span>
-    <span class="n">Width</span>                 <span class="p">=</span> <span class="m">852</span><span class="p">;</span> 
-    <span class="n">WindowStartupLocation</span> <span class="p">=</span> <span class="n">WindowStartupLocation</span><span class="p">.</span><span class="n">CenterScreen</span><span class="p">;</span>
-    <span class="n">WindowStyle</span>           <span class="p">=</span> <span class="n">WindowStyle</span><span class="p">.</span><span class="n">None</span><span class="p">;</span>
+protected override void OnInitialized(EventArgs e)
+{
+    AllowsTransparency    = false;
+    ResizeMode            = ResizeMode.NoResize;
+    Height                = 480;
+    Width                 = 852; 
+    WindowStartupLocation = WindowStartupLocation.CenterScreen;
+    WindowStyle           = WindowStyle.None;
 
-    <span class="n">SourceInitialized</span>    <span class="p">+=</span> <span class="n">HandleSourceInitialized</span><span class="p">;</span>
+    SourceInitialized    += HandleSourceInitialized;
 
-    <span class="k">base</span><span class="p">.</span><span class="nf">OnInitialized</span><span class="p">(</span><span class="n">e</span><span class="p">);</span>
-<span class="p">}</span>
+    base.OnInitialized(e);
+}
 
-<span class="c1">/// &lt;summary&gt;
+/// &lt;summary&gt;
 /// Handles the source initialized.
 /// &lt;/summary&gt;
 /// &lt;param name=&quot;sender&quot;&gt;The sender.&lt;/param&gt;
 /// &lt;param name=&quot;e&quot;&gt;The &lt;see cref=&quot;System.EventArgs&quot;/&gt;
 /// instance containing the event data.&lt;/param&gt;
-</span><span class="k">private</span> <span class="k">void</span> <span class="nf">HandleSourceInitialized</span><span class="p">(</span><span class="kt">object</span> <span class="n">sender</span><span class="p">,</span> <span class="n">EventArgs</span> <span class="n">e</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="k">this</span><span class="p">.</span><span class="n">hwndSource</span> <span class="p">=</span> <span class="p">(</span><span class="n">HwndSource</span><span class="p">)</span><span class="n">PresentationSource</span><span class="p">.</span><span class="nf">FromVisual</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+private void HandleSourceInitialized(object sender, EventArgs e)
+{
+    this.hwndSource = (HwndSource)PresentationSource.FromVisual(this);
 
-    <span class="c1">// Returns the HwndSource object for the window
-</span>    <span class="c1">// which presents WPF content in a Win32 window.
-</span>    <span class="n">HwndSource</span><span class="p">.</span><span class="nf">FromHwnd</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="n">hwndSource</span><span class="p">.</span><span class="n">Handle</span><span class="p">).</span><span class="nf">AddHook</span><span class="p">(</span>
-        <span class="k">new</span> <span class="nf">HwndSourceHook</span><span class="p">(</span><span class="n">NativeMethods</span><span class="p">.</span><span class="n">WindowProc</span><span class="p">));</span>
+    // Returns the HwndSource object for the window
+    // which presents WPF content in a Win32 window.
+    HwndSource.FromHwnd(this.hwndSource.Handle).AddHook(
+        new HwndSourceHook(NativeMethods.WindowProc));
 
-    <span class="c1">// http://msdn.microsoft.com/en-us/library/aa969524(VS.85).aspx
-</span>    <span class="kt">int</span> <span class="n">DWMWA_NCRENDERING_POLICY</span> <span class="p">=</span> <span class="m">2</span><span class="p">;</span>
-    <span class="n">NativeMethods</span><span class="p">.</span><span class="nf">DwmSetWindowAttribute</span><span class="p">(</span>
-        <span class="k">this</span><span class="p">.</span><span class="n">hwndSource</span><span class="p">.</span><span class="n">Handle</span><span class="p">,</span>
-        <span class="n">DWMWA_NCRENDERING_POLICY</span><span class="p">,</span>
-        <span class="k">ref</span> <span class="n">DWMWA_NCRENDERING_POLICY</span><span class="p">,</span>
-        <span class="m">4</span><span class="p">);</span>
+    // http://msdn.microsoft.com/en-us/library/aa969524(VS.85).aspx
+    int DWMWA_NCRENDERING_POLICY = 2;
+    NativeMethods.DwmSetWindowAttribute(
+        this.hwndSource.Handle,
+        DWMWA_NCRENDERING_POLICY,
+        ref DWMWA_NCRENDERING_POLICY,
+        4);
 
-    <span class="c1">// http://msdn.microsoft.com/en-us/library/aa969512(VS.85).aspx
-</span>    <span class="n">NativeMethods</span><span class="p">.</span><span class="nf">ShowShadowUnderWindow</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="n">hwndSource</span><span class="p">.</span><span class="n">Handle</span><span class="p">);</span>
-<span class="p">}</span>
+    // http://msdn.microsoft.com/en-us/library/aa969512(VS.85).aspx
+    NativeMethods.ShowShadowUnderWindow(this.hwndSource.Handle);
+}
 </pre>
 <p><img src="http://farm9.staticflickr.com/8212/8397466875_a3a92be9ed_o.png" alt="Metro window Without the drop shadow" /></p>
 
@@ -168,88 +168,88 @@
 </ol>
 <p>..Sounds like a lot of work to do for displaying a drop shadow that remains visible even if the user&#0160;unchecks the &ldquo;Show shadows under windows&rdquo; checkbox!</p>
 <p>Creating the transparent window in code was easy:</p></p>
-<pre class="highlight csharp"><span class="c1">/// &lt;summary&gt;
+<pre class="highlight text">/// &lt;summary&gt;
 /// Initializes the surrounding windows.
 /// &lt;/summary&gt;
-</span><span class="k">private</span> <span class="k">void</span> <span class="nf">InitializeSurrounds</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="c1">// Top.
-</span>    <span class="k">this</span><span class="p">.</span><span class="n">wndT</span> <span class="p">=</span> <span class="nf">CreateTransparentWindow</span><span class="p">();</span>
+private void InitializeSurrounds()
+{
+    // Top.
+    this.wndT = CreateTransparentWindow();
 
-    <span class="c1">// Left.
-</span>    <span class="k">this</span><span class="p">.</span><span class="n">wndL</span> <span class="p">=</span> <span class="nf">CreateTransparentWindow</span><span class="p">();</span>
+    // Left.
+    this.wndL = CreateTransparentWindow();
 
-    <span class="c1">// Bottom.
-</span>    <span class="k">this</span><span class="p">.</span><span class="n">wndB</span> <span class="p">=</span> <span class="nf">CreateTransparentWindow</span><span class="p">();</span>
+    // Bottom.
+    this.wndB = CreateTransparentWindow();
 
-    <span class="c1">// Right.
-</span>    <span class="k">this</span><span class="p">.</span><span class="n">wndR</span> <span class="p">=</span> <span class="nf">CreateTransparentWindow</span><span class="p">();</span>
+    // Right.
+    this.wndR = CreateTransparentWindow();
 
-    <span class="nf">SetSurroundShadows</span><span class="p">();</span>
-<span class="p">}</span>
+    SetSurroundShadows();
+}
 
-<span class="c1">/// &lt;summary&gt;
+/// &lt;summary&gt;
 /// Creates an empty window.
 /// &lt;/summary&gt;
 /// &lt;returns&gt;&lt;/returns&gt;
-</span><span class="k">private</span> <span class="k">static</span> <span class="n">Window</span> <span class="nf">CreateTransparentWindow</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="n">Window</span> <span class="n">wnd</span>             <span class="p">=</span> <span class="k">new</span> <span class="nf">Window</span><span class="p">();</span>
-    <span class="n">wnd</span><span class="p">.</span><span class="n">AllowsTransparency</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span>
-    <span class="n">wnd</span><span class="p">.</span><span class="n">ShowInTaskbar</span>      <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
-    <span class="n">wnd</span><span class="p">.</span><span class="n">WindowStyle</span>        <span class="p">=</span> <span class="n">WindowStyle</span><span class="p">.</span><span class="n">None</span><span class="p">;</span>
-    <span class="n">wnd</span><span class="p">.</span><span class="n">Background</span>         <span class="p">=</span> <span class="k">null</span><span class="p">;</span>
+private static Window CreateTransparentWindow()
+{
+    Window wnd             = new Window();
+    wnd.AllowsTransparency = true;
+    wnd.ShowInTaskbar      = false;
+    wnd.WindowStyle        = WindowStyle.None;
+    wnd.Background         = null;
 
-    <span class="k">return</span> <span class="n">wnd</span><span class="p">;</span>
-<span class="p">}</span>
+    return wnd;
+}
 
-<span class="c1">/// &lt;summary&gt;
+/// &lt;summary&gt;
 /// Sets the artificial drop shadow.
 /// &lt;/summary&gt;
 /// &lt;param name=&quot;active&quot;&gt;if set to &lt;c&gt;true&lt;/c&gt; [active].&lt;/param&gt;
-</span><span class="k">private</span> <span class="k">void</span> <span class="nf">SetSurroundShadows</span><span class="p">(</span><span class="kt">bool</span> <span class="n">active</span> <span class="p">=</span> <span class="k">true</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">active</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="kt">double</span> <span class="n">cornerRadius</span> <span class="p">=</span> <span class="m">1.75</span><span class="p">;</span>
+private void SetSurroundShadows(bool active = true)
+{
+    if (active)
+    {
+        double cornerRadius = 1.75;
 
-        <span class="k">this</span><span class="p">.</span><span class="n">wndT</span><span class="p">.</span><span class="n">Content</span> <span class="p">=</span> <span class="nf">GetDecorator</span><span class="p">(</span>
-            <span class="s">&quot;Images/ACTIVESHADOWTOP.PNG&quot;</span><span class="p">);</span>
-        <span class="k">this</span><span class="p">.</span><span class="n">wndL</span><span class="p">.</span><span class="n">Content</span> <span class="p">=</span> <span class="nf">GetDecorator</span><span class="p">(</span>
-            <span class="s">&quot;Images/ACTIVESHADOWLEFT.PNG&quot;</span><span class="p">,</span> <span class="n">cornerRadius</span><span class="p">);</span>
-        <span class="k">this</span><span class="p">.</span><span class="n">wndB</span><span class="p">.</span><span class="n">Content</span> <span class="p">=</span> <span class="nf">GetDecorator</span><span class="p">(</span>
-            <span class="s">&quot;Images/ACTIVESHADOWBOTTOM.PNG&quot;</span><span class="p">);</span>
-        <span class="k">this</span><span class="p">.</span><span class="n">wndR</span><span class="p">.</span><span class="n">Content</span> <span class="p">=</span> <span class="nf">GetDecorator</span><span class="p">(</span>
-            <span class="s">&quot;Images/ACTIVESHADOWRIGHT.PNG&quot;</span><span class="p">,</span> <span class="n">cornerRadius</span><span class="p">);</span>
-    <span class="p">}</span>
-    <span class="k">else</span>
-    <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="n">wndT</span><span class="p">.</span><span class="n">Content</span> <span class="p">=</span> <span class="nf">GetDecorator</span><span class="p">(</span>
-            <span class="s">&quot;Images/INACTIVESHADOWTOP.PNG&quot;</span><span class="p">);</span>
-        <span class="k">this</span><span class="p">.</span><span class="n">wndL</span><span class="p">.</span><span class="n">Content</span> <span class="p">=</span> <span class="nf">GetDecorator</span><span class="p">(</span>
-            <span class="s">&quot;Images/INACTIVESHADOWLEFT.PNG&quot;</span><span class="p">);</span>
-        <span class="k">this</span><span class="p">.</span><span class="n">wndB</span><span class="p">.</span><span class="n">Content</span> <span class="p">=</span> <span class="nf">GetDecorator</span><span class="p">(</span>
-            <span class="s">&quot;Images/INACTIVESHADOWBOTTOM.PNG&quot;</span><span class="p">);</span>
-        <span class="k">this</span><span class="p">.</span><span class="n">wndR</span><span class="p">.</span><span class="n">Content</span> <span class="p">=</span> <span class="nf">GetDecorator</span><span class="p">(</span>
-            <span class="s">&quot;Images/INACTIVESHADOWRIGHT.PNG&quot;</span><span class="p">);</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+        this.wndT.Content = GetDecorator(
+            &quot;Images/ACTIVESHADOWTOP.PNG&quot;);
+        this.wndL.Content = GetDecorator(
+            &quot;Images/ACTIVESHADOWLEFT.PNG&quot;, cornerRadius);
+        this.wndB.Content = GetDecorator(
+            &quot;Images/ACTIVESHADOWBOTTOM.PNG&quot;);
+        this.wndR.Content = GetDecorator(
+            &quot;Images/ACTIVESHADOWRIGHT.PNG&quot;, cornerRadius);
+    }
+    else
+    {
+        this.wndT.Content = GetDecorator(
+            &quot;Images/INACTIVESHADOWTOP.PNG&quot;);
+        this.wndL.Content = GetDecorator(
+            &quot;Images/INACTIVESHADOWLEFT.PNG&quot;);
+        this.wndB.Content = GetDecorator(
+            &quot;Images/INACTIVESHADOWBOTTOM.PNG&quot;);
+        this.wndR.Content = GetDecorator(
+            &quot;Images/INACTIVESHADOWRIGHT.PNG&quot;);
+    }
+}
 
-<span class="na">[DebuggerStepThrough]</span>
-<span class="k">private</span> <span class="n">Decorator</span> <span class="nf">GetDecorator</span><span class="p">(</span><span class="kt">string</span> <span class="n">imageUri</span><span class="p">,</span> <span class="kt">double</span> <span class="n">radius</span> <span class="p">=</span> <span class="m">0</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="n">Border</span> <span class="n">border</span>       <span class="p">=</span> <span class="k">new</span> <span class="nf">Border</span><span class="p">();</span>
-    <span class="n">border</span><span class="p">.</span><span class="n">CornerRadius</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">CornerRadius</span><span class="p">(</span><span class="n">radius</span><span class="p">);</span>
-    <span class="n">border</span><span class="p">.</span><span class="n">Background</span>   <span class="p">=</span> <span class="k">new</span> <span class="nf">ImageBrush</span><span class="p">(</span>
-        <span class="k">new</span> <span class="nf">BitmapImage</span><span class="p">(</span>
-            <span class="k">new</span> <span class="nf">Uri</span><span class="p">(</span><span class="n">BaseUriHelper</span><span class="p">.</span><span class="nf">GetBaseUri</span><span class="p">(</span><span class="k">this</span><span class="p">),</span>
-                <span class="n">imageUri</span><span class="p">)));</span>
+[DebuggerStepThrough]
+private Decorator GetDecorator(string imageUri, double radius = 0)
+{
+    Border border       = new Border();
+    border.CornerRadius = new CornerRadius(radius);
+    border.Background   = new ImageBrush(
+        new BitmapImage(
+            new Uri(BaseUriHelper.GetBaseUri(this),
+                imageUri)));
 
-    <span class="k">return</span> <span class="n">border</span><span class="p">;</span>
-<span class="p">}</span>
+    return border;
+}
 </pre>
 <p>Calculating the position, width and height for each external window was also not difficult:</p>
-<pre class="highlight csharp"><span class="c1">/// &lt;summary&gt;
+<pre class="highlight text">/// &lt;summary&gt;
 /// Raises the &lt;see cref=&quot;FrameworkElement.Initialized&quot;/&gt; event.
 /// This method is invoked whenever
 /// &lt;see cref=&quot;FrameworkElement.IsInitialized&quot;/&gt;
@@ -257,66 +257,66 @@
 /// &lt;/summary&gt;
 /// &lt;param name=&quot;e&quot;&gt;The &lt;see cref=&quot;T:RoutedEventArgs&quot;/&gt;
 /// that contains the event data.&lt;/param&gt;
-</span><span class="k">protected</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">OnInitialized</span><span class="p">(</span><span class="n">EventArgs</span> <span class="n">e</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="c1">// ...
-</span>
-    <span class="n">LocationChanged</span> <span class="p">+=</span> <span class="n">HandleLocationChanged</span><span class="p">;</span>
-    <span class="n">SizeChanged</span>     <span class="p">+=</span> <span class="n">HandleLocationChanged</span><span class="p">;</span>
-    <span class="n">StateChanged</span>    <span class="p">+=</span> <span class="n">HandleWndStateChanged</span><span class="p">;</span>
+protected override void OnInitialized(EventArgs e)
+{
+    // ...
 
-    <span class="nf">InitializeSurrounds</span><span class="p">();</span>
-    <span class="nf">ShowSurrounds</span><span class="p">();</span>
+    LocationChanged += HandleLocationChanged;
+    SizeChanged     += HandleLocationChanged;
+    StateChanged    += HandleWndStateChanged;
 
-    <span class="k">base</span><span class="p">.</span><span class="nf">OnInitialized</span><span class="p">(</span><span class="n">e</span><span class="p">);</span>
-<span class="p">}</span>
+    InitializeSurrounds();
+    ShowSurrounds();
 
-<span class="c1">/// &lt;summary&gt;
+    base.OnInitialized(e);
+}
+
+/// &lt;summary&gt;
 /// Handles the location changed.
 /// &lt;/summary&gt;
 /// &lt;param name=&quot;sender&quot;&gt;The sender.&lt;/param&gt;
 /// &lt;param name=&quot;e&quot;&gt;The &lt;see cref=&quot;System.EventArgs&quot;/&gt;
 /// instance containing the event data.&lt;/param&gt;
-</span><span class="k">private</span> <span class="k">void</span> <span class="nf">HandleLocationChanged</span><span class="p">(</span><span class="kt">object</span> <span class="n">sender</span><span class="p">,</span> <span class="n">EventArgs</span> <span class="n">e</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="k">this</span><span class="p">.</span><span class="n">wndT</span><span class="p">.</span><span class="n">Left</span>   <span class="p">=</span> <span class="n">Left</span>  <span class="p">-</span> <span class="n">edgeWndSize</span><span class="p">;</span>
-    <span class="k">this</span><span class="p">.</span><span class="n">wndT</span><span class="p">.</span><span class="n">Top</span>    <span class="p">=</span> <span class="n">Top</span>   <span class="p">-</span> <span class="k">this</span><span class="p">.</span><span class="n">wndT</span><span class="p">.</span><span class="n">Height</span><span class="p">;</span>
-    <span class="k">this</span><span class="p">.</span><span class="n">wndT</span><span class="p">.</span><span class="n">Width</span>  <span class="p">=</span> <span class="n">Width</span> <span class="p">+</span> <span class="n">edgeWndSize</span> <span class="p">*</span> <span class="m">2</span><span class="p">;</span>
-    <span class="k">this</span><span class="p">.</span><span class="n">wndT</span><span class="p">.</span><span class="n">Height</span> <span class="p">=</span> <span class="n">edgeWndSize</span><span class="p">;</span>
+private void HandleLocationChanged(object sender, EventArgs e)
+{
+    this.wndT.Left   = Left  - edgeWndSize;
+    this.wndT.Top    = Top   - this.wndT.Height;
+    this.wndT.Width  = Width + edgeWndSize * 2;
+    this.wndT.Height = edgeWndSize;
 
-    <span class="k">this</span><span class="p">.</span><span class="n">wndL</span><span class="p">.</span><span class="n">Left</span>   <span class="p">=</span> <span class="n">Left</span> <span class="p">-</span> <span class="k">this</span><span class="p">.</span><span class="n">wndL</span><span class="p">.</span><span class="n">Width</span><span class="p">;</span>
-    <span class="k">this</span><span class="p">.</span><span class="n">wndL</span><span class="p">.</span><span class="n">Top</span>    <span class="p">=</span> <span class="n">Top</span><span class="p">;</span>
-    <span class="k">this</span><span class="p">.</span><span class="n">wndL</span><span class="p">.</span><span class="n">Width</span>  <span class="p">=</span> <span class="n">edgeWndSize</span><span class="p">;</span>
-    <span class="k">this</span><span class="p">.</span><span class="n">wndL</span><span class="p">.</span><span class="n">Height</span> <span class="p">=</span> <span class="n">Height</span><span class="p">;</span>
+    this.wndL.Left   = Left - this.wndL.Width;
+    this.wndL.Top    = Top;
+    this.wndL.Width  = edgeWndSize;
+    this.wndL.Height = Height;
 
-    <span class="k">this</span><span class="p">.</span><span class="n">wndB</span><span class="p">.</span><span class="n">Left</span>   <span class="p">=</span> <span class="n">Left</span>  <span class="p">-</span> <span class="n">edgeWndSize</span><span class="p">;</span>
-    <span class="k">this</span><span class="p">.</span><span class="n">wndB</span><span class="p">.</span><span class="n">Top</span>    <span class="p">=</span> <span class="n">Top</span>   <span class="p">+</span> <span class="n">Height</span><span class="p">;</span>
-    <span class="k">this</span><span class="p">.</span><span class="n">wndB</span><span class="p">.</span><span class="n">Width</span>  <span class="p">=</span> <span class="n">Width</span> <span class="p">+</span> <span class="n">edgeWndSize</span> <span class="p">*</span> <span class="m">2</span><span class="p">;</span>
-    <span class="k">this</span><span class="p">.</span><span class="n">wndB</span><span class="p">.</span><span class="n">Height</span> <span class="p">=</span> <span class="n">edgeWndSize</span><span class="p">;</span>
+    this.wndB.Left   = Left  - edgeWndSize;
+    this.wndB.Top    = Top   + Height;
+    this.wndB.Width  = Width + edgeWndSize * 2;
+    this.wndB.Height = edgeWndSize;
 
-    <span class="k">this</span><span class="p">.</span><span class="n">wndR</span><span class="p">.</span><span class="n">Left</span>   <span class="p">=</span> <span class="n">Left</span> <span class="p">+</span> <span class="n">Width</span><span class="p">;</span>
-    <span class="k">this</span><span class="p">.</span><span class="n">wndR</span><span class="p">.</span><span class="n">Top</span>    <span class="p">=</span> <span class="n">Top</span><span class="p">;</span>
-    <span class="k">this</span><span class="p">.</span><span class="n">wndR</span><span class="p">.</span><span class="n">Width</span>  <span class="p">=</span> <span class="n">edgeWndSize</span><span class="p">;</span>
-    <span class="k">this</span><span class="p">.</span><span class="n">wndR</span><span class="p">.</span><span class="n">Height</span> <span class="p">=</span> <span class="n">Height</span><span class="p">;</span>
-<span class="p">}</span>
+    this.wndR.Left   = Left + Width;
+    this.wndR.Top    = Top;
+    this.wndR.Width  = edgeWndSize;
+    this.wndR.Height = Height;
+}
 
-<span class="c1">/// &lt;summary&gt;
+/// &lt;summary&gt;
 /// Handles the windows state changed.
 /// &lt;/summary&gt;
 /// &lt;param name=&quot;sender&quot;&gt;The sender.&lt;/param&gt;
 /// &lt;param name=&quot;e&quot;&gt;The &lt;see cref=&quot;System.EventArgs&quot;/&gt;
 /// instance containing the event data.&lt;/param&gt;
-</span><span class="k">private</span> <span class="k">void</span> <span class="nf">HandleWndStateChanged</span><span class="p">(</span><span class="kt">object</span> <span class="n">sender</span><span class="p">,</span> <span class="n">EventArgs</span> <span class="n">e</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">WindowState</span> <span class="p">==</span> <span class="n">WindowState</span><span class="p">.</span><span class="n">Normal</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="nf">ShowSurrounds</span><span class="p">();</span>
-    <span class="p">}</span>
-    <span class="k">else</span>
-    <span class="p">{</span>
-        <span class="nf">HideSurrounds</span><span class="p">();</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+private void HandleWndStateChanged(object sender, EventArgs e)
+{
+    if (WindowState == WindowState.Normal)
+    {
+        ShowSurrounds();
+    }
+    else
+    {
+        HideSurrounds();
+    }
+}
 </pre>
 <p><img src="http://farm9.staticflickr.com/8225/8398555440_33b04b6bea_o.png" alt="The final result as composed by four transparent windows on each side" /></p>
 

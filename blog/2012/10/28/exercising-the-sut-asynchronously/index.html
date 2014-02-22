@@ -1,6 +1,6 @@
-<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" /><meta content="width=device-width, user-scalable=no" name="viewport" /><title>Exercising the SUT asynchronously</title><link href="http://fonts.googleapis.com/css?family=Lora:400,700|Open+Sans" rel="stylesheet" type="text/css" /><link href="/stylesheets/fontello.css?1392664185" media="screen" rel="stylesheet" type="text/css" />
-<link href="/stylesheets/styles.css?1392664185" media="screen" rel="stylesheet" type="text/css" />
-<link href="/stylesheets/syntax.css?1392664185" media="screen" rel="stylesheet" type="text/css" /></head><body><div class="row"><h1>Exercising the SUT asynchronously</h1><div class="post"><p>In unit testing, there are times were the <a href="http://xunitpatterns.com/SUT.html">SUT</a> has to be exercised <strong>asynchronously</strong>.</p>
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" /><meta content="width=device-width, user-scalable=no" name="viewport" /><title>Exercising the SUT asynchronously</title><link href="http://fonts.googleapis.com/css?family=Lora:400,700|Open+Sans" rel="stylesheet" type="text/css" /><link href="/stylesheets/fontello.css?1393091639" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/styles.css?1393091639" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/syntax.css?1393091639" media="screen" rel="stylesheet" type="text/css" /></head><body><div class="row"><h1>Exercising the SUT asynchronously</h1><div class="post"><p>In unit testing, there are times were the <a href="http://xunitpatterns.com/SUT.html">SUT</a> has to be exercised <strong>asynchronously</strong>.</p>
 
 <p>How can we wait for the exercise to complete execution?</p>
 
@@ -12,19 +12,19 @@
 </ul>
 
 <p>The <a href="http://msdn.microsoft.com/en-us/library/system.threading.spinwait.aspx">SpinWait</a> synchronization type contains a method named <a href="http://msdn.microsoft.com/en-us/library/system.threading.spinwait.spinuntil.aspx">SpinUntil</a> which works perfect for the described scenario.</p>
-<pre class="highlight csharp"><span class="c1">// Fixture setup
-</span><span class="n">var</span> <span class="n">sut</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">ObjectLocalStorage</span><span class="p">();</span>
-<span class="n">sut</span><span class="p">.</span><span class="nf">Set</span><span class="p">(</span><span class="n">@object</span><span class="p">,</span> <span class="n">expected</span><span class="p">);</span>
-<span class="kt">object</span> <span class="n">result</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>
+<pre class="highlight text">// Fixture setup
+var sut = new ObjectLocalStorage();
+sut.Set(@object, expected);
+object result = null;
 
-<span class="c1">// Exercise system
-</span><span class="k">new</span> <span class="nf">Task</span><span class="p">(()</span> <span class="p">=&gt;</span> <span class="n">result</span> <span class="p">=</span> <span class="n">sut</span><span class="p">.</span><span class="nf">Get</span><span class="p">(</span><span class="n">@object</span><span class="p">)).</span><span class="nf">Start</span><span class="p">();</span>
-<span class="n">SpinWait</span><span class="p">.</span><span class="nf">SpinUntil</span><span class="p">(()</span> <span class="p">=&gt;</span> <span class="n">result</span> <span class="p">!=</span> <span class="k">null</span><span class="p">);</span>
+// Exercise system
+new Task(() =&gt; result = sut.Get(@object)).Start();
+SpinWait.SpinUntil(() =&gt; result != null);
 
-<span class="c1">// Verify outcome
-</span><span class="n">Assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="n">expected</span><span class="p">,</span> <span class="n">result</span><span class="p">);</span>
-<span class="c1">// Teardown
-</span></pre>
+// Verify outcome
+Assert.Equal(expected, result);
+// Teardown
+</pre>
 <ul>
 <li>Once the <code>Task</code> has been created it is immediately scheduled for execution by calling the <code>Start</code> method.</li>
 <li>As long as the unit test runs fast, the waiting thread spins in user mode, which is a <a href="http://msdn.microsoft.com/en-us/library/ee722114.aspx">good thing</a>.</li>

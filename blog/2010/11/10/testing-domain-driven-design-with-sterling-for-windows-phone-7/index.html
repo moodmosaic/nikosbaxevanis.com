@@ -1,93 +1,93 @@
-<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" /><meta content="width=device-width, user-scalable=no" name="viewport" /><title>Testing Domain-Driven Design with Sterling for Windows Phone 7</title><link href="http://fonts.googleapis.com/css?family=Lora:400,700|Open+Sans" rel="stylesheet" type="text/css" /><link href="/stylesheets/fontello.css?1392664185" media="screen" rel="stylesheet" type="text/css" />
-<link href="/stylesheets/styles.css?1392664185" media="screen" rel="stylesheet" type="text/css" />
-<link href="/stylesheets/syntax.css?1392664185" media="screen" rel="stylesheet" type="text/css" /></head><body><div class="row"><h1>Testing Domain-Driven Design with Sterling for Windows Phone 7</h1><div class="post"><p><img src="http://farm9.staticflickr.com/8084/8397459857_48e3dfb8a6_o.png" alt="" /></p>
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" /><meta content="width=device-width, user-scalable=no" name="viewport" /><title>Testing Domain-Driven Design with Sterling for Windows Phone 7</title><link href="http://fonts.googleapis.com/css?family=Lora:400,700|Open+Sans" rel="stylesheet" type="text/css" /><link href="/stylesheets/fontello.css?1393091639" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/styles.css?1393091639" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/syntax.css?1393091639" media="screen" rel="stylesheet" type="text/css" /></head><body><div class="row"><h1>Testing Domain-Driven Design with Sterling for Windows Phone 7</h1><div class="post"><p><img src="http://farm9.staticflickr.com/8084/8397459857_48e3dfb8a6_o.png" alt="" /></p>
 
 <p>When building applications targeting the Windows Phone 7 (WP7) you often need to create and maintain any kind of data. And while (for security reasons we all understand)&#0160;you can&#39;t access the local&#0160;file system, you can benefit from the&#0160;<a href="http://msdn.microsoft.com/en-us/library/ff402541(VS.92).aspx" target="_blank" title="Isolated Storage Overview for Windows Phone.">Isolated Storage</a>. It&#39;s API is similar with the one exposed in the Silverlight namespace.&#0160;</p>
 
 <p>A good design of a&#0160;<a href="http://en.wikipedia.org/wiki/Domain_model" target="_blank" title="A domain model, or Domain Object Model (DOM) in problem solving and software engineering can be thought of as a conceptual model of a domain of interest (often referred to as a problem domain) which describes the various entities, their attributes and relationships, plus the constraints that govern the integrity of the model elements comprising that problem domain.">Domain model</a>&#0160;knows nothing about persistence. You can use an in-memory database, a relational database, or ..<strong>&ldquo;<strong>an&#0160;Object-Oriented Database&#0160;for WP7 that works with Isolated Storage classes and&#0160;supports full LINQ to Object queries over keys and indexes for fast retrieval of information from large data sets!</strong>&rdquo;&#0160;</strong>Enter&#0160;<a href="http://sterling.codeplex.com/" target="_blank" title="Sterling is a lightweight object-oriented database implementation for Silverlight and Windows Phone 7 that works with your existing class structures. Sterling supports full LINQ to Object queries over keys and indexes for fast retrieval of information from large data sets.">Sterling</a>.</p>
 
 <p>Here is a sample repository implementation using Sterling to store and retrieve data:</p>
-<pre class="highlight csharp"><span class="k">internal</span> <span class="k">class</span> <span class="nc">SterlingRepository</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;</span> <span class="n">where</span> <span class="n">T</span><span class="p">:</span> <span class="k">class</span><span class="err">,</span> <span class="nc">new</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="k">public</span> <span class="k">void</span> <span class="nf">Save</span><span class="p">(</span><span class="n">T</span> <span class="n">instance</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">App</span><span class="p">.</span><span class="n">Database</span><span class="p">.</span><span class="n">Save</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;(</span><span class="n">instance</span><span class="p">);</span>
-    <span class="p">}</span>
+<pre class="highlight text">internal class SterlingRepository&lt;T&gt; where T: class, new()
+{
+    public void Save(T instance)
+    {
+        App.Database.Save&lt;T&gt;(instance);
+    }
 
-    <span class="k">public</span> <span class="n">T</span> <span class="n">LoadById</span><span class="p">&lt;</span><span class="n">TKey</span><span class="p">&gt;(</span><span class="n">TKey</span> <span class="n">id</span><span class="p">)</span> <span class="n">where</span> <span class="n">TKey</span> <span class="p">:</span> <span class="k">class</span>
-    <span class="err">{</span>
-        <span class="nc">var</span> <span class="n">query</span> <span class="p">=</span> <span class="n">App</span><span class="p">.</span><span class="n">Database</span><span class="p">.</span><span class="n">Query</span><span class="p">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="n">TKey</span><span class="p">&gt;()</span>
-                                <span class="p">.</span><span class="nf">Where</span><span class="p">((</span><span class="n">table</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="n">table</span><span class="p">.</span><span class="n">Key</span> <span class="p">==</span> <span class="n">id</span><span class="p">)</span>
-                                <span class="p">.</span><span class="nf">FirstOrDefault</span><span class="p">();</span>
+    public T LoadById&lt;TKey&gt;(TKey id) where TKey : class
+    {
+        var query = App.Database.Query&lt;T, TKey&gt;()
+                                .Where((table) =&gt; table.Key == id)
+                                .FirstOrDefault();
 
-        <span class="k">return</span> <span class="n">query</span><span class="p">.</span><span class="n">LazyValue</span><span class="p">.</span><span class="n">Value</span> <span class="p">??</span> <span class="k">default</span><span class="p">(</span><span class="n">T</span><span class="p">);</span>
-    <span class="p">}</span>
+        return query.LazyValue.Value ?? default(T);
+    }
 
-    <span class="k">public</span> <span class="n">ICollection</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;</span> <span class="n">FindAll</span><span class="p">&lt;</span><span class="n">TKey</span><span class="p">&gt;()</span>
-    <span class="p">{</span>
-        <span class="n">var</span> <span class="n">items</span> <span class="p">=</span> <span class="n">App</span><span class="p">.</span><span class="n">Database</span><span class="p">.</span><span class="n">Query</span><span class="p">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="n">TKey</span><span class="p">&gt;()</span>
-                                <span class="p">.</span><span class="nf">Select</span><span class="p">((</span><span class="n">table</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="n">table</span><span class="p">.</span><span class="n">LazyValue</span><span class="p">.</span><span class="n">Value</span><span class="p">)</span>
-                                <span class="p">.</span><span class="n">ToList</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;();</span>
-        <span class="k">return</span> <span class="n">items</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+    public ICollection&lt;T&gt; FindAll&lt;TKey&gt;()
+    {
+        var items = App.Database.Query&lt;T, TKey&gt;()
+                                .Select((table) =&gt; table.LazyValue.Value)
+                                .ToList&lt;T&gt;();
+        return items;
+    }
+}
 </pre>
 <blockquote>
 <p>In the sample application I use the domain&#0160;model based on the cargo example used in&#0160;<a href="http://www.amazon.com/Domain-Driven-Design-Tackling-Complexity-Software/dp/0321125215/ref=sr_1_1?ie=UTF8&amp;s=books&amp;qid=1238687848&amp;sr=8-1" target="_blank" title="http://www.amazon.com/Domain-Driven-Design-Tackling-Complexity-Software/dp/0321125215/">Eric Evans&#39; book</a>&#0160;which can be found&#0160;<a href="http://dddsamplenet.codeplex.com/" target="_blank" title="A .NET implementation of Domain Driven Design (DDD) sample application based on Eric Evans&#39; examples included in his great book. Project is intended to be used in training, demonstration and experiments.">here</a>.&#0160;</p>
 </blockquote>
 
 <p><strong>CargoRepository</strong></p>
-<pre class="highlight csharp"><span class="k">internal</span> <span class="k">sealed</span> <span class="k">class</span> <span class="nc">CargoRepository</span> <span class="p">:</span> 
-    <span class="n">SterlingRepository</span><span class="p">&lt;</span><span class="n">Cargo</span><span class="p">&gt;,</span> <span class="n">ICargoRepository</span>
-<span class="p">{</span>
+<pre class="highlight text">internal sealed class CargoRepository : 
+    SterlingRepository&lt;Cargo&gt;, ICargoRepository
+{
 
-    <span class="k">public</span> <span class="k">void</span> <span class="nf">Store</span><span class="p">(</span><span class="n">Cargo</span> <span class="n">cargo</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="nf">Save</span><span class="p">(</span><span class="n">cargo</span><span class="p">);</span>
-    <span class="p">}</span>
+    public void Store(Cargo cargo)
+    {
+        Save(cargo);
+    }
 
-    <span class="k">public</span> <span class="n">Cargo</span> <span class="nf">Find</span><span class="p">(</span><span class="n">TrackingId</span> <span class="n">trackingId</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="k">return</span> <span class="nf">LoadById</span><span class="p">(</span><span class="n">trackingId</span><span class="p">.</span><span class="n">IdString</span><span class="p">);</span>
-    <span class="p">}</span>
+    public Cargo Find(TrackingId trackingId)
+    {
+        return LoadById(trackingId.IdString);
+    }
 
-    <span class="k">public</span> <span class="n">ICollection</span><span class="p">&lt;</span><span class="n">Cargo</span><span class="p">&gt;</span> <span class="nf">FindAll</span><span class="p">()</span>
-    <span class="p">{</span>
-        <span class="k">return</span> <span class="n">FindAll</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;();</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+    public ICollection&lt;Cargo&gt; FindAll()
+    {
+        return FindAll&lt;string&gt;();
+    }
+}
 </pre>
 <p><strong>CargoFactory</strong></p>
-<pre class="highlight csharp"><span class="k">internal</span> <span class="k">static</span> <span class="k">class</span> <span class="nc">CargoFactory</span>
-<span class="p">{</span>
-    <span class="k">public</span> <span class="k">static</span> <span class="n">Cargo</span> <span class="nf">CreateNew</span><span class="p">(</span><span class="kt">string</span> <span class="n">origin</span><span class="p">,</span> <span class="kt">string</span> <span class="n">destination</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="c1">// Method implementation can be found in the sample application.
-</span>    <span class="p">}</span>
-<span class="p">}</span>
+<pre class="highlight text">internal static class CargoFactory
+{
+    public static Cargo CreateNew(string origin, string destination)
+    {
+        // Method implementation can be found in the sample application.
+    }
+}
 </pre>
 <p>Armed with the above classes you can create a Cargo, save it using the CargoRepository and load it. Sterling will save the whole object graph and when you load, it will &#0160;defer the creation of the whole object using the&#0160;<a href="http://msdn.microsoft.com/en-us/library/dd642331.aspx" target="_blank" title="http://msdn.microsoft.com/en-us/library/dd642331.aspx">Lazy&lt;T&gt;</a> class.</p>
-<pre class="highlight csharp"><span class="k">public</span> <span class="k">sealed</span> <span class="k">class</span> <span class="nc">CargoPageViewModel</span> <span class="p">:</span> <span class="n">PropertyChangedBase</span>
-<span class="p">{</span>
-    <span class="k">private</span> <span class="k">readonly</span> <span class="n">ICargoRepository</span> <span class="n">repository</span><span class="p">;</span>
+<pre class="highlight text">public sealed class CargoPageViewModel : PropertyChangedBase
+{
+    private readonly ICargoRepository repository;
 
-    <span class="k">public</span> <span class="nf">SterlingPageViewModel</span><span class="p">(</span><span class="n">ICargoRepository</span> <span class="n">repository</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="n">repository</span> <span class="p">=</span> <span class="n">repository</span><span class="p">;</span>
-    <span class="p">}</span>
+    public SterlingPageViewModel(ICargoRepository repository)
+    {
+        this.repository = repository;
+    }
 
-    <span class="k">public</span> <span class="k">void</span> <span class="nf">StoreAndFind</span><span class="p">()</span>
-    <span class="p">{</span>
-        <span class="n">Cargo</span> <span class="n">cargo</span> <span class="p">=</span> <span class="n">CargoFactory</span><span class="p">.</span><span class="nf">CreateNew</span><span class="p">(</span><span class="s">&quot;Glyfada&quot;</span><span class="p">,</span> <span class="s">&quot;Perachora&quot;</span><span class="p">);</span>
-        <span class="k">this</span><span class="p">.</span><span class="n">repository</span><span class="p">.</span><span class="nf">Store</span><span class="p">(</span><span class="n">cargo</span><span class="p">);</span>
+    public void StoreAndFind()
+    {
+        Cargo cargo = CargoFactory.CreateNew(&quot;Glyfada&quot;, &quot;Perachora&quot;);
+        this.repository.Store(cargo);
 
-        <span class="n">Cargo</span> <span class="n">saved</span> <span class="p">=</span> <span class="k">this</span><span class="p">.</span><span class="n">repository</span><span class="p">.</span><span class="nf">Find</span><span class="p">(</span><span class="n">cargo</span><span class="p">.</span><span class="n">TrackingId</span><span class="p">);</span>
+        Cargo saved = this.repository.Find(cargo.TrackingId);
 
-        <span class="n">Debug</span><span class="p">.</span><span class="nf">Assert</span><span class="p">(</span><span class="n">cargo</span><span class="p">.</span><span class="n">RouteSpecification</span><span class="p">.</span><span class="nf">Equals</span><span class="p">(</span><span class="n">saved</span><span class="p">.</span><span class="n">RouteSpecification</span><span class="p">));</span>
-        <span class="n">Debug</span><span class="p">.</span><span class="nf">Assert</span><span class="p">(</span><span class="n">cargo</span><span class="p">.</span><span class="n">Delivery</span><span class="p">.</span><span class="nf">Equals</span><span class="p">(</span><span class="n">saved</span><span class="p">.</span><span class="n">Delivery</span><span class="p">));</span>
-        <span class="n">Debug</span><span class="p">.</span><span class="nf">Assert</span><span class="p">(</span><span class="n">cargo</span><span class="p">.</span><span class="nf">Equals</span><span class="p">(</span><span class="n">saved</span><span class="p">));</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+        Debug.Assert(cargo.RouteSpecification.Equals(saved.RouteSpecification));
+        Debug.Assert(cargo.Delivery.Equals(saved.Delivery));
+        Debug.Assert(cargo.Equals(saved));
+    }
+}
 </pre>
 <p>Your domain model classes can be&#0160;<a href="http://en.wikipedia.org/wiki/Plain_Old_CLR_Object" target="_blank" title="Plain Old CLR Object or POCO is a play on the term POJO, from the Java EE programming world, and is used by developers targeting the Common Language Runtime of the .NET Framework.">POCOs</a>. That is, you don&#39;t have to inherit from anything in order to persist an instance of a type in the database. It just works!</p>
 

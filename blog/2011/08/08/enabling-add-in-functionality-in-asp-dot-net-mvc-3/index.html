@@ -1,6 +1,6 @@
-<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" /><meta content="width=device-width, user-scalable=no" name="viewport" /><title>Enabling Add-In functionality in ASP.NET MVC 3</title><link href="http://fonts.googleapis.com/css?family=Lora:400,700|Open+Sans" rel="stylesheet" type="text/css" /><link href="/stylesheets/fontello.css?1392664185" media="screen" rel="stylesheet" type="text/css" />
-<link href="/stylesheets/styles.css?1392664185" media="screen" rel="stylesheet" type="text/css" />
-<link href="/stylesheets/syntax.css?1392664185" media="screen" rel="stylesheet" type="text/css" /></head><body><div class="row"><h1>Enabling Add-In functionality in ASP.NET MVC 3</h1><div class="post"><p><strong>Update:&#0160;</strong>&#0160;<a href="http://www.nikosbaxevanis.com/bonus-bits/2011/08/enabling-add-in-functionality-in-aspnet-mvc3-part2.html" target="_blank" title="Enabling Add-In functionality in ASP.NET MVC 3 (Part 2)">Part 2</a></p>
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" /><meta content="width=device-width, user-scalable=no" name="viewport" /><title>Enabling Add-In functionality in ASP.NET MVC 3</title><link href="http://fonts.googleapis.com/css?family=Lora:400,700|Open+Sans" rel="stylesheet" type="text/css" /><link href="/stylesheets/fontello.css?1393091639" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/styles.css?1393091639" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/syntax.css?1393091639" media="screen" rel="stylesheet" type="text/css" /></head><body><div class="row"><h1>Enabling Add-In functionality in ASP.NET MVC 3</h1><div class="post"><p><strong>Update:&#0160;</strong>&#0160;<a href="http://www.nikosbaxevanis.com/bonus-bits/2011/08/enabling-add-in-functionality-in-aspnet-mvc3-part2.html" target="_blank" title="Enabling Add-In functionality in ASP.NET MVC 3 (Part 2)">Part 2</a></p>
 
 <p>I remember, back in 2006 when I wrote my first managed add-in for AutoCAD. The fact that we could extend the functionality of a very big product, using .NET was huge. Till that time, if we wanted to use .NET for add-in functionality we had to rely on <a href="http://en.wikipedia.org/wiki/Runtime_Callable_Wrapper" target="_blank" title="Runtime Callable Wrapper">RCW</a>&#0160;or else we had to&#0160;write messy and error-prone VBA code.&#0160;</p>
 
@@ -13,124 +13,124 @@
 <p><strong>DiscoverableControllerFactory</strong></p>
 
 <p>A MEF-specific <a href="http://msdn.microsoft.com/en-us/library/system.web.mvc.defaultcontrollerfactory.aspx" target="_blank" title="Represents the controller factory that is registered by default.">DefaultControllerFactory</a>&#0160;derived type. It&#0160;gets the exported types with the contract name, derived from an IController type. After the controller is supplied, the MVC framework will resolve the Views.</p>
-<pre class="highlight csharp"><span class="k">internal</span> <span class="k">sealed</span> <span class="k">class</span> <span class="nc">DiscoverableControllerFactory</span> <span class="p">:</span> <span class="n">DefaultControllerFactory</span>
-<span class="p">{</span>
-    <span class="k">private</span> <span class="k">readonly</span> <span class="n">CompositionContainer</span> <span class="n">compositionContainer</span><span class="p">;</span>
+<pre class="highlight text">internal sealed class DiscoverableControllerFactory : DefaultControllerFactory
+{
+    private readonly CompositionContainer compositionContainer;
 
-    <span class="k">public</span> <span class="nf">DiscoverableControllerFactory</span><span class="p">(</span>
-        <span class="n">CompositionContainer</span> <span class="n">compositionContainer</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="n">compositionContainer</span> <span class="p">=</span> <span class="n">compositionContainer</span><span class="p">;</span>
-    <span class="p">}</span>
+    public DiscoverableControllerFactory(
+        CompositionContainer compositionContainer)
+    {
+        this.compositionContainer = compositionContainer;
+    }
 
-    <span class="k">public</span> <span class="k">override</span> <span class="n">IController</span> <span class="nf">CreateController</span><span class="p">(</span>
-        <span class="n">RequestContext</span> <span class="n">requestContext</span><span class="p">,</span> 
-        <span class="kt">string</span> <span class="n">controllerName</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">Lazy</span><span class="p">&lt;</span><span class="n">IController</span><span class="p">&gt;</span> <span class="n">controller</span> <span class="p">=</span> <span class="k">this</span><span class="p">.</span><span class="n">compositionContainer</span>
-          <span class="p">.</span><span class="n">GetExports</span><span class="p">&lt;</span><span class="n">IController</span><span class="p">,</span> <span class="n">IDictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">object</span><span class="p">&gt;&gt;()</span>
-          <span class="p">.</span><span class="nf">Where</span><span class="p">(</span><span class="n">c</span> <span class="p">=&gt;</span> <span class="n">c</span><span class="p">.</span><span class="n">Metadata</span><span class="p">.</span><span class="nf">ContainsKey</span><span class="p">(</span><span class="s">&quot;controllerName&quot;</span><span class="p">)</span>
-                   <span class="p">&amp;&amp;</span> <span class="n">c</span><span class="p">.</span><span class="n">Metadata</span><span class="p">[</span><span class="s">&quot;controllerName&quot;</span><span class="p">].</span><span class="nf">ToString</span><span class="p">()</span> <span class="p">==</span> <span class="n">controllerName</span><span class="p">)</span>
-          <span class="p">.</span><span class="nf">First</span><span class="p">();</span>
+    public override IController CreateController(
+        RequestContext requestContext, 
+        string controllerName)
+    {
+        Lazy&lt;IController&gt; controller = this.compositionContainer
+          .GetExports&lt;IController, IDictionary&lt;string, object&gt;&gt;()
+          .Where(c =&gt; c.Metadata.ContainsKey(&quot;controllerName&quot;)
+                   &amp;&amp; c.Metadata[&quot;controllerName&quot;].ToString() == controllerName)
+          .First();
 
-        <span class="k">return</span> <span class="n">controller</span><span class="p">.</span><span class="n">Value</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+        return controller.Value;
+    }
+}
 </pre>
 <p><strong>UnityControllerFactory</strong></p>
 
 <p>A Unity-specific DefaultControllerFactory&#0160;&#0160;derived type. There are many implementations around. The difference from other implementations is that this one takes a delegate as a parameter in the constructor that acts as the fallback factory when the DI container can not supply a controller. This is a very important part of our architecture because here we have the chance to supply the target controller (as an add-in)&#0160;using&#0160;MEF.</p>
-<pre class="highlight csharp"><span class="k">internal</span> <span class="k">sealed</span> <span class="k">class</span> <span class="nc">UnityControllerFactory</span> <span class="p">:</span> <span class="n">DefaultControllerFactory</span>
-<span class="p">{</span>
-    <span class="k">private</span> <span class="k">readonly</span> <span class="n">UnityContainer</span> <span class="n">container</span><span class="p">;</span>
-    <span class="k">private</span> <span class="n">Func</span><span class="p">&lt;</span><span class="n">RequestContext</span><span class="p">,</span> <span class="kt">string</span><span class="p">,</span> <span class="n">IController</span><span class="p">&gt;</span> <span class="n">alternativeFactoryMethod</span><span class="p">;</span>
+<pre class="highlight text">internal sealed class UnityControllerFactory : DefaultControllerFactory
+{
+    private readonly UnityContainer container;
+    private Func&lt;RequestContext, string, IController&gt; alternativeFactoryMethod;
 
-    <span class="k">public</span> <span class="nf">UnityControllerFactory</span><span class="p">(</span>
-        <span class="n">UnityContainer</span> <span class="n">container</span><span class="p">,</span>
-        <span class="n">Func</span><span class="p">&lt;</span><span class="n">RequestContext</span><span class="p">,</span> <span class="kt">string</span><span class="p">,</span> <span class="n">IController</span><span class="p">&gt;</span> <span class="n">alternativeFactoryMethod</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="n">container</span> <span class="p">=</span> <span class="n">container</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="n">alternativeFactoryMethod</span> <span class="p">=</span> <span class="n">alternativeFactoryMethod</span><span class="p">;</span>
-    <span class="p">}</span>
+    public UnityControllerFactory(
+        UnityContainer container,
+        Func&lt;RequestContext, string, IController&gt; alternativeFactoryMethod)
+    {
+        this.container = container;
+        this.alternativeFactoryMethod = alternativeFactoryMethod;
+    }
 
-    <span class="k">protected</span> <span class="k">override</span> <span class="n">IController</span> <span class="nf">GetControllerInstance</span><span class="p">(</span>
-        <span class="n">RequestContext</span> <span class="n">requestContext</span><span class="p">,</span> 
-        <span class="n">Type</span> <span class="n">controllerType</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">IController</span> <span class="n">controller</span><span class="p">;</span>
+    protected override IController GetControllerInstance(
+        RequestContext requestContext, 
+        Type controllerType)
+    {
+        IController controller;
 
-        <span class="k">if</span> <span class="p">(</span><span class="n">controllerType</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="k">try</span>
-            <span class="p">{</span>
-                <span class="kt">string</span> <span class="n">controllerName</span> <span class="p">=</span> <span class="n">requestContext</span><span class="p">.</span><span class="n">HttpContext</span>
-                    <span class="p">.</span><span class="n">Request</span><span class="p">.</span><span class="n">Path</span><span class="p">.</span><span class="nf">Replace</span><span class="p">(</span><span class="s">&quot;/&quot;</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">);</span>
-                <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nf">alternativeFactoryMethod</span><span class="p">(</span>
-                    <span class="n">requestContext</span><span class="p">,</span> 
-                    <span class="n">controllerName</span><span class="p">);</span>
-            <span class="p">}</span>
-            <span class="k">catch</span>
-            <span class="p">{</span>
-                <span class="k">throw</span> <span class="k">new</span> <span class="nf">HttpException</span><span class="p">(</span><span class="m">404</span><span class="p">,</span> <span class="kt">string</span><span class="p">.</span><span class="nf">Format</span><span class="p">(</span>
-                    <span class="s">&quot;The controller for path '{0}' could not be found or it 
-</span>                        <span class="n">does</span> <span class="n">not</span> <span class="n">implement</span> <span class="n">IController</span><span class="p">.</span><span class="s">&quot;,
-</span>                    <span class="n">requestContext</span><span class="p">.</span><span class="n">HttpContext</span><span class="p">.</span><span class="n">Request</span><span class="p">.</span><span class="n">Path</span><span class="p">));</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
+        if (controllerType == null)
+        {
+            try
+            {
+                string controllerName = requestContext.HttpContext
+                    .Request.Path.Replace(&quot;/&quot;, &quot;&quot;);
+                return this.alternativeFactoryMethod(
+                    requestContext, 
+                    controllerName);
+            }
+            catch
+            {
+                throw new HttpException(404, string.Format(
+                    &quot;The controller for path '{0}' could not be found or it 
+                        does not implement IController.&quot;,
+                    requestContext.HttpContext.Request.Path));
+            }
+        }
 
-        <span class="k">if</span> <span class="p">(!</span><span class="k">typeof</span><span class="p">(</span><span class="n">IController</span><span class="p">).</span><span class="nf">IsAssignableFrom</span><span class="p">(</span><span class="n">controllerType</span><span class="p">))</span>
-        <span class="p">{</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="nf">ArgumentException</span><span class="p">(</span><span class="kt">string</span><span class="p">.</span><span class="nf">Format</span><span class="p">(</span>
-                <span class="s">&quot;Type requested is not a controller: {0}&quot;</span><span class="p">,</span> <span class="n">controllerType</span><span class="p">.</span><span class="n">Name</span><span class="p">),</span>
-                 <span class="s">&quot;controllerType&quot;</span><span class="p">);</span>
-        <span class="p">}</span>
+        if (!typeof(IController).IsAssignableFrom(controllerType))
+        {
+            throw new ArgumentException(string.Format(
+                &quot;Type requested is not a controller: {0}&quot;, controllerType.Name),
+                 &quot;controllerType&quot;);
+        }
 
-        <span class="k">try</span>
-        <span class="p">{</span>
-            <span class="n">controller</span> <span class="p">=</span> <span class="n">container</span><span class="p">.</span><span class="nf">Resolve</span><span class="p">(</span><span class="n">controllerType</span><span class="p">)</span> <span class="k">as</span> <span class="n">IController</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">catch</span> <span class="p">(</span><span class="n">Exception</span> <span class="n">e</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="nf">InvalidOperationException</span><span class="p">(</span><span class="kt">string</span><span class="p">.</span><span class="nf">Format</span><span class="p">(</span>
-                <span class="s">&quot;Error resolving controller {0}&quot;</span><span class="p">,</span> <span class="n">controllerType</span><span class="p">.</span><span class="n">Name</span><span class="p">),</span> <span class="n">e</span><span class="p">);</span>
-        <span class="p">}</span>
+        try
+        {
+            controller = container.Resolve(controllerType) as IController;
+        }
+        catch (Exception e)
+        {
+            throw new InvalidOperationException(string.Format(
+                &quot;Error resolving controller {0}&quot;, controllerType.Name), e);
+        }
 
-        <span class="k">return</span> <span class="n">controller</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+        return controller;
+    }
+}
 </pre>
 <p><strong>Global.asax</strong></p>
 
 <p>Here we specify the default path for the extensions. We create a new instance of the DiscoverableControllerFactory class passing a CompositionContainer and a DirectoryCatalog. Keep in mind that the DirectoryCatalog is one of the many choices that MEF provides for discovering parts. Besides the creation of the&#0160;DiscoverableControllerFactory we also create a new instance of the UnityControllerFactory class acting as the default controller factory. Any controllers that this factory can not supply will fallback to the DiscoverableControllerFactory using it&#39;s CreateController method. One last thing to note, this is the application&#39;s&#0160;<a href="http://blog.ploeh.dk/2011/07/28/CompositionRoot.aspx" target="_blank" title="Composition Root">Composition Root</a>. The DI container is referenced here, where the composition happens, and&#0160;<span style="text-decoration: underline;">nowhere else</span>&#0160;in the entire application.</p>
-<pre class="highlight csharp"><span class="k">private</span> <span class="k">static</span> <span class="k">void</span> <span class="nf">BootstrapContainer</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="kt">string</span> <span class="n">extensionsPath</span> <span class="p">=</span> <span class="n">Path</span><span class="p">.</span><span class="nf">Combine</span><span class="p">(</span>
-        <span class="n">AppDomain</span><span class="p">.</span><span class="n">CurrentDomain</span><span class="p">.</span><span class="n">BaseDirectory</span><span class="p">,</span> <span class="s">&quot;Extensions&quot;</span><span class="p">);</span>
+<pre class="highlight text">private static void BootstrapContainer()
+{
+    string extensionsPath = Path.Combine(
+        AppDomain.CurrentDomain.BaseDirectory, &quot;Extensions&quot;);
 
-    <span class="n">var</span> <span class="n">discoverableControllerFactory</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">DiscoverableControllerFactory</span><span class="p">(</span>
-        <span class="k">new</span> <span class="nf">CompositionContainer</span><span class="p">(</span>
-            <span class="k">new</span> <span class="nf">DirectoryCatalog</span><span class="p">(</span><span class="n">extensionsPath</span><span class="p">)));</span>
+    var discoverableControllerFactory = new DiscoverableControllerFactory(
+        new CompositionContainer(
+            new DirectoryCatalog(extensionsPath)));
 
-    <span class="c1">// No direct reference on the container outside this method.
-</span>    <span class="n">var</span> <span class="n">unityControllerFactory</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">UnityControllerFactory</span><span class="p">(</span>
-        <span class="k">new</span> <span class="nf">UnityContainer</span><span class="p">()</span>
-            <span class="p">.</span><span class="nf">Install</span><span class="p">(</span><span class="n">Registrator</span><span class="p">.</span><span class="n">ForControllers</span><span class="p">,</span>
-                     <span class="n">Registrator</span><span class="p">.</span><span class="n">ForServices</span><span class="p">,</span>
-                     <span class="n">Registrator</span><span class="p">.</span><span class="n">ForEnterpriseLibrary</span><span class="p">),</span>
-        <span class="n">fallbackFactoryMethod</span><span class="p">:</span> <span class="n">discoverableControllerFactory</span><span class="p">.</span><span class="n">CreateController</span><span class="p">);</span>
+    // No direct reference on the container outside this method.
+    var unityControllerFactory = new UnityControllerFactory(
+        new UnityContainer()
+            .Install(Registrator.ForControllers,
+                     Registrator.ForServices,
+                     Registrator.ForEnterpriseLibrary),
+        fallbackFactoryMethod: discoverableControllerFactory.CreateController);
 
-    <span class="n">ControllerBuilder</span><span class="p">.</span><span class="n">Current</span><span class="p">.</span><span class="nf">SetControllerFactory</span><span class="p">(</span><span class="n">unityControllerFactory</span><span class="p">);</span>
-<span class="p">}</span>
+    ControllerBuilder.Current.SetControllerFactory(unityControllerFactory);
+}
 
-<span class="k">protected</span> <span class="k">void</span> <span class="nf">Application_Start</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="n">AreaRegistration</span><span class="p">.</span><span class="nf">RegisterAllAreas</span><span class="p">();</span>
+protected void Application_Start()
+{
+    AreaRegistration.RegisterAllAreas();
 
-    <span class="nf">RegisterGlobalFilters</span><span class="p">(</span><span class="n">GlobalFilters</span><span class="p">.</span><span class="n">Filters</span><span class="p">);</span>
-    <span class="nf">RegisterRoutes</span><span class="p">(</span><span class="n">RouteTable</span><span class="p">.</span><span class="n">Routes</span><span class="p">);</span>
+    RegisterGlobalFilters(GlobalFilters.Filters);
+    RegisterRoutes(RouteTable.Routes);
 
-    <span class="nf">BootstrapContainer</span><span class="p">();</span>
-<span class="p">}</span>
+    BootstrapContainer();
+}
 </pre>
 <p>The add-in application is a regular class library and it&#39;s structure is shown below. I have selected the interesting types that I will be discussing.</p>
 
@@ -139,17 +139,17 @@
 <p><strong>ConceptController</strong></p>
 
 <p>This is a proof of concept&#0160;Controller for this demo. It is decorated with the&#0160;<a href="http://msdn.microsoft.com/en-us/library/system.componentmodel.composition.exportattribute.aspx" target="_blank" title="Specifies that a type, property, field, or method provides a particular export.">ExportAttribute</a>&#0160;and&#0160;<a href="http://msdn.microsoft.com/en-us/library/system.componentmodel.composition.exportmetadataattribute.aspx" target="_blank" title="Specifies metadata for a type, property, field, or method marked with the ExportAttribute.">ExportMetadataAttribute</a>. The later is needed in order to help the DiscoverableControllerFactory to choose the right controller among all the controllers supplied by this and other add-ins. The&#0160;<a href="http://msdn.microsoft.com/en-us/library/system.componentmodel.composition.partcreationpolicyattribute.aspx" target="_blank" title="Specifies the CreationPolicy for a part.">PartCreationPolicyAttribute</a>&#0160;is needed in order to specify that a new non-shared (transient) instance will be created for each request.</p>
-<pre class="highlight csharp"><span class="na">[Export(typeof(IController)), ExportMetadata(&quot;controllerName&quot;, &quot;Concept&quot;)]</span>
-<span class="na">[PartCreationPolicy(CreationPolicy.NonShared)]</span>
-<span class="k">public</span> <span class="k">class</span> <span class="nc">ConceptController</span> <span class="p">:</span> <span class="n">Controller</span>
-<span class="p">{</span>
-    <span class="k">public</span> <span class="n">ActionResult</span> <span class="nf">Index</span><span class="p">()</span>
-    <span class="p">{</span>
-        <span class="n">ViewBag</span><span class="p">.</span><span class="n">Name</span> <span class="p">=</span> <span class="k">this</span><span class="p">.</span><span class="nf">GetType</span><span class="p">().</span><span class="n">Assembly</span><span class="p">.</span><span class="n">FullName</span><span class="p">;</span>
+<pre class="highlight text">[Export(typeof(IController)), ExportMetadata(&quot;controllerName&quot;, &quot;Concept&quot;)]
+[PartCreationPolicy(CreationPolicy.NonShared)]
+public class ConceptController : Controller
+{
+    public ActionResult Index()
+    {
+        ViewBag.Name = this.GetType().Assembly.FullName;
 
-        <span class="k">return</span> <span class="nf">View</span><span class="p">(</span><span class="s">&quot;~/Extensions/Views/Concept/Index.cshtml&quot;</span><span class="p">);</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+        return View(&quot;~/Extensions/Views/Concept/Index.cshtml&quot;);
+    }
+}
 </pre>
 <p><strong>Index.cshtml, Web.config</strong></p>
 

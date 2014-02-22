@@ -1,6 +1,6 @@
-<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" /><meta content="width=device-width, user-scalable=no" name="viewport" /><title>Async REST Client for the Scrumy API</title><link href="http://fonts.googleapis.com/css?family=Lora:400,700|Open+Sans" rel="stylesheet" type="text/css" /><link href="/stylesheets/fontello.css?1392664185" media="screen" rel="stylesheet" type="text/css" />
-<link href="/stylesheets/styles.css?1392664185" media="screen" rel="stylesheet" type="text/css" />
-<link href="/stylesheets/syntax.css?1392664185" media="screen" rel="stylesheet" type="text/css" /></head><body><div class="row"><h1>Async REST Client for the Scrumy API</h1><div class="post"><p>I am a big fan of <a title="Scrumy is a simple and intuitive virtual task board based on some concepts of Scrum that helps organize and manage your projects." href="http://scrumy.com/" target="_blank">Scrumy</a>, I must admit that! Scrumy is <em>a simple and intuitive virtual task board based on some concepts of Scrum that helps organize and manage your projects (scrumy.com)</em>.&nbsp;</p>
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" /><meta content="width=device-width, user-scalable=no" name="viewport" /><title>Async REST Client for the Scrumy API</title><link href="http://fonts.googleapis.com/css?family=Lora:400,700|Open+Sans" rel="stylesheet" type="text/css" /><link href="/stylesheets/fontello.css?1393091639" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/styles.css?1393091639" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/syntax.css?1393091639" media="screen" rel="stylesheet" type="text/css" /></head><body><div class="row"><h1>Async REST Client for the Scrumy API</h1><div class="post"><p>I am a big fan of <a title="Scrumy is a simple and intuitive virtual task board based on some concepts of Scrum that helps organize and manage your projects." href="http://scrumy.com/" target="_blank">Scrumy</a>, I must admit that! Scrumy is <em>a simple and intuitive virtual task board based on some concepts of Scrum that helps organize and manage your projects (scrumy.com)</em>.&nbsp;</p>
 
 <p>The last weeks I have been thinking of a Visual Studio Extension for viewing (and interacting with) an entire Scrum (Sprints, Stories, Tasks, etc) from inside the IDE.&nbsp;I started building a client library around the Scrumy REST API. I wanted it to be fully asynchronous because I would like to make the Extension UI responsive.</p>
 
@@ -25,7 +25,7 @@
 <span class="o">&lt;/</span><span class="n">sprints</span><span class="o">&gt;</span>
 </pre>
 <p>Then I created the corresponding&nbsp;classes:</p>
-<pre class="highlight csharp"><span class="c1">/// &lt;example&gt;
+<pre class="highlight text">/// &lt;example&gt;
 ///     &lt;scrumy&gt;
 ///         &lt;created-at&gt;2011-06-24T21:49:57Z&lt;/created-at&gt;
 ///         &lt;time-zone&gt;Central Time (US &amp; Canada)&lt;/time-zone&gt;
@@ -34,18 +34,18 @@
 ///     &lt;/scrumy&gt;
 /// Editable fields: url, time_zone
 /// &lt;/example&gt;
-</span><span class="k">public</span> <span class="k">sealed</span> <span class="k">class</span> <span class="nc">Scrumy</span>
-<span class="p">{</span>
-    <span class="k">public</span> <span class="n">DateTimeOffset</span> <span class="n">CreatedAt</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+public sealed class Scrumy
+{
+    public DateTimeOffset CreatedAt { get; set; }
 
-    <span class="k">public</span> <span class="kt">string</span> <span class="n">TimeZone</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    public string TimeZone { get; set; }
 
-    <span class="k">public</span> <span class="n">DateTimeOffset</span> <span class="n">UpdatedAt</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    public DateTimeOffset UpdatedAt { get; set; }
 
-    <span class="k">public</span> <span class="kt">string</span> <span class="n">Url</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
-<span class="p">}</span>
+    public string Url { get; set; }
+}
 
-<span class="c1">/// &lt;example&gt;
+/// &lt;example&gt;
 ///     &lt;sprints type=&quot;array&quot;&gt;
 ///        &lt;sprint&gt;
 ///            &lt;created-at&gt;2011-06-24T21:50:53Z&lt;/created-at&gt;
@@ -57,104 +57,104 @@
 ///    &lt;/sprints&gt;
 /// Editable fields: url, time_zone
 /// &lt;/example&gt;
-</span><span class="k">public</span> <span class="k">sealed</span> <span class="k">class</span> <span class="nc">Sprint</span>
-<span class="p">{</span>
-    <span class="k">public</span> <span class="n">DateTimeOffset</span> <span class="n">CreatedAt</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+public sealed class Sprint
+{
+    public DateTimeOffset CreatedAt { get; set; }
 
-    <span class="k">public</span> <span class="kt">int</span> <span class="n">Id</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    public int Id { get; set; }
 
-    <span class="k">public</span> <span class="n">DateTimeOffset</span> <span class="n">StartDate</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    public DateTimeOffset StartDate { get; set; }
 
-    <span class="k">public</span> <span class="n">DateTimeOffset</span> <span class="n">UpdatedAt</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    public DateTimeOffset UpdatedAt { get; set; }
 
-    <span class="k">public</span> <span class="kt">string</span> <span class="n">ScrumyUrl</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
-<span class="p">}</span>
+    public string ScrumyUrl { get; set; }
+}
 </pre>
 <p>Next I included generic Begin/End methods for supporting the APM inside my class:</p>
-<pre class="highlight csharp"><span class="k">private</span> <span class="n">IAsyncResult</span> <span class="nf">BeginRequest</span><span class="p">(</span>
-     <span class="n">ScrumyRequest</span> <span class="n">request</span><span class="p">,</span> 
-     <span class="n">Func</span><span class="p">&lt;</span><span class="n">XElement</span><span class="p">,</span> <span class="n">ScrumyResponse</span><span class="p">&gt;</span> <span class="n">processor</span><span class="p">,</span> 
-     <span class="n">AsyncCallback</span> <span class="n">callback</span> <span class="p">=</span> <span class="k">null</span><span class="p">,</span>
-     <span class="kt">object</span> <span class="n">state</span> <span class="p">=</span> <span class="k">null</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="n">var</span> <span class="n">ae</span> <span class="p">=</span> <span class="k">new</span> <span class="n">AsyncEnumerator</span><span class="p">&lt;</span><span class="n">ScrumyResponse</span><span class="p">&gt;(</span>
-         <span class="kt">string</span><span class="p">.</span><span class="nf">Format</span><span class="p">(</span><span class="s">&quot;Method={0}, Uri={1}&quot;</span><span class="p">,</span> <span class="n">request</span><span class="p">.</span><span class="n">Method</span><span class="p">,</span> <span class="n">request</span><span class="p">.</span><span class="n">Uri</span><span class="p">));</span>
-    <span class="n">ae</span><span class="p">.</span><span class="n">SyncContext</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>
-    <span class="k">return</span> <span class="n">apmWrap</span><span class="p">.</span><span class="nf">Return</span><span class="p">(</span><span class="n">ae</span><span class="p">,</span>
-        <span class="n">ae</span><span class="p">.</span><span class="nf">BeginExecute</span><span class="p">(</span><span class="nf">MakeRequest</span><span class="p">(</span><span class="n">ae</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">processor</span><span class="p">),</span>
-            <span class="n">apmWrap</span><span class="p">.</span><span class="nf">Callback</span><span class="p">(</span><span class="n">ae</span><span class="p">,</span> <span class="n">callback</span><span class="p">),</span> <span class="n">state</span><span class="p">));</span>
-<span class="p">}</span>
+<pre class="highlight text">private IAsyncResult BeginRequest(
+     ScrumyRequest request, 
+     Func&lt;XElement, ScrumyResponse&gt; processor, 
+     AsyncCallback callback = null,
+     object state = null)
+{
+    var ae = new AsyncEnumerator&lt;ScrumyResponse&gt;(
+         string.Format(&quot;Method={0}, Uri={1}&quot;, request.Method, request.Uri));
+    ae.SyncContext = null;
+    return apmWrap.Return(ae,
+        ae.BeginExecute(MakeRequest(ae, request, processor),
+            apmWrap.Callback(ae, callback), state));
+}
 
-<span class="k">private</span> <span class="k">new</span> <span class="n">TResponse</span> <span class="n">EndRequest</span><span class="p">&lt;</span><span class="n">TResponse</span><span class="p">&gt;(</span><span class="n">IAsyncResult</span> <span class="n">result</span><span class="p">)</span> 
-     <span class="n">where</span> <span class="n">TResponse</span> <span class="p">:</span> <span class="n">ScrumyResponse</span>
-<span class="p">{</span>
-    <span class="k">return</span> <span class="p">(</span><span class="n">TResponse</span><span class="p">)</span><span class="n">apmWrap</span><span class="p">.</span><span class="nf">Unwrap</span><span class="p">(</span><span class="k">ref</span> <span class="n">result</span><span class="p">).</span><span class="nf">EndExecute</span><span class="p">(</span><span class="n">result</span><span class="p">);</span>
-<span class="p">}</span>
+private new TResponse EndRequest&lt;TResponse&gt;(IAsyncResult result) 
+     where TResponse : ScrumyResponse
+{
+    return (TResponse)apmWrap.Unwrap(ref result).EndExecute(result);
+}
 
-<span class="k">private</span> <span class="n">IEnumerator</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;</span> <span class="nf">MakeRequest</span><span class="p">(</span>
-     <span class="n">AsyncEnumerator</span><span class="p">&lt;</span><span class="n">ScrumyResponse</span><span class="p">&gt;</span> <span class="n">ae</span><span class="p">,</span> 
-     <span class="n">ScrumyRequest</span> <span class="n">request</span><span class="p">,</span> 
-     <span class="n">Func</span><span class="p">&lt;</span><span class="n">XElement</span><span class="p">,</span> <span class="n">ScrumyResponse</span><span class="p">&gt;</span> <span class="n">processor</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="k">base</span><span class="p">.</span><span class="nf">BeginRequest</span><span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="n">Method</span><span class="p">,</span> <span class="n">request</span><span class="p">.</span><span class="n">Uri</span><span class="p">,</span> <span class="n">ae</span><span class="p">.</span><span class="nf">End</span><span class="p">());</span>
-    <span class="k">yield</span> <span class="k">return</span> <span class="m">1</span><span class="p">;</span>
+private IEnumerator&lt;int&gt; MakeRequest(
+     AsyncEnumerator&lt;ScrumyResponse&gt; ae, 
+     ScrumyRequest request, 
+     Func&lt;XElement, ScrumyResponse&gt; processor)
+{
+    base.BeginRequest(request.Method, request.Uri, ae.End());
+    yield return 1;
 
-    <span class="n">XElement</span> <span class="n">element</span> <span class="p">=</span> <span class="k">base</span><span class="p">.</span><span class="nf">EndRequestXElement</span><span class="p">(</span><span class="n">ae</span><span class="p">.</span><span class="nf">DequeueAsyncResult</span><span class="p">());</span>
+    XElement element = base.EndRequestXElement(ae.DequeueAsyncResult());
 
-    <span class="n">ae</span><span class="p">.</span><span class="n">Result</span> <span class="p">=</span> <span class="n">processor</span><span class="p">.</span><span class="nf">Invoke</span><span class="p">(</span><span class="n">element</span><span class="p">);</span>
-<span class="p">}</span> 
+    ae.Result = processor.Invoke(element);
+} 
 </pre>
 <p>With these helper methods, dealing with the APM was trivial when implementing methods for the Scrumy client. Here are the methods I had to write for getting the Sprints:</p>
-<pre class="highlight csharp"><span class="k">public</span> <span class="n">IAsyncResult</span> <span class="nf">BeginGetScrumy</span><span class="p">(</span>
-     <span class="n">GetScrumyRequest</span> <span class="n">request</span><span class="p">,</span> 
-     <span class="n">AsyncCallback</span> <span class="n">callback</span> <span class="p">=</span> <span class="k">null</span><span class="p">,</span> 
-     <span class="kt">object</span> <span class="n">state</span> <span class="p">=</span> <span class="k">null</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="n">Func</span><span class="p">&lt;</span><span class="n">XElement</span><span class="p">,</span> <span class="n">GetScrumyResponse</span><span class="p">&gt;</span> <span class="n">processor</span> <span class="p">=</span> <span class="n">element</span> <span class="p">=&gt;</span>
-    <span class="p">{</span>
-        <span class="n">DateTimeOffset</span> <span class="n">createdAt</span><span class="p">;</span>
-        <span class="n">DateTimeOffset</span><span class="p">.</span><span class="nf">TryParse</span><span class="p">(</span>
-             <span class="n">element</span><span class="p">.</span><span class="nf">Element</span><span class="p">(</span><span class="s">&quot;created-at&quot;</span><span class="p">).</span><span class="n">Value</span><span class="p">,</span> <span class="k">out</span> <span class="n">createdAt</span><span class="p">);</span>
+<pre class="highlight text">public IAsyncResult BeginGetScrumy(
+     GetScrumyRequest request, 
+     AsyncCallback callback = null, 
+     object state = null)
+{
+    Func&lt;XElement, GetScrumyResponse&gt; processor = element =&gt;
+    {
+        DateTimeOffset createdAt;
+        DateTimeOffset.TryParse(
+             element.Element(&quot;created-at&quot;).Value, out createdAt);
 
-        <span class="n">DateTimeOffset</span> <span class="n">updatedAt</span><span class="p">;</span>
-        <span class="n">DateTimeOffset</span><span class="p">.</span><span class="nf">TryParse</span><span class="p">(</span>
-             <span class="n">element</span><span class="p">.</span><span class="nf">Element</span><span class="p">(</span><span class="s">&quot;updated-at&quot;</span><span class="p">).</span><span class="n">Value</span><span class="p">,</span> <span class="k">out</span> <span class="n">updatedAt</span><span class="p">);</span>
+        DateTimeOffset updatedAt;
+        DateTimeOffset.TryParse(
+             element.Element(&quot;updated-at&quot;).Value, out updatedAt);
 
-        <span class="n">var</span> <span class="n">scrumy</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Scrumy</span>
-        <span class="p">{</span>
-            <span class="n">CreatedAt</span> <span class="p">=</span> <span class="n">createdAt</span><span class="p">,</span>
-            <span class="n">TimeZone</span> <span class="p">=</span> <span class="n">element</span><span class="p">.</span><span class="nf">Element</span><span class="p">(</span><span class="s">&quot;time-zone&quot;</span><span class="p">).</span><span class="n">Value</span><span class="p">,</span>
-            <span class="n">UpdatedAt</span> <span class="p">=</span> <span class="n">updatedAt</span><span class="p">,</span>
-            <span class="n">Url</span> <span class="p">=</span> <span class="n">element</span><span class="p">.</span><span class="nf">Element</span><span class="p">(</span><span class="s">&quot;url&quot;</span><span class="p">).</span><span class="n">Value</span>
-        <span class="p">};</span>
+        var scrumy = new Scrumy
+        {
+            CreatedAt = createdAt,
+            TimeZone = element.Element(&quot;time-zone&quot;).Value,
+            UpdatedAt = updatedAt,
+            Url = element.Element(&quot;url&quot;).Value
+        };
 
-        <span class="k">return</span> <span class="k">new</span> <span class="n">GetScrumyResponse</span> <span class="p">{</span> <span class="n">Scrumy</span> <span class="p">=</span> <span class="n">scrumy</span> <span class="p">};</span>
-    <span class="p">};</span>
+        return new GetScrumyResponse { Scrumy = scrumy };
+    };
 
-    <span class="k">return</span> <span class="nf">BeginRequest</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">processor</span><span class="p">,</span> <span class="n">callback</span><span class="p">,</span> <span class="n">state</span><span class="p">);</span>
-<span class="p">}</span>
+    return BeginRequest(request, processor, callback, state);
+}
 
-<span class="k">public</span> <span class="n">GetScrumyResponse</span> <span class="nf">EndGetScrumy</span><span class="p">(</span><span class="n">IAsyncResult</span> <span class="n">ar</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="k">return</span> <span class="n">EndRequest</span><span class="p">&lt;</span><span class="n">GetScrumyResponse</span><span class="p">&gt;(</span><span class="n">ar</span><span class="p">);</span>
-<span class="p">}</span> 
+public GetScrumyResponse EndGetScrumy(IAsyncResult ar)
+{
+    return EndRequest&lt;GetScrumyResponse&gt;(ar);
+} 
 </pre>
 <p>As you notice, only the logic that creates a Sprint object from an XElement is inside the Begin part. Everything else is handled by the helper classes.</p>
 
 <p>Finally, here is how to use it:</p>
-<pre class="highlight csharp"><span class="n">AsyncEnumerator</span> <span class="n">ae</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">AsyncEnumerator</span><span class="p">();</span>            
-<span class="n">ae</span><span class="p">.</span><span class="nf">BeginExecute</span><span class="p">(</span><span class="nf">GetSprint</span><span class="p">(</span><span class="n">ae</span><span class="p">),</span> <span class="n">ae</span><span class="p">.</span><span class="n">EndExecute</span><span class="p">);</span>
+<pre class="highlight text">AsyncEnumerator ae = new AsyncEnumerator();            
+ae.BeginExecute(GetSprint(ae), ae.EndExecute);
 
-<span class="k">private</span> <span class="n">IEnumerator</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;</span> <span class="nf">GetSprint</span><span class="p">(</span><span class="n">AsyncEnumerator</span> <span class="n">ae</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="n">var</span> <span class="n">request</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">GetSprintRequest</span><span class="p">(</span><span class="n">client</span><span class="p">.</span><span class="n">ProjectName</span><span class="p">);</span>
+private IEnumerator&lt;int&gt; GetSprint(AsyncEnumerator ae)
+{
+    var request = new GetSprintRequest(client.ProjectName);
 
-    <span class="n">client</span><span class="p">.</span><span class="nf">BeginGetSprint</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">ae</span><span class="p">.</span><span class="nf">End</span><span class="p">());</span>
-    <span class="k">yield</span> <span class="k">return</span> <span class="m">1</span><span class="p">;</span>
+    client.BeginGetSprint(request, ae.End());
+    yield return 1;
 
-    <span class="n">var</span> <span class="n">response</span> <span class="p">=</span> <span class="n">client</span><span class="p">.</span><span class="nf">EndGetSprint</span><span class="p">(</span><span class="n">ae</span><span class="p">.</span><span class="nf">DequeueAsyncResult</span><span class="p">());</span>
-    <span class="n">Assert</span><span class="p">.</span><span class="nf">NotEmpty</span><span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="n">Sprints</span><span class="p">);</span>
-<span class="p">}</span>
+    var response = client.EndGetSprint(ae.DequeueAsyncResult());
+    Assert.NotEmpty(response.Sprints);
+}
 </pre>
 <p>I am looking forward building as much as I can and then to continue with the Visual Studio Extension.</p>
 
