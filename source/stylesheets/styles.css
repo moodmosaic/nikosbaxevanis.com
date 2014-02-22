@@ -97,9 +97,9 @@ pre {
   overflow: auto;
   background-color: #fafafa;
   border: 1px solid #e6e6e6;
-  -moz-border-radius: 5px;
-  -webkit-border-radius: 5px;
-  border-radius: 5px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  border-radius: 2px;
   -moz-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
   -webkit-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
