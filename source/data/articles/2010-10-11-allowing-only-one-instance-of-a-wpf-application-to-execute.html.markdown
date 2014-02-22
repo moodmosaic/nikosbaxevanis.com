@@ -11,7 +11,7 @@ alias: /bonus-bits/2010/10/allowing-only-one-instance-of-a-wpf-application-to-ex
 <p>Search on the internet and you will find&nbsp;<a href="http://www.google.gr/search?sourceid=chrome&amp;ie=UTF-8&amp;q=wpf+single+instance" target="_blank">many different ways</a> of doing this. However, inside Jeffrey Ricther's <a title="CLR via C#, Third Edition" href="http://www.microsoft.com/learning/en/us/book.aspx?ID=13874" target="_blank">excellent book</a>&nbsp;there is a way&nbsp;of allowing only one instance of an application (Console, WinForms, WPF) to execute at any given time using kernel-mode constructs.</p>
 <p>Using what has been described in the book and searching at <a href="http://www.pinvoke.net/default.aspx/user32/ShowWindow.html" target="_blank">P/Invoke.net</a>, I wrote some code that works with WPF applications. The code also attempts to set focus on the window and if it's minimized it will attempt to restore it.&nbsp;</p>
 
-```c#
+```
 using System;
 using System.Diagnostics;
 using System.Reflection;

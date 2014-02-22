@@ -20,7 +20,7 @@ alias: /bonus-bits/2010/10/async-ctp-part-1.html
 <p>I like the APM because with a good IAsyncResult implementation in hand you can easily expose&#0160;asynchronous&#0160;features to all versions of the .NET Framework (1.0-today) and also target Microsoft&#0160;Silverlight, Windows Phone 7, etc.&#0160;</p>
 <p>To start, here is some code that executes&#0160;synchronously:</p>
 
-```c#
+```
 private void FetchStockQuotesSync(WebService svc)
 {
     // This blocks. You don't know when the FetchStockQuotes
@@ -32,7 +32,7 @@ private void FetchStockQuotesSync(WebService svc)
       
 <p>Fortunately the WebService class implements the <a href="http://msdn.microsoft.com/en-us/library/system.iasyncresult.aspx" target="_blank" title="Represents the status of an asynchronous operation.">IAsyncResult</a> interface, so the same code can be executed asynchronously:</p>
 
-```c#
+```
 private void FetchStockQuotesApm(WebService svc)
 {
     // This never blocks. Your code returns immediately.
@@ -52,7 +52,7 @@ private void FetchStockQuotesApmCallback(IAsyncResult ar)
 <p style="text-align: justify;">The following code below is here just for the demo.&#0160;There is a known performance hit when calling delegates compared to direct method calls. (See the Delegates section <a href="http://msdn.microsoft.com/en-us/library/ms973852.aspx" target="_blank" title="Writing Faster Managed Code: Know What Things Cost by Jan Gray.">here</a>).</p>
 </blockquote>
 
-```c#
+```
 private void FetchStockQuotesApm(WebService svc)
 {
     // This never blocks. Your code returns immediately.
@@ -75,7 +75,7 @@ private void FetchStockQuotesApmCallback(IAsyncResult ar)
 </p>
 The new language features `async` and `await` and the TAP allow you to do this:
 
-```c#
+```
 private async void FetchStockQuotesAsyncCtp(WebService svc)
 {
     IStockQuote qt = await svc.FetchStockQuotesTaskAsync();
@@ -85,7 +85,7 @@ private async void FetchStockQuotesAsyncCtp(WebService svc)
 <p>Well, this is exciting. &#0160;The method is marked as async. This means that the method body is compiled specially, allowing parts of&#0160;it to be turned into callbacks.&#0160;The FetchStockQuotesTaskAsync method returns a Task&lt;IStockQuote&gt; by converting the BeginFetchStockQuotes/EndFetchStockQuotes methods into a task. Until the task completes, there is nothing to do but await for it.</p>
 <p>Here is how the&#0160;FetchStockQuotesTaskAsync method is written:</p>
 
-```c#
+```
 public static Task<IStockQuote> FetchStockQuotesTaskAsync(this IWebService svc)
 {
     return Task<IStockQuote>.Factory.FromAsync(

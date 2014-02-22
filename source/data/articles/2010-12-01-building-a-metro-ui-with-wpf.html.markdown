@@ -38,7 +38,7 @@ The image above is not what we want. We need to hide the window boundaries. This
 
 <p>By adding a Shape (ex. a <a href="http://msdn.microsoft.com/en-us/library/system.windows.shapes.rectangle.aspx" target="_blank" title="Draws a rectangle.">Rectangle</a>) and registering on it&#39;s&#0160;PreviewMouseDown event:</p>
 
-```c#
+```
 // Is this a double-click?
 if (DateTime.Now.Subtract(this.headerLastClicked) <= doubleClick)
 {
@@ -60,7 +60,7 @@ if (Mouse.LeftButton == MouseButtonState.Pressed)
 
 <p>By adding Shapes (ex.&#0160;<a href="http://msdn.microsoft.com/en-us/library/system.windows.shapes.rectangle.aspx" target="_blank" title="Draws a rectangle.">Rectangles</a>) one on each side of the window (left, top, right, bottom) and registering on it&#39;s&#0160;PreviewMouseDown event:</p>
 
-```c#
+```
 Rectangle clickedRectangle = (Rectangle)sender;
  
 switch (clickedRectangle.Name)
@@ -79,7 +79,7 @@ switch (clickedRectangle.Name)
 
 <p>Here is the code for resizing the window. It uses the underlying <a href="http://en.wikipedia.org/wiki/Windows_User" target="_blank" title="Windows USER is a component of the Microsoft Windows operating system that provides core functionality for building simple user interfaces. The component has existed in all versions of Windows, and includes functionality for window management, message passing, input processing and standard controls.">Windows USER</a> component.</p>
 
-```c#
+```
 /// <summary>
 /// Resizes the window.
 /// </summary>
@@ -103,7 +103,7 @@ internal static extern IntPtr SendMessage(
 <p>At the time of this&#0160;writing, I know two ways of doing this:</p>
 <p>The first one (which is described <a href="http://groups.google.com/group/wpf-disciples/browse_thread/thread/82d408e569e0b5f9" target="_blank" title="OS Composed DropShadows on WPF Windows with Custom Chrome Options.">here</a>) uses the&#0160;<a href="http://msdn.microsoft.com/en-us/library/aa969540(VS.85).aspx" target="_blank" title="The desktop composition feature, introduced in Windows Vista, fundamentally changed the way applications display pixels on the screen. When desktop composition is enabled, individual windows no longer draw directly to the screen or primary display device as they did in previous versions of Windows. Instead, their drawing is redirected to off-screen surfaces in video memory, which are then rendered into a desktop image and presented on the display.">Desktop Window Manager</a>&#0160;(DWM)&#0160;API. Specifically it uses the&#0160;<a href="http://msdn.microsoft.com/en-us/library/aa969524(VS.85).aspx" target="_blank" title="Sets the value of the specified attributes for non-client rendering to apply to the window.">DwmSetWindowAttribute</a> Function combined with the &#0160;<a href="http://msdn.microsoft.com/en-us/library/aa969512(VS.85).aspx" target="_blank" title="Extends the window frame behind the client area.">DwmExtendFrameIntoClientArea </a>Function to place a drop shadow around the window area. This method works by registering at the <a href="http://msdn.microsoft.com/en-us/library/system.windows.window.sourceinitialized.aspx" target="_blank" title="This event is raised to support interoperation with Win32.">SourceInitialized</a> event. When this event is raised, it is a good place to call any code that can&#0160;interoperate&#0160;with the underlying Win32 window.</p>
 
-```c#
+```
 /// <summary>
 /// Raises the <see cref="FrameworkElement.Initialized"/> event.
 /// This method is invoked whenever
@@ -181,7 +181,7 @@ The second way, of placing the drop shadows, via external windows is the main re
 <p>..Sounds like a lot of work to do for displaying a drop shadow that remains visible even if the user&#0160;unchecks the &quot;Show shadows under windows&quot; checkbox!</p>
 <p>Creating the transparent window in code was easy:</p>
 
-```c#
+```
 /// <summary>
 /// Initializes the surrounding windows.
 /// </summary>
@@ -265,7 +265,7 @@ private Decorator GetDecorator(string imageUri, double radius = 0)
 
 <p>Calculating the position, width and height for each external window was also not difficult:</p>
 
-```c#
+```
 /// <summary>
 /// Raises the <see cref="FrameworkElement.Initialized"/> event.
 /// This method is invoked whenever

@@ -14,7 +14,7 @@ alias: /bonus-bits/2010/11/testing-domain-driven-design-with-sterling-for-window
 <p>A good design of a&#0160;<a href="http://en.wikipedia.org/wiki/Domain_model" target="_blank" title="A domain model, or Domain Object Model (DOM) in problem solving and software engineering can be thought of as a conceptual model of a domain of interest (often referred to as a problem domain) which describes the various entities, their attributes and relationships, plus the constraints that govern the integrity of the model elements comprising that problem domain.">Domain model</a>&#0160;knows nothing about persistence. You can use an in-memory database, a relational database, or ..<strong>&quot;<strong>an&#0160;Object-Oriented Database&#0160;for WP7 that works with Isolated Storage classes and&#0160;supports full LINQ to Object queries over keys and indexes for fast retrieval of information from large data sets!</strong>&quot;&#0160;</strong>Enter&#0160;<a href="http://sterling.codeplex.com/" target="_blank" title="Sterling is a lightweight object-oriented database implementation for Silverlight and Windows Phone 7 that works with your existing class structures. Sterling supports full LINQ to Object queries over keys and indexes for fast retrieval of information from large data sets.">Sterling</a>.</p>
 <p>Here is a sample repository implementation using Sterling to store and retrieve data:</p>
 
-```c#
+```
 internal class SterlingRepository<T> where T: class, new()
 {
     public void Save(T instance)
@@ -47,7 +47,7 @@ internal class SterlingRepository<T> where T: class, new()
 
 **CargoRepository**
 
-```c#
+```
 internal sealed class CargoRepository : 
     SterlingRepository<Cargo>, ICargoRepository
 {
@@ -71,7 +71,7 @@ internal sealed class CargoRepository :
 
 **CargoFactory**
 
-```c#
+```
 internal static class CargoFactory
 {
     public static Cargo CreateNew(string origin, string destination)
@@ -83,7 +83,7 @@ internal static class CargoFactory
 
 <p>Armed with the above classes you can create a Cargo, save it using the CargoRepository and load it. Sterling will save the whole object graph and when you load, it will &#0160;defer the creation of the whole object using the&#0160;<a href="http://msdn.microsoft.com/en-us/library/dd642331.aspx" target="_blank" title="http://msdn.microsoft.com/en-us/library/dd642331.aspx">Lazy&lt;T&gt;</a> class.</p>
 
-```c#
+```
 public sealed class CargoPageViewModel : PropertyChangedBase
 {
     private readonly ICargoRepository repository;

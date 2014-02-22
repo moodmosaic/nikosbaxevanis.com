@@ -21,7 +21,7 @@ While in the desktop CLR there is the <a title="Provides support for lazy initia
 
 **SingleInstance(Of T) Class**
 
-```c#
+```
 using System;
 using System.Threading;
  

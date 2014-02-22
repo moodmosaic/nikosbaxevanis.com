@@ -10,7 +10,7 @@ alias: /bonus-bits/2012/02/dynamic-proxy-overriding-equals-in-autofixture-likene
 <p>From version 2.9.0 of AutoFixture, the&nbsp;<a href="http://blog.ploeh.dk/2010/06/29/IntroducingAutoFixtureLikeness.aspx" target="_blank">Likeness</a>&nbsp;class contains a new feature for&nbsp;creating a dynamic proxy that overrides Equals on the destination type.</p>
 <p>As an example, we want to compare instances of the following types:</p>
 
-```c#
+```
 public class DoubleParameterType<T1, T2>
 {
     public DoubleParameterType(T1 parameter1, T2 parameter2)
@@ -36,7 +36,7 @@ public class SingleParameterType<T>
 
 <p>We can have the following syntax (prior to version 2.9.0):</p>
 
-```c#
+```
 [Fact]
 public void TestWithLikeness()
 {
@@ -56,7 +56,7 @@ public void TestWithLikeness()
 
 <p>However, from version 2.9.0 there is also a new CreateProxy method on Likeness which returns a proxy of the destination type overriding Equals with Likeness's instance of IEqualityComparer&nbsp;(the SemanticComparer class):</p>
 
-```c#
+```
 [Fact]
 public void TestWithLikenessProxy()
 {
@@ -77,7 +77,7 @@ public void TestWithLikenessProxy()
 
 <p>Below is also an example, where we need to verify that an expectation was met:</p>
 
-```c#
+```
 public class Bar
 {
     public string Zip { get; set; }

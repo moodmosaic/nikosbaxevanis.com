@@ -29,7 +29,7 @@ alias: /bonus-bits/2010/10/exposing-asynchronous-features-to-client-code-windows
 
 <p>The code below shows how&#0160;ExecuteWithSyncIO method is implemented. The application shows a MessageBox to the user that the UI will pause while the execution is in progress.</p>
 
-```c#
+```
 private void ExecuteWithSyncIO()
 {
     for (int n = 0; n < iterations; n++)
@@ -44,7 +44,7 @@ private void ExecuteWithSyncIO()
 
 <p><img src="http://farm9.staticflickr.com/8507/8397466099_216efe6f78_o.png" alt="" /></p>
 
-```c#
+```
 private void ExecuteWithDelegateBeginInvoke()
 {
     Func<IStockQuote> stockQuoteDelegate = this.webService.GetStockQuotes;
@@ -59,7 +59,7 @@ private void ExecuteWithDelegateBeginInvoke()
 <p>The code below shows how ExecuteWithDelegateBeginInvoke method is implemented. </p>
 <p>This method is here just for the demo, since it is not allowed to invoke a delegate asynchronously in the Compact Framework.</p>
 
-```c#
+```
 private void ExecuteWithDelegateBeginInvoke()
 {
     Func<IStockQuote> stockQuoteDelegate = this.webService.GetStockQuotes;
@@ -77,7 +77,7 @@ private void ExecuteWithDelegateBeginInvoke()
 
 <p>The code below shows how the ExecuteWithIAsyncResult method is implemented. The only problem is that, when using the IAsyncResult, you need to specify a method to be called when a corresponding asynchronous operation completes. This can result in using synchronization constructs to avoid race conditions. It also splits the flow of your code. You can inline the callback method using <a href="http://msdn.microsoft.com/en-us/library/0yw3tz5k(VS.80).aspx" target="_blank" title="In versions of C# previous to 2.0, the only way to declare a delegate was to use named methods. C# 2.0 introduces anonymous methods.">Anonymous Methods</a> or&#0160;<a href="http://msdn.microsoft.com/en-us/library/bb397687.aspx" target="_blank" title="In the C# programming language a lambda expression is an anonymous function that can contain expressions and statements.">Lamda Expressions</a> as shown below but if your logic is complicated your code will not be beautiful.</p>
 
-```c#
+```
 private void ExecuteWithIAsyncResult()
 {
     SetStatus("Working..", StatusState.Busy);
@@ -107,7 +107,7 @@ private void ExecuteWithIAsyncResult()
 
 <p>The code below shows how&#0160;ExecuteWithAsyncEnumerator method is implemented. As you can see this method makes your code looks like it&#39;s executing synchronously but actually it executes asynchronously. You do not have to split your code in callback methods or inlined delegates. You do not need to marshall calls in the UI thread using the Dispacher or the SynchronizationContext. All this stuff is handled by the AsyncEnumerator class.</p>
 
-```c#
+```
 private IEnumerator<int> ExecuteWithAsyncEnumerator(AsyncEnumerator ae)
 {
     for (int n = 0; n < iterations; n++)

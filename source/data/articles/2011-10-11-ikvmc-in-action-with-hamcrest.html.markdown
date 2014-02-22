@@ -12,7 +12,7 @@ alias: /bonus-bits/2011/10/ikvmc-in-action-with-hamcrest.html
 <p>The version of Hamcrest that we use is&#0160;1.3RC2 and we are going to convert&#0160;hamcrest-core.jar and hamcrest-library.jar.</p>
 <p>Here is the generated script from Jar2ikvmc:</p>
 
-```c#
+```
 rest-core-1.3.0RC2.jar -target:library
 ikvmc hamcrest-library-1.3RC2.jar -target:library -r:hamcrest-core-1.3RC2.dll
 ```
@@ -21,7 +21,7 @@ ikvmc hamcrest-library-1.3RC2.jar -target:library -r:hamcrest-core-1.3RC2.dll
 <p>We are going to use the Graham Rhay&#39;s&#0160;<a href="https://github.com/grahamrhay/NHamcrest/blob/master/NHamcrest.XUnit/AssertEx.cs" target="_blank">Assert</a> class that let us use NHamcrest from xUnit.net.</p>
 <p>Here is the code that uses NHamcrest:</p>
 
-```c#
+```
 public class Assert : Xunit.Assert
 {
     public static void That<T>(T actual, IMatcher<T> matcher)
@@ -45,7 +45,7 @@ public class Assert : Xunit.Assert
 
 <p>Here is the code that uses Hamcrest that we coverted using IKVMC:</p>
 
-```c#
+```
 using org.hamcrest;
 
 public class Assert : Xunit.Assert
@@ -71,7 +71,7 @@ public class Assert : Xunit.Assert
 
 <p>Here is a unit-test that uses NHamcrest:</p>
 
-```c#
+```
 using NHamcrest.Xunit
 using Xunit;
 
@@ -84,7 +84,7 @@ public void Pass()
 
 <p>Here is a unit-test that uses Hamcrest that we coverted using IKVMC:</p>
 
-```c#
+```
 using org.hamcrest.core;
 using Xunit;
 

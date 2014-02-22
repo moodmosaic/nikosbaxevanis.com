@@ -18,7 +18,7 @@ alias: /bonus-bits/2010/10/hosting-agatha-in-a-managed-application.html
 </blockquote>
 <p>With Agatha, you can host your services easily on IIS or in a Console Application using <a href="http://www.coretechnologies.com/products/AlwaysUp/" target="_blank" title="AlwaysUp runs your application (32/64-bit executable, batch file, shortcut, java, perl, etc.) as a Windows Service, managing and monitoring it constantly to ensure 100% uptime.">AlwaysUp</a>. If you choose the latter there are a few things to do inside your Main() method.</p>
 
-```c#
+```
 Uri  baseAddress = new Uri("<uriString goes here>");
 ServiceHost host = new ServiceHost(typeof(WcfRequestProcessor), baseAddress);
 host.Open();
@@ -81,7 +81,7 @@ host.Close();
 
 <p>I included the&#0160;<a href="http://msdn.microsoft.com/en-us/library/ms229357.aspx" target="_blank" title="Specifies whether the common language runtime runs server garbage collection.">&lt;gcServer&gt;</a>&#0160;element to instruct CLR to use&#0160;server garbage collection. Inside your Main() method you can include the code below:</p>
 
-```c#
+```
 Console.WriteLine("{0} is {1}running with server GC.",
     Assembly.GetEntryAssembly().GetName().Name,
     GCSettings.IsServerGC == true ? string.Empty : "not ");

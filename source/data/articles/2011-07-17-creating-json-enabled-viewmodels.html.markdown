@@ -14,7 +14,7 @@ alias: /bonus-bits/2011/07/creating-json-enabled-viewmodels.html
 
 <p>All API responses are JSON in Stack Exchange API. Ian took advantage of that and wrote a DynamicViewModelFactory that contains the factory method below:</p>
 
-```c#
+```
 public static DynamicViewModel Create(string json)
 {
     DynamicViewModel result;
@@ -29,7 +29,7 @@ public static DynamicViewModel Create(string json)
 
 <p>This factory method creates an instance of a DynamicViewModel from a JSON formatted string. In order to use it you need to write code similar to the one below:</p>
 
-```c#
+```
 var uriString = "http://api.stackoverflow.com/1.1/users?filter=" + e.Argument;
 var request   = CreateHttpWebRequest(uriString);
 var response  = request.GetResponse();
@@ -43,7 +43,7 @@ using (var streamReader = new StreamReader(response.GetResponseStream()))
 
 <p>And some XAML action:</p>
 
-```c#
+```
 <TextBlock
     Grid.Column="0"
     VerticalAlignment="Center"

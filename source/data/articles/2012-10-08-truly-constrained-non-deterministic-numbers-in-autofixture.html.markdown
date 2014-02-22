@@ -9,7 +9,7 @@ comments: [disqus]
 
 Numbers in [AutoFixture](https://github.com/autofixture/autofixture) are currently created using a **strictly monotonically increasing** sequence.
 
-```c#
+```
 
 var fixture = new Fixture();
 
@@ -23,7 +23,7 @@ var f = fixture.CreateAnonymous<float>();
 
 Starting with version *2.13.0*, by applying a specific customization numbers can also be created using a **constrained non-deterministic** sequence. The new customization is called `RandomNumericSequenceCustomization`.
 
-```c#
+```
 var fixture = new Fixture()
     .Customize(new RandomNumericSequenceCustomization());
 
@@ -45,7 +45,7 @@ To supply a custom range, customize an instance of the Fixture class with an ins
 
 > The sequence must be two positive or negative numbers optionally followed by a series of greater numbers.
 
-```c#
+```
 var fixture = new Fixture();
 fixture.Customizations.Add(
     new RandomNumericSequenceGenerator(-100, 100, 255));

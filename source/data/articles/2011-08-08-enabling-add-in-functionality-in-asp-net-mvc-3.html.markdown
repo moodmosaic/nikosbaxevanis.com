@@ -18,7 +18,7 @@ alias: /bonus-bits/2011/08/enabling-add-in-functionality-in-aspnet-mvc3.html
 
 <p>A MEF-specific <a href="http://msdn.microsoft.com/en-us/library/system.web.mvc.defaultcontrollerfactory.aspx" target="_blank" title="Represents the controller factory that is registered by default.">DefaultControllerFactory</a>&#0160;derived type. It&#0160;gets the exported types with the contract name, derived from an IController type. After the controller is supplied, the MVC framework will resolve the Views.</p>
 
-```c#
+```
 internal sealed class DiscoverableControllerFactory : DefaultControllerFactory
 {
     private readonly CompositionContainer compositionContainer;
@@ -48,7 +48,7 @@ internal sealed class DiscoverableControllerFactory : DefaultControllerFactory
 
 <p>A Unity-specific DefaultControllerFactory&#0160;&#0160;derived type. There are many implementations around. The difference from other implementations is that this one takes a delegate as a parameter in the constructor that acts as the fallback factory when the DI container can not supply a controller. This is a very important part of our architecture because here we have the chance to supply the target controller (as an add-in)&#0160;using&#0160;MEF.</p>
 
-```c#
+```
 internal sealed class UnityControllerFactory : DefaultControllerFactory
 {
     private readonly UnityContainer container;
@@ -113,7 +113,7 @@ internal sealed class UnityControllerFactory : DefaultControllerFactory
 
 <p>Here we specify the default path for the extensions. We create a new instance of the DiscoverableControllerFactory class passing a CompositionContainer and a DirectoryCatalog. Keep in mind that the DirectoryCatalog is one of the many choices that MEF provides for discovering parts. Besides the creation of the&#0160;DiscoverableControllerFactory we also create a new instance of the UnityControllerFactory class acting as the default controller factory. Any controllers that this factory can not supply will fallback to the DiscoverableControllerFactory using it&#39;s CreateController method. One last thing to note, this is the application&#39;s&#0160;<a href="http://blog.ploeh.dk/2011/07/28/CompositionRoot.aspx" target="_blank" title="Composition Root">Composition Root</a>. The DI container is referenced here, where the composition happens, and&#0160;<span style="text-decoration: underline;">nowhere else</span>&#0160;in the entire application.</p>
 
-```c#
+```
 private static void BootstrapContainer()
 {
     string extensionsPath = Path.Combine(
@@ -153,7 +153,7 @@ protected void Application_Start()
 
 <p>This is a proof of concept&#0160;Controller for this demo. It is decorated with the&#0160;<a href="http://msdn.microsoft.com/en-us/library/system.componentmodel.composition.exportattribute.aspx" target="_blank" title="Specifies that a type, property, field, or method provides a particular export.">ExportAttribute</a>&#0160;and&#0160;<a href="http://msdn.microsoft.com/en-us/library/system.componentmodel.composition.exportmetadataattribute.aspx" target="_blank" title="Specifies metadata for a type, property, field, or method marked with the ExportAttribute.">ExportMetadataAttribute</a>. The later is needed in order to help the DiscoverableControllerFactory to choose the right controller among all the controllers supplied by this and other add-ins. The&#0160;<a href="http://msdn.microsoft.com/en-us/library/system.componentmodel.composition.partcreationpolicyattribute.aspx" target="_blank" title="Specifies the CreationPolicy for a part.">PartCreationPolicyAttribute</a>&#0160;is needed in order to specify that a new non-shared (transient) instance will be created for each request.</p>
 
-```c#
+```
 [Export(typeof(IController)), ExportMetadata("controllerName", "Concept")]
 [PartCreationPolicy(CreationPolicy.NonShared)]
 public class ConceptController : Controller

@@ -11,20 +11,20 @@ alias: /bonus-bits/2011/12/auto-mocking-with-fakeiteasy-and-autofixture.html
 <p>In addition to the above auto-mocking features it is now possible to use <a title="A .Net dynamic fake framework for creating all types of fake objects, mocks, stubs etc. Easier semantics, all fake objects are just that - fakes - the use of the fakes determines whether they're mocks or stubs." href="http://code.google.com/p/fakeiteasy/" target="_blank">FakeItEasy</a>.</p>
 <p>To install AutoFixture with Auto Mocking using FakeItEasy, run the following command in the Package Manager Console:</p>
 
-```c#
+```
 PM> Install-Package AutoFixture.AutoFakeItEasy
 ```
 
 <p>To use it, add an AutoFakeItEasyCustomization to the Fixture instance:</p>
 
-```c#
+```
 var fixture = new Fixture()
     .Customize(new AutoFakeItEasyCustomization());
 ```
 
 <p>Here is a typical usage inside a test method which will automatically create mocked instances using FakeItEasy:</p>
 
-```c#
+```
 var fixture = new Fixture()
     .Customize(new AutoFakeItEasyCustomization());
 var result = fixture.CreateAnonymous<IInterface>();
@@ -32,7 +32,7 @@ var result = fixture.CreateAnonymous<IInterface>();
 
 <p>To <em>explicitly </em>use FakeItEasy inside a test you need to <a title="AutoFixture Freeze." href="http://blog.ploeh.dk/2010/03/17/AutoFixtureFreeze.aspx" target="_blank">Freeze</a> it first:</p>
 
-```c#
+```
 [Fact]
 public void FixtureCanFreezeFake()
 {
@@ -54,7 +54,7 @@ public void FixtureCanFreezeFake()
 
 <p>The above example can be made even more elegant by using <a title="AutoData Theories with AutoFixture." href="http://blog.ploeh.dk/2010/10/08/AutoDataTheoriesWithAutoFixture.aspx" target="_blank">AutoData</a> theories:</p>
 
-```c#
+```
 
 [Theory, AutoFakeData]
 public void FixtureCanFreezeFake([Frozen]Fake<IInterface> fake, IInterface sut)
@@ -67,7 +67,7 @@ public void FixtureCanFreezeFake([Frozen]Fake<IInterface> fake, IInterface sut)
 
 <p>Below is the code for the AutoFakeDataAttribute class:</p>
 
-```c#
+```
 public class AutoFakeDataAttribute : AutoDataAttribute
 {
     public AutoFakeDataAttribute()

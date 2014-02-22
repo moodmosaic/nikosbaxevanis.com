@@ -9,7 +9,7 @@ alias: /bonus-bits/2011/08/heuristics-for-static-factory-methods-in-autofixture.
 ---
 <p>Here is a type with a private constructor:</p>
 
-```c#
+```
 public class TypeWithFactoryMethod
 {
     private TypeWithFactoryMethod() 
@@ -30,13 +30,13 @@ public class TypeWithFactoryMethod
 
 <p>In order to create an instance of that type we have to call one of it&#39;s static factory methods, for example:</p>
 
-```c#
+```
 var instance = TypeWithFactoryMethod.Create();
 ```
 
 <p>If we try to create an <a href="http://blogs.msdn.com/b/ploeh/archive/2008/11/17/anonymous-variables.aspx" target="_blank" title="Anonymous Variables">Anonymous Variable</a> with <a href="http://autofixture.codeplex.com" target="_blank" title="AutoFixture makes it easier for developers to do Test-Driven Development by automating non-relevant Test Fixture Setup, allowing the Test Developer to focus on the essentials of each test case.">AutoFixture</a> right now (version 2.1) it will throw an exception since there are no public constructors:</p>
 
-```c#
+```
 var fixture = new Fixture();
 var result = fixture.CreateAnonymous<TypeWithFactoryMethod>();
 ```

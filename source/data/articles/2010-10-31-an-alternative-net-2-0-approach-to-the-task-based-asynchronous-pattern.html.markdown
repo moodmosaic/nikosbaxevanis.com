@@ -16,7 +16,7 @@ alias: /bonus-bits/2010/10/an-alternative-net-20-approach-to-the-task-based-asyn
 </blockquote>
 <p>I will start, again, with some code that executes&#0160;synchronously:</p>
 
-```c#
+```
 private void FetchStockQuotesSync(WebService svc)
 {
     // This blocks. You don't know when the FetchStockQuotes
@@ -28,7 +28,7 @@ private void FetchStockQuotesSync(WebService svc)
 
 <p>Fortunately the WebService class implements the&#0160;<a href="http://msdn.microsoft.com/en-us/library/system.iasyncresult.aspx" target="_blank" title="Represents the status of an asynchronous operation.">IAsyncResult</a>&#0160;interface, so the same code can be executed asynchronously using the AsyncEnumerator class:</p>
 
-```c#
+```
 // Inside your method create an instance of an AsyncEnumerator class,
 // specifying the iterator method to be driven by the AsyncEnumerator.
 AsyncEnumerator ae = new AsyncEnumerator();

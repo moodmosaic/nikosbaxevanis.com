@@ -19,7 +19,7 @@ Since the IHttpControllerFactory interface has been [removed](http://aspnetwebst
 
 Below is the IHttpControllerSelector interface:
 
-```c#
+```
 public interface IHttpControllerSelector
 {
     HttpControllerDescriptor SelectController(HttpRequestMessage request);
@@ -30,7 +30,7 @@ public interface IHttpControllerSelector
 
 And the IHttpControllerActivator interface:
 
-```c#
+```
 public interface IHttpControllerActivator
 {
     IHttpController Create(
@@ -46,7 +46,7 @@ Internally, the GetDependencyScope method uses the DependencyResolver (registere
 
 Below is an implementation of the IDependencyScope interface:
 
-```c#
+```
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -115,7 +115,7 @@ Having a custom implementation of the [IDependencyScope](http://aspnetwebstack.c
 
 An implementation of the IDependencyResolver interface for Castle Windsor could be similar to the one below:
 
-```c#
+```
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -165,7 +165,7 @@ To keep the *named* registrations (and not break compatibility with any JavaScri
 
 A DefaultHttpControllerSelector derived type could be similar to the one below:
 
-```c#
+```
 using System;
 using System.Linq;
 using System.Net.Http;

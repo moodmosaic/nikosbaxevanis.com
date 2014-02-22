@@ -11,7 +11,7 @@ alias: /bonus-bits/2011/12/regularexpressionattribute-support-in-autofixture.htm
 <p>Starting with version 2.6.0, when this attribute is applied on a data field AutoFixture will <em>try </em>to&nbsp;generate a value that&nbsp;matches the specified regular expression.</p>
 <p>Let's take as an example the following type:</p>
 
-```c#
+```
 public class RegularExpressionValidatedType
 {
     // Allow up to 40 uppercase and lowercase.

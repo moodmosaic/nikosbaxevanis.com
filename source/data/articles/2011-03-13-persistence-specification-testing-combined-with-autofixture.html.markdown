@@ -11,7 +11,7 @@ alias: /bonus-bits/2011/03/persistence-specification-testing-combined-with-autof
 <p>If you are using FluentNHibernate you can use the <a href="https://github.com/jagregory/fluent-nhibernate/tree/master/src/FluentNHibernate/Testing" target="_blank">PersistenceSpecification&lt;T&gt; class</a>. However, the&nbsp;PersistenceSpecification&lt;T&gt; class requires that you pass the property to check and also a value for that property.</p>
 <p>By using <a title="AutoFixture makes it easier for developers to do Test-Driven Development by automating non-relevant Test Fixture Setup, allowing the Test Developer to focus on the essentials of each test case." href="http://autofixture.codeplex.com/" target="_blank">AutoFixture</a> you can easily create objects that you can pass inside the CheckXx methods:</p>
 
-```c#
+```
 [Fact]
 public void ShouldVerifyTheMappings()
 {

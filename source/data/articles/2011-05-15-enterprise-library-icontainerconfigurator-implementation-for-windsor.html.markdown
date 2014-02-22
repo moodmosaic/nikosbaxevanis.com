@@ -23,7 +23,7 @@ alias: /bonus-bits/2011/05/enterpriselibrary-and-windsorcontainerconfigurator.ht
 <p>The <a title="WindsorContainerConfigurator.cs" href="http://entlibcontrib.codeplex.com/SourceControl/changeset/63545" target="_blank">current</a> implementation relies heavily on Windsor's Property classes and it is based on the UnityContainerConfigurator.</p>
 <p>Below is the WindsorParameterVisitor,</p>
 
-```c#
+```
 private sealed class WindsorParameterVisitor : ParameterValueVisitor
 {
     public Property[] InjectionParameters { get; private set; }
@@ -60,7 +60,7 @@ private sealed class WindsorParameterVisitor : ParameterValueVisitor
 <p>The ParameterValueVisitor class is needed because most TypeRegistrations are quite complex coming with both ConstructorParameters and InjectedProperties and all this stuff must be routed on the .DependsOn() method of Windsor (actually Castle.MicroKernel).</p>
 <p>Below is some basic setup for configuring the Enterprise Library to use Windsor,</p>
 
-```c#
+```
 var container = new WindsorContainer();
 
 // Add a SubResolver for components with IEnumerable<T> dependencies on .ctors.

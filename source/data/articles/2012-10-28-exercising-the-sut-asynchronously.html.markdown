@@ -18,7 +18,7 @@ How can we wait for the exercise to complete execution?
 
 The [SpinWait](http://msdn.microsoft.com/en-us/library/system.threading.spinwait.aspx) synchronization type contains a method named [SpinUntil](http://msdn.microsoft.com/en-us/library/system.threading.spinwait.spinuntil.aspx) which works perfect for the described scenario.
 
-```c#
+```
 // Fixture setup
 var sut = new ObjectLocalStorage();
 sut.Set(@object, expected);

@@ -12,7 +12,7 @@ alias: /bonus-bits/2011/08/enabling-add-in-functionality-in-aspnet-mvc3-part2.ht
 <p>One possible improvement in the design is to introduce a <a href="http://en.wikipedia.org/wiki/Composite_pattern" target="_blank" title="Composite Pattern">composite</a> implementation for an IControllerFactory. That way, we still have the chance to supply a MEF-specific controller factory.</p>
 <p>A possible implementation of the <a href="http://msdn.microsoft.com/en-us/library/system.web.mvc.icontrollerfactory.createcontroller.aspx" target="_blank" title="Creates the specified controller by using the specified request context.">CreateController</a> method is the one below:</p>
 
-```c#
+```
 public override IController CreateController(
    RequestContext requestContext, 
    string controllerName)
@@ -29,7 +29,7 @@ public override IController CreateController(
 <p>With this implementation, if the Unity-specific controller factory can not provide an IController instance we will ask the next controller factory (MEF-specific controller factory in this example) to provide the IController instance, and so on.</p>
 <p>The&#0160;<a href="http://msdn.microsoft.com/en-us/library/dd460275.aspx" target="_blank" title="Sets the specified controller factory.">SetControllerFactory</a>&#0160;method can accept an instance of a CompositeControllerFactory type as shown below:</p>
 
-```c#
+```
 private static void BootstrapContainer()
 {
     // No direct reference on the container outside this method.

@@ -34,7 +34,7 @@ alias: /bonus-bits/2010/11/using-reflection-to-dynamically-invoke-the-nhibernate
 
 <p>2. For housekeeping you can define an interface.</p>
 
-```c#
+```
 public interface IIntegrateProfiler
 {
     void SetNHibernateProfiler(string directory, string assembly);
@@ -50,7 +50,7 @@ public interface IIntegrateProfiler
 <p style="text-align: justify;">In the example below the ValidateDirectory and ValidateFileName methods are not included as well as the&#0160;this.profilerPath &#0160;private instance field.</p>
 </blockquote>
 
-```c#
+```
 public void SetNHibernateProfiler(string directory, string assembly)
 {
     if (ValidateDirectory(directory))
@@ -81,7 +81,7 @@ public string ProfilerPath
       
 <p>4. Finally, from your code you can check whether the&#0160;<span style="font-family: Consolas; font-size: 13px;">CanUseProfiler&#0160;</span>property returns true and call the&#0160;<span style="font-family: Consolas; font-size: 13px;">InitializeProfiler&#0160;</span>method below:</p>
 
-```c#
+```
 private void InitializeProfiler()
 {
     Assembly asm  = Assembly.LoadFileLoadFrom(this.options.ProfilerPath);

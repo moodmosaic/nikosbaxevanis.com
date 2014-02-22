@@ -10,7 +10,7 @@ alias: /bonus-bits/2012/04/uri-support-in-autofixture.html
 <p>Starting with version 2.10.0, AutoFixture supports the creation of <a href="http://en.wikipedia.org/wiki/Uniform_resource_identifier" target="_blank" title="In computing, a uniform resource identifier (URI) is a string of characters used to identify a name or a resource. Such identification enables interaction with representations of the resource over a network (typically the World Wide Web) using specific protocols. Schemes specifying a concrete syntax and associated protocols define each URI.">Uniform Resource Identifiers</a>&#0160;and the <a href="http://msdn.microsoft.com/en-us/library/system.uri(v=vs.90).aspx" target="_blank" title="Provides an object representation of a uniform resource identifier (URI) and easy access to the parts of the URI.">Uri</a>&#0160;type.</p>
 <p>It is now possible to create an anonymous variable for Uri as with any other common type:</p>
 
-```c#
+```
 var fixture = new Fixture();
 var uri = fixture.CreateAnonymous<Uri>();
 // Prints -> scheme://257eb39a-8305-4d13-a7cb-0c481b78809a/
@@ -23,7 +23,7 @@ var uri = fixture.CreateAnonymous<Uri>();
 
 <p>The UriScheme type provides by default the name <em>&quot;scheme&quot;.</em>&#0160;However, by injecting a specific instance of this type we can easily override it with something else (e.g. &quot;<em>http&quot;</em>).</p>
 
-```c#
+```
 var fixture = new Fixture();
 fixture.Inject(new UriScheme("http"));
 var uri = fixture.CreateAnonymous<Uri>(); 
@@ -37,7 +37,7 @@ var uri = fixture.CreateAnonymous<Uri>();
 </blockquote>
 <p>Since the authority part is a string received from the context, it is possible to modify the base of all strings and get the desired name for the authority.</p>
 
-```c#
+```
 var fixture = new Fixture();
 fixture.Customizations.Add(
     new StringGenerator(() => "autofixture.codeplex.com"));
@@ -49,7 +49,7 @@ var uri = fixture.CreateAnonymous<Uri>();
 
 <p>As with any other generated specimen, it is possible to completely take over it&#39;s creation. Using a custom&#0160;ISpecimenBuilder type, each time a Uri is requested, a predefined Uri will be returned.</p>
 
-```c#
+```
 public class CustomUriBuilder : ISpecimenBuilder
 {
     public object Create(object request, ISpecimenContext context)

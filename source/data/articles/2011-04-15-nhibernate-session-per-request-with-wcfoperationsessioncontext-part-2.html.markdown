@@ -13,7 +13,7 @@ alias: /bonus-bits/2011/04/nhibernate-session-per-request-with-wcfoperationsessi
 
 <p>To host the service inside a managed application, define an endpoint for the service either imperatively in code, declaratively through configuration, or using default endpoints, and then create an instance of ServiceHost.</p>
 
-```c#
+```
 internal sealed class Program
 {
     public static void Main()
@@ -37,7 +37,7 @@ internal sealed class Program
 
 **Building the default SessionFactory**
 
-```c#
+```
 internal static class Bootstrapper
 {
     public static void Initialize()
@@ -74,7 +74,7 @@ internal static class Bootstrapper
 
 **Creating a WCF Service for testing the&nbsp;WcfOperationSessionContext**
 
-```c#
+```
 
 [NHibernateWcfContext]
 [ServiceBehavior(
@@ -129,7 +129,7 @@ internal sealed class WcfOperationSessionContextTestService
 
 <p>Here is how the client connects to the service in order to run the test method.</p>
 
-```c#
+```
 internal sealed class Program
 {
     private static void Main()

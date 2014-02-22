@@ -17,7 +17,7 @@ alias: /bonus-bits/2011/08/following-the-composition-root-pattern-with-enterpris
 <p>Since I completely agree with the statement &quot;<a href="http://blog.ploeh.dk/2010/02/03/ServiceLocatorIsAnAntiPattern.aspx" target="_blank">Service Locator is an Anti-Pattern</a>&quot; I would like to compose all Enterprise Library modules in the Composition Root. Then, I can use well-known DI patterns (such as Constructor Injection) to supply the Dependencies.</p>
 <p>Fortunately, the EnterpriseLibraryContainer class contains a method named &quot;ConfigureContainer&quot; that reads the current configuration and supplies the corresponding type information to configure a dependency injection container (by default Unity).</p>
 
-```c#
+```
 var configurator = new UnityContainerConfigurator(container);
 var configSource = ConfigurationSourceFactory.Create();
 

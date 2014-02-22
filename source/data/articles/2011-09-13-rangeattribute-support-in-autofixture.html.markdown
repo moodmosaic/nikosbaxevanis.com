@@ -10,7 +10,7 @@ alias: /bonus-bits/2011/09/rangeattribute-support-in-autofixture.html
 <p>Support for types from the System.ComponentModel.<a href="http://msdn.microsoft.com/en-us/library/system.componentmodel.dataannotations(v=VS.90).aspx" target="_blank" title="The System.ComponentModel.DataAnnotations namespace provides attribute classes that are used to define metadata for ASP.NET Dynamic Data controls.">DataAnnotations</a> namespace is one of the most voted features for AutoFixture. Starting with version 2.3.1 AutoFixture supports the <a href="http://msdn.microsoft.com/en-us/library/system.componentmodel.dataannotations.rangeattribute(v=VS.90).aspx" target="_blank" title="Specifies the numeric range constraints for the value of a data field.">RangeAttribute</a> class.&#0160;When this attribute is applied on a data field it can specify the numeric range constraints for it&#39;s value.</p>
 <p>Let&#39;s take as an example the following type:</p>
 
-```c#
+```
 public class RangeValidatedType
 {
     [Range(10, 20)]

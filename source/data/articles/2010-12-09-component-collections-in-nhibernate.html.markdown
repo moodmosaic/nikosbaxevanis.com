@@ -12,7 +12,7 @@ alias: /bonus-bits/2010/12/component-collections-in-nhibernate.html
 
 Here is an example with <a href="http://www.fluentnhibernate.org/" target="_blank">Fluent NHibernate</a>:
 
-```c#
+```
 /*
 <set name="MandatoryCoverages"
     table="CarUseMandatoryCoverageFees" mutable="true">
@@ -42,7 +42,7 @@ HasMany<CarCoverageFee>(x => x.MandatoryCoverages)
 
 <br />
 
-```c#
+```
 /*
 <set name="OptionalCoverages"
     table="CarUseOptionalCoverageFees" mutable="true">
@@ -76,7 +76,7 @@ HasMany<CarCoverageFee>(x => x.OptionalCoverages)
 
 <p>We can define an abstract base class for our components. Inside this class we override the Equals method and immediately throw an exception to the caller indicating that this method must be overridden by the caller:</p>
 
-```c#
+```
 public abstract class ComponentBase
 {
     /// <summary>
@@ -118,7 +118,7 @@ public abstract class ComponentBase
 
 <p>Here is the class, modified to inherit from the ComponentBase class:</p>
 
-```c#
+```
 public class CarCoverageFee : ComponentBase
 {
     /// <summary>

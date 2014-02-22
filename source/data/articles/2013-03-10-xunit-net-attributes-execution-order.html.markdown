@@ -9,7 +9,7 @@ comments: [disqus]
 
 The test below uses the [xUnit.net](http://xunit.codeplex.com/) framework and executes twice, since it is decorated with two data sources. The first data source is the built-in `[InlineData]` and the second data source is the custom `[StringData]`.
 
-```c#
+```
 [Theory]
 [InlineData("foo", "bar")]
 [StringData]
@@ -46,7 +46,7 @@ xUnit.net invokes in exact order:
 
 `[Intercept]` is defined as:
 
-```c#
+```
 internal class InterceptAttribute : BeforeAfterTestAttribute
 {
     public override void Before(MethodInfo methodUnderTest)
@@ -63,7 +63,7 @@ It allows code to be run before and after each test is run.
 
 `[StringData]` is defined as:
 
-```c#
+```
 internal class StringDataAttribute : DataAttribute
 {
     public override IEnumerable<object[]> GetData(

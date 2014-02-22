@@ -10,7 +10,7 @@ alias: /bonus-bits/2011/09/stringlengthattribute-support-in-autofixture.html
 <p>Continuing the support of DataAnnotations as described <a href="http://www.nikosbaxevanis.com/bonus-bits/2011/09/rangeattribute-support-in-autofixture.html" target="_blank" title="RangeAttribute support in AutoFixture">here</a>, there is now added support for the&#0160;<a href="http://msdn.microsoft.com/en-us/library/system.componentmodel.dataannotations.stringlengthattribute(v=VS.90).aspx" target="_blank" title="Specifies the maximum length of characters that are allowed in a data field.">StringLengthAttribute</a> class. Starting with version 2.4.0, when this attribute is applied on a data field it can specify the maximum length of characters that are allowed.</p>
 <p>Let&#39;s take as an example the following type:</p>
 
-```c#
+```
 public class StringLengthValidatedType
 {
     [StringLength(3)]

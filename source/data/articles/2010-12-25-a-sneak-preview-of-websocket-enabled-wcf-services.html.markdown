@@ -17,7 +17,7 @@ alias: /bonus-bits/2010/12/a-sneak-preview-of-websocket-enabled-wcf-services.htm
 
 The service implementation has to derive from the base WebSocketService class:
 
-```c#
+```
 [ServiceBehavior(
     InstanceContextMode=InstanceContextMode.PerSession, 
     ConcurrencyMode=ConcurrencyMode.Multiple)]
@@ -29,7 +29,7 @@ internal sealed class NotificationService : WebSocketsService
 
 The service host is a type deriving from the <a href="http://msdn.microsoft.com/en-us/library/system.servicemodel.servicehost.aspx" target="_blank" title="Provides a host for services.">ServiceHost</a>&#0160;named&#0160;WebSocketsHost:
 
-```c#
+```
 Uri baseAddress = new Uri("<uriString goes here>");            
 WebSocketsHost<NotificationService> host =
     new WebSocketsHost<NotificationService>(baseAddress);

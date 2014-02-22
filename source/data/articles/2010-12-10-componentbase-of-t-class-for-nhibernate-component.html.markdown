@@ -14,7 +14,7 @@ alias: /bonus-bits/2010/12/component-base-class-nhibernate.html
 <p>In my <a href="http://www.nikosbaxevanis.com/bonus-bits/2010/12/component-collections-in-nhibernate.html" target="_blank" title="Component Collections in NHibernate.">previous post</a> I discussed about the case where you want to map a component with NHibernate and introduced the ComponentBase(Of T) class. However, to make it&#0160;straightforward&#0160;that you need to override Equals (you also need to override GetHashCode) in your derived classes, I modified the ComponentBase(Of T) class to implement the <a href="http://msdn.microsoft.com/en-us/library/ms131187.aspx" target="_blank" title="Defines a generalized method that a value type or class implements to create a type-specific method for determining equality of instances.">IEquatable(Of T)</a> interface.&#0160;Furthermore, since NHibernate works only with reference types (that is, a class) I also constrained it to accept only reference types.</p>
 <p>Here is the Component(Of T) class:</p>
 
-```c#
+```
 using System;
  
 public abstract class ComponentBase<T> 
@@ -80,7 +80,7 @@ public abstract class ComponentBase<T>
 
 Below are some test cases:
 
-```c#
+```
 using System;
 using Xunit;
  

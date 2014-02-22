@@ -10,7 +10,7 @@ alias: /bonus-bits/2011/03/unit-testing-events-the-spinwaitspinuntil-method.html
 <p>The&nbsp;<a title="Spins until the specified condition is satisfied." href="http://msdn.microsoft.com/en-us/library/system.threading.spinwait.spinuntil.aspx" target="_blank">SpinWait.SpinUntil</a>&nbsp;method spins until a specified condition is satisfied.&nbsp;This&nbsp;greatly improves the unit testing of events.</p>
 <p>Let's see first, how we test an event using hybrid thread synchronization constructs:</p>
 
-```c#
+```
 [Fact]
 public void FooEvent()
 {
@@ -29,7 +29,7 @@ public void FooEvent()
 
 <p>Here is how the above test looks like when using&nbsp;the SpinWait.SpinUntil&nbsp;method:</p>
 
-```c#
+```
 [Fact]
 public void FooEvent()
 {

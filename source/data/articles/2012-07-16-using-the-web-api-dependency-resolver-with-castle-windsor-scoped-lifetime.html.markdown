@@ -13,7 +13,7 @@ comments: [disqus]
 
 The WindsorDependencyScope from the previous post has been modified to use the Scoped lifetime [available](http://docs.castleproject.org/Windsor.Whats-New-In-Windsor-3.ashx#Added_two_new_lifestyles:_scoped_and_bound_2) in Castle Windsor 3.
 
-```c#
+```
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -58,7 +58,7 @@ The `BeginScope` is an extension method for the `IWindsorContainer` type. It ret
 
 On each request the Web API calls the [GetDependencyScope](http://aspnetwebstack.codeplex.com/SourceControl/changeset/view/a1b7c04f7227#src%2fSystem.Web.Http%2fHttpRequestMessageExtensions.cs) extension method of the [HttpRequestMessage](http://msdn.microsoft.com/en-us/library/system.net.http.httprequestmessage.aspx) type, which, in return, calls it's own [BeginScope](http://aspnetwebstack.codeplex.com/SourceControl/changeset/view/a1b7c04f7227#src%2fSystem.Web.Http%2fDependencies%2fIDependencyResolver.cs) method to start a new resolution scope. Using our own implementation of the [IDependencyResolver](http://aspnetwebstack.codeplex.com/SourceControl/changeset/view/a1b7c04f7227#src%2fSystem.Web.Http%2fDependencies%2fIDependencyResolver.cs) interface we always return a new instance of the WindsorDependencyScope type.
 
-```c#
+```
 internal sealed class WindsorDependencyResolver : IDependencyResolver
 {    
     // 'using' Directives and other type members removed for brevity.
@@ -72,7 +72,7 @@ internal sealed class WindsorDependencyResolver : IDependencyResolver
 
 Since we use the Scoped lifetime we need to define it also in the registration code. Then, we will always have at most one instance of each requested type per resolution scope (that is, a request).
 
-```c#
+```
 internal sealed class WebWindsorInstaller : IWindsorInstaller
 {
     public void Install(IWindsorContainer container, IConfigurationStore store)

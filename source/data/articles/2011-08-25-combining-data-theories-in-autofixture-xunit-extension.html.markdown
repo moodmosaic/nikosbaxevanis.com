@@ -12,7 +12,7 @@ alias: /bonus-bits/2011/08/combining-xunit-data-theories.html
 <p>AutoFixture.Xunit extension includes a very useful type, for providing auto-data theories, called&#0160;<a href="http://blog.ploeh.dk/2010/10/08/AutoDataTheoriesWithAutoFixture.aspx" target="_blank" title="AutoData Theories with AutoFixture">AutoMoqDataAttribute</a>.&#0160;</p>
 <p>Imagine a Scenario where we have a unit test method with 3 parameters.&#0160;We want the first parameters to be supplied by InlineData and the rest by AutoFixture using AutoMoqData.</p>
 
-```c#
+```
 [Theory]
 [InlineAutoData("foo")]
 [InlineAutoData("foo", "bar")]

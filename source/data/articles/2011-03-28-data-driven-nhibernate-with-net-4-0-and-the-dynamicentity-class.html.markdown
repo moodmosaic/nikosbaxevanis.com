@@ -15,7 +15,7 @@ alias: /bonus-bits/2011/03/data-driven-nhibernate-with-net-4-and-the-dynamicenti
 <p><img src="http://farm9.staticflickr.com/8506/8397466511_abfc4b24be_o.png" alt="The entity-name in mapping" /></p>
 <p>The only thing we have is the mapping, no classes. In order to create a Currency object we create the following dictionary:</p>
 
-```c#
+```
 var currency = new Dictionary<string, object>()
 {
     { "ISOCode","GBP" },
@@ -39,7 +39,7 @@ var currency = new Dictionary<string, object>()
 </ol>
 <p>Here is the DynamicEntity class:</p>
 
-```c#
+```
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
@@ -102,7 +102,7 @@ public sealed class DynamicEntity : DynamicObject
 
 <p>Finally, here is an integration test in action:</p>
 
-```c#
+```
 [Fact]
 public void NHibernateShouldBeAbleToPersistCurrency()
 {

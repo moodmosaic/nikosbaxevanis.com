@@ -22,7 +22,7 @@ alias: /bonus-bits/2012/03/using-the-web-api-dependency-resolver-with-castle-win
 <p><img src="http://farm9.staticflickr.com/8073/8398547788_242021568e_o.png" alt="ILogger type is requested" /></p>
 <p>The first thing we want to do is to create a type implementing the IHttpControllerFactory interface.</p>
 
-```c#
+```
 using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Dispatcher;
@@ -65,7 +65,7 @@ internal class WindsorHttpControllerFactory : IHttpControllerFactory
 
 <p>Note that inside the WindsorHttpControllerFactory class the CreateController method&nbsp;&nbsp;takes a string for the name of the controller. That means we need to use the Windsor's&nbsp;<em>Named&nbsp;</em>method to set a name for each controller registration. (We can also trim the "Controller" part from the name and also pluralize the remaining part.)</p>
 
-```c#
+```
 foreach (Type controller in typeof(OrderController).Assembly.GetTypes()
     .Where(type => typeof(IHttpController).IsAssignableFrom(type)))
 {
@@ -82,7 +82,7 @@ foreach (Type controller in typeof(OrderController).Assembly.GetTypes()
 
 <p>Let's also create a NullLogger implementing the ILogger interface.</p>
 
-```c#
+```
 using System;
 using System.Diagnostics;
 using System.Web.Http.Common;
@@ -103,7 +103,7 @@ internal class NullLogger : ILogger
 
 <p>For all the other instances that the framework requests there are default implementations in the System.Web.* assemblies and we can now create a Windsor&nbsp;<a href="http://stw.castleproject.org/Default.aspx?Page=Installers&amp;NS=Windsor&amp;AspxAutoDetectCookieSupport=1" target="_blank">Installer</a>&nbsp;to encapsulate the registration logic.</p>
 
-```c#
+```
 using System;
 using System.Linq;
 using System.Net.Http.Formatting;
@@ -163,7 +163,7 @@ internal class WebApiInstaller : IWindsorInstaller
 
 <p>In the&nbsp;Application_Start method we add the installer and set the delegates for the SetResolver method. That way when the framework requests an IHttpControllerFactory instance, Windsor will supply the one we created earlier.</p>
 
-```c#
+```
 this.container = new WindsorContainer()
     .Install(new WebApiInstaller());
 
@@ -174,7 +174,7 @@ GlobalConfiguration.Configuration.ServiceResolver.SetResolver(
 
 <p>In order to have Windsor resolve regular controllers (side by side) we can create and add another installer as well as an implementation of the IControllerFactory interface.</p>
 
-```c#
+```
 this.container = new WindsorContainer()
     .Install(new WebMvcInstaller())
     .Install(new WebApiInstaller());

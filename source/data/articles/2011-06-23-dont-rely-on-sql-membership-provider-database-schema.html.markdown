@@ -16,7 +16,7 @@ You take the blue pill and the story [ends](http://blogs.teamb.com/craigstuntz/2
 
 **Entities**
 
-```c#
+```
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -50,7 +50,7 @@ public class Role : Entity<Guid>
 
 **Mappings**
 
-```c#
+```
 using FluentNHibernate.Mapping;
 
 public sealed class UserMap : ClassMap<User>
@@ -95,7 +95,7 @@ public sealed class RoleMap : ClassMap<Role>
 
 **RoleType class**
 
-```c#
+```
 public class RoleType : Enumeration
 {
     public static readonly RoleType Consumer = new ConsumerType();
@@ -144,7 +144,7 @@ public class RoleType : Enumeration
 
 <p>Adding an IPostLoadEventListener on NHibernate configuration we can easily add logic to set a specific RoleType to each Role entity.</p>
 
-```c#
+```
 private sealed class RoleToRoleTypeEventListener : IPostLoadEventListener
 {
     public void OnPostLoad(PostLoadEvent @event)
@@ -193,7 +193,7 @@ private sealed class RoleToRoleTypeEventListener : IPostLoadEventListener
 
 <p>The complete Configuration for the ISessionFactory is (or, could be) below:</p>
 
-```c#
+```
 public static ISessionFactory BuildSessionFactory(IKernel kernel)
 {
     var configuration = CreateConfiguration(ForMsSql2008);

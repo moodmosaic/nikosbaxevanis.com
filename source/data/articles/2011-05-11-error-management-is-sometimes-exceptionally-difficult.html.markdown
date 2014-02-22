@@ -12,7 +12,7 @@ alias: /bonus-bits/2011/05/error-management-is-sometimes-exceptionally-difficult
 <p>When I started using the<span>&nbsp;Exception Handling Application Block from Enterprise Library I found out that I had to also deploy the Unity assemblies. </span></p>
 <p><span>The call below resolves the registered component for the ExceptionManager class:</span></p>
 
-```c#
+```
 EnterpriseLibraryContainer.Current.GetInstance<ExceptionManager>();
 ```
 
@@ -23,7 +23,7 @@ EnterpriseLibraryContainer.Current.GetInstance<ExceptionManager>();
 <p>The first thing I did was to compile the&nbsp;<a title="Castle Windsor Adapter - CommonServiceLocator" href="http://commonservicelocator.codeplex.com/wikipage?title=Castle%20Windsor%20Adapter&amp;referringTitle=Home" target="_blank">Windsor adapter</a> of the CommonServiceLocator against the current version of Windsor that I use (and also run the unit-tests and see if they pass).</p>
 <p>Next, I set the IServiceLocator.Current property of the EnterpriseLibraryContainer class:</p>
 
-```c#
+```
 EntLibraryContainer.Current = new WindsorServiceLocator(container);
 ```
 
@@ -31,7 +31,7 @@ EntLibraryContainer.Current = new WindsorServiceLocator(container);
 <p>Great, so I had to provide a class implementing the IContainerConfigurator interface for the Windsor container.</p>
 <p>The IContainerConfigurator interface contains a single method:&nbsp;</p>
 
-```c#
+```
 void RegisterAll(
      IConfigurationSource configurationSource,        
      ITypeRegistrationsProvider rootProvider
@@ -40,7 +40,7 @@ void RegisterAll(
 
 <p>Below is the (currently incomplete) implementation:</p>
 
-```c#
+```
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -160,7 +160,7 @@ internal sealed class WindsorContainerConfigurator
       
 <p>I really don't know what to do in the case of a MethodCallExpression as you can see inside the <em>else</em> block. However, after I can finish with the code inside that block I will be able to do this:</p>
 
-```c#
+```
 var container = new WindsorContainer();
 
 // Add a SubResolver for components with IEnumerable<T> dependencies on .ctors.

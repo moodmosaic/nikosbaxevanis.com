@@ -16,7 +16,7 @@ alias: /bonus-bits/2010/11/going-asynchronous-with-sterling-for-windows-phone-7.
 <p>I have <a href="http://www.nikosbaxevanis.com/bonus-bits/2010/11/testing-domain-driven-design-with-sterling-for-windows-phone-7.html" target="_blank" title="Testing Domain-Driven Design with Sterling for Windows Phone 7.">already discussed</a> about the basics of Sterling Isolated Storage Database (Sterling)&#0160;when building application for Windows Phone 7 (WP7). At times you might want to do some operation on the background while your code executes something else.</p>
 <p>Sterling supports the&#0160;Event-based Asynchronous Pattern (EAP) which means you can write the following code against the&#0160;<a href="http://sterling.codeplex.com/SourceControl/changeset/view/68865#1253296" target="_blank" title="Wintellect.Sterling.ISterlingDatabaseInstance">ISterlingDatabaseInstance</a> interface:</p>
 
-```c#
+```
 private void ExecuteWithEventBased()
 {
     IList<Cargo> cargos = new List<Cargo>();
@@ -41,7 +41,7 @@ private void ExecuteWithEventBased()
 
 <p>Power Threading library comes with an implementation of the IAsyncResult interface, so one can take a method that executes synchronously and implement the APM. In the code above you can see the APM for the&#0160;<span style="font-family: Consolas; font-size: 13px;"><span style="color: blue;">object</span> Save&lt;T&gt;(T instance) <span style="color: blue;">where</span> T : <span style="color: blue;">class</span>, <span style="color: blue;">new</span>();&#0160;</span>method in ISterlingDatabaseInstance interface.</p>
 
-```c#
+```
 /// <summary>
 /// Asynchronous version of ISterlingDatabaseInstance Save method (Begin part).
 /// </summary>
@@ -92,7 +92,7 @@ public static void EndSave(
 </blockquote>
 <p>Armed with the above extension method you can write the following code which combines the APM implementation with the <a href="http://msdn.microsoft.com/en-gb/magazine/cc546608.aspx" target="_blank" title="Simplified APM With The AsyncEnumerator by Jeffrey Richter.">AsyncEnumerator</a> class.</p>
 
-```c#
+```
 // Inside your method create an instance of an AsyncEnumerator class,
 // specifying the iterator method to be driven by the AsyncEnumerator.
 AsyncEnumerator ae = new AsyncEnumerator();

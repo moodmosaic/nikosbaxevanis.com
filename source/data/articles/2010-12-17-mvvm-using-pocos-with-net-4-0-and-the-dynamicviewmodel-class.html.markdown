@@ -31,7 +31,7 @@ alias: /bonus-bits/2010/12/mvvm-using-pocos-with-dynamicviewmodel-class.html
 </ol>
 <p>Here is the <a href="http://dynamicviewmodel.codeplex.com/SourceControl/changeset/view/9e2b2d03b705#DynamicViewModel%2fDynamicViewModel.cs" target="_blank" title="The DynamicViewModel(Of TModel) Class adds dynamic ViewModel behavior to any class at runtime.">DynamicViewModel(Of TModel)</a> Class:</p>
 
-```c#
+```
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -195,7 +195,7 @@ internal sealed class DynamicViewModel<TModel>
 </ol>
 <p>Here is the POCO model class that I have used:</p>
 
-```c#
+```
 using System;
  
 internal sealed class ContactDetails
@@ -272,7 +272,7 @@ internal sealed class ContactDetails
 <p>As you notice, this class <em>does not implement any interface or base class</em>. In fact, this class can be used successfully in ORM scenarios too (when you need to bind on the same classes that are used in your mappings).</p>
 <p>Finally, I would like to show how the View&#39;s DataContext is initialized properly to accept the DynamicViewModel(Of TModel) Class wrapper around the model class:</p>
 
-```c#
+```
 /// <summary>
 /// Interaction logic for ContactView.xaml
 /// </summary>

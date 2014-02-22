@@ -11,7 +11,7 @@ alias: /bonus-bits/2011/03/nhibernate-session-per-request-with-wcfoperationsessi
 <p>NHibernate 3 comes with out of the box support for the scenario where we want to have a single Session for the lifetime of a WCF request.</p>
 <p>Using the <a href="http://jameskovacs.com/2011/01/21/loquacious-configuration-in-nhibernate-3/" target="_blank" title="Loquacious Configuration in NHibernate 3.">Loquacious</a>&#0160;configuration we can easily set the WcfOperationSessionContext to be the default&#0160;current session context.</p>
 
-```c#
+```
 var cfg = NHibernate.Cfg.Configuration();
 cfg.DataBaseIntegration(ForMySQL5)
    .CurrentSessionContext<WcfOperationSessionContext>()
@@ -23,7 +23,7 @@ cfg.DataBaseIntegration(ForMySQL5)
 <p>We also need to inspect inbound and outbound application messages prior to dispatching a request message to an operation (for binding the Session) and before returning a reply (for unbinding the Session).</p>
 <p>Here is a specific&#0160;<a href="http://msdn.microsoft.com/en-us/library/system.servicemodel.dispatcher.idispatchmessageinspector.aspx" target="_blank" title="Defines the methods that enable custom inspection or modification of inbound and outbound application messages in service applications.">IDispatchMessageInspector</a> implementation for that:</p>
 
-```c#
+```
 public sealed class NHibernateWcfContextInitializer
       : IDispatchMessageInspector
   {
@@ -54,7 +54,7 @@ public sealed class NHibernateWcfContextInitializer
 
 <p>Next, we need to define a custom Service Behavior that applies to every single endpoint of a service. To do that we need to define a class that implements the <a href="http://msdn.microsoft.com/en-us/library/system.servicemodel.description.iservicebehavior.aspx" target="_blank" title="Provides a mechanism to modify or insert custom extensions across an entire service, including the ServiceHostBase.">IServiceBehavior</a> interface.</p>
 
-```c#
+```
 [AttributeUsage(AttributeTargets.Class)]
 public sealed class NHibernateWcfContextAttribute
     : Attribute, IServiceBehavior
@@ -89,7 +89,7 @@ public sealed class NHibernateWcfContextAttribute
 <p>We can now decorate any WCF service implementation with [NHibernateWcfContext] attribute and we can access the Session using the ISessionFactory&#39;s GetCurrentSession method.</p>
 <blockquote><p>When using the&#0160;<a href="http://code.google.com/p/agatha-rrsl/" target="_blank" title="Implementation of the Request/Response Service Layer for .NET">agatha-rrsl</a>&#0160;project instead of providing a WcfRequestProcessor define a custom RequestProcessor (deriving from the&#0160;WcfRequestProcessor) and decorating it with the [NHibernateWcfContext] attribute.</p></blockquote>
 
-```c#
+```
 [NHibernateWcfContext]
 public sealed class NHibernateWcfRequestProcessor
     : Agatha.ServiceLayer.WCF.WcfRequestProcessor { }

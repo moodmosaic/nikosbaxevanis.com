@@ -11,7 +11,7 @@ comments: [disqus]
 
 Below is a data-driven test with the data coming a Microsoft Excel (.xls) spreadsheet.
 
-```c#
+```
 [Theory]
 [ExcelData("UnitTestData.xls", "SELECT x, y FROM Data")]
 public void Foo(object x, object y)
@@ -22,7 +22,7 @@ public void Foo(object x, object y)
 
 Also, a data-driven test with the data coming from a type implementing the IEnumerable<object[]>.
 
-```c#
+```
 [Theory]
 [ClassData(typeof(CollectionOfSpecifiedString))]
 public void Bar(object x, object y)
@@ -53,7 +53,7 @@ In the above samples, `[ExcelData]` and `[ClassData]` are attributes representin
 
 Below is a data-driven test with the data coming from a type implementing the IEnumerable<object[]> combined with the data coming from an .xls spreadsheet.
 
-```c#
+```
 [Theory]
 [ClassExcelData(
     typeof(CollectionOfSpecifiedString),
@@ -87,7 +87,7 @@ The `[ClassExcelData]` from the previous example is a [composite](http://en.wiki
 
 All we have to do is create a type deriving from `CompositeDataAttribute`, passing in its base constructor an array of the data attributes we would like to compose.
 
-```c#
+```
 [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
 internal class ClassExcelDataAttribute : CompositeDataAttribute
 {

@@ -13,7 +13,7 @@ comments: [disqus]
 
 To install AutoFixture with xUnit.net data theories, run the following command in the Package Manager Console:
 
-```c#
+```
 PM> Install-Package AutoFixture.Xunit
 ```
 
@@ -23,7 +23,7 @@ In the test method below we would like to use xUnit.net data theories to provide
  2. Auto-generated data specimens for `_`, `s`, `i`, `a`, and inline values for `d`.
  3. Auto-generated data specimens for `_`, `_`, `i`, `a`, and inline values for `d`, `s`.
 
-```c#
+```
 public void TestMethod(
     double d, string s, IInterface i, AbstractType a)
 {
@@ -47,13 +47,13 @@ AutoFixture allows us to easily define custom DataAttribute derived types:
 
 To install AutoFixture with Auto Mocking using Moq, run the following command in the Package Manager Console:
 
-```c#
+```
 PM> Install-Package AutoFixture.AutoMoq
 ```
 
 We decorate the test method with AutoMoqData and InlineAutoMoqData attributes:
 
-```c#
+```
 [Theory]
 [AutoMoqData]
 [InlineAutoMoqData(2)]
@@ -89,7 +89,7 @@ InlineAutoMoqData:
 
 Source code:
 
-```c#
+```
 internal class AutoMoqDataAttribute : AutoDataAttribute
 {
     internal AutoMoqDataAttribute()
@@ -114,13 +114,13 @@ More information on AutoFixture with Auto Mocking using Moq can be found at [Aut
 
 To install AutoFixture with Auto Mocking using Rhino Mocks, run the following command in the Package Manager Console:
 
-```c#
+```
 PM> Install-Package AutoFixture.AutoRhinoMocks
 ```
 
 We decorate the test method with AutoRhinoMockData and InlineAutoRhinoMockData attributes:
 
-```c#
+```
 [Theory]
 [AutoRhinoMockData]
 [InlineAutoRhinoMockData(2)]
@@ -156,7 +156,7 @@ InlineAutoRhinoMockData:
 
 Source code:
 
-```c#
+```
 internal class AutoRhinoMockDataAttribute : AutoDataAttribute
 {
     internal AutoRhinoMockDataAttribute()
@@ -181,13 +181,13 @@ More information on AutoFixture with Auto Mocking using Rhino Mocks can be found
 
 To install AutoFixture with Auto Mocking using FakeItEasy, run the following command in the Package Manager Console:
 
-```c#
+```
 PM> Install-Package AutoFixture.AutoFakeItEasy
 ```
 
 We decorate the test method with AutoFakeItEasyData or InlineAutoFakeItEasyData attributes:
 
-```c#
+```
 [Theory]
 [AutoFakeItEasyData]
 [InlineAutoFakeItEasyData(2)]
@@ -223,7 +223,7 @@ InlineAutoFakeItEasyData:
 
 Source code:
 
-```c#
+```
 internal class AutoFakeItEasyDataAttribute : AutoDataAttribute
 {
     internal AutoFakeItEasyDataAttribute()
@@ -248,13 +248,13 @@ More information on AutoFixture with Auto Mocking using FakeItEasy can be found 
 
 To install AutoFixture with Auto Mocking using NSubstitute, run the following command in the Package Manager Console:
 
-```c#
+```
 PM> Install-Package AutoFixture.AutoNSubstitute
 ```
 
 We decorate the test method with AutoNSubstituteData or InlineAutoNSubstituteData attributes:
 
-```c#
+```
 [Theory]
 [AutoNSubstituteData]
 [InlineAutoNSubstituteData(2)]
@@ -290,7 +290,7 @@ InlineAutoNSubstituteData:
 
 Source code:
 
-```c#
+```
 internal class AutoNSubstituteDataAttribute : AutoDataAttribute
 {
     internal AutoNSubstituteDataAttribute()

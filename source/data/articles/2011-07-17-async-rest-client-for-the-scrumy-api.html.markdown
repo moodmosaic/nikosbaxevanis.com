@@ -33,7 +33,7 @@ alias: /bonus-bits/2011/07/async-rest-client-for-scrumy-api.html
 
 <p>Then I created the corresponding&nbsp;classes:</p>
 
-```c#
+```
 /// <example>
 ///     <scrumy>
 ///         <created-at>2011-06-24T21:49:57Z</created-at>
@@ -82,7 +82,7 @@ public sealed class Sprint
 
 <p>Next I included generic Begin/End methods for supporting the APM inside my class:</p>
 
-```c#
+```
 private IAsyncResult BeginRequest(
      ScrumyRequest request, 
      Func<XElement, ScrumyResponse> processor, 
@@ -119,7 +119,7 @@ private IEnumerator<int> MakeRequest(
 
 <p>With these helper methods, dealing with the APM was trivial when implementing methods for the Scrumy client. Here are the methods I had to write for getting the Sprints:</p>
 
-```c#
+```
 public IAsyncResult BeginGetScrumy(
      GetScrumyRequest request, 
      AsyncCallback callback = null, 
@@ -158,7 +158,7 @@ public GetScrumyResponse EndGetScrumy(IAsyncResult ar)
 <p>As you notice, only the logic that creates a Sprint object from an XElement is inside the Begin part. Everything else is handled by the helper classes.</p>
 <p>Finally, here is how to use it:</p>
 
-```c#
+```
 AsyncEnumerator ae = new AsyncEnumerator();            
 ae.BeginExecute(GetSprint(ae), ae.EndExecute);
 
