@@ -1,0 +1,124 @@
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" /><meta content="width=device-width, user-scalable=no" name="viewport" /><title>How to configure AutoFoq with Foq's return strategy</title><link href="http://fonts.googleapis.com/css?family=Lora:400,700|Open+Sans" rel="stylesheet" type="text/css" /><link href="/stylesheets/fontello.css?1393159061" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/styles.css?1393159061" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/syntax.css?1393159061" media="screen" rel="stylesheet" type="text/css" /></head><body><div class="row"><h1>How to configure AutoFoq with Foq's return strategy</h1><div class="post"><p><i>This post explains how to configure <a href="http://nuget.org/packages/AutoFixture.AutoFoq">AutoFixture.AutoFoq 3</a> so that <code>null</code> values are never returned when using <a href="https://foq.codeplex.com/">Foq</a> 1.5.1 and newer.</i></p>
+
+<p>Foq&#39;s behavior for mock objects that have not been explicitly setup, is to return <code>null</code> if the return type of a function is a <a href="http://en.wikipedia.org/wiki/Reference_type">reference type</a> (e.g. a string):</p>
+<pre class="highlight text">type IInterface =
+   abstract DoSomething : unit -&gt; string
+
+let sut = Mock&lt;IInterface&gt;().Create()
+// No expectations have been setup.
+
+let actual = sut.DoSomething()
+// -&gt; actual = null
+</pre>
+<p>AutoFixture is an opinionated library, and one of the opinions it holds is that <a href="http://stackoverflow.com/questions/18155015/why-does-autofixture-w-automoqcustomization-stop-complaining-about-lack-of-para/18170070#18170070">nulls are invalid return values</a>.</p>
+
+<p>By the time AutoFixture.AutoFoq 3 was published Foq was still in version 1.0 with no specific hooks to override this behavior.</p>
+
+<p>Foq now provides the necessary hooks to override this behavior and the rest of this post explains how to automate this when using AutoFixture.AutoFoq.</p>
+
+<p><strong>Solution</strong></p>
+
+<p><a href="http://twitter.com/rbartelink">Ruben Bartelink</a> originally discussed and proposed in <a href="http://foq.codeplex.com/discussions/470568">Foq discussions</a> about a <code>returnStrategy</code> argument for members that have not been explicitly setup:</p>
+<pre class="highlight text">let sut = Mock&lt;IInterface&gt;(returnStrategy = fun x -&gt; &quot;123&quot; :&gt; obj).Create()
+// No expectations have been setup - fallback to returnStrategy function.
+
+let actual = sut.DoSomething()
+// -&gt; actual = &quot;123&quot;
+</pre>
+<p><strong>Configuring AutoFoq to use Foq&#39;s returnStrategy argument</strong></p>
+
+<p>The existing <a href="https://github.com/AutoFixture/AutoFixture/blob/master/Src/AutoFoq/AutoFoqCustomization.fs">AutoFoqCustomization</a> has no specific hook to select Foq&#39;s new <code>returnStrategy</code> argument. This can be addressed when necessary with the customization shown below:</p>
+<pre class="highlight text">[&lt;AutoOpen&gt;]
+module internal SynthesizerMethod =
+    type private SynthesizerMethod&lt;'T when 'T : not struct&gt;
+        (parameterInfos, builder) =
+        interface IMethod with
+            member this.Parameters = parameterInfos
+            member this.Invoke parameters = 
+                Mock&lt;'T&gt;(SpecimenContext(builder).Resolve).Create(
+                    parameters |&gt; Seq.toArray) :&gt; obj
+
+    let Create (targetType: Type, parameterInfos: ParameterInfo[], builder) = 
+        Activator.CreateInstance(
+            typedefof&lt;SynthesizerMethod&lt;_&gt;&gt;
+                .MakeGenericType(targetType), 
+            parameterInfos,
+            builder)
+
+[&lt;AutoOpen&gt;]
+module internal SynthesizerType = 
+    type Type with 
+        member this.GetPublicAndProtectedConstructors () = 
+            this.GetConstructors(
+                BindingFlags.Public ||| 
+                BindingFlags.Instance ||| 
+                BindingFlags.NonPublic)
+
+type internal SynthesizerMethodQuery (builder) =
+    do if builder = null then raise &lt;| ArgumentNullException(&quot;builder&quot;)
+    interface IMethodQuery with
+        member this.SelectMethods target = 
+            if target = null then raise &lt;| ArgumentNullException(&quot;target&quot;)
+            if target.IsInterface then 
+                seq { yield Create(target, Array.empty, builder) :?&gt; IMethod }
+            else
+                target.GetPublicAndProtectedConstructors() 
+                |&gt; Seq.sortBy(fun x -&gt; x.GetParameters().Length)
+                |&gt; Seq.map(fun ctor -&gt; 
+                    Create(target, ctor.GetParameters(), builder) :?&gt; IMethod)
+
+    member this.SelectMethods targetType = 
+        (this :&gt; IMethodQuery).SelectMethods targetType
+
+type internal AutoFoqSynthesizeReturnValuesCustomization () =
+    interface ICustomization with 
+        member this.Customize fixture = 
+            match fixture with
+            | null -&gt; raise (ArgumentNullException(&quot;fixture&quot;))
+            | _    -&gt; fixture.Customizations.Add(
+                        FilteringSpecimenBuilder(
+                            MethodInvoker(
+                                SynthesizerMethodQuery(fixture)),
+                            AbstractTypeSpecification()))
+
+    member this.Customize fixture = (this :&gt; ICustomization).Customize fixture
+</pre>
+<p>The only difference from the original AutoFoqCustomization is the usage of Foq&#39;s <code>returnStrategy</code> argument in the <code>SynthesizerMethodQuery</code> class.</p>
+
+<p><strong>Typical usage</strong></p>
+<pre class="highlight text">[&lt;Fact&gt;]
+let CustomizationFillsReturnValues () = 
+    let fixture = Fixture().Customize(AutoFoqSynthesizeReturnValuesCustomization())
+
+    let sut = fixture.Create&lt;IInterface&gt;()
+    // No expectations have been setup - fallback to Foq's returnStrategy function.
+
+    let actual = sut.DoSomething()
+    // -&gt; actual: &quot;f5cdf6b1-a473-410f-95f3-f427f7abb0c7&quot;
+</pre>
+<blockquote>
+<p>For any members that have not been explicitly setup Foq returns <a href="http://blog.ploeh.dk/2009/03/05/ConstrainedNon-Determinism/">constrained non-deterministic</a> values generated by AutoFixture&#39;s <a href="http://xunitpatterns.com/equivalence%20class.html">equivalence classes</a>, for example <a href="http://nikosbaxevanis.com/blog/2012/10/08/truly-constrained-non-deterministic-numbers-in-autofixture/">random numbers</a>.</p>
+</blockquote>
+
+<p><strong>Declarative usage</strong></p>
+
+<p>The above test can be also written declaratively using <a href="http://blog.ploeh.dk/2010/10/08/AutoDataTheoriesWithAutoFixture.aspx">AutoData</a> theories:</p>
+<pre class="highlight text">type TestConventionsAttribute() = 
+    inherit AutoDataAttribute(
+        Fixture().Customize(AutoFoqSynthesizeReturnValuesCustomization()))
+
+[&lt;Theory; TestConventions&gt;]
+let CustomizationFillsReturnValuesDecleratively (sut : IInterface) =
+    let actual = sut.DoSomething()
+    // -&gt; actual: &quot;f5cdf6b1-a473-410f-95f3-f427f7abb0c7&quot;
+</pre></div><a class="twitter" href="https://twitter.com/intent/tweet?url=http%3A%2F%2Fnikosbaxevanis.com%2Fblog%2F2014%2F02%2F23%2Fhow-to-configure-autofoq-with-foqs-return-strategy%2F&text=How+to+configure+AutoFoq+with+Foq%27s+return+strategy&via=nikosbaxevanis" target="_blank">Tweet This</a><div class="dater">February 23, 2014</div><div class="categories">Published in<a class="category" href="/category/autofixture/">AutoFixture&nbsp;</a><a class="category" href="/category/fsharp/">FSharp&nbsp;</a> on February 23, 2014</div></div><div class="homer"><a href="/"><i class="icon-tape" style="font-size:32px;"></i></a></div><script type="text/javascript">var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-24262928-1']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>
