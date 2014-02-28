@@ -65,6 +65,8 @@ public void FixtureCanFreezeFake([Frozen]Fake<IInterface> fake, IInterface sut)
 }
 ```
 
+**Update (2014/02/28)**: It is also possible to use the `[Frozen]` attribute on the `IInterface` directly, as [Mark Seemann](http://blog.ploeh.dk/) commented [here](https://github.com/AutoFixture/AutoFixture/issues/251#issuecomment-36285413).
+
 <p>Below is the code for the AutoFakeItEasyDataAttribute class:</p>
 
 ```
