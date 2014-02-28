@@ -56,7 +56,7 @@ public void FixtureCanFreezeFake()
 
 ```
 
-[Theory, AutoFakeData]
+[Theory, AutoFakeItEasyData]
 public void FixtureCanFreezeFake([Frozen]Fake<IInterface> fake, IInterface sut)
 {
     var dummy = new object();
@@ -65,12 +65,12 @@ public void FixtureCanFreezeFake([Frozen]Fake<IInterface> fake, IInterface sut)
 }
 ```
 
-<p>Below is the code for the AutoFakeDataAttribute class:</p>
+<p>Below is the code for the AutoFakeItEasyDataAttribute class:</p>
 
 ```
-public class AutoFakeDataAttribute : AutoDataAttribute
+public class AutoFakeItEasyDataAttribute : AutoDataAttribute
 {
-    public AutoFakeDataAttribute()
+    public AutoFakeItEasyDataAttribute()
         : base(new Fixture().Customize(new AutoFakeItEasyCustomization()))
     {
     }
