@@ -43,13 +43,13 @@ and more. — Enter [Superhero.js](http://superherojs.com/), a collection of the
 
 Contains every JavaScript project you should be looking into with examples, categories, install commands, CDN links, project and author stats, and more.
 
-An an example, here is the entry on JavaScriptOO for [Schema-Inspector](http://www.javascriptoo.com/schema-inspector) - a powerful tool to sanitize and validate JS objects.
+As an example, here is the entry on JavaScriptOO for [Schema-Inspector](http://www.javascriptoo.com/schema-inspector) - a powerful tool to sanitize and validate JS objects.
 
 [JSDB.io](http://www.jsdb.io/)
 
 Complementary source to JavaScriptOO.
 
-An an example, here is the entry on JSDB.io for [Offline.js](http://www.jsdb.io/view/offline) - a library which automatically displays online/offline indications to users.
+As an example, here is the entry on JSDB.io for [Offline.js](http://www.jsdb.io/view/offline) - a library which automatically displays online/offline indications to users.
 
 ## The UI
 
