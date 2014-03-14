@@ -5,10 +5,111 @@
   <author>
     <name>Nikos Baxevanis</name>
   </author>
-  <updated>2014-02-28T09:25:14+02:00</updated>
+  <updated>2014-03-14T19:29:40+02:00</updated>
   <link href="http://nikosbaxevanis.com/" rel="alternate"/>
   <link href="http://nikosbaxevanis.com/feed/" rel="self"/>
   <id>http://nikosbaxevanis.com/</id>
+  <entry>
+    <title>Just another JavaScript list</title>
+    <link rel="alternate" href="/blog/2014/03/14/just-another-javascript-list"/>
+    <id>http://nikosbaxevanis.com/blog/2014/03/14/just-another-javascript-list</id>
+    <updated>2014-03-14T00:00:00+02:00</updated>
+    <author>
+      <name>Nikos Baxevanis</name>
+    </author>
+    <content type="html">&lt;p&gt;I constantly collect and store bookmarks for various programming topics. This post contains high-level bookmarks for large-scale JavaScript apps. I hope you find them useful.&lt;/p&gt;
+
+&lt;h2&gt;The essentials&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href="http://typedarray.org/javascript-refresh/"&gt;A JavaScript refresh&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;If you have not checked JavaScript for the past few years or if you are new to JavaScript the creators of &amp;#39;A JavaScript refresh&amp;#39; hope you find this site useful.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="http://jstherightway.org/"&gt;JavaScript - The Right Way&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Despite the name, this guide doesn&amp;#39;t mean exactly &amp;ldquo;the right way&amp;rdquo; to do JavaScript. It just gathers all the stuff from top developers into a single place.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="http://www.promisejs.org/"&gt;Promises&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;This site aims to introduce the concept of Promises - objects which represent the pending result of an asynchronous operation.&lt;/p&gt;
+
+&lt;h2&gt;Things to consider&lt;/h2&gt;
+
+&lt;p&gt;Before you start writing a large-scale JavaScript app you may consider:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Code organization&lt;/li&gt;
+&lt;li&gt;Workflow&lt;/li&gt;
+&lt;li&gt;Testing&lt;/li&gt;
+&lt;li&gt;API design&lt;/li&gt;
+&lt;li&gt;Security&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;and more. — Enter &lt;a href="http://superherojs.com/"&gt;Superhero.js&lt;/a&gt;, a collection of the best articles, videos and presentations on the topic.&lt;/p&gt;
+
+&lt;h2&gt;Your location on the JavaScript wave&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href="http://www.javascriptoo.com/"&gt;JavaScriptOO&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Contains every JavaScript project you should be looking into with examples, categories, install commands, CDN links, project and author stats, and more.&lt;/p&gt;
+
+&lt;p&gt;An an example, here is the entry on JavaScriptOO for &lt;a href="http://www.javascriptoo.com/schema-inspector"&gt;Schema-Inspector&lt;/a&gt; - a powerful tool to sanitize and validate JS objects.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="http://www.jsdb.io/"&gt;JSDB.io&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Complementary source to JavaScriptOO.&lt;/p&gt;
+
+&lt;p&gt;An an example, here is the entry on JSDB.io for &lt;a href="http://www.jsdb.io/view/offline"&gt;Offline.js&lt;/a&gt; - a library which automatically displays online/offline indications to users.&lt;/p&gt;
+
+&lt;h2&gt;The UI&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href="http://goodui.org/"&gt;A Good User Interface&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;A running-idea list of how a good user interface looks like. Beneficial for both the business side as well as the clients using it.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="http://browserhacks.com/"&gt;Browserhacks&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;An extensive list of browser specific CSS and JavaScript hacks from all over the interwebs. &lt;/p&gt;
+
+&lt;p&gt;&lt;a href="http://screensiz.es/"&gt;Screen-size specifications&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Helps you quickly find the screen specifications of the most popular devices and monitors currently on the market.&lt;/p&gt;
+
+&lt;h2&gt;Automate&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href="http://yeoman.io/"&gt;Yeoman&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;A stack of tools and frameworks intended to help developers quickly build high quality web applications.&lt;/p&gt;
+
+&lt;p&gt;Combines several automations into one place, such as:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Generating a starter template&lt;/li&gt;
+&lt;li&gt;Managing dependencies&lt;/li&gt;
+&lt;li&gt;Running unit tests&lt;/li&gt;
+&lt;li&gt;Providing a local development server&lt;/li&gt;
+&lt;li&gt;Optimizing production code for deployment&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;and more. — You may also see the &lt;a href="https://speakerdeck.com/addyosmani/automating-front-end-workflow"&gt;Automating Front-end Workflow&lt;/a&gt; slides.&lt;/p&gt;
+
+&lt;h2&gt;Framework&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href="http://angularjs.org/"&gt;AngularJS&lt;/a&gt; and &lt;a href="http://emberjs.com/"&gt;Ember.js&lt;/a&gt; — Read more about &lt;a href="https://github.com/TryGhost/Ghost/issues/2144"&gt;Ghost&amp;#39;s decision on Ember.js&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;If you picked up Angular for its superior test-friendliness here are some links:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://github.com/yeoman/generator-angular"&gt;Yeoman generator for AngularJS&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://andyshora.com/promises-angularjs-explained-as-cartoon.html"&gt;Promises in AngularJS, Explained as a Cartoon&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://docs.google.com/document/d/1XXMvReO8-Awi1EZXAXS4PzDzdNvV6pGcuaF4Q9821Es/pub"&gt;Best Practice Recommendations for Angular App Structure&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Still not convinced? — Take a look at &lt;a href="http://todomvc.com/"&gt;TodoMVC&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Need help to select a mobile framework? — Take a look at &lt;a href="http://propertycross.com/"&gt;PropertyCross&lt;/a&gt;.&lt;/p&gt;
+</content>
+  </entry>
   <entry>
     <title>How to configure AutoFoq with Foq's return strategy</title>
     <link rel="alternate" href="/blog/2014/02/23/how-to-configure-autofoq-with-foqs-return-strategy"/>
@@ -173,7 +274,7 @@ let CustomizationFillsReturnValuesDecleratively (sut : IInterface) =
     </author>
     <content type="html">&lt;p&gt;&lt;u&gt;Note&lt;/u&gt;: After following this post, the end result is pretty awesome:&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-17.png?1393572309" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-17.png?1394818175" /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Radio Edit (tl;dr)&lt;/strong&gt;&lt;/p&gt;
 
@@ -202,7 +303,7 @@ let CustomizationFillsReturnValuesDecleratively (sut : IInterface) =
 
 &lt;p&gt;Create a new Virtual Machine on Windows Azure to install and access TeamCity.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-1.png?1393572309" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-1.png?1394818175" /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;Turn off Internet Explorer&amp;#39;s Enhanced Security Configuration.&lt;/li&gt;
@@ -213,7 +314,7 @@ let CustomizationFillsReturnValuesDecleratively (sut : IInterface) =
 &lt;/ul&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-3.png?1393572309" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-3.png?1394818175" /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;Install Karma and karma-teamcity-reporter plugin:&lt;br&gt;&lt;pre&gt;&lt;code&gt;  npm install -g karma
@@ -230,19 +331,19 @@ let CustomizationFillsReturnValuesDecleratively (sut : IInterface) =
 &lt;/ul&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-4.png?1393572309" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-4.png?1394818175" /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;u&gt;Optional&lt;/u&gt;: &lt;a href="https://help.github.com/articles/generating-ssh-keys"&gt;Generate SSH keys&lt;/a&gt; if you use SSH keys to establish a secure connection between the Virtual Machine and Git.&lt;/p&gt;
 
 &lt;p&gt;Install TeamCity and choose a port so it can be accessed from a browser (e.g. port 80).&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-5.png?1393572309" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-5.png?1394818175" /&gt;&lt;/p&gt;
 
 &lt;p&gt;If you use SSH keys to establish a secure connection between the Virtual Machine and Git, make sure to run TeamCity Server under a user account that can access the path where the SSH keys are saved.&lt;/p&gt;
 
 &lt;p&gt;Use the &lt;code&gt;whoami&lt;/code&gt; command in the Command Prompt to find out the Virtual Machine&amp;#39;s domain name.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-6.png?1393572309" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-6.png?1394818175" /&gt;&lt;/p&gt;
 
 &lt;p&gt;Add a new inbound rule to Windows Firewall with the TeamCity Server port that was entered during installation.&lt;/p&gt;
 
@@ -252,7 +353,7 @@ let CustomizationFillsReturnValuesDecleratively (sut : IInterface) =
 
 &lt;p&gt;On Windows Azure Management Portal add a new endpoint with the selected TeamCity Server port that was entered during installation.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-7.png?1393572309" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-7.png?1394818175" /&gt;&lt;/p&gt;
 
 &lt;p&gt;Log in to the TeamCity Server:&lt;/p&gt;
 
@@ -262,20 +363,20 @@ let CustomizationFillsReturnValuesDecleratively (sut : IInterface) =
 &lt;li&gt;Attach a new VCS root on Build Configuration for Git.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-8.png?1393572309" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-8.png?1394818175" /&gt;&lt;/p&gt;
 
 &lt;p&gt;For the demo, I forked the &lt;a href="https://github.com/moodmosaic/angular-phonecat"&gt;angular-phonecat&lt;/a&gt; project.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-9.png?1393572309" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-9.png?1394818175" /&gt;&lt;/p&gt;
 
 &lt;p&gt;Select an authentication method and test the connection.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-10.png?1393572309" /&gt;
-&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-11.png?1393572309" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-10.png?1394818175" /&gt;
+&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-11.png?1394818175" /&gt;&lt;/p&gt;
 
 &lt;p&gt;Add a Build Step and attach the newly created Build Configuration.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-12.png?1393572309" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-12.png?1394818175" /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;In the runner type select Command Line.&lt;/li&gt;
@@ -285,20 +386,20 @@ let CustomizationFillsReturnValuesDecleratively (sut : IInterface) =
 &lt;li&gt;In the command parameters option enter &lt;code&gt;start karma.conf.js --reporters teamcity --single-run&lt;/code&gt;.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-13.png?1393572309" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-13.png?1394818175" /&gt;&lt;/p&gt;
 
 &lt;p&gt;As a last step, include the &lt;code&gt;karma-teamcity-reporter&lt;/code&gt; plugin in the karma.conf.js file.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-14.png?1393572309" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-14.png?1394818175" /&gt;&lt;/p&gt;
 
 &lt;p&gt;Push to Git to trigger the build process and see the commit on TeamCity Server.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-15.png?1393572309" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-15.png?1394818175" /&gt;&lt;/p&gt;
 
 &lt;p&gt;The end result is pretty awesome:&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-16.png?1393572309" /&gt;
-&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-17.png?1393572309" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-16.png?1394818175" /&gt;
+&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-17.png?1394818175" /&gt;&lt;/p&gt;
 </content>
   </entry>
   <entry>
@@ -678,31 +779,31 @@ PM&amp;gt; Install-Package Xunit.Extensions
 
 &lt;p&gt;&lt;a href="http://msdn.microsoft.com/en-us/library/bb298736.aspx"&gt;Enumerable.ToArray&lt;/a&gt; &amp;#8594; &lt;a href="http://msdn.microsoft.com/en-us/library/ee340263.aspx"&gt;Seq.toArray&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-1.png?1393572309" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-1.png?1394818175" /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;AsEnumerable&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;a href="http://msdn.microsoft.com/en-us/library/bb335435.aspx"&gt;Enumerable.AsEnumerable&lt;/a&gt; &amp;#8594; &lt;code&gt;seq { }&lt;/code&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-2.png?1393572309" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-2.png?1394818175" /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;First&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;a href="http://msdn.microsoft.com/en-us/library/bb291976.aspx"&gt;Enumerable.First&lt;/a&gt; &amp;#8594; &lt;a href="http://msdn.microsoft.com/en-us/library/ee340330.aspx"&gt;Seq.head&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-3.png?1393572309" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-3.png?1394818175" /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Count&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;a href="http://msdn.microsoft.com/en-us/library/bb338038.aspx"&gt;Enumerable.Count&lt;/a&gt; &amp;#8594; &lt;a href="http://msdn.microsoft.com/en-us/library/ee370547.aspx"&gt;Seq.length&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-4.png?1393572309" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-4.png?1394818175" /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;SequenceEqual&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;a href="http://msdn.microsoft.com/en-us/library/bb348567.aspx"&gt;Enumerable.SequenceEqual&lt;/a&gt; &amp;#8594; &lt;a href="http://msdn.microsoft.com/en-us/library/ee353659.aspx"&gt;Seq.compareWith&lt;/a&gt; &lt;a href="http://msdn.microsoft.com/en-us/library/ee353429.aspx"&gt;Operators.compare&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-5.png?1393572309" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-5.png?1394818175" /&gt;&lt;/p&gt;
 </content>
   </entry>
   <entry>
@@ -799,7 +900,7 @@ let AutoMockInterfaceAndSetupExpectationsDeclaratively
 
 &lt;p&gt;The most important changes are shown below. You can also see the diff as an image &lt;a href="/images/articles/2013-10-04-how-to-configure-msbuild-to-locate-the-fsharp-build-targets.png"&gt;here&lt;/a&gt;:&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-04-how-to-configure-msbuild-to-locate-the-fsharp-build-targets.png?1393572309" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-04-how-to-configure-msbuild-to-locate-the-fsharp-build-targets.png?1394818175" /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;A note for VS 2012 users&lt;/strong&gt;&lt;/p&gt;
 
@@ -3611,6 +3712,27 @@ Stack Overflow
 </content>
   </entry>
   <entry>
+    <title>Using class libraries from different platforms</title>
+    <link rel="alternate" href="/blog/2011/10/11/using-class-libraries-from-different-platforms"/>
+    <id>http://nikosbaxevanis.com/blog/2011/10/11/using-class-libraries-from-different-platforms</id>
+    <updated>2011-10-11T00:00:00+03:00</updated>
+    <author>
+      <name>Nikos Baxevanis</name>
+    </author>
+    <content type="html">&lt;p&gt;There are times where we need to use a library written in a different platform than the one we are currently on.&amp;#0160;Most of the times a port already exists and we can choose to go with that.&amp;#0160;Before using a port there are some good considerations:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;The size of the original codebase.&lt;/li&gt;
+&lt;li&gt;The kind of project (is it a logger, an&amp;#0160;ORM, etc).&lt;/li&gt;
+&lt;li&gt;The current version of the original compared with the ported one. It depends on the activity of the original but if the ported is left 1+ year behind this is not a good sign.&lt;/li&gt;
+&lt;li&gt;The quality of the ported codebase,&amp;#0160;framework usage, coding conventions. Does it use recommeded guidelines for the target framework?&lt;/li&gt;
+&lt;li&gt;The activity of the ported project. If it&amp;#39;s low that&amp;#39;s a sign that future versions might now show up. However, consider contributing.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Besides ported code, there are cases where we can use a tool that allows us to use the original library from a different platform. For example, when working in .NET we can use Java class libraries through IKVM.NET which has a bytecode compiler called&amp;#0160;&lt;a href="http://www.ikvm.net/userguide/ikvmc.html" target="_blank" title="IKVM.NET Bytecode Compiler (ikvmc.exe)"&gt;IKVMC&lt;/a&gt;.&lt;/p&gt;
+</content>
+  </entry>
+  <entry>
     <title>IKVMC in Action with Hamcrest</title>
     <link rel="alternate" href="/blog/2011/10/11/ikvmc-in-action-with-hamcrest"/>
     <id>http://nikosbaxevanis.com/blog/2011/10/11/ikvmc-in-action-with-hamcrest</id>
@@ -3699,27 +3821,6 @@ public void EqualTo()
 &lt;p&gt;A notable difference is on the different naming conventions (Java methods start with lowercase). However, we can create &lt;a href="http://martinfowler.com/bliki/HeaderInterface.html" target="_blank" title="A header interface is an explicit interface that mimics the implicit public interface of a class."&gt;header interfaces&lt;/a&gt;&amp;#0160;declaring those methods inside.&lt;/p&gt;
 
 &lt;p&gt;To sum up, if there is a good quality port we can use the port. In this case, I personally choose to go with NHamcrest. However, we already demoed the alternative approach which also works.&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
-    <title>Using class libraries from different platforms</title>
-    <link rel="alternate" href="/blog/2011/10/11/using-class-libraries-from-different-platforms"/>
-    <id>http://nikosbaxevanis.com/blog/2011/10/11/using-class-libraries-from-different-platforms</id>
-    <updated>2011-10-11T00:00:00+03:00</updated>
-    <author>
-      <name>Nikos Baxevanis</name>
-    </author>
-    <content type="html">&lt;p&gt;There are times where we need to use a library written in a different platform than the one we are currently on.&amp;#0160;Most of the times a port already exists and we can choose to go with that.&amp;#0160;Before using a port there are some good considerations:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;The size of the original codebase.&lt;/li&gt;
-&lt;li&gt;The kind of project (is it a logger, an&amp;#0160;ORM, etc).&lt;/li&gt;
-&lt;li&gt;The current version of the original compared with the ported one. It depends on the activity of the original but if the ported is left 1+ year behind this is not a good sign.&lt;/li&gt;
-&lt;li&gt;The quality of the ported codebase,&amp;#0160;framework usage, coding conventions. Does it use recommeded guidelines for the target framework?&lt;/li&gt;
-&lt;li&gt;The activity of the ported project. If it&amp;#39;s low that&amp;#39;s a sign that future versions might now show up. However, consider contributing.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Besides ported code, there are cases where we can use a tool that allows us to use the original library from a different platform. For example, when working in .NET we can use Java class libraries through IKVM.NET which has a bytecode compiler called&amp;#0160;&lt;a href="http://www.ikvm.net/userguide/ikvmc.html" target="_blank" title="IKVM.NET Bytecode Compiler (ikvmc.exe)"&gt;IKVMC&lt;/a&gt;.&lt;/p&gt;
 </content>
   </entry>
   <entry>
@@ -7648,29 +7749,6 @@ host.Close();
 </content>
   </entry>
   <entry>
-    <title>Quick Comparison of NHibernate Books</title>
-    <link rel="alternate" href="/blog/2010/10/11/quick-comparison-of-nhibernate-books"/>
-    <id>http://nikosbaxevanis.com/blog/2010/10/11/quick-comparison-of-nhibernate-books</id>
-    <updated>2010-10-11T00:00:00+03:00</updated>
-    <author>
-      <name>Nikos Baxevanis</name>
-    </author>
-    <content type="html">&lt;p&gt;&lt;a href="http://sourceforge.net/projects/nhibernate/" target="_blank"&gt;NHibernate&lt;/a&gt;&amp;#0160;is an &lt;a href="http://en.wikipedia.org/wiki/Object-relational_mapping" target="_blank" title="Object-relational mapping (ORM, O/RM, and O/R mapping) in computer software is a programming technique for converting data between incompatible type systems ..."&gt;Object-relational mapping&lt;/a&gt; (ORM) solution for the Microsoft .NET platform. It provides a framework for mapping an object-oriented domain model to a traditional relational database. It is open-source, easy to use (if you are familiar with good design principles) and offers a lot of extensibility points (logging and interception to name a few). The story begins with &lt;a href="http://www.hibernate.org/" target="_blank" title="Hibernate an open source Java persistence framework project. Perform powerful object relational mapping and query databases using HQL and ..."&gt;Hibernate&lt;/a&gt; in Java. In fact, there are &lt;a href="http://www.amazon.com/s/ref=nb_sb_noss?url=search-alias%3Daps&amp;amp;field-keywords=hibernate&amp;amp;x=0&amp;amp;y=0" target="_blank"&gt;many books&lt;/a&gt; out there for Hibernate but only a few for NHibernate (so far):&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href="http://www.manning.com/kuate/" target="_blank"&gt;NHibernate In Action&lt;/a&gt; (Manning, 2009)&lt;/li&gt;
-&lt;li&gt;&lt;a href="http://www.packtpub.com/nhibernate-2-x-beginners-guide/book" target="_blank"&gt;NHibernate 2 Beginner&amp;#39;s Guide&lt;/a&gt; (Packt Publishing, 2010)&lt;/li&gt;
-&lt;li&gt;&lt;a href="http://www.packtpub.com/nhibernate-3-0-cookbook/book" target="_blank"&gt;NHibernate 3.0 Cookbook&lt;/a&gt; (Pack Publishing, 2010)&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;NHibernate In Action is written by members of NHibernate (Pierre Henri Kuaté, Tobin Harris)&amp;#0160;and Hibernate (Christian Bauer, Gavin King) team. It contains a lot of stuff about the internals, such as,&amp;#0160;the persistence lifecycle, the persistence manager, transitive persistence, the NHibernate type system, advanced query techniques, optimizing object retrieval (I could go on).&lt;/p&gt;
-
-&lt;p&gt;NHibernate 2 Beginner&amp;#39;s Guide, written by Aaron Cure,&amp;#0160;targets those who have not used an ORM yet. It helps you find&amp;#0160;about what is NHibernate, why would you use it, where do you get it, and more. It guides you on how to create mappings (XML and &lt;a href="http://fluentnhibernate.org/" target="_blank" title="Fluent NHibernate, a statically compiled alternative to NHibernate&amp;#39;s standard hbm xml mapping."&gt;Fluently&lt;/a&gt;), types, relationships and more. It contains a whole chapter about Code Generation and even talks about&amp;#0160;&lt;a href="http://nhforge.org/wikis/burrow/introduction.aspx" target="_blank" title="NHibernate.Burrow is a light weight middleware developed to support .NET applications using NHibernate as ORM framework by providing advanced and smart session/transaction management and other facilitates."&gt;Burrow&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;NHibernate 3.0 Cookbook, written by&amp;#0160;Jason Dentler, is the most recent and most updated. In the chapter about mappings, (besides XML and Fluently) it discuss about creating mappings in code using&amp;#0160;&lt;a href="http://code.google.com/p/codeconform/" target="_blank" title="ORM configuration by code."&gt;ConfORM&lt;/a&gt;.&amp;#0160;It describes the Conversation per Business Transaction pattern, the use of Futures, NHibernate Spatial and more! It focus on testing and describes the use of NHibernate Profiler and the Fluent NHibernate Persistence Tester among other. It even promotes design patterns and talks about using &lt;a href="http://en.wikipedia.org/wiki/Dependency_injection" target="_blank" title="Dependency injection (DI) in object-oriented computer programming is a design pattern with a core principle of separating behavior from dependency ..."&gt;dependency injection&lt;/a&gt; with entities.&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
     <title>Allowing only one instance of a WPF application to execute</title>
     <link rel="alternate" href="/blog/2010/10/11/allowing-only-one-instance-of-a-wpf-application-to-execute"/>
     <id>http://nikosbaxevanis.com/blog/2010/10/11/allowing-only-one-instance-of-a-wpf-application-to-execute</id>
@@ -7861,6 +7939,29 @@ internal partial class App : Application
 }
 &lt;/pre&gt;
 &lt;p&gt;One improvement would be to restore the window only if it&amp;rsquo;s minimized by checking the return value of SetForegroundWindow method. I leave this to you, go on and adapt it to your own needs.&lt;/p&gt;
+</content>
+  </entry>
+  <entry>
+    <title>Quick Comparison of NHibernate Books</title>
+    <link rel="alternate" href="/blog/2010/10/11/quick-comparison-of-nhibernate-books"/>
+    <id>http://nikosbaxevanis.com/blog/2010/10/11/quick-comparison-of-nhibernate-books</id>
+    <updated>2010-10-11T00:00:00+03:00</updated>
+    <author>
+      <name>Nikos Baxevanis</name>
+    </author>
+    <content type="html">&lt;p&gt;&lt;a href="http://sourceforge.net/projects/nhibernate/" target="_blank"&gt;NHibernate&lt;/a&gt;&amp;#0160;is an &lt;a href="http://en.wikipedia.org/wiki/Object-relational_mapping" target="_blank" title="Object-relational mapping (ORM, O/RM, and O/R mapping) in computer software is a programming technique for converting data between incompatible type systems ..."&gt;Object-relational mapping&lt;/a&gt; (ORM) solution for the Microsoft .NET platform. It provides a framework for mapping an object-oriented domain model to a traditional relational database. It is open-source, easy to use (if you are familiar with good design principles) and offers a lot of extensibility points (logging and interception to name a few). The story begins with &lt;a href="http://www.hibernate.org/" target="_blank" title="Hibernate an open source Java persistence framework project. Perform powerful object relational mapping and query databases using HQL and ..."&gt;Hibernate&lt;/a&gt; in Java. In fact, there are &lt;a href="http://www.amazon.com/s/ref=nb_sb_noss?url=search-alias%3Daps&amp;amp;field-keywords=hibernate&amp;amp;x=0&amp;amp;y=0" target="_blank"&gt;many books&lt;/a&gt; out there for Hibernate but only a few for NHibernate (so far):&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="http://www.manning.com/kuate/" target="_blank"&gt;NHibernate In Action&lt;/a&gt; (Manning, 2009)&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://www.packtpub.com/nhibernate-2-x-beginners-guide/book" target="_blank"&gt;NHibernate 2 Beginner&amp;#39;s Guide&lt;/a&gt; (Packt Publishing, 2010)&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://www.packtpub.com/nhibernate-3-0-cookbook/book" target="_blank"&gt;NHibernate 3.0 Cookbook&lt;/a&gt; (Pack Publishing, 2010)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;NHibernate In Action is written by members of NHibernate (Pierre Henri Kuaté, Tobin Harris)&amp;#0160;and Hibernate (Christian Bauer, Gavin King) team. It contains a lot of stuff about the internals, such as,&amp;#0160;the persistence lifecycle, the persistence manager, transitive persistence, the NHibernate type system, advanced query techniques, optimizing object retrieval (I could go on).&lt;/p&gt;
+
+&lt;p&gt;NHibernate 2 Beginner&amp;#39;s Guide, written by Aaron Cure,&amp;#0160;targets those who have not used an ORM yet. It helps you find&amp;#0160;about what is NHibernate, why would you use it, where do you get it, and more. It guides you on how to create mappings (XML and &lt;a href="http://fluentnhibernate.org/" target="_blank" title="Fluent NHibernate, a statically compiled alternative to NHibernate&amp;#39;s standard hbm xml mapping."&gt;Fluently&lt;/a&gt;), types, relationships and more. It contains a whole chapter about Code Generation and even talks about&amp;#0160;&lt;a href="http://nhforge.org/wikis/burrow/introduction.aspx" target="_blank" title="NHibernate.Burrow is a light weight middleware developed to support .NET applications using NHibernate as ORM framework by providing advanced and smart session/transaction management and other facilitates."&gt;Burrow&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;NHibernate 3.0 Cookbook, written by&amp;#0160;Jason Dentler, is the most recent and most updated. In the chapter about mappings, (besides XML and Fluently) it discuss about creating mappings in code using&amp;#0160;&lt;a href="http://code.google.com/p/codeconform/" target="_blank" title="ORM configuration by code."&gt;ConfORM&lt;/a&gt;.&amp;#0160;It describes the Conversation per Business Transaction pattern, the use of Futures, NHibernate Spatial and more! It focus on testing and describes the use of NHibernate Profiler and the Fluent NHibernate Persistence Tester among other. It even promotes design patterns and talks about using &lt;a href="http://en.wikipedia.org/wiki/Dependency_injection" target="_blank" title="Dependency injection (DI) in object-oriented computer programming is a design pattern with a core principle of separating behavior from dependency ..."&gt;dependency injection&lt;/a&gt; with entities.&lt;/p&gt;
 </content>
   </entry>
   <entry>
