@@ -3,10 +3,12 @@
   div.post
     == yield
   
+  div.footer
+    div.author
+      | <h4>Written by Nikos Baxevanis</h4>
+    p Programmer, building software in a broad range of sectors and technologies. Find me here: <a href="http://twitter.com/nikosbaxevanis">http://twitter.com/nikosbaxevanis</a></p>
   div.dater=article.date.strftime("%B %d, %Y")
   div.categories
     | Published in
     - for category in article.categories do
       a.category href="/category/#{category.downcase.gsub(' ', '-')}/" #{category}&nbsp;
-    |  on 
-    = article.date.strftime("%B %d, %Y")

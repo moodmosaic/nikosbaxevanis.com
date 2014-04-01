@@ -114,8 +114,26 @@ img { max-width: 800px }
 .categories {
     color: #999;
     margin: 2rem 0;
+    font-size: 0.8rem;
 }
-.categories .category { margin-left: 10px }
+.categories .category { margin-left: 10px; }
+
+.footer {
+    margin: 3rem 0 0 0;
+    padding: 1.5rem 0 0 0;
+    border-top: #999 1px solid;
+}
+.footer h4 {
+    margin: 0;
+}
+.footer p {
+    margin: 0.2rem 0;
+    font-size: 0.8rem;
+    line-height: 1.4em;
+    font-style: italic;
+    color: #999;
+}
+
 .testimonial {
     padding: 4rem;
     padding-left: 1rem;
