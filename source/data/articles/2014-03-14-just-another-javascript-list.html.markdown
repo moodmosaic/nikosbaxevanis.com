@@ -4,7 +4,7 @@ title: Just another JavaScript list
 published: 1
 categories: [JavaScript]
 comments: [disqus]
-slug: "Bla bla bla."
+slug: "Bookmarks for large-scale JavaScript apps."
 ---
 
 I constantly collect and store bookmarks for various programming topics. This post contains high-level bookmarks for large-scale JavaScript apps. I hope you find them useful.
