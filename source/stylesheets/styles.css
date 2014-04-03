@@ -87,6 +87,9 @@ p img {
     display: block;
     margin-left: auto;
     margin-right: auto;
+    border: 1px solid rgba(0,0,0,0.15);
+    border-radius: 4px;
+    padding: 8.5px 5.5px;
 }
 div.published_date {
     font-size: 0.8rem;
