@@ -208,4 +208,4 @@ A similar pattern can be applied to the test files:
 
 ### Coding in TypeScript
 
-The TypeScript language services is available as an official [add-in for Visual Studio](http://go.microsoft.com/fwlink/?LinkID=266563) as well as an unofficial, but rather excellent, [add-in for Sublime Text](https://github.com/Railk/T3S).
+The TypeScript language services is available as an official [add-in for Visual Studio](http://blogs.msdn.com/b/typescript/archive/2014/04/02/announcing-typescript-1-0.aspx) as well as an unofficial, but rather excellent, [add-in for Sublime Text](https://github.com/Railk/T3S).
