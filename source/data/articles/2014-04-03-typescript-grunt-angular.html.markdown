@@ -9,51 +9,7 @@ slug: "Superheroic TypeScript/Grunt/Angular stack."
 
 *Since the TypeScript language is a strict superset of JavaScript, all the repetitive tasks like minification, compilation, unit testing, linting, etc, performed by Grunt can also be applied to TypeScript projects.*
 
-### Motivation
-
-With [TypeScript](http://www.typescriptlang.org/), [AngularJS](http://angularjs.org/), and [Jasmine](http://jasmine.github.io/), tests can be written as:
-
-```
-describe('xyzController', () => {
-    it('it can be instantiated', 
-        inject(($rootScope, $location) => {            
-            var sut = new xyzController($rootScope.$new(), $location);
-            expect(sut).not.toBeNull();
-    }));
-});
-```
-Characteristics of the above test:
-
-* It is **strongly-typed**.
-* It is quite similar to a unit test written in .NET or JVM.
-* It is **declarative** since the arguments $rootScope and $location are parameterized.
-* It compiles into readable JavaScript.
-* It can be **debugged in the browser** with source maps.
-
-Furthermore, the [SUT](http://xunitpatterns.com/SUT.html) can be defined as:
-
-```
-export class xyzController {
-    constructor(
-        private $scope, 
-        private $location) {
-        $scope.controller = this;
-    }
-
-    xyzQuery = path => 
-        this.$location.path() == path.replace('#', '') ? 'foo' : 'bar';
-}
-```
-
-Characteristics of the above SUT:
-
-* It is **strongly-typed**.
-* It is quite similar to a class written in .NET or JVM.
-* It uses Dependency Injection through **Constructor Injection**.
-* It compiles into readable JavaScript.
-* It can be **debugged in the browser** with source maps.
-
->The rest of the post describes how to add TypeScript to an AngularJS project where task automation is performed by [Grunt](http://gruntjs.com/).
+This post describes how to add [TypeScript](http://www.typescriptlang.org/) to an [AngularJS](http://angularjs.org/) project where task automation is performed by [Grunt](http://gruntjs.com/).
 
 ### Task automation pipeline
 
