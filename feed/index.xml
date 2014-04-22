@@ -5,10 +5,254 @@
   <author>
     <name>Nikos Baxevanis</name>
   </author>
-  <updated>2014-04-12T22:52:07+03:00</updated>
+  <updated>2014-04-22T11:26:59+03:00</updated>
   <link href="http://nikosbaxevanis.com/" rel="alternate"/>
   <link href="http://nikosbaxevanis.com/feed/" rel="self"/>
   <id>http://nikosbaxevanis.com/</id>
+  <entry>
+    <title>mountebank mocks with F#</title>
+    <link rel="alternate" href="/blog/2014/04/22/mountebank-mocks-with-f-number"/>
+    <id>http://nikosbaxevanis.com/blog/2014/04/22/mountebank-mocks-with-f-number</id>
+    <updated>2014-04-22T00:00:00+03:00</updated>
+    <author>
+      <name>Nikos Baxevanis</name>
+    </author>
+    <content type="html">&lt;p&gt;&lt;em&gt;This post describes how to use mountebank imposters as Mock Objects/Test Spies via HTTP with F#.&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;As a learning exercise, for mountebank, but also for F#, I wrote a few F# functions to communicate with mountebank imposters via HTTP and a few passing tests. The rest of the post describes what I learned so far.&lt;/em&gt;&lt;/p&gt;
+
+&lt;h3&gt;What is mountebank?&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;mountebank&lt;/strong&gt; is a tool (and currently the only one) which provides multi-protocol, multi-language, on-demand, &lt;a href="http://xunitpatterns.com/Test%20Double.html"&gt;Test Doubles&lt;/a&gt; over the wire, named &lt;strong&gt;imposters&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;Imposters are normally created during the &lt;a href="http://xunitpatterns.com/fixture%20setup.html"&gt;fixture setup&lt;/a&gt; phase and disposed in the &lt;a href="http://xunitpatterns.com/fixture%20teardown.html"&gt;fixture teardown&lt;/a&gt; phase.&lt;/p&gt;
+
+&lt;p&gt;According to the &lt;a href="http://www.mbtest.org/"&gt;official website&lt;/a&gt;, mountebank currently supports imposters for:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;http&lt;/li&gt;
+&lt;li&gt;https&lt;/li&gt;
+&lt;li&gt;tcp&lt;/li&gt;
+&lt;li&gt;smtp&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3&gt;Smtp example&lt;/h3&gt;
+
+&lt;p&gt;Imposters can act as Mocks, as well as Stubs. For Mocks, the mountebank website contains a &lt;a href="http://www.mbtest.org/docs/api/mocks"&gt;mocking example&lt;/a&gt; for the STMP protocol.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Scenario: SMTP client transmits a mail message; verify the subject of the message.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;The mountebank server runs at 192.168.1.3 on port 2525 in a Unix-like OS. During the setup phase an imposter is created via HTTP POST specifying the SMTP protocol and port (4547) in the request body:&lt;/p&gt;
+&lt;pre class="highlight text"&gt;POST http://192.168.1.3:2525/imposters/ HTTP/1.1
+Host: 192.168.1.3:2525
+Accept: application/json
+Content-Type: application/json
+
+{ 
+  &amp;quot;port&amp;quot;: 4547, 
+  &amp;quot;protocol&amp;quot;: &amp;quot;smtp&amp;quot; 
+}
+&lt;/pre&gt;
+&lt;p&gt;In F# this can be written using the &lt;a href="http://fsharp.github.io/FSharp.Data/index.html"&gt;FSharp.Data&lt;/a&gt; &lt;a href="http://fsharp.github.io/FSharp.Data/library/Http.html"&gt;Http&lt;/a&gt; module as:&lt;/p&gt;
+&lt;pre class="highlight text"&gt;let Create protocol host port =
+    Http.Request(
+        &amp;quot;http://&amp;quot; + host + &amp;quot;:2525/imposters/&amp;quot;,
+        headers = 
+            [&amp;quot;Content-Type&amp;quot;, HttpContentTypes.Json; 
+             &amp;quot;Accept&amp;quot;      , HttpContentTypes.Json],
+        httpMethod = &amp;quot;POST&amp;quot;,
+        body = TextRequest 
+                   (sprintf @&amp;quot;{ &amp;quot;&amp;quot;port&amp;quot;&amp;quot;: %i, &amp;quot;&amp;quot;protocol&amp;quot;&amp;quot;: &amp;quot;&amp;quot;%s&amp;quot;&amp;quot; }&amp;quot; 
+                       port protocol))
+&lt;/pre&gt;
+&lt;p&gt;The response is:&lt;/p&gt;
+&lt;pre class="highlight text"&gt;HTTP/1.1 201 Created
+Location: http://192.168.1.3:2525/imposters/4547
+Content-Type: application/json; charset=utf-8
+Content-Length: 167
+Date: Mon, 21 Apr 2014 20:42:57 GMT
+Connection: keep-alive
+
+{
+  &amp;quot;protocol&amp;quot;: &amp;quot;smtp&amp;quot;,
+  &amp;quot;port&amp;quot;: 4547,
+  &amp;quot;requests&amp;quot;: [],
+  &amp;quot;stubs&amp;quot;: [],
+  &amp;quot;_links&amp;quot;: {
+    &amp;quot;self&amp;quot;: {
+      &amp;quot;href&amp;quot;: &amp;quot;http://192.168.1.3:2525/imposters/4547&amp;quot;
+    }
+  }
+}
+&lt;/pre&gt;
+&lt;p&gt;Now we can send a mail message via SMTP to the mountebank imposter using port 4547:&lt;/p&gt;
+&lt;pre class="highlight text"&gt;From: &amp;quot;Customer Service&amp;quot; &amp;lt;code@nikosbaxevanis.com&amp;gt;
+To: &amp;quot;Customer&amp;quot; &amp;lt;nikos.baxevanis@gmail.com&amp;gt;
+Subject: Thank you for your order
+
+Hello Customer,
+Thank you for your order from company.com.  Your order will
+be shipped shortly.
+
+Your friendly customer service department.
+&lt;/pre&gt;
+&lt;p&gt;In F# this can be written as:&lt;/p&gt;
+&lt;pre class="highlight text"&gt;let expectedSubject = &amp;quot;Thank you for your order&amp;quot;
+(new SmtpClient(&amp;quot;192.168.1.3&amp;quot;, 4547)).Send(
+    new MailMessage(
+        &amp;quot;code@nikosbaxevanis.com&amp;quot;, 
+        &amp;quot;nikos.baxevanis@gmail.com&amp;quot;, 
+        expectedSubject, 
+        &amp;quot;Hello Customer, Thank you for your order from company.com.&amp;quot;))
+&lt;/pre&gt;
+&lt;p&gt;To get the captured requests from the imposter we can issue a &lt;code&gt;GET&lt;/code&gt; or a &lt;code&gt;DELETE&lt;/code&gt; request. Normally, this happens during the fixture teardown phase via &lt;code&gt;DELETE&lt;/code&gt;:&lt;/p&gt;
+&lt;pre class="highlight text"&gt;DELETE http://192.168.1.3:2525/imposters/4547 HTTP/1.1
+Content-Type: application/json
+Host: 192.168.1.3:2525
+&lt;/pre&gt;
+&lt;blockquote&gt;
+&lt;p&gt;According to &lt;a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.7"&gt;Hypertext Transfer Protocol &amp;ndash; HTTP/1.1&lt;/a&gt; for HTTP method definitions, it is OK to issue a DELETE to also get the captured requests from the imposter: &lt;em&gt;&amp;ldquo;A successful response SHOULD be 200 (OK) if the response includes an entity describing the status&amp;rdquo; &amp;ndash; Hypertext Transfer Protocol &amp;ndash; HTTP/1.1, 9.7 DELETE&lt;/em&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;The response is:&lt;/p&gt;
+&lt;pre class="highlight text"&gt;HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Content-Length: 810
+Date: Mon, 21 Apr 2014 20:41:10 GMT
+Connection: keep-alive
+
+{
+  &amp;quot;protocol&amp;quot;: &amp;quot;smtp&amp;quot;,
+  &amp;quot;port&amp;quot;: 4547,
+  &amp;quot;requests&amp;quot;: [
+    {
+      &amp;quot;requestFrom&amp;quot;: &amp;quot;192.168.1.4&amp;quot;,
+      &amp;quot;envelopeFrom&amp;quot;: &amp;quot;code@nikosbaxevanis.com&amp;quot;,
+      &amp;quot;envelopeTo&amp;quot;: [
+        &amp;quot;nikos.baxevanis@gmail.com&amp;quot;
+      ],
+      &amp;quot;from&amp;quot;: {
+        &amp;quot;address&amp;quot;: &amp;quot;code@nikosbaxevanis.com&amp;quot;,
+        &amp;quot;name&amp;quot;: &amp;quot;&amp;quot;
+      },
+      &amp;quot;to&amp;quot;: [
+        {
+          &amp;quot;address&amp;quot;: &amp;quot;nikos.baxevanis@gmail.com&amp;quot;,
+          &amp;quot;name&amp;quot;: &amp;quot;&amp;quot;
+        }
+      ],
+      &amp;quot;cc&amp;quot;: [],
+      &amp;quot;bcc&amp;quot;: [],
+      &amp;quot;subject&amp;quot;: &amp;quot;Thank you for your order!&amp;quot;,
+      &amp;quot;priority&amp;quot;: &amp;quot;normal&amp;quot;,
+      &amp;quot;references&amp;quot;: [],
+      &amp;quot;inReplyTo&amp;quot;: [],
+      &amp;quot;text&amp;quot;: &amp;quot;Hello Customer, Thank you for your order from company.com.\n&amp;quot;,
+      &amp;quot;html&amp;quot;: &amp;quot;&amp;quot;,
+      &amp;quot;attachments&amp;quot;: []
+    }
+  ],
+  &amp;quot;stubs&amp;quot;: [],
+  &amp;quot;_links&amp;quot;: {
+    &amp;quot;self&amp;quot;: {
+      &amp;quot;href&amp;quot;: &amp;quot;http://192.168.1.3:2525/imposters/4547&amp;quot;
+    }
+  }
+&lt;/pre&gt;
+&lt;p&gt;In F# the &lt;code&gt;requests&lt;/code&gt; JSON property can be decomposed and extracted using the FSharp.Data &lt;a href="http://fsharp.github.io/FSharp.Data/library/JsonValue.html"&gt;JSON Parser&lt;/a&gt; and Http modules as:&lt;/p&gt;
+&lt;pre class="highlight text"&gt;let GetCapturedRequests (spy : HttpResponse) = 
+    let getRequests jsonValue = 
+        match jsonValue with
+        | FSharp.Data.Record properties -&amp;gt;
+            match properties with
+            | [| protocol; port; requests; stubs; _links; |] -&amp;gt;
+                match snd requests with
+                | FSharp.Data.Array elements -&amp;gt;
+                    match elements |&amp;gt; Seq.toList with
+                    | head :: tail -&amp;gt; Some(elements)
+                    | [] -&amp;gt; None
+                | _ -&amp;gt; None
+            | _ -&amp;gt; None
+        | _ -&amp;gt; None
+    let response = 
+        Http.Request(
+            spy.Headers.Item &amp;quot;Location&amp;quot;,
+            headers = [ 
+                &amp;quot;Content-Type&amp;quot;, HttpContentTypes.Json; 
+                &amp;quot;Accept&amp;quot;, HttpContentTypes.Json ],
+            httpMethod = &amp;quot;DELETE&amp;quot;)
+    match response.Body with
+    | Text json -&amp;gt; 
+        JsonValue.Parse json 
+        |&amp;gt; getRequests
+    | _ -&amp;gt; None
+&lt;/pre&gt;
+&lt;p&gt;The signature of &lt;code&gt;GetCapturedRequests&lt;/code&gt; function is:&lt;/p&gt;
+&lt;pre class="highlight text"&gt;spy : HttpResponse -&amp;gt; JsonValue [] option
+&lt;/pre&gt;
+&lt;p&gt;The value of the &lt;code&gt;subject&lt;/code&gt; property can be similarly decomposed and extracted with Pattern Matching:&lt;/p&gt;
+&lt;pre class="highlight text"&gt;match GetCapturedRequest imposter &amp;quot;subject&amp;quot; with
+| Some actual -&amp;gt; expectedSubject = actual
+| None -&amp;gt; 
+    raise &amp;lt;| InvalidOperationException(
+        &amp;quot;No property named 'subject' found in captured requests.&amp;quot;) 
+&lt;/pre&gt;
+&lt;p&gt;With all the above a test using &lt;a href="https://github.com/xunit/xunit"&gt;xUnit.net&lt;/a&gt; and &lt;a href="http://blog.ploeh.dk/2014/03/21/composed-assertions-with-unquote/"&gt;composed assertions with Unquote&lt;/a&gt; could be written as:&lt;/p&gt;
+&lt;pre class="highlight text"&gt;let verify = Swensen.Unquote.Assertions.test
+
+[&amp;lt;Fact&amp;gt;]
+let SendMailTransmitsCorrectSubject () =
+    let expectedSubject = &amp;quot;Thank you for your order!&amp;quot;
+    let mountebankHost = &amp;quot;192.168.1.3&amp;quot;
+    let imposterPort = 4547
+    let spy = Imposter.Create &amp;quot;smtp&amp;quot; mountebankHost imposterPort
+
+    (new SmtpClient(mountebankHost, imposterPort)).Send(
+        new MailMessage(
+            &amp;quot;code@nikosbaxevanis.com&amp;quot;, 
+            &amp;quot;nikos.baxevanis@gmail.com&amp;quot;, 
+            expectedSubject, 
+            &amp;quot;Hello Customer, Thank you for your order from company.com.&amp;quot;))
+
+    verify &amp;lt;@
+            match SmtpSpy.GetCapturedRequest spy &amp;quot;subject&amp;quot; with
+            | Some actual -&amp;gt; expectedSubject = actual
+            | None        -&amp;gt; 
+                raise &amp;lt;| InvalidOperationException(
+                    &amp;quot;No property named 'subject' found in captured requests.&amp;quot;) @&amp;gt;
+&lt;/pre&gt;
+&lt;blockquote&gt;
+&lt;p&gt;The mountebank website uses the &lt;a href="http://xunitpatterns.com/Mock%20Object.html"&gt;Mock Object&lt;/a&gt; terminology when verifying &lt;a href="http://xunitpatterns.com/indirect%20output.html"&gt;indirect outputs&lt;/a&gt;. However, the examples shown here don&amp;#39;t setup expectations - instead they only verify &lt;em&gt;captured&lt;/em&gt;-indirect outputs of the SUT; thus the &lt;a href="http://xunitpatterns.com/Test%20Spy.html"&gt;Test Spy&lt;/a&gt; terminology is used in code.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;strong&gt;Scenario: SMTP client transmits correct number of requests.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;In this case, it&amp;#39;s only necessary to verify that the SMTP request on the imposter was made only once:&lt;/p&gt;
+&lt;pre class="highlight text"&gt;[&amp;lt;Fact&amp;gt;]
+let SendMailTransmitsCorrectNumberOfSmtpRequests () =
+    let expectedNumberOfRequests = 1
+    let mountebankHost = &amp;quot;192.168.1.3&amp;quot;
+    let imposterPort = 4546
+    let spy = Imposter.Create &amp;quot;smtp&amp;quot; mountebankHost imposterPort
+
+    (new SmtpClient(mountebankHost, imposterPort)).Send(
+        new MailMessage(
+            &amp;quot;code@nikosbaxevanis.com&amp;quot;, 
+            &amp;quot;nikos.baxevanis@gmail.com&amp;quot;, 
+            &amp;quot;Thank you for your order!&amp;quot;, 
+            &amp;quot;Hello Customer, Thank you for your order from company.com.&amp;quot;))
+
+    verify &amp;lt;@
+            match Imposter.GetCapturedRequests spy with
+            | Some actual -&amp;gt; expectedNumberOfRequests = (actual |&amp;gt; Seq.length)
+            | None -&amp;gt; 
+                raise &amp;lt;| InvalidOperationException(
+                    sprintf &amp;quot;Expected %i calls but received none.&amp;quot; 
+                        expectedNumberOfRequests) @&amp;gt;
+&lt;/pre&gt;
+&lt;p&gt;The complete source code is available on this &lt;a href="https://gist.github.com/moodmosaic/11169180"&gt;gist&lt;/a&gt; - any comments or suggestions are always welcome.&lt;/p&gt;
+</content>
+  </entry>
   <entry>
     <title>TypeScript/Grunt/Angular</title>
     <link rel="alternate" href="/blog/2014/04/03/typescript-slash-grunt-slash-angular"/>
@@ -118,13 +362,13 @@ tsTest: {
 &lt;/pre&gt;
 &lt;p&gt;The file comparison output should be similar with the image shown below:&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-04-03-typescript-grunt-angular-1.png?1397332323" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-04-03-typescript-grunt-angular-1.png?1398155214" /&gt;&lt;/p&gt;
 
 &lt;h3&gt;Linting configuration&lt;/h3&gt;
 
 &lt;p&gt;Remove the indentation setting from JSHint since &lt;a href="https://typescript.codeplex.com/workitem/204"&gt;TypeScript indents code idiomatically&lt;/a&gt;.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-04-03-typescript-grunt-angular-2.png?1397332323" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-04-03-typescript-grunt-angular-2.png?1398155214" /&gt;&lt;/p&gt;
 
 &lt;h3&gt;Declaration source files usage&lt;/h3&gt;
 
@@ -566,7 +810,7 @@ let CustomizationFillsReturnValuesDecleratively (sut : IInterface) =
     </author>
     <content type="html">&lt;p&gt;&lt;u&gt;Note&lt;/u&gt;: After following this post, the end result is pretty awesome:&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-17.png?1397332323" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-17.png?1398155215" /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Radio Edit (tl;dr)&lt;/strong&gt;&lt;/p&gt;
 
@@ -595,7 +839,7 @@ let CustomizationFillsReturnValuesDecleratively (sut : IInterface) =
 
 &lt;p&gt;Create a new Virtual Machine on Windows Azure to install and access TeamCity.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-1.png?1397332323" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-1.png?1398155214" /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;Turn off Internet Explorer&amp;#39;s Enhanced Security Configuration.&lt;/li&gt;
@@ -606,7 +850,7 @@ let CustomizationFillsReturnValuesDecleratively (sut : IInterface) =
 &lt;/ul&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-3.png?1397332323" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-3.png?1398155214" /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;Install Karma and karma-teamcity-reporter plugin:&lt;br&gt;&lt;pre&gt;&lt;code&gt;  npm install -g karma
@@ -623,19 +867,19 @@ let CustomizationFillsReturnValuesDecleratively (sut : IInterface) =
 &lt;/ul&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-4.png?1397332323" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-4.png?1398155214" /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;u&gt;Optional&lt;/u&gt;: &lt;a href="https://help.github.com/articles/generating-ssh-keys"&gt;Generate SSH keys&lt;/a&gt; if you use SSH keys to establish a secure connection between the Virtual Machine and Git.&lt;/p&gt;
 
 &lt;p&gt;Install TeamCity and choose a port so it can be accessed from a browser (e.g. port 80).&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-5.png?1397332323" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-5.png?1398155214" /&gt;&lt;/p&gt;
 
 &lt;p&gt;If you use SSH keys to establish a secure connection between the Virtual Machine and Git, make sure to run TeamCity Server under a user account that can access the path where the SSH keys are saved.&lt;/p&gt;
 
 &lt;p&gt;Use the &lt;code&gt;whoami&lt;/code&gt; command in the Command Prompt to find out the Virtual Machine&amp;#39;s domain name.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-6.png?1397332323" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-6.png?1398155214" /&gt;&lt;/p&gt;
 
 &lt;p&gt;Add a new inbound rule to Windows Firewall with the TeamCity Server port that was entered during installation.&lt;/p&gt;
 
@@ -645,7 +889,7 @@ let CustomizationFillsReturnValuesDecleratively (sut : IInterface) =
 
 &lt;p&gt;On Windows Azure Management Portal add a new endpoint with the selected TeamCity Server port that was entered during installation.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-7.png?1397332323" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-7.png?1398155214" /&gt;&lt;/p&gt;
 
 &lt;p&gt;Log in to the TeamCity Server:&lt;/p&gt;
 
@@ -655,20 +899,20 @@ let CustomizationFillsReturnValuesDecleratively (sut : IInterface) =
 &lt;li&gt;Attach a new VCS root on Build Configuration for Git.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-8.png?1397332323" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-8.png?1398155214" /&gt;&lt;/p&gt;
 
 &lt;p&gt;For the demo, I forked the &lt;a href="https://github.com/moodmosaic/angular-phonecat"&gt;angular-phonecat&lt;/a&gt; project.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-9.png?1397332323" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-9.png?1398155214" /&gt;&lt;/p&gt;
 
 &lt;p&gt;Select an authentication method and test the connection.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-10.png?1397332323" /&gt;
-&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-11.png?1397332323" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-10.png?1398155214" /&gt;
+&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-11.png?1398155214" /&gt;&lt;/p&gt;
 
 &lt;p&gt;Add a Build Step and attach the newly created Build Configuration.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-12.png?1397332323" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-12.png?1398155214" /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;In the runner type select Command Line.&lt;/li&gt;
@@ -678,20 +922,20 @@ let CustomizationFillsReturnValuesDecleratively (sut : IInterface) =
 &lt;li&gt;In the command parameters option enter &lt;code&gt;start karma.conf.js --reporters teamcity --single-run&lt;/code&gt;.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-13.png?1397332323" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-13.png?1398155214" /&gt;&lt;/p&gt;
 
 &lt;p&gt;As a last step, include the &lt;code&gt;karma-teamcity-reporter&lt;/code&gt; plugin in the karma.conf.js file.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-14.png?1397332323" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-14.png?1398155214" /&gt;&lt;/p&gt;
 
 &lt;p&gt;Push to Git to trigger the build process and see the commit on TeamCity Server.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-15.png?1397332323" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-15.png?1398155214" /&gt;&lt;/p&gt;
 
 &lt;p&gt;The end result is pretty awesome:&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-16.png?1397332323" /&gt;
-&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-17.png?1397332323" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-16.png?1398155214" /&gt;
+&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-17.png?1398155215" /&gt;&lt;/p&gt;
 </content>
   </entry>
   <entry>
@@ -1071,31 +1315,31 @@ PM&amp;gt; Install-Package Xunit.Extensions
 
 &lt;p&gt;&lt;a href="http://msdn.microsoft.com/en-us/library/bb298736.aspx"&gt;Enumerable.ToArray&lt;/a&gt; &amp;#8594; &lt;a href="http://msdn.microsoft.com/en-us/library/ee340263.aspx"&gt;Seq.toArray&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-1.png?1397332323" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-1.png?1398155214" /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;AsEnumerable&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;a href="http://msdn.microsoft.com/en-us/library/bb335435.aspx"&gt;Enumerable.AsEnumerable&lt;/a&gt; &amp;#8594; &lt;code&gt;seq { }&lt;/code&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-2.png?1397332323" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-2.png?1398155214" /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;First&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;a href="http://msdn.microsoft.com/en-us/library/bb291976.aspx"&gt;Enumerable.First&lt;/a&gt; &amp;#8594; &lt;a href="http://msdn.microsoft.com/en-us/library/ee340330.aspx"&gt;Seq.head&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-3.png?1397332323" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-3.png?1398155214" /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Count&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;a href="http://msdn.microsoft.com/en-us/library/bb338038.aspx"&gt;Enumerable.Count&lt;/a&gt; &amp;#8594; &lt;a href="http://msdn.microsoft.com/en-us/library/ee370547.aspx"&gt;Seq.length&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-4.png?1397332323" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-4.png?1398155214" /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;SequenceEqual&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;a href="http://msdn.microsoft.com/en-us/library/bb348567.aspx"&gt;Enumerable.SequenceEqual&lt;/a&gt; &amp;#8594; &lt;a href="http://msdn.microsoft.com/en-us/library/ee353659.aspx"&gt;Seq.compareWith&lt;/a&gt; &lt;a href="http://msdn.microsoft.com/en-us/library/ee353429.aspx"&gt;Operators.compare&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-5.png?1397332323" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-5.png?1398155214" /&gt;&lt;/p&gt;
 </content>
   </entry>
   <entry>
@@ -1192,7 +1436,7 @@ let AutoMockInterfaceAndSetupExpectationsDeclaratively
 
 &lt;p&gt;The most important changes are shown below. You can also see the diff as an image &lt;a href="/images/articles/2013-10-04-how-to-configure-msbuild-to-locate-the-fsharp-build-targets.png"&gt;here&lt;/a&gt;:&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-04-how-to-configure-msbuild-to-locate-the-fsharp-build-targets.png?1397332323" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-04-how-to-configure-msbuild-to-locate-the-fsharp-build-targets.png?1398155214" /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;A note for VS 2012 users&lt;/strong&gt;&lt;/p&gt;
 
@@ -3620,25 +3864,6 @@ public void Test()
 </content>
   </entry>
   <entry>
-    <title>Test-After Development Sins (Ignoring cross-cutting concerns)</title>
-    <link rel="alternate" href="/blog/2012/02/18/test-after-development-sins-ignoring-cross-cutting-concerns"/>
-    <id>http://nikosbaxevanis.com/blog/2012/02/18/test-after-development-sins-ignoring-cross-cutting-concerns</id>
-    <updated>2012-02-18T00:00:00+02:00</updated>
-    <author>
-      <name>Nikos Baxevanis</name>
-    </author>
-    <content type="html">&lt;p&gt;A&amp;#0160;&lt;a href="http://www.nikosbaxevanis.com/bonus-bits/2012/01/test-after-development-sins-introduction.html" target="_blank" title="&amp;quot;Test-After Development&amp;quot; Sins: Introduction"&gt;series&lt;/a&gt;&amp;#0160;of articles exploring the impact of writing tests&amp;#0160;&lt;em&gt;after&amp;#0160;&lt;/em&gt;the code is written&amp;#0160;on the implementation part of&amp;#0160;&lt;a href="http://en.wikipedia.org/wiki/Software_development_process" target="_blank" title="A software development process, also known as a software development life cycle (SDLC), is a structure imposed on the development of a software product."&gt;SDLC&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;span style="text-decoration: underline;"&gt;Sin No.3&lt;/span&gt;: Ignoring cross-cutting concerns.&lt;/p&gt;
-
-&lt;p&gt;The problem with this approach becomes very clear. It will be hard and tedious work, inside each test, to create stubs and mocks for each and every aspect.&amp;#0160;The intent of the unit tests will also look wrong since, in reality, these aspects should not be treated as&lt;em&gt;&amp;#0160;&lt;/em&gt;dependencies of the&amp;#0160;&lt;a href="http://xunitpatterns.com/SUT.html" target="_blank" title="The &amp;quot;system under test&amp;quot;. It is short for &amp;quot;whatever thing we are testing&amp;quot; and is always defined from the perspective of the test."&gt;SUT&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Among others, logging and caching are cross-cutting concerns that can easily slip through the services (making us treat them as normal dependencies).&amp;#0160;&lt;/p&gt;
-
-&lt;p&gt;While the preferred way to model these aspects is using decorators and/or dynamic interceptors,&amp;#0160;there are many times that we see classes violating the&amp;#0160;&lt;a href="http://en.wikipedia.org/wiki/Single_responsibility_principle" target="_blank" title="In object-oriented programming, the single responsibility principle states that every object should have a single responsibility, and that responsibility should be entirely encapsulated by the class. All its services should be narrowly aligned with that responsibility."&gt;SRP&lt;/a&gt;&amp;#0160;containing &lt;em&gt;all-in-one&lt;/em&gt; logging, caching, auditing and other aspects (and even violating the&amp;#0160;&lt;a href="http://en.wikipedia.org/wiki/Interface_segregation_principle" target="_blank" title="The notion that many client specific interfaces are better than one general purpose interface."&gt;ISP&lt;/a&gt;&amp;#0160;with a coarse-grained&amp;#0160;&lt;a href="http://martinfowler.com/bliki/HeaderInterface.html" target="_blank" title="A header interface is an explicit interface that mimics the implicit public interface of a class. Essentially you take all the public methods of a class and declare them in an interface."&gt;Header Interface&lt;/a&gt;).&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
     <title>Parameterized Tests for ServiceStack Web Services</title>
     <link rel="alternate" href="/blog/2012/02/18/parameterized-tests-for-servicestack-web-services"/>
     <id>http://nikosbaxevanis.com/blog/2012/02/18/parameterized-tests-for-servicestack-web-services</id>
@@ -3711,6 +3936,25 @@ public void HttpGetReturnsNonEmptyResultWithId(IRestClient sut)
 &lt;p&gt;The advantage of this approach is that we have abstracted the creation of the IRestClient instance from the test itself. The base URI is now hardcoded in only one place (the customization class). Furthermore, we can easily pass other parameters to the test method if necessary.&amp;#0160;&lt;/p&gt;
 
 &lt;p&gt;While this approach is applied to ServiceStack it can be easily generalized and used on other scenarios as well.&lt;/p&gt;
+</content>
+  </entry>
+  <entry>
+    <title>Test-After Development Sins (Ignoring cross-cutting concerns)</title>
+    <link rel="alternate" href="/blog/2012/02/18/test-after-development-sins-ignoring-cross-cutting-concerns"/>
+    <id>http://nikosbaxevanis.com/blog/2012/02/18/test-after-development-sins-ignoring-cross-cutting-concerns</id>
+    <updated>2012-02-18T00:00:00+02:00</updated>
+    <author>
+      <name>Nikos Baxevanis</name>
+    </author>
+    <content type="html">&lt;p&gt;A&amp;#0160;&lt;a href="http://www.nikosbaxevanis.com/bonus-bits/2012/01/test-after-development-sins-introduction.html" target="_blank" title="&amp;quot;Test-After Development&amp;quot; Sins: Introduction"&gt;series&lt;/a&gt;&amp;#0160;of articles exploring the impact of writing tests&amp;#0160;&lt;em&gt;after&amp;#0160;&lt;/em&gt;the code is written&amp;#0160;on the implementation part of&amp;#0160;&lt;a href="http://en.wikipedia.org/wiki/Software_development_process" target="_blank" title="A software development process, also known as a software development life cycle (SDLC), is a structure imposed on the development of a software product."&gt;SDLC&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;span style="text-decoration: underline;"&gt;Sin No.3&lt;/span&gt;: Ignoring cross-cutting concerns.&lt;/p&gt;
+
+&lt;p&gt;The problem with this approach becomes very clear. It will be hard and tedious work, inside each test, to create stubs and mocks for each and every aspect.&amp;#0160;The intent of the unit tests will also look wrong since, in reality, these aspects should not be treated as&lt;em&gt;&amp;#0160;&lt;/em&gt;dependencies of the&amp;#0160;&lt;a href="http://xunitpatterns.com/SUT.html" target="_blank" title="The &amp;quot;system under test&amp;quot;. It is short for &amp;quot;whatever thing we are testing&amp;quot; and is always defined from the perspective of the test."&gt;SUT&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Among others, logging and caching are cross-cutting concerns that can easily slip through the services (making us treat them as normal dependencies).&amp;#0160;&lt;/p&gt;
+
+&lt;p&gt;While the preferred way to model these aspects is using decorators and/or dynamic interceptors,&amp;#0160;there are many times that we see classes violating the&amp;#0160;&lt;a href="http://en.wikipedia.org/wiki/Single_responsibility_principle" target="_blank" title="In object-oriented programming, the single responsibility principle states that every object should have a single responsibility, and that responsibility should be entirely encapsulated by the class. All its services should be narrowly aligned with that responsibility."&gt;SRP&lt;/a&gt;&amp;#0160;containing &lt;em&gt;all-in-one&lt;/em&gt; logging, caching, auditing and other aspects (and even violating the&amp;#0160;&lt;a href="http://en.wikipedia.org/wiki/Interface_segregation_principle" target="_blank" title="The notion that many client specific interfaces are better than one general purpose interface."&gt;ISP&lt;/a&gt;&amp;#0160;with a coarse-grained&amp;#0160;&lt;a href="http://martinfowler.com/bliki/HeaderInterface.html" target="_blank" title="A header interface is an explicit interface that mimics the implicit public interface of a class. Essentially you take all the public methods of a class and declare them in an interface."&gt;Header Interface&lt;/a&gt;).&lt;/p&gt;
 </content>
   </entry>
   <entry>
