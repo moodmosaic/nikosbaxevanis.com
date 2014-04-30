@@ -136,6 +136,12 @@ img { max-width: 800px }
     font-style: italic;
     color: #999;
 }
+.footer img {
+    float: left;
+    width: 75px;
+    height: 75px;
+    margin-left: -23px;
+}
 
 .testimonial {
     padding: 4rem;
