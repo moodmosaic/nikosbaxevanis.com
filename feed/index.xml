@@ -5,10 +5,173 @@
   <author>
     <name>Nikos Baxevanis</name>
   </author>
-  <updated>2014-04-22T11:26:59+03:00</updated>
+  <updated>2014-05-02T10:02:50+03:00</updated>
   <link href="http://nikosbaxevanis.com/" rel="alternate"/>
   <link href="http://nikosbaxevanis.com/feed/" rel="self"/>
   <id>http://nikosbaxevanis.com/</id>
+  <entry>
+    <title>mountebank stubs with F#</title>
+    <link rel="alternate" href="/blog/2014/05/02/mountebank-stubs-with-f-number"/>
+    <id>http://nikosbaxevanis.com/blog/2014/05/02/mountebank-stubs-with-f-number</id>
+    <updated>2014-05-02T00:00:00+03:00</updated>
+    <author>
+      <name>Nikos Baxevanis</name>
+    </author>
+    <content type="html">&lt;p&gt;The &lt;a href="http://nikosbaxevanis.com/blog/2014/04/22/mountebank-mocks-with-f-number/"&gt;previous post&lt;/a&gt; described what mountebank is, as well as how to use mountebank imposters as Mocks via HTTP and F#.&lt;/p&gt;
+
+&lt;p&gt;This post describes how to use mountebank imposters as Stubs via HTTP, xUnit.net, and F#.&lt;/p&gt;
+
+&lt;h3&gt;Scenario&lt;/h3&gt;
+
+&lt;p&gt;The &lt;a href="http://www.mbtest.org/docs/api/stubs"&gt;Stub example&lt;/a&gt; in mountebank API documentation simulates a RESTful endpoint that creates a Customer, the first time it&amp;#39;s called, and returns a 400 Bad Request the second time it&amp;#39;s called with the same Customer because the email address already exists.&lt;/p&gt;
+
+&lt;h3&gt;Intercepting imposter Stub setup&lt;/h3&gt;
+
+&lt;p&gt;When using mountebank imposters as Stubs we typically care about configuring the Stub&amp;#39;s return values - the rest of the &lt;a href="http://xunitpatterns.com/fixture%20setup.html"&gt;fixture setup&lt;/a&gt; and &lt;a href="http://xunitpatterns.com/fixture%20teardown.html"&gt;fixture teardown&lt;/a&gt; phases are always the same.&lt;/p&gt;
+
+&lt;p&gt;If fixture setup and fixture teardown phases are always the same, they could be extracted into an &lt;a href="http://en.wikipedia.org/wiki/Interceptor_pattern"&gt;Interceptor&lt;/a&gt; class.&lt;/p&gt;
+
+&lt;p&gt;In &lt;a href="https://github.com/xunit/xunit"&gt;xUnit.net&lt;/a&gt; we can do this by inheriting from &lt;a href="https://github.com/xunit/xunit/blob/master/src/xunit.core/Sdk/BeforeAfterTestAttribute.cs"&gt;BeforeAfterTestAttribute&lt;/a&gt;:&lt;/p&gt;
+&lt;pre class="highlight text"&gt;type UseImposterStubAttribute (mountebankHost, mountebankPort, imposterJson) =
+    inherit BeforeAfterTestAttribute()
+
+    override this.Before (methodUnderTest : MethodInfo) =
+        Http.Request(
+            UriBuilder(
+                &amp;quot;http&amp;quot;, 
+                mountebankHost, 
+                mountebankPort, 
+                &amp;quot;imposters/&amp;quot;).ToString(),
+            headers = [ 
+              &amp;quot;Content-Type&amp;quot;, HttpContentTypes.Json; 
+              &amp;quot;Accept&amp;quot;      , HttpContentTypes.Json ],
+            httpMethod = &amp;quot;POST&amp;quot;,
+            body = TextRequest imposterJson)
+        |&amp;gt; ignore
+
+    override this.After (methodUnderTest : MethodInfo) =
+        Http.Request(
+            UriBuilder(
+                &amp;quot;http&amp;quot;, 
+                mountebankHost, 
+                mountebankPort, 
+                &amp;quot;imposters/&amp;quot; + ParsePortFrom(imposterJson)).ToString(),
+            headers = [ 
+                &amp;quot;Content-Type&amp;quot;, HttpContentTypes.Json; 
+                &amp;quot;Accept&amp;quot;      , HttpContentTypes.Json ],
+            httpMethod = &amp;quot;DELETE&amp;quot;)
+        |&amp;gt; ignore
+&lt;/pre&gt;
+&lt;h3&gt;Using imposter Stubs with xUnit.net&lt;/h3&gt;
+
+&lt;p&gt;With xUnit.net and the &lt;code&gt;UseImposterStubAttribute&lt;/code&gt;, the original &lt;a href="http://www.mbtest.org/docs/api/stubs"&gt;Stub example&lt;/a&gt; can be written as:&lt;/p&gt;
+&lt;pre class="highlight text"&gt;[&amp;lt;Fact; UseImposterStub(
+    &amp;quot;192.168.1.4&amp;quot;, 
+    2525, 
+    @&amp;quot;
+    {
+      &amp;quot;&amp;quot;port&amp;quot;&amp;quot;:4545,
+      &amp;quot;&amp;quot;protocol&amp;quot;&amp;quot;:&amp;quot;&amp;quot;http&amp;quot;&amp;quot;,
+      &amp;quot;&amp;quot;stubs&amp;quot;&amp;quot;:[
+        {
+          &amp;quot;&amp;quot;responses&amp;quot;&amp;quot;:[
+            {
+              &amp;quot;&amp;quot;is&amp;quot;&amp;quot;:{
+                &amp;quot;&amp;quot;statusCode&amp;quot;&amp;quot;:201,
+                &amp;quot;&amp;quot;headers&amp;quot;&amp;quot;:{
+                  &amp;quot;&amp;quot;Location&amp;quot;&amp;quot;:&amp;quot;&amp;quot;http://localhost:4545/customers/123&amp;quot;&amp;quot;,
+                  &amp;quot;&amp;quot;Content-Type&amp;quot;&amp;quot;:&amp;quot;&amp;quot;application/xml&amp;quot;&amp;quot;
+                },
+                &amp;quot;&amp;quot;body&amp;quot;&amp;quot;:&amp;quot;&amp;quot;&amp;lt;customer&amp;gt;&amp;lt;email&amp;gt;customer@test.com&amp;lt;/email&amp;gt;&amp;lt;/customer&amp;gt;&amp;quot;&amp;quot;
+              }
+            },
+            {
+              &amp;quot;&amp;quot;is&amp;quot;&amp;quot;:{
+                &amp;quot;&amp;quot;statusCode&amp;quot;&amp;quot;:400,
+                &amp;quot;&amp;quot;headers&amp;quot;&amp;quot;:{
+                  &amp;quot;&amp;quot;Content-Type&amp;quot;&amp;quot;:&amp;quot;&amp;quot;application/xml&amp;quot;&amp;quot;
+                },
+                &amp;quot;&amp;quot;body&amp;quot;&amp;quot;:&amp;quot;&amp;quot;&amp;lt;error&amp;gt;email already exists&amp;lt;/error&amp;gt;&amp;quot;&amp;quot;
+              }
+            }
+          ]
+        }
+      ]
+    }&amp;quot;
+)&amp;gt;]
+let CreateDuplicateCustomerThrows () =
+    let expected = 201
+    let mutable secondRequestHasFailed = false
+
+    let actual = 
+        Create &amp;quot;&amp;lt;customer&amp;gt;&amp;lt;email&amp;gt;customer@test.com&amp;lt;/email&amp;gt;&amp;lt;/customer&amp;gt;&amp;quot;
+    try
+        Create &amp;quot;&amp;lt;customer&amp;gt;&amp;lt;email&amp;gt;customer@test.com&amp;lt;/email&amp;gt;&amp;lt;/customer&amp;gt;&amp;quot; |&amp;gt; ignore
+    with
+    | e -&amp;gt; if e.Message.Contains(&amp;quot;email already exists&amp;quot;) 
+           then secondRequestHasFailed &amp;lt;- true
+
+    verify &amp;lt;@ actual.StatusCode = expected &amp;amp;&amp;amp; secondRequestHasFailed @&amp;gt;
+&lt;/pre&gt;
+&lt;p&gt;The &lt;code&gt;UseImposterStubAttribute&lt;/code&gt; arguments are&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;the mountebank server host&lt;/li&gt;
+&lt;li&gt;the mountebank server port number&lt;/li&gt;
+&lt;li&gt;the imposter (protocol, port, and return values) specified in the JSON setup&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;When running the test, the output on the mountebank server console is:&lt;/p&gt;
+&lt;pre class="highlight text"&gt;info: [mb:2525] POST /imposters/
+info: [http:4545] Open for business...
+info: [http:4545] 192.168.1.5:62897 =&amp;gt; POST /imposters/
+info: [http:4545] 192.168.1.5:62898 =&amp;gt; POST /imposters/
+info: [mb:2525] DELETE /imposters/4545
+&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;During the setup phase an imposter Stub is created via HTTP POST using the the mountebank URL and imposter protocol (http) and port (4545) defined in the &lt;code&gt;UseImposterStubAttribute&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;During the teardown phase the imposter Stub is removed.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;The important part is that the &lt;code&gt;UseImposterStubAttribute&lt;/code&gt; removes the repetitive imposter setup and teardown steps from the actual test.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3&gt;TCP Stubs&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href="http://brandonbyars.com/"&gt;Brandon Byars&lt;/a&gt;, the creator of mountebank, provided an &lt;a href="http://brandonbyars.com/2014/02/10/stubbing-a-mule-tcp-connector-with-mountebank/"&gt;example&lt;/a&gt; of how to create TCP imposter Stubs with Java.&lt;/p&gt;
+
+&lt;p&gt;It is now easy to do something similar with F#, xUnit.net and the &lt;code&gt;UseImposterStubAttribute&lt;/code&gt;:&lt;/p&gt;
+&lt;pre class="highlight text"&gt;[&amp;lt;Fact; UseImposterStub(
+    &amp;quot;192.168.1.4&amp;quot;, 
+    2525, 
+    @&amp;quot;
+    {
+      &amp;quot;&amp;quot;protocol&amp;quot;&amp;quot;:&amp;quot;&amp;quot;tcp&amp;quot;&amp;quot;,
+      &amp;quot;&amp;quot;port&amp;quot;&amp;quot;:&amp;quot;&amp;quot;4546&amp;quot;&amp;quot;,
+      &amp;quot;&amp;quot;mode&amp;quot;&amp;quot;:&amp;quot;&amp;quot;binary&amp;quot;&amp;quot;,
+      &amp;quot;&amp;quot;stubs&amp;quot;&amp;quot;:[
+        {
+          &amp;quot;&amp;quot;responses&amp;quot;&amp;quot;:[
+            {
+              &amp;quot;&amp;quot;is&amp;quot;&amp;quot;:{
+                &amp;quot;&amp;quot;data&amp;quot;&amp;quot;: &amp;quot;&amp;quot;&amp;lt;encoded string&amp;gt;&amp;quot;&amp;quot;
+              }
+            }
+          ]
+        }
+      ]
+    }&amp;quot;
+)&amp;gt;]
+let QueryWithCancelledTravelPlan () = 
+    // (Java to F#-pseudocode conversion)
+    let expected = { travelPlan with Status = &amp;quot;Cancelled&amp;quot; }
+    let actual = sut.Query(&amp;quot;http://travelPlans/1234&amp;amp;date=2013-02-15&amp;quot;);
+    verify &amp;lt;@ actual .. expected @&amp;gt;
+&lt;/pre&gt;
+&lt;p&gt;The complete source code is available on this &lt;a href="https://gist.github.com/moodmosaic/1fbad33d03b11b188edc"&gt;gist&lt;/a&gt; - any comments or suggestions are always welcome.&lt;/p&gt;
+</content>
+  </entry>
   <entry>
     <title>mountebank mocks with F#</title>
     <link rel="alternate" href="/blog/2014/04/22/mountebank-mocks-with-f-number"/>
@@ -251,6 +414,8 @@ let SendMailTransmitsCorrectNumberOfSmtpRequests () =
                         expectedNumberOfRequests) @&amp;gt;
 &lt;/pre&gt;
 &lt;p&gt;The complete source code is available on this &lt;a href="https://gist.github.com/moodmosaic/11169180"&gt;gist&lt;/a&gt; - any comments or suggestions are always welcome.&lt;/p&gt;
+
+&lt;p&gt;You may also read the next post, &lt;a href="http://nikosbaxevanis.com/blog/2014/05/02/mountebank-stubs-with-f-number"&gt;mountebank stubs with F#&lt;/a&gt;.&lt;/p&gt;
 </content>
   </entry>
   <entry>
@@ -362,13 +527,13 @@ tsTest: {
 &lt;/pre&gt;
 &lt;p&gt;The file comparison output should be similar with the image shown below:&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-04-03-typescript-grunt-angular-1.png?1398155214" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-04-03-typescript-grunt-angular-1.png?1399014165" /&gt;&lt;/p&gt;
 
 &lt;h3&gt;Linting configuration&lt;/h3&gt;
 
 &lt;p&gt;Remove the indentation setting from JSHint since &lt;a href="https://typescript.codeplex.com/workitem/204"&gt;TypeScript indents code idiomatically&lt;/a&gt;.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-04-03-typescript-grunt-angular-2.png?1398155214" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-04-03-typescript-grunt-angular-2.png?1399014165" /&gt;&lt;/p&gt;
 
 &lt;h3&gt;Declaration source files usage&lt;/h3&gt;
 
@@ -810,7 +975,7 @@ let CustomizationFillsReturnValuesDecleratively (sut : IInterface) =
     </author>
     <content type="html">&lt;p&gt;&lt;u&gt;Note&lt;/u&gt;: After following this post, the end result is pretty awesome:&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-17.png?1398155215" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-17.png?1399014165" /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Radio Edit (tl;dr)&lt;/strong&gt;&lt;/p&gt;
 
@@ -839,7 +1004,7 @@ let CustomizationFillsReturnValuesDecleratively (sut : IInterface) =
 
 &lt;p&gt;Create a new Virtual Machine on Windows Azure to install and access TeamCity.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-1.png?1398155214" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-1.png?1399014165" /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;Turn off Internet Explorer&amp;#39;s Enhanced Security Configuration.&lt;/li&gt;
@@ -850,7 +1015,7 @@ let CustomizationFillsReturnValuesDecleratively (sut : IInterface) =
 &lt;/ul&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-3.png?1398155214" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-3.png?1399014165" /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;Install Karma and karma-teamcity-reporter plugin:&lt;br&gt;&lt;pre&gt;&lt;code&gt;  npm install -g karma
@@ -867,19 +1032,19 @@ let CustomizationFillsReturnValuesDecleratively (sut : IInterface) =
 &lt;/ul&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-4.png?1398155214" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-4.png?1399014165" /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;u&gt;Optional&lt;/u&gt;: &lt;a href="https://help.github.com/articles/generating-ssh-keys"&gt;Generate SSH keys&lt;/a&gt; if you use SSH keys to establish a secure connection between the Virtual Machine and Git.&lt;/p&gt;
 
 &lt;p&gt;Install TeamCity and choose a port so it can be accessed from a browser (e.g. port 80).&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-5.png?1398155214" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-5.png?1399014165" /&gt;&lt;/p&gt;
 
 &lt;p&gt;If you use SSH keys to establish a secure connection between the Virtual Machine and Git, make sure to run TeamCity Server under a user account that can access the path where the SSH keys are saved.&lt;/p&gt;
 
 &lt;p&gt;Use the &lt;code&gt;whoami&lt;/code&gt; command in the Command Prompt to find out the Virtual Machine&amp;#39;s domain name.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-6.png?1398155214" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-6.png?1399014165" /&gt;&lt;/p&gt;
 
 &lt;p&gt;Add a new inbound rule to Windows Firewall with the TeamCity Server port that was entered during installation.&lt;/p&gt;
 
@@ -889,7 +1054,7 @@ let CustomizationFillsReturnValuesDecleratively (sut : IInterface) =
 
 &lt;p&gt;On Windows Azure Management Portal add a new endpoint with the selected TeamCity Server port that was entered during installation.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-7.png?1398155214" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-7.png?1399014165" /&gt;&lt;/p&gt;
 
 &lt;p&gt;Log in to the TeamCity Server:&lt;/p&gt;
 
@@ -899,20 +1064,20 @@ let CustomizationFillsReturnValuesDecleratively (sut : IInterface) =
 &lt;li&gt;Attach a new VCS root on Build Configuration for Git.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-8.png?1398155214" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-8.png?1399014165" /&gt;&lt;/p&gt;
 
 &lt;p&gt;For the demo, I forked the &lt;a href="https://github.com/moodmosaic/angular-phonecat"&gt;angular-phonecat&lt;/a&gt; project.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-9.png?1398155214" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-9.png?1399014165" /&gt;&lt;/p&gt;
 
 &lt;p&gt;Select an authentication method and test the connection.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-10.png?1398155214" /&gt;
-&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-11.png?1398155214" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-10.png?1399014165" /&gt;
+&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-11.png?1399014165" /&gt;&lt;/p&gt;
 
 &lt;p&gt;Add a Build Step and attach the newly created Build Configuration.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-12.png?1398155214" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-12.png?1399014165" /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;In the runner type select Command Line.&lt;/li&gt;
@@ -922,20 +1087,20 @@ let CustomizationFillsReturnValuesDecleratively (sut : IInterface) =
 &lt;li&gt;In the command parameters option enter &lt;code&gt;start karma.conf.js --reporters teamcity --single-run&lt;/code&gt;.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-13.png?1398155214" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-13.png?1399014165" /&gt;&lt;/p&gt;
 
 &lt;p&gt;As a last step, include the &lt;code&gt;karma-teamcity-reporter&lt;/code&gt; plugin in the karma.conf.js file.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-14.png?1398155214" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-14.png?1399014165" /&gt;&lt;/p&gt;
 
 &lt;p&gt;Push to Git to trigger the build process and see the commit on TeamCity Server.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-15.png?1398155214" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-15.png?1399014165" /&gt;&lt;/p&gt;
 
 &lt;p&gt;The end result is pretty awesome:&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-16.png?1398155214" /&gt;
-&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-17.png?1398155215" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-16.png?1399014165" /&gt;
+&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-17.png?1399014165" /&gt;&lt;/p&gt;
 </content>
   </entry>
   <entry>
@@ -1315,31 +1480,31 @@ PM&amp;gt; Install-Package Xunit.Extensions
 
 &lt;p&gt;&lt;a href="http://msdn.microsoft.com/en-us/library/bb298736.aspx"&gt;Enumerable.ToArray&lt;/a&gt; &amp;#8594; &lt;a href="http://msdn.microsoft.com/en-us/library/ee340263.aspx"&gt;Seq.toArray&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-1.png?1398155214" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-1.png?1399014165" /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;AsEnumerable&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;a href="http://msdn.microsoft.com/en-us/library/bb335435.aspx"&gt;Enumerable.AsEnumerable&lt;/a&gt; &amp;#8594; &lt;code&gt;seq { }&lt;/code&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-2.png?1398155214" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-2.png?1399014165" /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;First&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;a href="http://msdn.microsoft.com/en-us/library/bb291976.aspx"&gt;Enumerable.First&lt;/a&gt; &amp;#8594; &lt;a href="http://msdn.microsoft.com/en-us/library/ee340330.aspx"&gt;Seq.head&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-3.png?1398155214" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-3.png?1399014165" /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Count&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;a href="http://msdn.microsoft.com/en-us/library/bb338038.aspx"&gt;Enumerable.Count&lt;/a&gt; &amp;#8594; &lt;a href="http://msdn.microsoft.com/en-us/library/ee370547.aspx"&gt;Seq.length&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-4.png?1398155214" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-4.png?1399014165" /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;SequenceEqual&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;a href="http://msdn.microsoft.com/en-us/library/bb348567.aspx"&gt;Enumerable.SequenceEqual&lt;/a&gt; &amp;#8594; &lt;a href="http://msdn.microsoft.com/en-us/library/ee353659.aspx"&gt;Seq.compareWith&lt;/a&gt; &lt;a href="http://msdn.microsoft.com/en-us/library/ee353429.aspx"&gt;Operators.compare&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-5.png?1398155214" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-5.png?1399014165" /&gt;&lt;/p&gt;
 </content>
   </entry>
   <entry>
@@ -1436,7 +1601,7 @@ let AutoMockInterfaceAndSetupExpectationsDeclaratively
 
 &lt;p&gt;The most important changes are shown below. You can also see the diff as an image &lt;a href="/images/articles/2013-10-04-how-to-configure-msbuild-to-locate-the-fsharp-build-targets.png"&gt;here&lt;/a&gt;:&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-04-how-to-configure-msbuild-to-locate-the-fsharp-build-targets.png?1398155214" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-04-how-to-configure-msbuild-to-locate-the-fsharp-build-targets.png?1399014165" /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;A note for VS 2012 users&lt;/strong&gt;&lt;/p&gt;
 
@@ -4248,27 +4413,6 @@ Stack Overflow
 </content>
   </entry>
   <entry>
-    <title>Using class libraries from different platforms</title>
-    <link rel="alternate" href="/blog/2011/10/11/using-class-libraries-from-different-platforms"/>
-    <id>http://nikosbaxevanis.com/blog/2011/10/11/using-class-libraries-from-different-platforms</id>
-    <updated>2011-10-11T00:00:00+03:00</updated>
-    <author>
-      <name>Nikos Baxevanis</name>
-    </author>
-    <content type="html">&lt;p&gt;There are times where we need to use a library written in a different platform than the one we are currently on.&amp;#0160;Most of the times a port already exists and we can choose to go with that.&amp;#0160;Before using a port there are some good considerations:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;The size of the original codebase.&lt;/li&gt;
-&lt;li&gt;The kind of project (is it a logger, an&amp;#0160;ORM, etc).&lt;/li&gt;
-&lt;li&gt;The current version of the original compared with the ported one. It depends on the activity of the original but if the ported is left 1+ year behind this is not a good sign.&lt;/li&gt;
-&lt;li&gt;The quality of the ported codebase,&amp;#0160;framework usage, coding conventions. Does it use recommeded guidelines for the target framework?&lt;/li&gt;
-&lt;li&gt;The activity of the ported project. If it&amp;#39;s low that&amp;#39;s a sign that future versions might now show up. However, consider contributing.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Besides ported code, there are cases where we can use a tool that allows us to use the original library from a different platform. For example, when working in .NET we can use Java class libraries through IKVM.NET which has a bytecode compiler called&amp;#0160;&lt;a href="http://www.ikvm.net/userguide/ikvmc.html" target="_blank" title="IKVM.NET Bytecode Compiler (ikvmc.exe)"&gt;IKVMC&lt;/a&gt;.&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
     <title>IKVMC in Action with Hamcrest</title>
     <link rel="alternate" href="/blog/2011/10/11/ikvmc-in-action-with-hamcrest"/>
     <id>http://nikosbaxevanis.com/blog/2011/10/11/ikvmc-in-action-with-hamcrest</id>
@@ -4360,6 +4504,27 @@ public void EqualTo()
 </content>
   </entry>
   <entry>
+    <title>Using class libraries from different platforms</title>
+    <link rel="alternate" href="/blog/2011/10/11/using-class-libraries-from-different-platforms"/>
+    <id>http://nikosbaxevanis.com/blog/2011/10/11/using-class-libraries-from-different-platforms</id>
+    <updated>2011-10-11T00:00:00+03:00</updated>
+    <author>
+      <name>Nikos Baxevanis</name>
+    </author>
+    <content type="html">&lt;p&gt;There are times where we need to use a library written in a different platform than the one we are currently on.&amp;#0160;Most of the times a port already exists and we can choose to go with that.&amp;#0160;Before using a port there are some good considerations:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;The size of the original codebase.&lt;/li&gt;
+&lt;li&gt;The kind of project (is it a logger, an&amp;#0160;ORM, etc).&lt;/li&gt;
+&lt;li&gt;The current version of the original compared with the ported one. It depends on the activity of the original but if the ported is left 1+ year behind this is not a good sign.&lt;/li&gt;
+&lt;li&gt;The quality of the ported codebase,&amp;#0160;framework usage, coding conventions. Does it use recommeded guidelines for the target framework?&lt;/li&gt;
+&lt;li&gt;The activity of the ported project. If it&amp;#39;s low that&amp;#39;s a sign that future versions might now show up. However, consider contributing.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Besides ported code, there are cases where we can use a tool that allows us to use the original library from a different platform. For example, when working in .NET we can use Java class libraries through IKVM.NET which has a bytecode compiler called&amp;#0160;&lt;a href="http://www.ikvm.net/userguide/ikvmc.html" target="_blank" title="IKVM.NET Bytecode Compiler (ikvmc.exe)"&gt;IKVMC&lt;/a&gt;.&lt;/p&gt;
+</content>
+  </entry>
+  <entry>
     <title>What goes first? (Theory or Tooling)</title>
     <link rel="alternate" href="/blog/2011/09/26/what-goes-first-theory-or-tooling"/>
     <id>http://nikosbaxevanis.com/blog/2011/09/26/what-goes-first-theory-or-tooling</id>
@@ -4437,44 +4602,6 @@ public void EqualTo()
 </content>
   </entry>
   <entry>
-    <title>Heuristics for Static Factory Methods in AutoFixture</title>
-    <link rel="alternate" href="/blog/2011/08/25/heuristics-for-static-factory-methods-in-autofixture"/>
-    <id>http://nikosbaxevanis.com/blog/2011/08/25/heuristics-for-static-factory-methods-in-autofixture</id>
-    <updated>2011-08-25T00:00:00+03:00</updated>
-    <author>
-      <name>Nikos Baxevanis</name>
-    </author>
-    <content type="html">&lt;p&gt;Here is a type with a private constructor:&lt;/p&gt;
-&lt;pre class="highlight text"&gt;public class TypeWithFactoryMethod
-{
-    private TypeWithFactoryMethod() 
-    {
-    }
-
-    public static TypeWithFactoryMethod Create()
-    {
-        return new TypeWithFactoryMethod();
-    }
-
-    public static TypeWithFactoryMethod Create(object argument)
-    {
-        return new TypeWithFactoryMethod();
-    }
-}
-&lt;/pre&gt;
-&lt;p&gt;In order to create an instance of that type we have to call one of it&amp;#39;s static factory methods, for example:&lt;/p&gt;
-&lt;pre class="highlight text"&gt;var instance = TypeWithFactoryMethod.Create();
-&lt;/pre&gt;
-&lt;p&gt;If we try to create an &lt;a href="http://blogs.msdn.com/b/ploeh/archive/2008/11/17/anonymous-variables.aspx" target="_blank" title="Anonymous Variables"&gt;Anonymous Variable&lt;/a&gt; with &lt;a href="http://autofixture.codeplex.com" target="_blank" title="AutoFixture makes it easier for developers to do Test-Driven Development by automating non-relevant Test Fixture Setup, allowing the Test Developer to focus on the essentials of each test case."&gt;AutoFixture&lt;/a&gt; right now (version 2.1) it will throw an exception since there are no public constructors:&lt;/p&gt;
-&lt;pre class="highlight text"&gt;var fixture = new Fixture();
-var result = fixture.CreateAnonymous&amp;lt;TypeWithFactoryMethod&amp;gt;();
-&lt;/pre&gt;
-&lt;p&gt;Using the latest version from&amp;#0160;&lt;a href="http://autofixture.codeplex.com/SourceControl/list/changesets" target="_blank" title="AutoFixture (changesets)"&gt;trunk&lt;/a&gt;&amp;#0160;(and on the next public release) the above code will work.&amp;#0160;It will successfully return an instance of the type by using&amp;#0160;a set of heuristics that enable AutoFixture to search for static factory methods.&lt;/p&gt;
-
-&lt;p&gt;The latest build (including strong names) can be downloaded from &lt;a href="http://teamcity.codebetter.com/project.html?projectId=project129&amp;amp;tab=projectOverview. " target="_blank"&gt;here&lt;/a&gt;.&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
     <title>Combining Data Theories in AutoFixture.Xunit extension</title>
     <link rel="alternate" href="/blog/2011/08/25/combining-data-theories-in-autofixture-dot-xunit-extension"/>
     <id>http://nikosbaxevanis.com/blog/2011/08/25/combining-data-theories-in-autofixture-dot-xunit-extension</id>
@@ -4523,6 +4650,44 @@ public void Test(string s1, string s2, MyClass myClass)
 &lt;p&gt;While this feature comes with AutoFixture.Xunit extension, the CompositeDataAttribute class depends only on the xunit.extensions assembly.&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;You may compile the code from the latest&amp;#0160;&lt;a href="http://autofixture.codeplex.com/SourceControl/list/changesets" target="_blank" title="AutoFixture (changesets)"&gt;trunk&lt;/a&gt;&amp;#0160;version, alternatively&amp;#0160;the latest build (including strong names) can be downloaded from&amp;#0160;&lt;a href="http://teamcity.codebetter.com/project.html?projectId=project129&amp;amp;tab=projectOverview. " target="_blank"&gt;here&lt;/a&gt;.&lt;/p&gt;&lt;/p&gt;
+</content>
+  </entry>
+  <entry>
+    <title>Heuristics for Static Factory Methods in AutoFixture</title>
+    <link rel="alternate" href="/blog/2011/08/25/heuristics-for-static-factory-methods-in-autofixture"/>
+    <id>http://nikosbaxevanis.com/blog/2011/08/25/heuristics-for-static-factory-methods-in-autofixture</id>
+    <updated>2011-08-25T00:00:00+03:00</updated>
+    <author>
+      <name>Nikos Baxevanis</name>
+    </author>
+    <content type="html">&lt;p&gt;Here is a type with a private constructor:&lt;/p&gt;
+&lt;pre class="highlight text"&gt;public class TypeWithFactoryMethod
+{
+    private TypeWithFactoryMethod() 
+    {
+    }
+
+    public static TypeWithFactoryMethod Create()
+    {
+        return new TypeWithFactoryMethod();
+    }
+
+    public static TypeWithFactoryMethod Create(object argument)
+    {
+        return new TypeWithFactoryMethod();
+    }
+}
+&lt;/pre&gt;
+&lt;p&gt;In order to create an instance of that type we have to call one of it&amp;#39;s static factory methods, for example:&lt;/p&gt;
+&lt;pre class="highlight text"&gt;var instance = TypeWithFactoryMethod.Create();
+&lt;/pre&gt;
+&lt;p&gt;If we try to create an &lt;a href="http://blogs.msdn.com/b/ploeh/archive/2008/11/17/anonymous-variables.aspx" target="_blank" title="Anonymous Variables"&gt;Anonymous Variable&lt;/a&gt; with &lt;a href="http://autofixture.codeplex.com" target="_blank" title="AutoFixture makes it easier for developers to do Test-Driven Development by automating non-relevant Test Fixture Setup, allowing the Test Developer to focus on the essentials of each test case."&gt;AutoFixture&lt;/a&gt; right now (version 2.1) it will throw an exception since there are no public constructors:&lt;/p&gt;
+&lt;pre class="highlight text"&gt;var fixture = new Fixture();
+var result = fixture.CreateAnonymous&amp;lt;TypeWithFactoryMethod&amp;gt;();
+&lt;/pre&gt;
+&lt;p&gt;Using the latest version from&amp;#0160;&lt;a href="http://autofixture.codeplex.com/SourceControl/list/changesets" target="_blank" title="AutoFixture (changesets)"&gt;trunk&lt;/a&gt;&amp;#0160;(and on the next public release) the above code will work.&amp;#0160;It will successfully return an instance of the type by using&amp;#0160;a set of heuristics that enable AutoFixture to search for static factory methods.&lt;/p&gt;
+
+&lt;p&gt;The latest build (including strong names) can be downloaded from &lt;a href="http://teamcity.codebetter.com/project.html?projectId=project129&amp;amp;tab=projectOverview. " target="_blank"&gt;here&lt;/a&gt;.&lt;/p&gt;
 </content>
   </entry>
   <entry>
@@ -6203,6 +6368,21 @@ public void FooEvent()
 </content>
   </entry>
   <entry>
+    <title>Why I Love My MacBook Pro</title>
+    <link rel="alternate" href="/blog/2011/01/21/why-i-love-my-macbook-pro"/>
+    <id>http://nikosbaxevanis.com/blog/2011/01/21/why-i-love-my-macbook-pro</id>
+    <updated>2011-01-21T00:00:00+02:00</updated>
+    <author>
+      <name>Nikos Baxevanis</name>
+    </author>
+    <content type="html">&lt;p&gt;&lt;img src="http://farm9.staticflickr.com/8045/8397459235_3a3e2fa062_o.png" alt="Apple logo" /&gt;&lt;/p&gt;
+
+&lt;p&gt;It is the perfect solution if you want to work out, for example at Starbucks.&amp;nbsp;I take a long break every time I need to charge the &lt;a title="Apple - MacBook Pro - Learn all about the breakthrough battery." href="http://www.apple.com/macbookpro/battery/" target="_blank"&gt;battery&lt;/a&gt;. This means that every ~4-6* hours I will get a an hour off for full refreshment. :-)&lt;/p&gt;
+
+&lt;p&gt;* with Visual Studio, VirtualBox and about 25-30 open tabs in Chrome.&lt;/p&gt;
+</content>
+  </entry>
+  <entry>
     <title>Code Coverage without NCover</title>
     <link rel="alternate" href="/blog/2011/01/21/code-coverage-without-ncover"/>
     <id>http://nikosbaxevanis.com/blog/2011/01/21/code-coverage-without-ncover</id>
@@ -6247,21 +6427,6 @@ public void FooEvent()
 &lt;p&gt;&lt;img src="http://farm9.staticflickr.com/8356/8397466379_3ddd680253_o.png" alt="Code is covered by tests"/&gt;&lt;/p&gt;
 
 &lt;p&gt;That&amp;#39;s it!&amp;#0160;Visual Studio 2010 Cove Coverage feature (on Premium and Ultimate products) plays nicely with TestDriven.Net and xUnit.net!&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
-    <title>Why I Love My MacBook Pro</title>
-    <link rel="alternate" href="/blog/2011/01/21/why-i-love-my-macbook-pro"/>
-    <id>http://nikosbaxevanis.com/blog/2011/01/21/why-i-love-my-macbook-pro</id>
-    <updated>2011-01-21T00:00:00+02:00</updated>
-    <author>
-      <name>Nikos Baxevanis</name>
-    </author>
-    <content type="html">&lt;p&gt;&lt;img src="http://farm9.staticflickr.com/8045/8397459235_3a3e2fa062_o.png" alt="Apple logo" /&gt;&lt;/p&gt;
-
-&lt;p&gt;It is the perfect solution if you want to work out, for example at Starbucks.&amp;nbsp;I take a long break every time I need to charge the &lt;a title="Apple - MacBook Pro - Learn all about the breakthrough battery." href="http://www.apple.com/macbookpro/battery/" target="_blank"&gt;battery&lt;/a&gt;. This means that every ~4-6* hours I will get a an hour off for full refreshment. :-)&lt;/p&gt;
-
-&lt;p&gt;* with Visual Studio, VirtualBox and about 25-30 open tabs in Chrome.&lt;/p&gt;
 </content>
   </entry>
   <entry>
@@ -8261,6 +8426,17 @@ host.Close();
 </content>
   </entry>
   <entry>
+    <title>List of software engineering topics</title>
+    <link rel="alternate" href="/blog/2010/10/14/list-of-software-engineering-topics"/>
+    <id>http://nikosbaxevanis.com/blog/2010/10/14/list-of-software-engineering-topics</id>
+    <updated>2010-10-14T00:00:00+03:00</updated>
+    <author>
+      <name>Nikos Baxevanis</name>
+    </author>
+    <content type="html">&lt;p&gt;&lt;a href="http://en.wikipedia.org/wiki/List_of_software_engineering_topics"&gt;This&lt;/a&gt; list along with &lt;a href="http://en.wikipedia.org/wiki/List_of_software_development_philosophies" target="_blank" title="List of software development philosophies - Wikipedia, the free encyclopedia"&gt;this one&lt;/a&gt;&amp;#0160;completes the list of topics a software engineer should be aware of (well, almost!).&lt;/p&gt;
+</content>
+  </entry>
+  <entry>
     <title>GitHub + Visual Studio = Love</title>
     <link rel="alternate" href="/blog/2010/10/14/github-plus-visual-studio-equals-love"/>
     <id>http://nikosbaxevanis.com/blog/2010/10/14/github-plus-visual-studio-equals-love</id>
@@ -8271,17 +8447,6 @@ host.Close();
     <content type="html">&lt;p&gt;I love&amp;#0160;&lt;a href="http://www.github.com/" target="_blank" title="Online project hosting using Git. Includes source-code browser, in-line editing, wikis, and ticketing. Free for public open-source code."&gt;GitHub&lt;/a&gt;.&amp;#0160;It&amp;#39;s&amp;#0160;&lt;a href="http://github.com/blog/39-say-hello-to-the-network-graph-visualizer" target="_blank" title="Say hello to the Network Graph Visualizer"&gt;Network Graph Visualizer&lt;/a&gt;&amp;#0160;is outstanding! It solves one of the biggest challenges in open-source world; keeping track of what other people have done with the code base.&lt;/p&gt;
 
 &lt;p&gt;If you use Windows for&amp;#0160;writing&amp;#0160;your code you can use the tools described &lt;a href="http://nikosbaxevanis.com/2010/10/07/building-castle-activerecord-from-source-at-github/" target="_self"&gt;here&lt;/a&gt;&amp;#0160;to have&amp;#0160;Git on shell context-menu. For Visual Studio support you can use &lt;a href="http://code.google.com/p/gitextensions/" target="_blank" title="Git Extensions is a small toolset to make working with Git under Windows a little more intuitive."&gt;GitExtensions&lt;/a&gt;&amp;#0160;and/or Joshua Flanagan&amp;#39;s &lt;a href="http://github.com/joshuaflanagan/gitmacros" target="_blank" title="Visual Studio macros for viewing a file on GitHub."&gt;GitMacros&lt;/a&gt;. The last one requires you to do some steps for adding the macros manually but it&amp;#39;s worth it, since you can have some basic GitHub functionality in minutes (like&amp;#0160;opening&amp;#0160;the GitHub page for the current file).&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
-    <title>List of software engineering topics</title>
-    <link rel="alternate" href="/blog/2010/10/14/list-of-software-engineering-topics"/>
-    <id>http://nikosbaxevanis.com/blog/2010/10/14/list-of-software-engineering-topics</id>
-    <updated>2010-10-14T00:00:00+03:00</updated>
-    <author>
-      <name>Nikos Baxevanis</name>
-    </author>
-    <content type="html">&lt;p&gt;&lt;a href="http://en.wikipedia.org/wiki/List_of_software_engineering_topics"&gt;This&lt;/a&gt; list along with &lt;a href="http://en.wikipedia.org/wiki/List_of_software_development_philosophies" target="_blank" title="List of software development philosophies - Wikipedia, the free encyclopedia"&gt;this one&lt;/a&gt;&amp;#0160;completes the list of topics a software engineer should be aware of (well, almost!).&lt;/p&gt;
 </content>
   </entry>
   <entry>
