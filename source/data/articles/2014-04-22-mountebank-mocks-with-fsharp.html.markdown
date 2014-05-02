@@ -249,3 +249,5 @@ In this case, it's only necessary to verify that the SMTP request on the imposte
                             expectedNumberOfRequests) @>
 
 The complete source code is available on this [gist](https://gist.github.com/moodmosaic/11169180) - any comments or suggestions are always welcome.
+
+You may also read the next post, [mountebank stubs with F#](http://nikosbaxevanis.com/blog/2014/05/02/mountebank-stubs-with-f-number).
