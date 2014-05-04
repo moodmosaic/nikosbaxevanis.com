@@ -173,7 +173,7 @@ public class ConceptController : Controller
 <blockquote>
 <p>Make sure to select all the views and set the property &quot;Copy to Output directory&quot; to &quot;<em>Copy if newer&quot;. </em>This is important because each time we compile the add-in library besides the .dll with the models and the controllers we also want the views to be copied there (they are also part of the add-in).</p>
 </blockquote>
-<p>You can download the demo application <a href="http://goo.gl/kX4ZP" target="_blank" title="ExtensibleMvcApplicationDemo-Part1.zip">here</a>. Upon build the Concepts.dll along with it&#39;s Views will be copied in the Web project&#39;s &quot;Extensions&quot; directory. When run, the application will automatically load the assembly the first time the &quot;Concepts&quot; tab is pressed.</p>
+<p>You can clone the code <a href="https://github.com/moodmosaic-attic/BonusBits.CodeSamples/tree/master/BonusBits.CodeSamples.Mvc" target="_blank">here</a>. Upon build the Concepts.dll along with it&#39;s Views will be copied in the Web project&#39;s &quot;Extensions&quot; directory. When run, the application will automatically load the assembly the first time the &quot;Concepts&quot; tab is pressed.</p>
 <ul>
 </ul>
 
