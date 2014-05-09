@@ -1,8 +1,8 @@
 ---
 layout:       talk
-name:        "moodmosaic/Fare"
+name:        "Fare"
 description:  "Creator"
-date:         2013-11-07
+date:         2011-11-02
 url:          "http://github.com/moodmosaic/fare"
 categories:   []
 ---

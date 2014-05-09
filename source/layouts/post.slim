@@ -2,11 +2,7 @@
   h1=data.page.title
   div.post
     == yield
-  
-  div.footer
-    div.author
-      | <h4>Written by Nikos Baxevanis</h4>
-    p Professional code writer. Full stack programmer. Core contributor to AutoFixture.<br>Find me here: <a href="http://twitter.com/nikosbaxevanis">http://twitter.com/nikosbaxevanis</a></p>
+  a.twitter target="_blank" href="https://twitter.com/intent/tweet?#{URI::encode_www_form("url" => "http://nikosbaxevanis.com" + current_page.url, "text" => current_page.data.title, "via" => "nikosbaxevanis")}" Tweet This
   div.dater=article.date.strftime("%B %d, %Y")
   div.categories
     | Published in

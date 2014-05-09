@@ -1,8 +1,8 @@
 ---
 layout:       talk
-name:        "ploeh/Albedo"
-description:  "Core contributor"
-date:         2013-11-13
+name:        "Albedo"
+description:  "Core Contributor"
+date:         2013-10-07
 url:          "http://github.com/ploeh/albedo"
 categories:   []
 ---
