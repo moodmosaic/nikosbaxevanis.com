@@ -5,10 +5,21 @@
   <author>
     <name>Nikos Baxevanis</name>
   </author>
-  <updated>2014-05-06T13:44:29+03:00</updated>
+  <updated>2014-05-10T02:40:19+03:00</updated>
   <link href="http://nikosbaxevanis.com/" rel="alternate"/>
   <link href="http://nikosbaxevanis.com/feed/" rel="self"/>
   <id>http://nikosbaxevanis.com/</id>
+  <entry>
+    <title>Work in progress</title>
+    <link rel="alternate" href="/screencasts/000-work-in-progress"/>
+    <id>http://nikosbaxevanis.com/screencasts/000-work-in-progress</id>
+    <updated>2014-05-10T00:00:00+03:00</updated>
+    <author>
+      <name>Nikos Baxevanis</name>
+    </author>
+    <content type="html">&lt;p&gt;Screencasts are either just being fabricated or waiting for further processing in a queue or a buffer storage. Please check back soon.&lt;/p&gt;
+</content>
+  </entry>
   <entry>
     <title>mountebank stubs with F#</title>
     <link rel="alternate" href="/blog/2014/05/02/mountebank-stubs-with-f-number"/>
@@ -527,13 +538,13 @@ tsTest: {
 &lt;/pre&gt;
 &lt;p&gt;The file comparison output should be similar with the image shown below:&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-04-03-typescript-grunt-angular-1.png?1399373065" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-04-03-typescript-grunt-angular-1.png?1399678814" /&gt;&lt;/p&gt;
 
 &lt;h3&gt;Linting configuration&lt;/h3&gt;
 
 &lt;p&gt;Remove the indentation setting from JSHint since &lt;a href="https://typescript.codeplex.com/workitem/204"&gt;TypeScript indents code idiomatically&lt;/a&gt;.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-04-03-typescript-grunt-angular-2.png?1399373065" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-04-03-typescript-grunt-angular-2.png?1399678814" /&gt;&lt;/p&gt;
 
 &lt;h3&gt;Declaration source files usage&lt;/h3&gt;
 
@@ -975,7 +986,7 @@ let CustomizationFillsReturnValuesDecleratively (sut : IInterface) =
     </author>
     <content type="html">&lt;p&gt;&lt;u&gt;Note&lt;/u&gt;: After following this post, the end result is pretty awesome:&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-17.png?1399373065" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-17.png?1399678814" /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Radio Edit (tl;dr)&lt;/strong&gt;&lt;/p&gt;
 
@@ -1004,7 +1015,7 @@ let CustomizationFillsReturnValuesDecleratively (sut : IInterface) =
 
 &lt;p&gt;Create a new Virtual Machine on Windows Azure to install and access TeamCity.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-1.png?1399373065" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-1.png?1399678814" /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;Turn off Internet Explorer&amp;#39;s Enhanced Security Configuration.&lt;/li&gt;
@@ -1015,7 +1026,7 @@ let CustomizationFillsReturnValuesDecleratively (sut : IInterface) =
 &lt;/ul&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-3.png?1399373065" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-3.png?1399678814" /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;Install Karma and karma-teamcity-reporter plugin:&lt;br&gt;&lt;pre&gt;&lt;code&gt;  npm install -g karma
@@ -1032,19 +1043,19 @@ let CustomizationFillsReturnValuesDecleratively (sut : IInterface) =
 &lt;/ul&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-4.png?1399373065" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-4.png?1399678814" /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;u&gt;Optional&lt;/u&gt;: &lt;a href="https://help.github.com/articles/generating-ssh-keys"&gt;Generate SSH keys&lt;/a&gt; if you use SSH keys to establish a secure connection between the Virtual Machine and Git.&lt;/p&gt;
 
 &lt;p&gt;Install TeamCity and choose a port so it can be accessed from a browser (e.g. port 80).&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-5.png?1399373065" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-5.png?1399678814" /&gt;&lt;/p&gt;
 
 &lt;p&gt;If you use SSH keys to establish a secure connection between the Virtual Machine and Git, make sure to run TeamCity Server under a user account that can access the path where the SSH keys are saved.&lt;/p&gt;
 
 &lt;p&gt;Use the &lt;code&gt;whoami&lt;/code&gt; command in the Command Prompt to find out the Virtual Machine&amp;#39;s domain name.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-6.png?1399373065" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-6.png?1399678814" /&gt;&lt;/p&gt;
 
 &lt;p&gt;Add a new inbound rule to Windows Firewall with the TeamCity Server port that was entered during installation.&lt;/p&gt;
 
@@ -1054,7 +1065,7 @@ let CustomizationFillsReturnValuesDecleratively (sut : IInterface) =
 
 &lt;p&gt;On Windows Azure Management Portal add a new endpoint with the selected TeamCity Server port that was entered during installation.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-7.png?1399373065" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-7.png?1399678814" /&gt;&lt;/p&gt;
 
 &lt;p&gt;Log in to the TeamCity Server:&lt;/p&gt;
 
@@ -1064,20 +1075,20 @@ let CustomizationFillsReturnValuesDecleratively (sut : IInterface) =
 &lt;li&gt;Attach a new VCS root on Build Configuration for Git.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-8.png?1399373065" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-8.png?1399678814" /&gt;&lt;/p&gt;
 
 &lt;p&gt;For the demo, I forked the &lt;a href="https://github.com/moodmosaic/angular-phonecat"&gt;angular-phonecat&lt;/a&gt; project.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-9.png?1399373065" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-9.png?1399678814" /&gt;&lt;/p&gt;
 
 &lt;p&gt;Select an authentication method and test the connection.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-10.png?1399373065" /&gt;
-&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-11.png?1399373065" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-10.png?1399678814" /&gt;
+&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-11.png?1399678814" /&gt;&lt;/p&gt;
 
 &lt;p&gt;Add a Build Step and attach the newly created Build Configuration.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-12.png?1399373065" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-12.png?1399678814" /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;In the runner type select Command Line.&lt;/li&gt;
@@ -1087,20 +1098,20 @@ let CustomizationFillsReturnValuesDecleratively (sut : IInterface) =
 &lt;li&gt;In the command parameters option enter &lt;code&gt;start karma.conf.js --reporters teamcity --single-run&lt;/code&gt;.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-13.png?1399373065" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-13.png?1399678814" /&gt;&lt;/p&gt;
 
 &lt;p&gt;As a last step, include the &lt;code&gt;karma-teamcity-reporter&lt;/code&gt; plugin in the karma.conf.js file.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-14.png?1399373065" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-14.png?1399678814" /&gt;&lt;/p&gt;
 
 &lt;p&gt;Push to Git to trigger the build process and see the commit on TeamCity Server.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-15.png?1399373065" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-15.png?1399678814" /&gt;&lt;/p&gt;
 
 &lt;p&gt;The end result is pretty awesome:&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-16.png?1399373065" /&gt;
-&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-17.png?1399373065" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-16.png?1399678814" /&gt;
+&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-17.png?1399678814" /&gt;&lt;/p&gt;
 </content>
   </entry>
   <entry>
@@ -1380,16 +1391,6 @@ PM&amp;gt; Install-Package Xunit.Extensions
 </content>
   </entry>
   <entry>
-    <title>AutoFixture/AutoFixture: Core contributor</title>
-    <link rel="alternate" href="http://github.com/autofixture"/>
-    <id>http://nikosbaxevanis.comhttp://github.com/autofixture</id>
-    <updated>2013-11-27T00:00:00+02:00</updated>
-    <author>
-      <name>Nikos Baxevanis</name>
-    </author>
-    <content type="html"></content>
-  </entry>
-  <entry>
     <title>Dealing with Legacy Systems</title>
     <link rel="alternate" href="/blog/2013/11/20/dealing-with-legacy-systems"/>
     <id>http://nikosbaxevanis.com/blog/2013/11/20/dealing-with-legacy-systems</id>
@@ -1449,26 +1450,6 @@ PM&amp;gt; Install-Package Xunit.Extensions
 </content>
   </entry>
   <entry>
-    <title>ploeh/Albedo: Core contributor</title>
-    <link rel="alternate" href="http://github.com/ploeh/albedo"/>
-    <id>http://nikosbaxevanis.comhttp://github.com/ploeh/albedo</id>
-    <updated>2013-11-13T00:00:00+02:00</updated>
-    <author>
-      <name>Nikos Baxevanis</name>
-    </author>
-    <content type="html"></content>
-  </entry>
-  <entry>
-    <title>moodmosaic/Fare: Creator</title>
-    <link rel="alternate" href="http://github.com/moodmosaic/fare"/>
-    <id>http://nikosbaxevanis.comhttp://github.com/moodmosaic/fare</id>
-    <updated>2013-11-07T00:00:00+02:00</updated>
-    <author>
-      <name>Nikos Baxevanis</name>
-    </author>
-    <content type="html"></content>
-  </entry>
-  <entry>
     <title>Replacing a few LINQ query operators with F# Sequences</title>
     <link rel="alternate" href="/blog/2013/10/24/replacing-a-few-linq-query-operators-with-f-number-sequences"/>
     <id>http://nikosbaxevanis.com/blog/2013/10/24/replacing-a-few-linq-query-operators-with-f-number-sequences</id>
@@ -1480,31 +1461,31 @@ PM&amp;gt; Install-Package Xunit.Extensions
 
 &lt;p&gt;&lt;a href="http://msdn.microsoft.com/en-us/library/bb298736.aspx"&gt;Enumerable.ToArray&lt;/a&gt; &amp;#8594; &lt;a href="http://msdn.microsoft.com/en-us/library/ee340263.aspx"&gt;Seq.toArray&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-1.png?1399373065" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-1.png?1399678814" /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;AsEnumerable&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;a href="http://msdn.microsoft.com/en-us/library/bb335435.aspx"&gt;Enumerable.AsEnumerable&lt;/a&gt; &amp;#8594; &lt;code&gt;seq { }&lt;/code&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-2.png?1399373065" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-2.png?1399678814" /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;First&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;a href="http://msdn.microsoft.com/en-us/library/bb291976.aspx"&gt;Enumerable.First&lt;/a&gt; &amp;#8594; &lt;a href="http://msdn.microsoft.com/en-us/library/ee340330.aspx"&gt;Seq.head&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-3.png?1399373065" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-3.png?1399678814" /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Count&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;a href="http://msdn.microsoft.com/en-us/library/bb338038.aspx"&gt;Enumerable.Count&lt;/a&gt; &amp;#8594; &lt;a href="http://msdn.microsoft.com/en-us/library/ee370547.aspx"&gt;Seq.length&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-4.png?1399373065" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-4.png?1399678814" /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;SequenceEqual&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;a href="http://msdn.microsoft.com/en-us/library/bb348567.aspx"&gt;Enumerable.SequenceEqual&lt;/a&gt; &amp;#8594; &lt;a href="http://msdn.microsoft.com/en-us/library/ee353659.aspx"&gt;Seq.compareWith&lt;/a&gt; &lt;a href="http://msdn.microsoft.com/en-us/library/ee353429.aspx"&gt;Operators.compare&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-5.png?1399373065" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-5.png?1399678814" /&gt;&lt;/p&gt;
 </content>
   </entry>
   <entry>
@@ -1568,6 +1549,16 @@ let AutoMockInterfaceAndSetupExpectationsDeclaratively
 </content>
   </entry>
   <entry>
+    <title>Albedo: Core Contributor</title>
+    <link rel="alternate" href="http://github.com/ploeh/albedo"/>
+    <id>http://nikosbaxevanis.comhttp://github.com/ploeh/albedo</id>
+    <updated>2013-10-07T00:00:00+03:00</updated>
+    <author>
+      <name>Nikos Baxevanis</name>
+    </author>
+    <content type="html"></content>
+  </entry>
+  <entry>
     <title>How to configure MSBuild to locate the F# build targets</title>
     <link rel="alternate" href="/blog/2013/10/04/how-to-configure-msbuild-to-locate-the-f-number-build-targets"/>
     <id>http://nikosbaxevanis.com/blog/2013/10/04/how-to-configure-msbuild-to-locate-the-f-number-build-targets</id>
@@ -1601,7 +1592,7 @@ let AutoMockInterfaceAndSetupExpectationsDeclaratively
 
 &lt;p&gt;The most important changes are shown below. You can also see the diff as an image &lt;a href="/images/articles/2013-10-04-how-to-configure-msbuild-to-locate-the-fsharp-build-targets.png"&gt;here&lt;/a&gt;:&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-04-how-to-configure-msbuild-to-locate-the-fsharp-build-targets.png?1399373065" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-04-how-to-configure-msbuild-to-locate-the-fsharp-build-targets.png?1399678814" /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;A note for VS 2012 users&lt;/strong&gt;&lt;/p&gt;
 
@@ -2521,6 +2512,16 @@ public void Test(string a, string b)
 </content>
   </entry>
   <entry>
+    <title>EmptyWebApiProjectTemplate: Creator</title>
+    <link rel="alternate" href="https://github.com/moodmosaic/EmptyWebApiProjectTemplate"/>
+    <id>http://nikosbaxevanis.comhttps://github.com/moodmosaic/EmptyWebApiProjectTemplate</id>
+    <updated>2012-11-02T00:00:00+02:00</updated>
+    <author>
+      <name>Nikos Baxevanis</name>
+    </author>
+    <content type="html"></content>
+  </entry>
+  <entry>
     <title>Empty ASP.NET Web API Project Template</title>
     <link rel="alternate" href="/blog/2012/11/02/empty-asp-dot-net-web-api-project-template"/>
     <id>http://nikosbaxevanis.com/blog/2012/11/02/empty-asp-dot-net-web-api-project-template</id>
@@ -2633,6 +2634,16 @@ Assert.Equal(expected, result);
 
 &lt;p&gt;There is also a &lt;a href="http://msdn.microsoft.com/en-us/library/dd449238.aspx"&gt;SpinUntil overload&lt;/a&gt; accepting a TimeSpan timeout.&lt;/p&gt;
 </content>
+  </entry>
+  <entry>
+    <title>ObjectLocalStorage: Creator</title>
+    <link rel="alternate" href="https://github.com/moodmosaic/ObjectLocalStorage"/>
+    <id>http://nikosbaxevanis.comhttps://github.com/moodmosaic/ObjectLocalStorage</id>
+    <updated>2012-10-27T00:00:00+03:00</updated>
+    <author>
+      <name>Nikos Baxevanis</name>
+    </author>
+    <content type="html"></content>
   </entry>
   <entry>
     <title>Truly Constrained Non-Deterministic Numbers in AutoFixture</title>
@@ -4388,6 +4399,16 @@ Stack Overflow
 </content>
   </entry>
   <entry>
+    <title>Fare: Creator</title>
+    <link rel="alternate" href="http://github.com/moodmosaic/fare"/>
+    <id>http://nikosbaxevanis.comhttp://github.com/moodmosaic/fare</id>
+    <updated>2011-11-02T00:00:00+02:00</updated>
+    <author>
+      <name>Nikos Baxevanis</name>
+    </author>
+    <content type="html"></content>
+  </entry>
+  <entry>
     <title>Estimation Quiz</title>
     <link rel="alternate" href="/blog/2011/10/16/estimation-quiz"/>
     <id>http://nikosbaxevanis.com/blog/2011/10/16/estimation-quiz</id>
@@ -4602,6 +4623,54 @@ public void EqualTo()
 </content>
   </entry>
   <entry>
+    <title>System.Web.Mvc.Composition: Creator</title>
+    <link rel="alternate" href="https://github.com/moodmosaic/System.Web.Mvc.Composition"/>
+    <id>http://nikosbaxevanis.comhttps://github.com/moodmosaic/System.Web.Mvc.Composition</id>
+    <updated>2011-08-28T00:00:00+03:00</updated>
+    <author>
+      <name>Nikos Baxevanis</name>
+    </author>
+    <content type="html"></content>
+  </entry>
+  <entry>
+    <title>Heuristics for Static Factory Methods in AutoFixture</title>
+    <link rel="alternate" href="/blog/2011/08/25/heuristics-for-static-factory-methods-in-autofixture"/>
+    <id>http://nikosbaxevanis.com/blog/2011/08/25/heuristics-for-static-factory-methods-in-autofixture</id>
+    <updated>2011-08-25T00:00:00+03:00</updated>
+    <author>
+      <name>Nikos Baxevanis</name>
+    </author>
+    <content type="html">&lt;p&gt;Here is a type with a private constructor:&lt;/p&gt;
+&lt;pre class="highlight text"&gt;public class TypeWithFactoryMethod
+{
+    private TypeWithFactoryMethod() 
+    {
+    }
+
+    public static TypeWithFactoryMethod Create()
+    {
+        return new TypeWithFactoryMethod();
+    }
+
+    public static TypeWithFactoryMethod Create(object argument)
+    {
+        return new TypeWithFactoryMethod();
+    }
+}
+&lt;/pre&gt;
+&lt;p&gt;In order to create an instance of that type we have to call one of it&amp;#39;s static factory methods, for example:&lt;/p&gt;
+&lt;pre class="highlight text"&gt;var instance = TypeWithFactoryMethod.Create();
+&lt;/pre&gt;
+&lt;p&gt;If we try to create an &lt;a href="http://blogs.msdn.com/b/ploeh/archive/2008/11/17/anonymous-variables.aspx" target="_blank" title="Anonymous Variables"&gt;Anonymous Variable&lt;/a&gt; with &lt;a href="http://autofixture.codeplex.com" target="_blank" title="AutoFixture makes it easier for developers to do Test-Driven Development by automating non-relevant Test Fixture Setup, allowing the Test Developer to focus on the essentials of each test case."&gt;AutoFixture&lt;/a&gt; right now (version 2.1) it will throw an exception since there are no public constructors:&lt;/p&gt;
+&lt;pre class="highlight text"&gt;var fixture = new Fixture();
+var result = fixture.CreateAnonymous&amp;lt;TypeWithFactoryMethod&amp;gt;();
+&lt;/pre&gt;
+&lt;p&gt;Using the latest version from&amp;#0160;&lt;a href="http://autofixture.codeplex.com/SourceControl/list/changesets" target="_blank" title="AutoFixture (changesets)"&gt;trunk&lt;/a&gt;&amp;#0160;(and on the next public release) the above code will work.&amp;#0160;It will successfully return an instance of the type by using&amp;#0160;a set of heuristics that enable AutoFixture to search for static factory methods.&lt;/p&gt;
+
+&lt;p&gt;The latest build (including strong names) can be downloaded from &lt;a href="http://teamcity.codebetter.com/project.html?projectId=project129&amp;amp;tab=projectOverview. " target="_blank"&gt;here&lt;/a&gt;.&lt;/p&gt;
+</content>
+  </entry>
+  <entry>
     <title>Combining Data Theories in AutoFixture.Xunit extension</title>
     <link rel="alternate" href="/blog/2011/08/25/combining-data-theories-in-autofixture-dot-xunit-extension"/>
     <id>http://nikosbaxevanis.com/blog/2011/08/25/combining-data-theories-in-autofixture-dot-xunit-extension</id>
@@ -4650,44 +4719,6 @@ public void Test(string s1, string s2, MyClass myClass)
 &lt;p&gt;While this feature comes with AutoFixture.Xunit extension, the CompositeDataAttribute class depends only on the xunit.extensions assembly.&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;You may compile the code from the latest&amp;#0160;&lt;a href="http://autofixture.codeplex.com/SourceControl/list/changesets" target="_blank" title="AutoFixture (changesets)"&gt;trunk&lt;/a&gt;&amp;#0160;version, alternatively&amp;#0160;the latest build (including strong names) can be downloaded from&amp;#0160;&lt;a href="http://teamcity.codebetter.com/project.html?projectId=project129&amp;amp;tab=projectOverview. " target="_blank"&gt;here&lt;/a&gt;.&lt;/p&gt;&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
-    <title>Heuristics for Static Factory Methods in AutoFixture</title>
-    <link rel="alternate" href="/blog/2011/08/25/heuristics-for-static-factory-methods-in-autofixture"/>
-    <id>http://nikosbaxevanis.com/blog/2011/08/25/heuristics-for-static-factory-methods-in-autofixture</id>
-    <updated>2011-08-25T00:00:00+03:00</updated>
-    <author>
-      <name>Nikos Baxevanis</name>
-    </author>
-    <content type="html">&lt;p&gt;Here is a type with a private constructor:&lt;/p&gt;
-&lt;pre class="highlight text"&gt;public class TypeWithFactoryMethod
-{
-    private TypeWithFactoryMethod() 
-    {
-    }
-
-    public static TypeWithFactoryMethod Create()
-    {
-        return new TypeWithFactoryMethod();
-    }
-
-    public static TypeWithFactoryMethod Create(object argument)
-    {
-        return new TypeWithFactoryMethod();
-    }
-}
-&lt;/pre&gt;
-&lt;p&gt;In order to create an instance of that type we have to call one of it&amp;#39;s static factory methods, for example:&lt;/p&gt;
-&lt;pre class="highlight text"&gt;var instance = TypeWithFactoryMethod.Create();
-&lt;/pre&gt;
-&lt;p&gt;If we try to create an &lt;a href="http://blogs.msdn.com/b/ploeh/archive/2008/11/17/anonymous-variables.aspx" target="_blank" title="Anonymous Variables"&gt;Anonymous Variable&lt;/a&gt; with &lt;a href="http://autofixture.codeplex.com" target="_blank" title="AutoFixture makes it easier for developers to do Test-Driven Development by automating non-relevant Test Fixture Setup, allowing the Test Developer to focus on the essentials of each test case."&gt;AutoFixture&lt;/a&gt; right now (version 2.1) it will throw an exception since there are no public constructors:&lt;/p&gt;
-&lt;pre class="highlight text"&gt;var fixture = new Fixture();
-var result = fixture.CreateAnonymous&amp;lt;TypeWithFactoryMethod&amp;gt;();
-&lt;/pre&gt;
-&lt;p&gt;Using the latest version from&amp;#0160;&lt;a href="http://autofixture.codeplex.com/SourceControl/list/changesets" target="_blank" title="AutoFixture (changesets)"&gt;trunk&lt;/a&gt;&amp;#0160;(and on the next public release) the above code will work.&amp;#0160;It will successfully return an instance of the type by using&amp;#0160;a set of heuristics that enable AutoFixture to search for static factory methods.&lt;/p&gt;
-
-&lt;p&gt;The latest build (including strong names) can be downloaded from &lt;a href="http://teamcity.codebetter.com/project.html?projectId=project129&amp;amp;tab=projectOverview. " target="_blank"&gt;here&lt;/a&gt;.&lt;/p&gt;
 </content>
   </entry>
   <entry>
@@ -5046,6 +5077,61 @@ EnterpriseLibraryContainer.ConfigureContainer(configurator, configSource);
 </content>
   </entry>
   <entry>
+    <title>Creating JSON-enabled ViewModels</title>
+    <link rel="alternate" href="/blog/2011/07/17/creating-json-enabled-viewmodels"/>
+    <id>http://nikosbaxevanis.com/blog/2011/07/17/creating-json-enabled-viewmodels</id>
+    <updated>2011-07-17T00:00:00+03:00</updated>
+    <author>
+      <name>Nikos Baxevanis</name>
+    </author>
+    <content type="html">&lt;p&gt;Recently, Ian Randall&amp;nbsp;contributed something really cool to the DynamicViewModel codebase:&amp;nbsp;Support for binding to a JSON object.&amp;nbsp;I find this exciting!&amp;nbsp;&lt;/p&gt;
+
+&lt;p&gt;In the trunk of DynamicViewModel you can find an example that uses the Stack Exchange API. It is a WPF application for searching the Stack Overflow Users.&amp;nbsp;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="http://farm9.staticflickr.com/8045/8398555224_d4ecaec7ae_o.png" alt="Screenshot of the demo application" /&gt;&lt;/p&gt;
+
+&lt;p&gt;All API responses are JSON in Stack Exchange API. Ian took advantage of that and wrote a DynamicViewModelFactory that contains the factory method below:&lt;/p&gt;
+&lt;pre class="highlight text"&gt;public static DynamicViewModel Create(string json)
+{
+    DynamicViewModel result;
+    if (!json.TryCreateDynamic(out result))
+    {
+        throw new ArgumentException(&amp;quot;parameter was not a valid JSON string&amp;quot;);
+    }
+
+    return result;
+}
+&lt;/pre&gt;
+&lt;p&gt;This factory method creates an instance of a DynamicViewModel from a JSON formatted string. In order to use it you need to write code similar to the one below:&lt;/p&gt;
+&lt;pre class="highlight text"&gt;var uriString = &amp;quot;http://api.stackoverflow.com/1.1/users?filter=&amp;quot; + e.Argument;
+var request   = CreateHttpWebRequest(uriString);
+var response  = request.GetResponse();
+
+using (var streamReader = new StreamReader(response.GetResponseStream()))
+{
+    var json = streamReader.ReadToEnd();
+    dynamic viewModel = DynamicViewModelFactory.Create(json);
+}
+&lt;/pre&gt;
+&lt;p&gt;And some XAML action:&lt;/p&gt;
+&lt;pre class="highlight text"&gt;&amp;lt;TextBlock
+    Grid.Column=&amp;quot;0&amp;quot;
+    VerticalAlignment=&amp;quot;Center&amp;quot;
+    Margin=&amp;quot;4,0,0,0&amp;quot;
+    Text=&amp;quot;{Binding display_name}&amp;quot; /&amp;gt;
+&amp;lt;TextBlock
+    Grid.Column=&amp;quot;1&amp;quot;
+    VerticalAlignment=&amp;quot;Center&amp;quot;
+    Text=&amp;quot;{Binding reputation}&amp;quot; /&amp;gt;
+
+&amp;lt;local:BadgesUserControl
+    Grid.Column=&amp;quot;2&amp;quot;
+    DataContext=&amp;quot;{Binding badge_counts}&amp;quot; /&amp;gt;
+&lt;/pre&gt;
+&lt;p&gt;The source code is &lt;a href="http://dynamicviewmodel.codeplex.com/SourceControl/list/changesets" target="_blank"&gt;here&lt;/a&gt;. Thanks to&amp;nbsp;&lt;a href="http://xaml.geek.nz/contact" target="_self"&gt;Ian Randall&lt;/a&gt;!&lt;/p&gt;
+</content>
+  </entry>
+  <entry>
     <title>Async REST Client for the Scrumy API</title>
     <link rel="alternate" href="/blog/2011/07/17/async-rest-client-for-the-scrumy-api"/>
     <id>http://nikosbaxevanis.com/blog/2011/07/17/async-rest-client-for-the-scrumy-api</id>
@@ -5212,61 +5298,6 @@ private IEnumerator&amp;lt;int&amp;gt; GetSprint(AsyncEnumerator ae)
 &lt;p&gt;I am looking forward building as much as I can and then to continue with the Visual Studio Extension.&lt;/p&gt;
 
 &lt;p&gt;A gist with all the source code can be found &lt;a title="Asynchronous .NET Client Implementation around the Scrumy REST API." href="https://gist.github.com/2850410" target="_blank"&gt;here&lt;/a&gt;.&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
-    <title>Creating JSON-enabled ViewModels</title>
-    <link rel="alternate" href="/blog/2011/07/17/creating-json-enabled-viewmodels"/>
-    <id>http://nikosbaxevanis.com/blog/2011/07/17/creating-json-enabled-viewmodels</id>
-    <updated>2011-07-17T00:00:00+03:00</updated>
-    <author>
-      <name>Nikos Baxevanis</name>
-    </author>
-    <content type="html">&lt;p&gt;Recently, Ian Randall&amp;nbsp;contributed something really cool to the DynamicViewModel codebase:&amp;nbsp;Support for binding to a JSON object.&amp;nbsp;I find this exciting!&amp;nbsp;&lt;/p&gt;
-
-&lt;p&gt;In the trunk of DynamicViewModel you can find an example that uses the Stack Exchange API. It is a WPF application for searching the Stack Overflow Users.&amp;nbsp;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src="http://farm9.staticflickr.com/8045/8398555224_d4ecaec7ae_o.png" alt="Screenshot of the demo application" /&gt;&lt;/p&gt;
-
-&lt;p&gt;All API responses are JSON in Stack Exchange API. Ian took advantage of that and wrote a DynamicViewModelFactory that contains the factory method below:&lt;/p&gt;
-&lt;pre class="highlight text"&gt;public static DynamicViewModel Create(string json)
-{
-    DynamicViewModel result;
-    if (!json.TryCreateDynamic(out result))
-    {
-        throw new ArgumentException(&amp;quot;parameter was not a valid JSON string&amp;quot;);
-    }
-
-    return result;
-}
-&lt;/pre&gt;
-&lt;p&gt;This factory method creates an instance of a DynamicViewModel from a JSON formatted string. In order to use it you need to write code similar to the one below:&lt;/p&gt;
-&lt;pre class="highlight text"&gt;var uriString = &amp;quot;http://api.stackoverflow.com/1.1/users?filter=&amp;quot; + e.Argument;
-var request   = CreateHttpWebRequest(uriString);
-var response  = request.GetResponse();
-
-using (var streamReader = new StreamReader(response.GetResponseStream()))
-{
-    var json = streamReader.ReadToEnd();
-    dynamic viewModel = DynamicViewModelFactory.Create(json);
-}
-&lt;/pre&gt;
-&lt;p&gt;And some XAML action:&lt;/p&gt;
-&lt;pre class="highlight text"&gt;&amp;lt;TextBlock
-    Grid.Column=&amp;quot;0&amp;quot;
-    VerticalAlignment=&amp;quot;Center&amp;quot;
-    Margin=&amp;quot;4,0,0,0&amp;quot;
-    Text=&amp;quot;{Binding display_name}&amp;quot; /&amp;gt;
-&amp;lt;TextBlock
-    Grid.Column=&amp;quot;1&amp;quot;
-    VerticalAlignment=&amp;quot;Center&amp;quot;
-    Text=&amp;quot;{Binding reputation}&amp;quot; /&amp;gt;
-
-&amp;lt;local:BadgesUserControl
-    Grid.Column=&amp;quot;2&amp;quot;
-    DataContext=&amp;quot;{Binding badge_counts}&amp;quot; /&amp;gt;
-&lt;/pre&gt;
-&lt;p&gt;The source code is &lt;a href="http://dynamicviewmodel.codeplex.com/SourceControl/list/changesets" target="_blank"&gt;here&lt;/a&gt;. Thanks to&amp;nbsp;&lt;a href="http://xaml.geek.nz/contact" target="_self"&gt;Ian Randall&lt;/a&gt;!&lt;/p&gt;
 </content>
   </entry>
   <entry>
@@ -5806,6 +5837,16 @@ EnterpriseLibraryContainer.Current = new WindsorServiceLocator(container);
 </content>
   </entry>
   <entry>
+    <title>AutoFixture: Core Contributor</title>
+    <link rel="alternate" href="http://github.com/autofixture"/>
+    <id>http://nikosbaxevanis.comhttp://github.com/autofixture</id>
+    <updated>2011-05-01T00:00:00+03:00</updated>
+    <author>
+      <name>Nikos Baxevanis</name>
+    </author>
+    <content type="html"></content>
+  </entry>
+  <entry>
     <title>NHibernate SessionPerRequest with WcfOperationSessionContext (Part 2)</title>
     <link rel="alternate" href="/blog/2011/04/15/nhibernate-sessionperrequest-with-wcfoperationsessioncontext-part-2"/>
     <id>http://nikosbaxevanis.com/blog/2011/04/15/nhibernate-sessionperrequest-with-wcfoperationsessioncontext-part-2</id>
@@ -6194,46 +6235,6 @@ public void NHibernateShouldBeAbleToPersistCurrency()
 </content>
   </entry>
   <entry>
-    <title>Persistence specification testing combined with AutoFixture</title>
-    <link rel="alternate" href="/blog/2011/03/13/persistence-specification-testing-combined-with-autofixture"/>
-    <id>http://nikosbaxevanis.com/blog/2011/03/13/persistence-specification-testing-combined-with-autofixture</id>
-    <updated>2011-03-13T00:00:00+02:00</updated>
-    <author>
-      <name>Nikos Baxevanis</name>
-    </author>
-    <content type="html">&lt;p&gt;When working with NHibernate you need to make sure that your mappings are correct. At least, you have to make sure that when you&amp;nbsp;save an item you can also qet that item back.&lt;/p&gt;
-
-&lt;p&gt;If you are using FluentNHibernate you can use the &lt;a href="https://github.com/jagregory/fluent-nhibernate/tree/master/src/FluentNHibernate/Testing" target="_blank"&gt;PersistenceSpecification&amp;lt;T&amp;gt; class&lt;/a&gt;. However, the&amp;nbsp;PersistenceSpecification&amp;lt;T&amp;gt; class requires that you pass the property to check and also a value for that property.&lt;/p&gt;
-
-&lt;p&gt;By using &lt;a title="AutoFixture makes it easier for developers to do Test-Driven Development by automating non-relevant Test Fixture Setup, allowing the Test Developer to focus on the essentials of each test case." href="http://autofixture.codeplex.com/" target="_blank"&gt;AutoFixture&lt;/a&gt; you can easily create objects that you can pass inside the CheckXx methods:&lt;/p&gt;
-&lt;pre class="highlight text"&gt;[Fact]
-public void ShouldVerifyTheMappings()
-{
-    var fixture = new Fixture();
-
-    using (session)
-    {
-        new PersistenceSpecification&amp;lt;EventType&amp;gt;(session)
-            .CheckProperty(x =&amp;gt; x.EventTypeId, 
-                fixture.CreateAnonymous&amp;lt;long&amp;gt;())
-            .CheckProperty(x =&amp;gt; x.EventTypeName, 
-                fixture.CreateAnonymous&amp;lt;string&amp;gt;())
-            .CheckProperty(x =&amp;gt; x.ExchangeServerId, 
-                fixture.CreateAnonymous&amp;lt;int&amp;gt;())
-            .CheckProperty(x =&amp;gt; x.LastUpdatedOn, 
-                DateTime.Today)
-            .CheckProperty(x =&amp;gt; x.NextMarketId, 
-                fixture.CreateAnonymous&amp;lt;long&amp;gt;())
-            .CheckReference(x =&amp;gt; x.Bookmaker, 
-                fixture.CreateAnonymous&amp;lt;Bookmaker&amp;gt;())
-            .VerifyTheMappings();
-    }
-}
-&lt;/pre&gt;
-&lt;p&gt;Combining&amp;nbsp;AutoFixture with the PersistenceSpecification&amp;lt;T&amp;gt; class results in&amp;nbsp;writing less code when testing NHibernate mappings, specially when dealing with complex types.&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
     <title>Unit Testing Events (The SpinWait.SpinUntil Method)</title>
     <link rel="alternate" href="/blog/2011/03/13/unit-testing-events-the-spinwait-dot-spinuntil-method"/>
     <id>http://nikosbaxevanis.com/blog/2011/03/13/unit-testing-events-the-spinwait-dot-spinuntil-method</id>
@@ -6275,6 +6276,46 @@ public void FooEvent()
 }
 &lt;/pre&gt;
 &lt;p&gt;The above tests are exactly the same. The one with the SpinWait.SpinUntil method is easier to read and it also requires less code. Pretty cool.&lt;/p&gt;
+</content>
+  </entry>
+  <entry>
+    <title>Persistence specification testing combined with AutoFixture</title>
+    <link rel="alternate" href="/blog/2011/03/13/persistence-specification-testing-combined-with-autofixture"/>
+    <id>http://nikosbaxevanis.com/blog/2011/03/13/persistence-specification-testing-combined-with-autofixture</id>
+    <updated>2011-03-13T00:00:00+02:00</updated>
+    <author>
+      <name>Nikos Baxevanis</name>
+    </author>
+    <content type="html">&lt;p&gt;When working with NHibernate you need to make sure that your mappings are correct. At least, you have to make sure that when you&amp;nbsp;save an item you can also qet that item back.&lt;/p&gt;
+
+&lt;p&gt;If you are using FluentNHibernate you can use the &lt;a href="https://github.com/jagregory/fluent-nhibernate/tree/master/src/FluentNHibernate/Testing" target="_blank"&gt;PersistenceSpecification&amp;lt;T&amp;gt; class&lt;/a&gt;. However, the&amp;nbsp;PersistenceSpecification&amp;lt;T&amp;gt; class requires that you pass the property to check and also a value for that property.&lt;/p&gt;
+
+&lt;p&gt;By using &lt;a title="AutoFixture makes it easier for developers to do Test-Driven Development by automating non-relevant Test Fixture Setup, allowing the Test Developer to focus on the essentials of each test case." href="http://autofixture.codeplex.com/" target="_blank"&gt;AutoFixture&lt;/a&gt; you can easily create objects that you can pass inside the CheckXx methods:&lt;/p&gt;
+&lt;pre class="highlight text"&gt;[Fact]
+public void ShouldVerifyTheMappings()
+{
+    var fixture = new Fixture();
+
+    using (session)
+    {
+        new PersistenceSpecification&amp;lt;EventType&amp;gt;(session)
+            .CheckProperty(x =&amp;gt; x.EventTypeId, 
+                fixture.CreateAnonymous&amp;lt;long&amp;gt;())
+            .CheckProperty(x =&amp;gt; x.EventTypeName, 
+                fixture.CreateAnonymous&amp;lt;string&amp;gt;())
+            .CheckProperty(x =&amp;gt; x.ExchangeServerId, 
+                fixture.CreateAnonymous&amp;lt;int&amp;gt;())
+            .CheckProperty(x =&amp;gt; x.LastUpdatedOn, 
+                DateTime.Today)
+            .CheckProperty(x =&amp;gt; x.NextMarketId, 
+                fixture.CreateAnonymous&amp;lt;long&amp;gt;())
+            .CheckReference(x =&amp;gt; x.Bookmaker, 
+                fixture.CreateAnonymous&amp;lt;Bookmaker&amp;gt;())
+            .VerifyTheMappings();
+    }
+}
+&lt;/pre&gt;
+&lt;p&gt;Combining&amp;nbsp;AutoFixture with the PersistenceSpecification&amp;lt;T&amp;gt; class results in&amp;nbsp;writing less code when testing NHibernate mappings, specially when dealing with complex types.&lt;/p&gt;
 </content>
   </entry>
   <entry>
@@ -8707,20 +8748,6 @@ internal partial class App : Application
 </content>
   </entry>
   <entry>
-    <title>BindingBase.StringFormat Property (System.Windows.Data)</title>
-    <link rel="alternate" href="/blog/2010/10/07/bindingbase-dot-stringformat-property-system-dot-windows-dot-data"/>
-    <id>http://nikosbaxevanis.com/blog/2010/10/07/bindingbase-dot-stringformat-property-system-dot-windows-dot-data</id>
-    <updated>2010-10-07T00:00:00+03:00</updated>
-    <author>
-      <name>Nikos Baxevanis</name>
-    </author>
-    <content type="html">&lt;p&gt;By default the WPF binding engine uses 2 fractional digits when displaying double values. When those digits are zero though, they are omitted. You can override this by specifying the StringFormat Property on the binding.&lt;/p&gt;
-&lt;pre class="highlight text"&gt;Text=&amp;quot;{Binding Path=Price, StringFormat={}{0:0.00}}&amp;quot;
-&lt;/pre&gt;
-&lt;p&gt;&lt;a href="http://msdn.microsoft.com/en-us/library/system.windows.data.bindingbase.stringformat.aspx"&gt;StringFormat&lt;/a&gt; can be a predefined, composite, or custom string format. For more information about string formats, see Formatting Types &lt;a href="http://msdn.microsoft.com/en-us/library/26etazsy.aspx"&gt;here&lt;/a&gt;.&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
     <title>Building Castle ActiveRecord from Source at GitHub</title>
     <link rel="alternate" href="/blog/2010/10/07/building-castle-activerecord-from-source-at-github"/>
     <id>http://nikosbaxevanis.com/blog/2010/10/07/building-castle-activerecord-from-source-at-github</id>
@@ -8773,6 +8800,20 @@ internal partial class App : Application
 &lt;/ul&gt;
 
 &lt;p&gt;The documentation is &lt;a href="http://stw.castleproject.org/Active%20Record.MainPage.ashx" title="Castle Active Record"&gt;here&lt;/a&gt;. Feel free to contribute.&lt;/p&gt;
+</content>
+  </entry>
+  <entry>
+    <title>BindingBase.StringFormat Property (System.Windows.Data)</title>
+    <link rel="alternate" href="/blog/2010/10/07/bindingbase-dot-stringformat-property-system-dot-windows-dot-data"/>
+    <id>http://nikosbaxevanis.com/blog/2010/10/07/bindingbase-dot-stringformat-property-system-dot-windows-dot-data</id>
+    <updated>2010-10-07T00:00:00+03:00</updated>
+    <author>
+      <name>Nikos Baxevanis</name>
+    </author>
+    <content type="html">&lt;p&gt;By default the WPF binding engine uses 2 fractional digits when displaying double values. When those digits are zero though, they are omitted. You can override this by specifying the StringFormat Property on the binding.&lt;/p&gt;
+&lt;pre class="highlight text"&gt;Text=&amp;quot;{Binding Path=Price, StringFormat={}{0:0.00}}&amp;quot;
+&lt;/pre&gt;
+&lt;p&gt;&lt;a href="http://msdn.microsoft.com/en-us/library/system.windows.data.bindingbase.stringformat.aspx"&gt;StringFormat&lt;/a&gt; can be a predefined, composite, or custom string format. For more information about string formats, see Formatting Types &lt;a href="http://msdn.microsoft.com/en-us/library/26etazsy.aspx"&gt;here&lt;/a&gt;.&lt;/p&gt;
 </content>
   </entry>
 </feed>
