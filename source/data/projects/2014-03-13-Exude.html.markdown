@@ -1,0 +1,8 @@
+---
+layout:       talk
+name:        "GreanTech/Exude"
+description:  "Contributor"
+date:         2014-03-13
+url:          "https://github.com/GreanTech/Exude"
+categories:   []
+---

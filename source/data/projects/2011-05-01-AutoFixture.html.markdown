@@ -1,8 +1,8 @@
 ---
 layout:       talk
-name:        "AutoFixture"
+name:        "AutoFixture/AutoFixture"
 description:  "Core Contributor"
 date:         2011-05-01
-url:          "http://github.com/autofixture"
+url:          "https://github.com/AutoFixture/AutoFixture"
 categories:   []
 ---
