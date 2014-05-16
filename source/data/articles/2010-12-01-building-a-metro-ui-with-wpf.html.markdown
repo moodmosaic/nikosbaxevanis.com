@@ -340,6 +340,6 @@ private void HandleWndStateChanged(object sender, EventArgs e)
 
 <p>I hope you find this post useful, there is a lot of information around but I think this post connects the pieces.</p>
 <p>The <a href="https://github.com/moodmosaic/BonusBits.CodeSamples/tree/master/BonusBits.CodeSamples.MetroUI" target="_blank" title="BonusBits Blog source-code for Windows Presentation Foundation">solution</a> contains two projects. The first one uses the 1st method for displaying the drop shadow. The second one uses the method described above.</p>
-<p>Due to popular demand, you can download the sample projects <a href="https://github.com/downloads/moodmosaic/BonusBits.CodeSamples/MetroUI-1.zip" target="_blank" title="MetroUI Sample 1">here</a> and <a href="https://github.com/downloads/moodmosaic/BonusBits.CodeSamples/MetroUI-2.zip" target="_blank" title="MetroUI Sample 2">here</a>.</p>
+<p>Due to popular demand, you can download the sample projects <a href="https://github.com/downloads/moodmosaic-attic/BonusBits.CodeSamples/MetroUI-1.zip" target="_blank" title="MetroUI Sample 1">here</a> and <a href="https://github.com/downloads/moodmosaic-attic/BonusBits.CodeSamples/MetroUI-2.zip" target="_blank" title="MetroUI Sample 2">here</a>.</p>
 <p><a href="http://www.codeproject.com/script/Articles/BlogFeedList.aspx?amid=5962224" rel="tag" style="display: none;">CodeProject</a></p>
 
