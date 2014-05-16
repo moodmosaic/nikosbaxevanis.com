@@ -151,6 +151,10 @@ img {
     padding-right: 2rem
 }
 
+.abstract, .experience {
+    text-align: justify;
+}
+
 .experience h4,.experience h5 {
     margin-top: -.8rem;font-weight:400
 }
