@@ -6,7 +6,7 @@
   == yield
   
   div.dater=screencast.date.strftime("%B %d, %Y")
-  div.categories
+  /div.categories
     | Published in
     - for category in screencast.categories do
       a.category href="/category/#{category.downcase.gsub(' ', '-')}/" #{category}&nbsp;
