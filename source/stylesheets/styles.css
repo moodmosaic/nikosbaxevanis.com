@@ -219,6 +219,10 @@ p code {
     .testimonial div {
         padding-right: 1rem
     }
+
+    .abstract,.experience {
+        text-align: left
+    }
 }
 .highlight .hll {
     background-color: #ffc
