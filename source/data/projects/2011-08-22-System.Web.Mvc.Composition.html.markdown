@@ -1,8 +1,0 @@
----
-layout:       talk
-name:        "moodmosaic/System.Web.Mvc.Composition"
-description:  "Creator"
-date:         2011-08-28
-url:          "https://github.com/moodmosaic/System.Web.Mvc.Composition"
-categories:   []
----
