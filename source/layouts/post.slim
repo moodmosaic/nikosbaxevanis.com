@@ -2,7 +2,6 @@
   h1=data.page.title
   div.post
     == yield
-  a.twitter target="_blank" href="https://twitter.com/intent/tweet?#{URI::encode_www_form("url" => "http://nikosbaxevanis.com" + current_page.url, "text" => current_page.data.title, "via" => "nikosbaxevanis")}" Tweet This
   div.dater=article.date.strftime("%B %d, %Y")
   div.categories
     | Published in
