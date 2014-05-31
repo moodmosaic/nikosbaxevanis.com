@@ -44,6 +44,8 @@ blockquote p { margin-bottom: 1rem }
     line-height: 1.7;
 }
 .homer a { color: #fff }
+.homer a:hover { color: #fff }
+
 .homer-inline {
     font-size: 2rem;
     height: 71px;
@@ -69,7 +71,7 @@ a {
 }
 
 a:hover {
-    color: #222;
+    color: #333;
 }
 .dater {
     font-family: "Open Sans";
