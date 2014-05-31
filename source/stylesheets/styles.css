@@ -63,8 +63,13 @@ div.elevator-pitch {
     text-align: justify;
 }
 a {
-    text-decoration: none;
     color: #0074D9;
+    transition: color ease 0.2s;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #222;
 }
 .dater {
     font-family: "Open Sans";
