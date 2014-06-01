@@ -2,7 +2,7 @@
 layout: post
 title: Semantic commit-logs
 published: 1
-categories: [Unit Testing]
+categories: [Miscellaneous]
 comments: [disqus]
 slug: "Consider providing useful, fine-grained, commits when doing test-driven development."
 ---
@@ -104,4 +104,4 @@ In contrast, in a hypothetical commit log like below all the valuable informatio
 |  
 ```
 
-> Consider providing useful, fine-grained, commits when doing test-driven development.
+Consider providing useful, fine-grained, commits when doing test-driven development.
