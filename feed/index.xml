@@ -5,7 +5,7 @@
   <author>
     <name>Nikos Baxevanis</name>
   </author>
-  <updated>2014-06-01T10:18:37+03:00</updated>
+  <updated>2014-06-01T18:34:26+03:00</updated>
   <link href="http://nikosbaxevanis.com/" rel="alternate"/>
   <link href="http://nikosbaxevanis.com/feed/" rel="self"/>
   <id>http://nikosbaxevanis.com/</id>
@@ -597,13 +597,13 @@ tsTest: {
 &lt;/pre&gt;
 &lt;p&gt;The file comparison output should be similar with the image shown below:&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-04-03-typescript-grunt-angular-1.png?1401607113" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-04-03-typescript-grunt-angular-1.png?1401636860" /&gt;&lt;/p&gt;
 
 &lt;h3&gt;Linting configuration&lt;/h3&gt;
 
 &lt;p&gt;Remove the indentation setting from JSHint since &lt;a href="https://typescript.codeplex.com/workitem/204"&gt;TypeScript indents code idiomatically&lt;/a&gt;.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-04-03-typescript-grunt-angular-2.png?1401607112" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-04-03-typescript-grunt-angular-2.png?1401636860" /&gt;&lt;/p&gt;
 
 &lt;h3&gt;Declaration source files usage&lt;/h3&gt;
 
@@ -1053,7 +1053,7 @@ let CustomizationFillsReturnValuesDecleratively (sut : IInterface) =
     </author>
     <content type="html">&lt;p&gt;&lt;u&gt;Note&lt;/u&gt;: After following this post, the end result is pretty awesome:&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-17.png?1401607113" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-17.png?1401636860" /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Radio Edit (tl;dr)&lt;/strong&gt;&lt;/p&gt;
 
@@ -1082,7 +1082,7 @@ let CustomizationFillsReturnValuesDecleratively (sut : IInterface) =
 
 &lt;p&gt;Create a new Virtual Machine on Windows Azure to install and access TeamCity.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-1.png?1401607112" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-1.png?1401636860" /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;Turn off Internet Explorer&amp;#39;s Enhanced Security Configuration.&lt;/li&gt;
@@ -1093,7 +1093,7 @@ let CustomizationFillsReturnValuesDecleratively (sut : IInterface) =
 &lt;/ul&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-3.png?1401607113" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-3.png?1401636860" /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;Install Karma and karma-teamcity-reporter plugin:&lt;br&gt;&lt;pre&gt;&lt;code&gt;  npm install -g karma
@@ -1110,19 +1110,19 @@ let CustomizationFillsReturnValuesDecleratively (sut : IInterface) =
 &lt;/ul&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-4.png?1401607113" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-4.png?1401636860" /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;u&gt;Optional&lt;/u&gt;: &lt;a href="https://help.github.com/articles/generating-ssh-keys"&gt;Generate SSH keys&lt;/a&gt; if you use SSH keys to establish a secure connection between the Virtual Machine and Git.&lt;/p&gt;
 
 &lt;p&gt;Install TeamCity and choose a port so it can be accessed from a browser (e.g. port 80).&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-5.png?1401607113" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-5.png?1401636860" /&gt;&lt;/p&gt;
 
 &lt;p&gt;If you use SSH keys to establish a secure connection between the Virtual Machine and Git, make sure to run TeamCity Server under a user account that can access the path where the SSH keys are saved.&lt;/p&gt;
 
 &lt;p&gt;Use the &lt;code&gt;whoami&lt;/code&gt; command in the Command Prompt to find out the Virtual Machine&amp;#39;s domain name.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-6.png?1401607113" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-6.png?1401636860" /&gt;&lt;/p&gt;
 
 &lt;p&gt;Add a new inbound rule to Windows Firewall with the TeamCity Server port that was entered during installation.&lt;/p&gt;
 
@@ -1132,7 +1132,7 @@ let CustomizationFillsReturnValuesDecleratively (sut : IInterface) =
 
 &lt;p&gt;On Windows Azure Management Portal add a new endpoint with the selected TeamCity Server port that was entered during installation.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-7.png?1401607113" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-7.png?1401636860" /&gt;&lt;/p&gt;
 
 &lt;p&gt;Log in to the TeamCity Server:&lt;/p&gt;
 
@@ -1142,20 +1142,20 @@ let CustomizationFillsReturnValuesDecleratively (sut : IInterface) =
 &lt;li&gt;Attach a new VCS root on Build Configuration for Git.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-8.png?1401607113" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-8.png?1401636860" /&gt;&lt;/p&gt;
 
 &lt;p&gt;For the demo, I forked the &lt;a href="https://github.com/moodmosaic/angular-phonecat"&gt;angular-phonecat&lt;/a&gt; project.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-9.png?1401607113" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-9.png?1401636860" /&gt;&lt;/p&gt;
 
 &lt;p&gt;Select an authentication method and test the connection.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-10.png?1401607113" /&gt;
-&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-11.png?1401607113" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-10.png?1401636860" /&gt;
+&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-11.png?1401636860" /&gt;&lt;/p&gt;
 
 &lt;p&gt;Add a Build Step and attach the newly created Build Configuration.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-12.png?1401607113" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-12.png?1401636860" /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;In the runner type select Command Line.&lt;/li&gt;
@@ -1165,20 +1165,20 @@ let CustomizationFillsReturnValuesDecleratively (sut : IInterface) =
 &lt;li&gt;In the command parameters option enter &lt;code&gt;start karma.conf.js --reporters teamcity --single-run&lt;/code&gt;.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-13.png?1401607113" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-13.png?1401636860" /&gt;&lt;/p&gt;
 
 &lt;p&gt;As a last step, include the &lt;code&gt;karma-teamcity-reporter&lt;/code&gt; plugin in the karma.conf.js file.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-14.png?1401607113" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-14.png?1401636860" /&gt;&lt;/p&gt;
 
 &lt;p&gt;Push to Git to trigger the build process and see the commit on TeamCity Server.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-15.png?1401607113" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-15.png?1401636860" /&gt;&lt;/p&gt;
 
 &lt;p&gt;The end result is pretty awesome:&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-16.png?1401607113" /&gt;
-&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-17.png?1401607113" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-16.png?1401636860" /&gt;
+&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-17.png?1401636860" /&gt;&lt;/p&gt;
 </content>
   </entry>
   <entry>
@@ -1528,31 +1528,31 @@ PM&amp;gt; Install-Package Xunit.Extensions
 
 &lt;p&gt;&lt;a href="http://msdn.microsoft.com/en-us/library/bb298736.aspx"&gt;Enumerable.ToArray&lt;/a&gt; &amp;#8594; &lt;a href="http://msdn.microsoft.com/en-us/library/ee340263.aspx"&gt;Seq.toArray&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-1.png?1401607112" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-1.png?1401636860" /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;AsEnumerable&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;a href="http://msdn.microsoft.com/en-us/library/bb335435.aspx"&gt;Enumerable.AsEnumerable&lt;/a&gt; &amp;#8594; &lt;code&gt;seq { }&lt;/code&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-2.png?1401607112" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-2.png?1401636860" /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;First&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;a href="http://msdn.microsoft.com/en-us/library/bb291976.aspx"&gt;Enumerable.First&lt;/a&gt; &amp;#8594; &lt;a href="http://msdn.microsoft.com/en-us/library/ee340330.aspx"&gt;Seq.head&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-3.png?1401607112" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-3.png?1401636860" /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Count&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;a href="http://msdn.microsoft.com/en-us/library/bb338038.aspx"&gt;Enumerable.Count&lt;/a&gt; &amp;#8594; &lt;a href="http://msdn.microsoft.com/en-us/library/ee370547.aspx"&gt;Seq.length&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-4.png?1401607112" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-4.png?1401636860" /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;SequenceEqual&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;a href="http://msdn.microsoft.com/en-us/library/bb348567.aspx"&gt;Enumerable.SequenceEqual&lt;/a&gt; &amp;#8594; &lt;a href="http://msdn.microsoft.com/en-us/library/ee353659.aspx"&gt;Seq.compareWith&lt;/a&gt; &lt;a href="http://msdn.microsoft.com/en-us/library/ee353429.aspx"&gt;Operators.compare&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-5.png?1401607112" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-5.png?1401636860" /&gt;&lt;/p&gt;
 </content>
   </entry>
   <entry>
@@ -1659,7 +1659,7 @@ let AutoMockInterfaceAndSetupExpectationsDeclaratively
 
 &lt;p&gt;The most important changes are shown below. You can also see the diff as an image &lt;a href="/images/articles/2013-10-04-how-to-configure-msbuild-to-locate-the-fsharp-build-targets.png"&gt;here&lt;/a&gt;:&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-04-how-to-configure-msbuild-to-locate-the-fsharp-build-targets.png?1401607112" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-04-how-to-configure-msbuild-to-locate-the-fsharp-build-targets.png?1401636860" /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;A note for VS 2012 users&lt;/strong&gt;&lt;/p&gt;
 
@@ -1955,14 +1955,15 @@ C:\Program Files (x86)\MSBuild\Microsoft\VisualStudio\v11.0\CodeAnalysis&lt;/p&g
     <author>
       <name>Nikos Baxevanis</name>
     </author>
-    <content type="html">&lt;p&gt;&lt;strong&gt;Updated&lt;/strong&gt;: February 13, 2013.&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;The complete list can be found &lt;a href="http://stackoverflow.com/questions/tagged/autofixture"&gt;here&lt;/a&gt;.&lt;/em&gt;&lt;/p&gt;
+    <content type="html">&lt;p&gt;&lt;strong&gt;Updated&lt;/strong&gt;: June 1, 2014.&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Using AutoFixture in F#&lt;/strong&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;a href="http://stackoverflow.com/a/20816487/467754"&gt;Specifying readonly property values via constructor arguments when instantiating immutable objects with AutoFixture&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://stackoverflow.com/a/23509999/467754"&gt;Create an instance of FormsAuthenticationTicket&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://stackoverflow.com/questions/19908385/automocking-web-api-2-controller/19954215#comment34356805_19954215"&gt;ASP.NET Web API 2 Customization (&amp;lt; 5.0.0.0)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://stackoverflow.com/questions/20712686/need-to-create-convention-for-apicontrollers/20723447#comment36871339_20723447"&gt;ASP.NET Web API 2 Customization (= 5.0.0.0)&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;&lt;strong&gt;AutoFixture.Auto[Moq/RhinoMocks/FakeItEasy/NSubstitute/Foq]&lt;/strong&gt;&lt;/p&gt;
@@ -2005,6 +2006,9 @@ C:\Program Files (x86)\MSBuild\Microsoft\VisualStudio\v11.0\CodeAnalysis&lt;/p&g
 &lt;p&gt;&lt;strong&gt;AutoFixture.Xunit&lt;/strong&gt;&lt;/p&gt;
 
 &lt;ul&gt;
+&lt;li&gt;&lt;a href="http://stackoverflow.com/questions/22179928/autofixture-mixing-propertydata-with-multiple-entries-and-autodata-using-automo"&gt;AutoFixture mixing PropertyData with multiple entries and AutoData&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://stackoverflow.com/questions/22373258/difference-between-fact-and-theory-xunit-net"&gt;Difference between Fact and Theory?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://stackoverflow.com/questions/22985001/how-to-combine-propertydata-and-autonsubstitutedata-attributes-in-xunit-autofixt"&gt;How to combine PropertyData and AutoNSubstituteData attributes?&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="http://stackoverflow.com/questions/21195872/how-to-use-autodata-in-unit-tests-to-supply-n-objects-of-a-type-in-test-argument"&gt;How to use AutoData in unit tests to supply N objects of a type in test arguments?&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="http://stackoverflow.com/questions/18852608/autofixture-compositedataattribute-does-not-work-with-propertydataattribute"&gt;CompositeDataAttribute does not seem to work with PropertyDataAttribute&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="http://stackoverflow.com/questions/18238348/can-a-particular-constructor-argument-of-an-injected-sut-using-autodata-xunit-th"&gt;Inject a particular constructor argument in the SUT using xUnit Theories and AutoData&lt;/a&gt;&lt;/li&gt;
@@ -2024,6 +2028,12 @@ C:\Program Files (x86)\MSBuild\Microsoft\VisualStudio\v11.0\CodeAnalysis&lt;/p&g
 &lt;p&gt;&lt;strong&gt;Customizations&lt;/strong&gt;&lt;/p&gt;
 
 &lt;ul&gt;
+&lt;li&gt;&lt;a href="http://stackoverflow.com/questions/22262885/omitting-a-specific-field-with-createmany-from-autofixture"&gt;Omitting a specific field with CreateMany from AutoFixture&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://stackoverflow.com/questions/22686907/let-autofixture-create-datetime-in-utc"&gt;How to let AutoFixture create DateTime in UTC?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://stackoverflow.com/a/23509581/467754"&gt;Create an instance of FormsAuthenticationTicket&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://stackoverflow.com/questions/22692281/how-to-fix-a-range-on-some-properties-when-create-a-testclass-by-autofixture"&gt;How to fix a range on some properties?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://stackoverflow.com/questions/23462036/autofixture-customization-for-creating-implementations-of-a-base-type"&gt;AutoFixture customization for creating implementations of a base type&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://stackoverflow.com/questions/21564894/how-can-i-add-common-postprocessing-applied-after-customization"&gt;How can I add common postprocessing applied after customization?&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="http://stackoverflow.com/questions/21590491/customizations-vs-residue-collectors"&gt;Customizations vs Residue collectors&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="http://stackoverflow.com/questions/20209469/how-can-i-register-a-generic-object-factory"&gt;How can I register a generic object factory?&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="http://stackoverflow.com/questions/19908385/automocking-web-api-2-controller"&gt;Automocking Web Api 2 controller&lt;/a&gt;&lt;/li&gt;
@@ -2093,6 +2103,7 @@ C:\Program Files (x86)\MSBuild\Microsoft\VisualStudio\v11.0\CodeAnalysis&lt;/p&g
 &lt;p&gt;&lt;strong&gt;Refactoring&lt;/strong&gt;&lt;/p&gt;
 
 &lt;ul&gt;
+&lt;li&gt;&lt;a href="http://stackoverflow.com/questions/22331791/applying-dry-to-autofixture-build-statements"&gt;Applying DRY to Autofixture &amp;ldquo;Build&amp;rdquo; statements&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="http://stackoverflow.com/questions/17867566/unit-testing-order-of-items-in-a-list"&gt;Unit testing the order of items in a list&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="http://stackoverflow.com/questions/17846164/autofixture-generate-custom-list"&gt;Generating custom lists&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="http://stackoverflow.com/questions/2622334/autofixture-refactoring"&gt;Minimizing the Arrange phase&lt;/a&gt;&lt;/li&gt;
