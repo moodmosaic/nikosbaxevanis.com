@@ -7,13 +7,14 @@ comments: [disqus]
 slug: "Questions on Stack Overflow about AutoFixture, Auto-mocking, xUnit.net, Customizations, Idioms, Likeness, and Refactoring."
 ---
 
-**Updated**: February 13, 2013.
-
-*The complete list can be found [here](http://stackoverflow.com/questions/tagged/autofixture).*
+**Updated**: June 1, 2014.
 
 **Using AutoFixture in F#**
 
 * [Specifying readonly property values via constructor arguments when instantiating immutable objects with AutoFixture](http://stackoverflow.com/a/20816487/467754)
+* [Create an instance of FormsAuthenticationTicket](http://stackoverflow.com/a/23509999/467754)
+* [ASP.NET Web API 2 Customization (< 5.0.0.0)](http://stackoverflow.com/questions/19908385/automocking-web-api-2-controller/19954215#comment34356805_19954215)
+* [ASP.NET Web API 2 Customization (= 5.0.0.0)](http://stackoverflow.com/questions/20712686/need-to-create-convention-for-apicontrollers/20723447#comment36871339_20723447)
 
 **AutoFixture.Auto[Moq/RhinoMocks/FakeItEasy/NSubstitute/Foq]**
 
@@ -50,6 +51,9 @@ slug: "Questions on Stack Overflow about AutoFixture, Auto-mocking, xUnit.net, C
 
 **AutoFixture.Xunit**
 
+* [AutoFixture mixing PropertyData with multiple entries and AutoData](http://stackoverflow.com/questions/22179928/autofixture-mixing-propertydata-with-multiple-entries-and-autodata-using-automo)
+* [Difference between Fact and Theory?](http://stackoverflow.com/questions/22373258/difference-between-fact-and-theory-xunit-net)
+* [How to combine PropertyData and AutoNSubstituteData attributes?](http://stackoverflow.com/questions/22985001/how-to-combine-propertydata-and-autonsubstitutedata-attributes-in-xunit-autofixt)
 * [How to use AutoData in unit tests to supply N objects of a type in test arguments?](http://stackoverflow.com/questions/21195872/how-to-use-autodata-in-unit-tests-to-supply-n-objects-of-a-type-in-test-argument)
 * [CompositeDataAttribute does not seem to work with PropertyDataAttribute](http://stackoverflow.com/questions/18852608/autofixture-compositedataattribute-does-not-work-with-propertydataattribute)
 * [Inject a particular constructor argument in the SUT using xUnit Theories and AutoData](http://stackoverflow.com/questions/18238348/can-a-particular-constructor-argument-of-an-injected-sut-using-autodata-xunit-th)
@@ -67,6 +71,12 @@ slug: "Questions on Stack Overflow about AutoFixture, Auto-mocking, xUnit.net, C
 
 **Customizations**
 
+* [Omitting a specific field with CreateMany from AutoFixture](http://stackoverflow.com/questions/22262885/omitting-a-specific-field-with-createmany-from-autofixture)
+* [How to let AutoFixture create DateTime in UTC?](http://stackoverflow.com/questions/22686907/let-autofixture-create-datetime-in-utc)
+* [Create an instance of FormsAuthenticationTicket](http://stackoverflow.com/a/23509581/467754)
+* [How to fix a range on some properties?](http://stackoverflow.com/questions/22692281/how-to-fix-a-range-on-some-properties-when-create-a-testclass-by-autofixture)
+* [AutoFixture customization for creating implementations of a base type](http://stackoverflow.com/questions/23462036/autofixture-customization-for-creating-implementations-of-a-base-type)
+* [How can I add common postprocessing applied after customization?](http://stackoverflow.com/questions/21564894/how-can-i-add-common-postprocessing-applied-after-customization)
 * [Customizations vs Residue collectors](http://stackoverflow.com/questions/21590491/customizations-vs-residue-collectors)
 * [How can I register a generic object factory?](http://stackoverflow.com/questions/20209469/how-can-i-register-a-generic-object-factory)
 * [Automocking Web Api 2 controller](http://stackoverflow.com/questions/19908385/automocking-web-api-2-controller)
@@ -130,6 +140,7 @@ slug: "Questions on Stack Overflow about AutoFixture, Auto-mocking, xUnit.net, C
 
 **Refactoring**
 
+* [Applying DRY to Autofixture "Build" statements](http://stackoverflow.com/questions/22331791/applying-dry-to-autofixture-build-statements)
 * [Unit testing the order of items in a list](http://stackoverflow.com/questions/17867566/unit-testing-order-of-items-in-a-list)
 * [Generating custom lists](http://stackoverflow.com/questions/17846164/autofixture-generate-custom-list)
 * [Minimizing the Arrange phase](http://stackoverflow.com/questions/2622334/autofixture-refactoring)
