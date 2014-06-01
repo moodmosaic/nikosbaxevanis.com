@@ -2,7 +2,7 @@
 layout: post
 title: Do you need help with your project?
 published: 1
-categories: [Miscellaneous]
+categories: []
 comments: []
 slug: "Why not use my experience for the benefit of your project?"
 ---
