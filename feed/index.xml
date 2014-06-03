@@ -5,10 +5,605 @@
   <author>
     <name>Nikos Baxevanis</name>
   </author>
-  <updated>2014-06-02T23:05:50+03:00</updated>
+  <updated>2014-06-03T11:20:52+03:00</updated>
   <link href="http://nikosbaxevanis.com/" rel="alternate"/>
   <link href="http://nikosbaxevanis.com/feed/" rel="self"/>
   <id>http://nikosbaxevanis.com/</id>
+  <entry>
+    <title>Using Grunt with angular-seed</title>
+    <link rel="alternate" href="/blog/2014/06/03/using-grunt-with-angular-seed"/>
+    <id>http://nikosbaxevanis.com/blog/2014/06/03/using-grunt-with-angular-seed</id>
+    <updated>2014-06-03T00:00:00+03:00</updated>
+    <author>
+      <name>Nikos Baxevanis</name>
+    </author>
+    <content type="html">&lt;p&gt;&lt;em&gt;This post contains step-by-step instructions to enable development and deployment task automation for &lt;a href="https://github.com/angular/angular-seed"&gt;angular-seed&lt;/a&gt; projects using &lt;a href="http://gruntjs.com/"&gt;Grunt&lt;/a&gt;.&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 1 – Preparing to use Grunt&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;To make sure that no npm errors will propagate during the installation of npm packages it is recommended to clean the npm cache.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="http://codebetter.com/glennblock/2012/02/27/my-tale-of-npm-woe-when-all-else-fails-clear-you-cache/"&gt;&lt;em&gt;&amp;ldquo;.. clear you cache! It might save you from switching professions.&amp;rdquo;&lt;/em&gt;&lt;/a&gt; &amp;ndash; Glenn Block&lt;/p&gt;
+&lt;pre class="highlight text"&gt;$ npm cache clean
+&lt;/pre&gt;
+&lt;p&gt;Next, install Grunt&amp;#39;s command line interface, &lt;a href="https://github.com/gruntjs/grunt-cli"&gt;grunt-cli&lt;/a&gt;.&lt;/p&gt;
+&lt;pre class="highlight text"&gt;$ npm install -g grunt-cli
+&lt;/pre&gt;
+&lt;p&gt;In fact, grunt-cli is the only required globally installed npm module to demo this post.&lt;/p&gt;
+&lt;pre class="highlight text"&gt;$ npm list -g -depth=0
+C:\Users\Nikos\AppData\Roaming\npm
+└── grunt-cli@0.1.13
+&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;Step 2 - Create a Gruntfile.js in the root directory&lt;/strong&gt;&lt;/p&gt;
+&lt;pre class="highlight text"&gt;'use strict';
+
+module.exports = function (grunt) {
+
+  require('load-grunt-tasks')(grunt);
+  require('time-grunt')(grunt);
+
+  grunt.initConfig({
+
+    myApp: {
+      app: require('./bower.json').appPath || 'app',
+      dist: 'dist'
+    },
+
+    typescript: {
+      base: {
+        src: ['&amp;lt;%= myApp.app %&amp;gt;/js/{,*/}*.ts'],
+        options: {
+          target: 'es5',
+          sourceMap: true
+        }
+      },
+      test: {
+        src: ['test/unit/{,*/}*.ts'],
+        options: {
+          target: 'es5',
+          sourceMap: true
+        }
+      }
+    },
+
+    watch: {
+      ts: {
+        files: ['&amp;lt;%= myApp.app %&amp;gt;/js/{,*/}*.ts'],
+        tasks: ['typescript']
+      },
+      tsTest: {
+        files: ['test/unit/{,*/}*.ts'],
+        tasks: ['typescript:test']
+      },
+      js: {
+        files: ['&amp;lt;%= myApp.app %&amp;gt;/js/{,*/}*.js'],
+        tasks: ['newer:jshint:all'],
+        options: {
+          livereload: true
+        }
+      },
+      jsTest: {
+        files: ['test/unit/{,*/}*.js'],
+        tasks: ['newer:jshint:test', 'karma']
+      },
+      styles: {
+        files: ['&amp;lt;%= myApp.app %&amp;gt;/css/{,*/}*.css'],
+        tasks: ['newer:copy:styles', 'autoprefixer']
+      },
+      gruntfile: {
+        files: ['Gruntfile.js']
+      },
+      livereload: {
+        options: {
+          livereload: '&amp;lt;%= connect.options.livereload %&amp;gt;'
+        },
+        files: [
+          '&amp;lt;%= myApp.app %&amp;gt;/{,*/}*.html',
+          '.tmp/css/{,*/}*.css',
+          '&amp;lt;%= myApp.app %&amp;gt;/img/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
+        ]
+      }
+    },
+
+    connect: {
+      options: {
+        port: 9000,
+        hostname: 'localhost',
+        livereload: 35729
+      },
+      livereload: {
+        options: {
+          open: true,
+          base: [
+            '.tmp',
+            '&amp;lt;%= myApp.app %&amp;gt;'
+          ]
+        }
+      },
+      test: {
+        options: {
+          port: 9001,
+          base: [
+            '.tmp',
+            'test',
+            '&amp;lt;%= myApp.app %&amp;gt;'
+          ]
+        }
+      },
+      dist: {
+        options: {
+          base: '&amp;lt;%= myApp.dist %&amp;gt;'
+        }
+      }
+    },
+
+    jshint: {
+      options: {
+        jshintrc: '.jshintrc',
+        reporter: require('jshint-stylish')
+      },
+      all: [
+        'Gruntfile.js',
+        '&amp;lt;%= myApp.app %&amp;gt;/js/{,*/}*.js'
+      ],
+      test: {
+        options: {
+          jshintrc: '.jshintrc'
+        },
+        src: ['test/unit/{,*/}*.js']
+      }
+    },
+
+    clean: {
+      dist: {
+        files: [{
+          dot: true,
+          src: [
+            '.tmp',
+            '&amp;lt;%= myApp.dist %&amp;gt;/*',
+            '!&amp;lt;%= myApp.dist %&amp;gt;/.git*'
+          ]
+        }]
+      },
+      server: '.tmp'
+    },
+
+    autoprefixer: {
+      options: {
+        browsers: ['last 1 version']
+      },
+      dist: {
+        files: [{
+          expand: true,
+          cwd: '.tmp/css/',
+          src: '{,*/}*.css',
+          dest: '.tmp/css/'
+        }]
+      }
+    },
+
+    'bower-install': {
+      app: {
+        html: '&amp;lt;%= myApp.app %&amp;gt;/index.html',
+        ignorePath: '&amp;lt;%= myApp.app %&amp;gt;/'
+      }
+    },
+
+    rev: {
+      dist: {
+        files: {
+          src: [
+            '&amp;lt;%= myApp.dist %&amp;gt;/js/{,*/}*.js',
+            '&amp;lt;%= myApp.dist %&amp;gt;/css/{,*/}*.css',
+            '&amp;lt;%= myApp.dist %&amp;gt;/img/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
+            '&amp;lt;%= myApp.dist %&amp;gt;/css/fonts/*'
+          ]
+        }
+      }
+    },
+
+    useminPrepare: {
+      html: '&amp;lt;%= myApp.app %&amp;gt;/index.html',
+      options: {
+        dest: '&amp;lt;%= myApp.dist %&amp;gt;'
+      }
+    },
+
+    usemin: {
+      html: ['&amp;lt;%= myApp.dist %&amp;gt;/{,*/}*.html'],
+      css: ['&amp;lt;%= myApp.dist %&amp;gt;/css/{,*/}*.css'],
+      options: {
+        assetsDirs: ['&amp;lt;%= myApp.dist %&amp;gt;']
+      }
+    },
+
+    imagemin: {
+      dist: {
+        files: [{
+          expand: true,
+          cwd: '&amp;lt;%= myApp.app %&amp;gt;/img',
+          src: '{,*/}*.{png,jpg,jpeg,gif}',
+          dest: '&amp;lt;%= myApp.dist %&amp;gt;/img'
+        }]
+      }
+    },
+    svgmin: {
+      dist: {
+        files: [{
+          expand: true,
+          cwd: '&amp;lt;%= myApp.app %&amp;gt;/img',
+          src: '{,*/}*.svg',
+          dest: '&amp;lt;%= myApp.dist %&amp;gt;/img'
+        }]
+      }
+    },
+    htmlmin: {
+      dist: {
+        options: {
+          collapseWhitespace: true,
+          collapseBooleanAttributes: true,
+          removeCommentsFromCDATA: true,
+          removeOptionalTags: true
+        },
+        files: [{
+          expand: true,
+          cwd: '&amp;lt;%= myApp.dist %&amp;gt;',
+          src: ['*.html', 'partials/{,*/}*.html'],
+          dest: '&amp;lt;%= myApp.dist %&amp;gt;'
+        }]
+      }
+    },
+
+    ngmin: {
+      dist: {
+        files: [{
+          expand: true,
+          cwd: '.tmp/concat/js',
+          src: '*.js',
+          dest: '.tmp/concat/js'
+        }]
+      }
+    },
+
+    cdnify: {
+      dist: {
+        html: ['&amp;lt;%= myApp.dist %&amp;gt;/*.html']
+      }
+    },
+
+    copy: {
+      dist: {
+        files: [{
+          expand: true,
+          dot: true,
+          cwd: '&amp;lt;%= myApp.app %&amp;gt;',
+          dest: '&amp;lt;%= myApp.dist %&amp;gt;',
+          src: [
+            '*.{ico,png,txt}',
+            '.htaccess',
+            '*.html',
+            'partials/{,*/}*.html',
+            'bower_components/**/*',
+            'img/{,*/}*.{webp}',
+            'fonts/*'
+          ]
+        }, {
+          expand: true,
+          cwd: '.tmp/img',
+          dest: '&amp;lt;%= myApp.dist %&amp;gt;/img',
+          src: ['generated/*']
+        }]
+      },
+      styles: {
+        expand: true,
+        cwd: '&amp;lt;%= myApp.app %&amp;gt;/css',
+        dest: '.tmp/css/',
+        src: '{,*/}*.css'
+      }
+    },
+
+    concurrent: {
+      server: [
+        'copy:styles'
+      ],
+      test: [
+        'copy:styles'
+      ],
+      dist: [
+        'copy:styles',
+        'imagemin',
+        'svgmin'
+      ]
+    },
+
+    replace: {
+      development: {
+        options: {
+          patterns: [{
+            json: grunt.file.readJSON(
+              'config.development.json')
+          }]
+        },
+        files: [{
+          expand: true,
+          flatten: true,
+          src: ['config.js'],
+          dest: '&amp;lt;%= myApp.app %&amp;gt;/js'
+        }]
+      },
+      azure: {
+        options: {
+          patterns: [{
+            json: grunt.file.readJSON('config.azure.json')
+          }]
+        },
+        files: [{
+          expand: true,
+          flatten: true,
+          src: ['config.js'],
+          dest: '&amp;lt;%= myApp.app %&amp;gt;/js'
+        }]
+      }
+    },
+
+    karma: {
+      unit: {
+        configFile: './test/karma.conf.js',
+        singleRun: true
+      }
+    }
+  });
+
+  grunt.registerTask('serve', function (target) {
+    if (target === 'dist') {
+      return grunt.task.run(['build', 'connect:dist:keepalive']);
+    }
+
+    grunt.task.run([
+      'clean:server',
+      'bower-install',
+      'concurrent:server',
+      'autoprefixer',
+      'connect:livereload',
+      'replace:development',
+      'watch'
+    ]);
+  });
+
+  grunt.registerTask('server', function () {
+    grunt.log.warn(
+      'The `server` task has been deprecated. Use `grunt serve` to start a server.'
+    );
+    grunt.task.run(['serve']);
+  });
+
+  grunt.registerTask('test', [
+    'clean:server',
+    'concurrent:test',
+    'autoprefixer',
+    'connect:test',
+    'karma'
+  ]);
+
+  grunt.registerTask('build', [
+    'clean:dist',
+    'bower-install',
+    'useminPrepare',
+    'concurrent:dist',
+    'autoprefixer',
+    'concat',
+    'ngmin',
+    'copy:dist',
+    'cdnify',
+    'cssmin',
+    'uglify',
+    'rev',
+    'usemin',
+    'htmlmin'
+  ]);
+
+  grunt.registerTask('default', [
+    'newer:jshint',
+    'test',
+    'build'
+  ]);
+};
+&lt;/pre&gt;
+&lt;p&gt;This is quite a sophisticated Gruntfile, with reasonable defaults and best practises, composed by &lt;a href="https://github.com/yeoman/generator-angular"&gt;generator-angular&lt;/a&gt;, as well as this &lt;a href="http://newtriks.com/2013/11/29/environment-specific-configuration-in-angularjs-using-grunt/"&gt;post&lt;/a&gt;, and this &lt;a href="http://nikosbaxevanis.com/blog/2014/04/03/typescript-slash-grunt-slash-angular/"&gt;post&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 3 – Add environment specific configuration files&lt;/strong&gt;&lt;/p&gt;
+&lt;pre class="highlight json"&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
+  &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;name&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;value&amp;quot;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/pre&gt;
+&lt;p&gt;Save the above key-value placeholder as &lt;strong&gt;config.azure.json&lt;/strong&gt; and &lt;strong&gt;config.development.json&lt;/strong&gt; in the root directory.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 4 – Make angular-mocks a Bower development-dependency&lt;/strong&gt;&lt;/p&gt;
+&lt;pre class="highlight diff"&gt;&lt;span class="err"&gt;diff --git a/bower.json b/bower.json
+&lt;/span&gt;&lt;span class="gh"&gt;@@ -9,7 +9,9 @@
+&lt;/span&gt;     &amp;quot;angular&amp;quot;: &amp;quot;1.2.x&amp;quot;,
+     &amp;quot;angular-route&amp;quot;: &amp;quot;1.2.x&amp;quot;,
+     &amp;quot;angular-loader&amp;quot;: &amp;quot;1.2.x&amp;quot;,
+&lt;span class="gd"&gt;-    &amp;quot;angular-mocks&amp;quot;: &amp;quot;~1.2.x&amp;quot;,
+&lt;/span&gt;     &amp;quot;html5-boilerplate&amp;quot;: &amp;quot;~4.3.0&amp;quot;
+&lt;span class="gd"&gt;-  }
+&lt;/span&gt;&lt;span class="gi"&gt;+  },
++  &amp;quot;devDependencies&amp;quot;: {
++    &amp;quot;angular-mocks&amp;quot;: &amp;quot;~1.2.x&amp;quot;
++   }
+&lt;/span&gt; }
+&lt;/pre&gt;
+&lt;p&gt;(Currently &lt;a href="https://github.com/angular/angular-seed/blob/238b1a9aaa34e6ef98c6aaa0418c24c0c19dd2e3/bower.json"&gt;bower.json&lt;/a&gt; includes &lt;code&gt;angular-mocks&lt;/code&gt; as an application dependency, although it&amp;#39;s really a development/testing dependency.)&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 5 – Add the npm packages required by Grunt&lt;/strong&gt;&lt;/p&gt;
+&lt;pre class="highlight diff"&gt;&lt;span class="err"&gt;diff --git a/package.json b/package.json
+&lt;/span&gt;&lt;span class="gh"&gt;@@ -11,12 +11,52 @@
+&lt;/span&gt;     &amp;quot;http-server&amp;quot;: &amp;quot;^0.6.1&amp;quot;,
+     &amp;quot;bower&amp;quot;: &amp;quot;^1.3.1&amp;quot;,
+     &amp;quot;shelljs&amp;quot;: &amp;quot;^0.2.6&amp;quot;,
+&lt;span class="gd"&gt;-    &amp;quot;karma-junit-reporter&amp;quot;: &amp;quot;^0.2.2&amp;quot;
+&lt;/span&gt;&lt;span class="gi"&gt;+    &amp;quot;karma-junit-reporter&amp;quot;: &amp;quot;^0.2.2&amp;quot;,
++    &amp;quot;grunt&amp;quot;: &amp;quot;~0.4.1&amp;quot;,
++    &amp;quot;grunt-cli&amp;quot;: &amp;quot;~0.1.13&amp;quot;,
++    &amp;quot;grunt-autoprefixer&amp;quot;: &amp;quot;~0.4.0&amp;quot;,
++    &amp;quot;grunt-bower-install&amp;quot;: &amp;quot;~0.7.0&amp;quot;,
++    &amp;quot;grunt-concurrent&amp;quot;: &amp;quot;~0.4.1&amp;quot;,
++    &amp;quot;grunt-contrib-clean&amp;quot;: &amp;quot;~0.5.0&amp;quot;,
++    &amp;quot;grunt-contrib-coffee&amp;quot;: &amp;quot;~0.7.0&amp;quot;,
++    &amp;quot;grunt-contrib-compass&amp;quot;: &amp;quot;~0.6.0&amp;quot;,
++    &amp;quot;grunt-contrib-concat&amp;quot;: &amp;quot;~0.3.0&amp;quot;,
++    &amp;quot;grunt-contrib-connect&amp;quot;: &amp;quot;~0.5.0&amp;quot;,
++    &amp;quot;grunt-contrib-copy&amp;quot;: &amp;quot;~0.4.1&amp;quot;,
++    &amp;quot;grunt-contrib-cssmin&amp;quot;: &amp;quot;~0.7.0&amp;quot;,
++    &amp;quot;grunt-contrib-htmlmin&amp;quot;: &amp;quot;~0.1.3&amp;quot;,
++    &amp;quot;grunt-contrib-imagemin&amp;quot;: &amp;quot;~0.3.0&amp;quot;,
++    &amp;quot;grunt-contrib-jshint&amp;quot;: &amp;quot;~0.7.1&amp;quot;,
++    &amp;quot;grunt-contrib-uglify&amp;quot;: &amp;quot;~0.2.0&amp;quot;,
++    &amp;quot;grunt-contrib-watch&amp;quot;: &amp;quot;~0.5.2&amp;quot;,
++    &amp;quot;grunt-google-cdn&amp;quot;: &amp;quot;~0.2.0&amp;quot;,
++    &amp;quot;grunt-karma&amp;quot;: &amp;quot;~0.6.2&amp;quot;,
++    &amp;quot;grunt-newer&amp;quot;: &amp;quot;~0.5.4&amp;quot;,
++    &amp;quot;grunt-ngmin&amp;quot;: &amp;quot;~0.0.2&amp;quot;,
++    &amp;quot;grunt-replace&amp;quot;: &amp;quot;~0.7.6&amp;quot;,
++    &amp;quot;grunt-rev&amp;quot;: &amp;quot;~0.1.0&amp;quot;,
++    &amp;quot;grunt-svgmin&amp;quot;: &amp;quot;~0.2.0&amp;quot;,
++    &amp;quot;grunt-typescript&amp;quot;: &amp;quot;*&amp;quot;,
++    &amp;quot;grunt-usemin&amp;quot;: &amp;quot;~2.0.0&amp;quot;,
++    &amp;quot;jshint-stylish&amp;quot;: &amp;quot;~0.1.3&amp;quot;,
++    &amp;quot;load-grunt-tasks&amp;quot;: &amp;quot;~0.2.0&amp;quot;,
++    &amp;quot;requirejs&amp;quot;: &amp;quot;~2.1.10&amp;quot;,
++    &amp;quot;time-grunt&amp;quot;: &amp;quot;~0.2.1&amp;quot;,
++    &amp;quot;karma-ng-scenario&amp;quot;: &amp;quot;~0.1.0&amp;quot;,
++    &amp;quot;karma-html2js-preprocessor&amp;quot;: &amp;quot;~0.1.0&amp;quot;,
++    &amp;quot;karma-firefox-launcher&amp;quot;: &amp;quot;~0.1.3&amp;quot;,
++    &amp;quot;karma-script-launcher&amp;quot;: &amp;quot;~0.1.0&amp;quot;,
++    &amp;quot;karma-chrome-launcher&amp;quot;: &amp;quot;~0.1.2&amp;quot;,
++    &amp;quot;karma-jasmine&amp;quot;: &amp;quot;~0.1.5&amp;quot;,
++    &amp;quot;karma-coffee-preprocessor&amp;quot;: &amp;quot;~0.1.2&amp;quot;,
++    &amp;quot;karma-requirejs&amp;quot;: &amp;quot;~0.2.1&amp;quot;,
++    &amp;quot;karma-phantomjs-launcher&amp;quot;: &amp;quot;~0.1.1&amp;quot;,
++    &amp;quot;karma-ng-html2js-preprocessor&amp;quot;: &amp;quot;~0.1.0&amp;quot;
+&lt;/span&gt;   },
+   &amp;quot;scripts&amp;quot;: {
+     &amp;quot;postinstall&amp;quot;: &amp;quot;bower install&amp;quot;,
+&lt;span class="err"&gt;
+&lt;/span&gt;&lt;span class="gd"&gt;-    &amp;quot;prestart&amp;quot;: &amp;quot;npm install&amp;quot;,
+&lt;/span&gt;&lt;span class="gi"&gt;+    &amp;quot;prestart&amp;quot;: &amp;quot;npm install &amp;amp;&amp;amp; grunt bower-install&amp;quot;,
+&lt;/span&gt;     &amp;quot;start&amp;quot;: &amp;quot;http-server -a localhost -p 8000&amp;quot;,
+&lt;span class="err"&gt;
+&lt;/span&gt;     &amp;quot;pretest&amp;quot;: &amp;quot;npm install&amp;quot;,
+&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;Step 6 – Install locally the npm and Bower packages&lt;/strong&gt;&lt;/p&gt;
+&lt;pre class="highlight text"&gt;npm install
+&lt;/pre&gt;
+&lt;p&gt;This has been pre-configured by angular-seed to also automatically call &lt;code&gt;bower install&lt;/code&gt;. Two new folders will be created in the project:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;node_modules, containing the required npm packages for the tools&lt;/li&gt;
+&lt;li&gt;app/bower_components, containing the AngularJS framework files&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;This normally takes a while.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 7 – Inject some awesomeness to index.html&lt;/strong&gt;&lt;/p&gt;
+&lt;pre class="highlight diff"&gt;&lt;span class="err"&gt;diff --git a/app/index.html b/app/index.html
+&lt;/span&gt;&lt;span class="gh"&gt;@@ -9,9 +9,15 @@
+&lt;/span&gt;   &amp;lt;title&amp;gt;My AngularJS App&amp;lt;/title&amp;gt;
+   &amp;lt;meta name=&amp;quot;description&amp;quot; content=&amp;quot;&amp;quot;&amp;gt;
+   &amp;lt;meta name=&amp;quot;viewport&amp;quot; content=&amp;quot;width=device-width, initial-scale=1&amp;quot;&amp;gt;
+&lt;span class="gi"&gt;+  &amp;lt;!-- build:css styles/vendor.css --&amp;gt;
+&lt;/span&gt;   &amp;lt;link rel=&amp;quot;stylesheet&amp;quot; href=&amp;quot;bower_components/html5-boilerplate/css/normalize.css&amp;quot;&amp;gt;
+   &amp;lt;link rel=&amp;quot;stylesheet&amp;quot; href=&amp;quot;bower_components/html5-boilerplate/css/main.css&amp;quot;&amp;gt;
+&lt;span class="gi"&gt;+  &amp;lt;!-- bower:css --&amp;gt;
++  &amp;lt;!-- endbower --&amp;gt;
++  &amp;lt;!-- endbuild --&amp;gt;
++  &amp;lt;!-- build:css({.tmp,app}) styles/main.css --&amp;gt;
+&lt;/span&gt;   &amp;lt;link rel=&amp;quot;stylesheet&amp;quot; href=&amp;quot;css/app.css&amp;quot;/&amp;gt;
+&lt;span class="gi"&gt;+  &amp;lt;!-- endbuild --&amp;gt;
+&lt;/span&gt;   &amp;lt;script src=&amp;quot;bower_components/html5-boilerplate/js/vendor/modernizr-2.6.2.min.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+ &amp;lt;/head&amp;gt;
+ &amp;lt;body&amp;gt;
+&lt;span class="gh"&gt;@@ -31,12 +37,19 @@
+&lt;/span&gt;   &amp;lt;!-- In production use:
+   &amp;lt;script src=&amp;quot;//ajax.googleapis.com/ajax/libs/angularjs/x.x.x/angular.min.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+   --&amp;gt;
+&lt;span class="gi"&gt;+  &amp;lt;!-- build:js scripts/vendor.js --&amp;gt;
++  &amp;lt;!-- bower:js --&amp;gt;
+&lt;/span&gt;   &amp;lt;script src=&amp;quot;bower_components/angular/angular.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+   &amp;lt;script src=&amp;quot;bower_components/angular-route/angular-route.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&lt;span class="gi"&gt;+  &amp;lt;!-- endbower --&amp;gt;
++  &amp;lt;!-- endbuild --&amp;gt;
++
++  &amp;lt;!-- build:js({.tmp,app}) scripts/scripts.js --&amp;gt;
+&lt;/span&gt;   &amp;lt;script src=&amp;quot;js/app.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+   &amp;lt;script src=&amp;quot;js/services.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+   &amp;lt;script src=&amp;quot;js/controllers.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+   &amp;lt;script src=&amp;quot;js/filters.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+   &amp;lt;script src=&amp;quot;js/directives.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&lt;span class="gi"&gt;+  &amp;lt;!-- endbuild --&amp;gt;
+&lt;/span&gt; &amp;lt;/body&amp;gt;
+ &amp;lt;/html&amp;gt;
+&lt;/pre&gt;
+&lt;p&gt;The &lt;code&gt;build-css&lt;/code&gt; tag bundles and minifies CSS while &lt;code&gt;build:js&lt;/code&gt; bundles and minifies the scripts.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Run the angular-seed application&lt;/strong&gt;&lt;/p&gt;
+&lt;pre class="highlight text"&gt;npm start
+&lt;/pre&gt;
+&lt;p&gt;This is already pre-configured by angular-seed with a simple development web server.&lt;/p&gt;
+
+&lt;p&gt;In addition, &lt;a href="https://www.npmjs.org/package/grunt-bower-install"&gt;grunt-bower-install&lt;/a&gt; is invoked to look at all bower.json components and determine the best order to inject their scripts in the HTML file.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;That is also the reason why we injected &lt;code&gt;build:js&lt;/code&gt; tags in the index.html.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;strong&gt;Run the angular-seed application – using Grunt&lt;/strong&gt;&lt;/p&gt;
+&lt;pre class="highlight text"&gt;grunt serve
+&lt;/pre&gt;
+&lt;p&gt;Modify the index.html, partial views, TypeScript&lt;sup&gt;1&lt;/sup&gt;, or JavaScript files to see everything in action.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Deploying&lt;/strong&gt;&lt;/p&gt;
+&lt;pre class="highlight text"&gt;grunt
+&lt;/pre&gt;
+&lt;p&gt;This normally takes a few seconds&lt;sup&gt;2&lt;/sup&gt;.&lt;/p&gt;
+&lt;pre class="highlight text"&gt;Done, without errors.
+
+Execution Time (2014-06-02 21:57:42 UTC)
+concurrent:test    2.3s  ■■■■■■■■■■■■■■■■■■■■ 14%
+karma:unit         4.5s  ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ 27%
+concurrent:dist    6.5s  ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ 40%
+copy:dist         381ms  ■■■■ 2%
+uglify:generated   1.9s  ■■■■■■■■■■■■■■■■■ 12%
+Total 16.3s
+&lt;/pre&gt;
+&lt;p&gt;Pretty cool!&lt;/p&gt;
+
+&lt;p&gt;&lt;br&gt;
+&lt;br&gt;&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;p&gt;&lt;sup&gt;1&lt;/sup&gt;To enable *.ts auto-compilation install TypeScript with &lt;code&gt;npm install -g TypeScript&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;sup&gt;2&lt;/sup&gt;In case of JSHint errors, under the &lt;code&gt;globals&lt;/code&gt; directive in &lt;code&gt;.jshintrc&lt;/code&gt; add the variables below:&lt;/p&gt;
+&lt;pre class="highlight diff"&gt;&lt;span class="err"&gt;diff --git a/.jshintrc b/.jshintrc
+&lt;/span&gt;&lt;span class="gh"&gt;@@ -1,6 +1,13 @@
+&lt;/span&gt; {
+   &amp;quot;globalstrict&amp;quot;: true,
+   &amp;quot;globals&amp;quot;: {
+&lt;span class="gd"&gt;-    &amp;quot;angular&amp;quot;: false
+&lt;/span&gt;&lt;span class="gi"&gt;+    &amp;quot;angular&amp;quot;   : false,
++    &amp;quot;module&amp;quot;    : false,
++    &amp;quot;require&amp;quot;   : false,
++    &amp;quot;describe&amp;quot;  : false,
++    &amp;quot;beforeEach&amp;quot;: false,
++    &amp;quot;it&amp;quot;        : false,
++    &amp;quot;inject&amp;quot;    : false,
++    &amp;quot;expect&amp;quot;    : false
+&lt;/span&gt;   }
+ }
+&lt;/pre&gt;</content>
+  </entry>
   <entry>
     <title>GitHub README layouts</title>
     <link rel="alternate" href="/blog/2014/06/01/github-readme-layouts"/>
@@ -597,13 +1192,13 @@ tsTest: {
 &lt;/pre&gt;
 &lt;p&gt;The file comparison output should be similar with the image shown below:&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-04-03-typescript-grunt-angular-1.png?1401739544" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-04-03-typescript-grunt-angular-1.png?1401783646" /&gt;&lt;/p&gt;
 
 &lt;h3&gt;Linting configuration&lt;/h3&gt;
 
 &lt;p&gt;Remove the indentation setting from JSHint since &lt;a href="https://typescript.codeplex.com/workitem/204"&gt;TypeScript indents code idiomatically&lt;/a&gt;.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-04-03-typescript-grunt-angular-2.png?1401739544" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-04-03-typescript-grunt-angular-2.png?1401783646" /&gt;&lt;/p&gt;
 
 &lt;h3&gt;Declaration source files usage&lt;/h3&gt;
 
@@ -1053,7 +1648,7 @@ let CustomizationFillsReturnValuesDecleratively (sut : IInterface) =
     </author>
     <content type="html">&lt;p&gt;&lt;u&gt;Note&lt;/u&gt;: After following this post, the end result is pretty awesome:&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-17.png?1401739545" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-17.png?1401783646" /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Radio Edit (tl;dr)&lt;/strong&gt;&lt;/p&gt;
 
@@ -1082,7 +1677,7 @@ let CustomizationFillsReturnValuesDecleratively (sut : IInterface) =
 
 &lt;p&gt;Create a new Virtual Machine on Windows Azure to install and access TeamCity.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-1.png?1401739544" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-1.png?1401783646" /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;Turn off Internet Explorer&amp;#39;s Enhanced Security Configuration.&lt;/li&gt;
@@ -1093,7 +1688,7 @@ let CustomizationFillsReturnValuesDecleratively (sut : IInterface) =
 &lt;/ul&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-3.png?1401739544" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-3.png?1401783646" /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;Install Karma and karma-teamcity-reporter plugin:&lt;br&gt;&lt;pre&gt;&lt;code&gt;  npm install -g karma
@@ -1110,19 +1705,19 @@ let CustomizationFillsReturnValuesDecleratively (sut : IInterface) =
 &lt;/ul&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-4.png?1401739544" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-4.png?1401783646" /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;u&gt;Optional&lt;/u&gt;: &lt;a href="https://help.github.com/articles/generating-ssh-keys"&gt;Generate SSH keys&lt;/a&gt; if you use SSH keys to establish a secure connection between the Virtual Machine and Git.&lt;/p&gt;
 
 &lt;p&gt;Install TeamCity and choose a port so it can be accessed from a browser (e.g. port 80).&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-5.png?1401739544" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-5.png?1401783646" /&gt;&lt;/p&gt;
 
 &lt;p&gt;If you use SSH keys to establish a secure connection between the Virtual Machine and Git, make sure to run TeamCity Server under a user account that can access the path where the SSH keys are saved.&lt;/p&gt;
 
 &lt;p&gt;Use the &lt;code&gt;whoami&lt;/code&gt; command in the Command Prompt to find out the Virtual Machine&amp;#39;s domain name.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-6.png?1401739544" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-6.png?1401783646" /&gt;&lt;/p&gt;
 
 &lt;p&gt;Add a new inbound rule to Windows Firewall with the TeamCity Server port that was entered during installation.&lt;/p&gt;
 
@@ -1132,7 +1727,7 @@ let CustomizationFillsReturnValuesDecleratively (sut : IInterface) =
 
 &lt;p&gt;On Windows Azure Management Portal add a new endpoint with the selected TeamCity Server port that was entered during installation.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-7.png?1401739545" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-7.png?1401783646" /&gt;&lt;/p&gt;
 
 &lt;p&gt;Log in to the TeamCity Server:&lt;/p&gt;
 
@@ -1142,20 +1737,20 @@ let CustomizationFillsReturnValuesDecleratively (sut : IInterface) =
 &lt;li&gt;Attach a new VCS root on Build Configuration for Git.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-8.png?1401739545" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-8.png?1401783646" /&gt;&lt;/p&gt;
 
 &lt;p&gt;For the demo, I forked the &lt;a href="https://github.com/moodmosaic/angular-phonecat"&gt;angular-phonecat&lt;/a&gt; project.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-9.png?1401739545" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-9.png?1401783646" /&gt;&lt;/p&gt;
 
 &lt;p&gt;Select an authentication method and test the connection.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-10.png?1401739544" /&gt;
-&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-11.png?1401739544" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-10.png?1401783646" /&gt;
+&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-11.png?1401783646" /&gt;&lt;/p&gt;
 
 &lt;p&gt;Add a Build Step and attach the newly created Build Configuration.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-12.png?1401739544" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-12.png?1401783646" /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;In the runner type select Command Line.&lt;/li&gt;
@@ -1165,20 +1760,20 @@ let CustomizationFillsReturnValuesDecleratively (sut : IInterface) =
 &lt;li&gt;In the command parameters option enter &lt;code&gt;start karma.conf.js --reporters teamcity --single-run&lt;/code&gt;.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-13.png?1401739544" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-13.png?1401783646" /&gt;&lt;/p&gt;
 
 &lt;p&gt;As a last step, include the &lt;code&gt;karma-teamcity-reporter&lt;/code&gt; plugin in the karma.conf.js file.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-14.png?1401739544" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-14.png?1401783646" /&gt;&lt;/p&gt;
 
 &lt;p&gt;Push to Git to trigger the build process and see the commit on TeamCity Server.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-15.png?1401739544" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-15.png?1401783646" /&gt;&lt;/p&gt;
 
 &lt;p&gt;The end result is pretty awesome:&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-16.png?1401739544" /&gt;
-&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-17.png?1401739545" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-16.png?1401783646" /&gt;
+&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-17.png?1401783646" /&gt;&lt;/p&gt;
 </content>
   </entry>
   <entry>
@@ -1528,31 +2123,31 @@ PM&amp;gt; Install-Package Xunit.Extensions
 
 &lt;p&gt;&lt;a href="http://msdn.microsoft.com/en-us/library/bb298736.aspx"&gt;Enumerable.ToArray&lt;/a&gt; &amp;#8594; &lt;a href="http://msdn.microsoft.com/en-us/library/ee340263.aspx"&gt;Seq.toArray&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-1.png?1401739544" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-1.png?1401783646" /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;AsEnumerable&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;a href="http://msdn.microsoft.com/en-us/library/bb335435.aspx"&gt;Enumerable.AsEnumerable&lt;/a&gt; &amp;#8594; &lt;code&gt;seq { }&lt;/code&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-2.png?1401739544" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-2.png?1401783646" /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;First&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;a href="http://msdn.microsoft.com/en-us/library/bb291976.aspx"&gt;Enumerable.First&lt;/a&gt; &amp;#8594; &lt;a href="http://msdn.microsoft.com/en-us/library/ee340330.aspx"&gt;Seq.head&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-3.png?1401739544" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-3.png?1401783646" /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Count&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;a href="http://msdn.microsoft.com/en-us/library/bb338038.aspx"&gt;Enumerable.Count&lt;/a&gt; &amp;#8594; &lt;a href="http://msdn.microsoft.com/en-us/library/ee370547.aspx"&gt;Seq.length&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-4.png?1401739544" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-4.png?1401783646" /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;SequenceEqual&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;a href="http://msdn.microsoft.com/en-us/library/bb348567.aspx"&gt;Enumerable.SequenceEqual&lt;/a&gt; &amp;#8594; &lt;a href="http://msdn.microsoft.com/en-us/library/ee353659.aspx"&gt;Seq.compareWith&lt;/a&gt; &lt;a href="http://msdn.microsoft.com/en-us/library/ee353429.aspx"&gt;Operators.compare&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-5.png?1401739544" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-5.png?1401783646" /&gt;&lt;/p&gt;
 </content>
   </entry>
   <entry>
@@ -1659,7 +2254,7 @@ let AutoMockInterfaceAndSetupExpectationsDeclaratively
 
 &lt;p&gt;The most important changes are shown below. You can also see the diff as an image &lt;a href="/images/articles/2013-10-04-how-to-configure-msbuild-to-locate-the-fsharp-build-targets.png"&gt;here&lt;/a&gt;:&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-04-how-to-configure-msbuild-to-locate-the-fsharp-build-targets.png?1401739544" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-04-how-to-configure-msbuild-to-locate-the-fsharp-build-targets.png?1401783646" /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;A note for VS 2012 users&lt;/strong&gt;&lt;/p&gt;
 
@@ -4192,27 +4787,6 @@ public void HttpGetReturnsNonEmptyResultWithId(IRestClient sut)
 </content>
   </entry>
   <entry>
-    <title>Test-After Development Sins</title>
-    <link rel="alternate" href="/blog/2012/01/28/test-after-development-sins"/>
-    <id>http://nikosbaxevanis.com/blog/2012/01/28/test-after-development-sins</id>
-    <updated>2012-01-28T00:00:00+02:00</updated>
-    <author>
-      <name>Nikos Baxevanis</name>
-    </author>
-    <content type="html">&lt;p&gt;A series of short articles exploring the impact of writing tests&amp;#0160;&lt;em&gt;after&amp;#0160;&lt;/em&gt;the code is written&amp;#0160;on the implementation part of &lt;a href="http://en.wikipedia.org/wiki/Software_development_process" target="_blank" title="A software development process, also known as a software development life cycle (SDLC), is a structure imposed on the development of a software product."&gt;SDLC&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href="http://www.nikosbaxevanis.com/bonus-bits/2012/01/test-after-development-sins-production-code-first.html" target="_blank" title="&amp;quot;Test-After Development&amp;quot; Sins: Production Code First."&gt; Sin No.1&lt;/a&gt;:&amp;#0160;Production Code First.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href="http://www.nikosbaxevanis.com/bonus-bits/2012/01/test-after-development-sins-coarse-header-interfaces.html" target="_blank" title="&amp;quot;Test-After Development&amp;quot; Sins: Header Interfaces."&gt;Sin No.2&lt;/a&gt;: Header Interfaces.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href="http://www.nikosbaxevanis.com/bonus-bits/2012/02/test-after-development-sins-ignoring-cross-cutting-concerns.html" target="_blank" title="&amp;quot;Test-After Development&amp;quot; Sins: Ignoring cross-cutting concerns."&gt;Sin No.3&lt;/a&gt;: Ignoring cross-cutting concerns.&lt;/p&gt;
-
-&lt;p&gt;Sin No.4: Increasing costs.&lt;/p&gt;
-
-&lt;p&gt;Sin No.5:&amp;#0160;Decreasing quality.&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
     <title>Test-After Development Sins (Production Code First)</title>
     <link rel="alternate" href="/blog/2012/01/28/test-after-development-sins-production-code-first"/>
     <id>http://nikosbaxevanis.com/blog/2012/01/28/test-after-development-sins-production-code-first</id>
@@ -4233,6 +4807,27 @@ public void HttpGetReturnsNonEmptyResultWithId(IRestClient sut)
 &lt;p&gt;Even worse, inside those methods, dependencies might be resolved using a&amp;#0160;&lt;a href="http://martinfowler.com/articles/injection.html#UsingAServiceLocator" target="_blank"&gt;Service Locator&lt;/a&gt;&amp;#0160;(which is &lt;a href="http://blog.ploeh.dk/2010/02/03/ServiceLocatorIsAnAntiPattern.aspx" target="_blank" title="Service Locator is an Anti-Pattern"&gt;not&lt;/a&gt; good) forcing us to mock the container (if that&amp;#39;s an option at all) in order to successfully write unit tests&amp;#0160;&lt;em&gt;afterwards&lt;/em&gt;.&lt;/p&gt;
 
 &lt;p&gt;At the end, a lot of time is spent to write a few&amp;#0160;&lt;a href="http://xunitpatterns.com/Fragile%20Test.html" target="_blank" title="A test fails to compile or run when the system under test (SUT) is changed in ways that do not affect the part the test is exercising."&gt;Fragile Tests&lt;/a&gt;, resulting in a system which is (in most other places) not covered by tests at all.&lt;/p&gt;
+</content>
+  </entry>
+  <entry>
+    <title>Test-After Development Sins</title>
+    <link rel="alternate" href="/blog/2012/01/28/test-after-development-sins"/>
+    <id>http://nikosbaxevanis.com/blog/2012/01/28/test-after-development-sins</id>
+    <updated>2012-01-28T00:00:00+02:00</updated>
+    <author>
+      <name>Nikos Baxevanis</name>
+    </author>
+    <content type="html">&lt;p&gt;A series of short articles exploring the impact of writing tests&amp;#0160;&lt;em&gt;after&amp;#0160;&lt;/em&gt;the code is written&amp;#0160;on the implementation part of &lt;a href="http://en.wikipedia.org/wiki/Software_development_process" target="_blank" title="A software development process, also known as a software development life cycle (SDLC), is a structure imposed on the development of a software product."&gt;SDLC&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="http://www.nikosbaxevanis.com/bonus-bits/2012/01/test-after-development-sins-production-code-first.html" target="_blank" title="&amp;quot;Test-After Development&amp;quot; Sins: Production Code First."&gt; Sin No.1&lt;/a&gt;:&amp;#0160;Production Code First.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="http://www.nikosbaxevanis.com/bonus-bits/2012/01/test-after-development-sins-coarse-header-interfaces.html" target="_blank" title="&amp;quot;Test-After Development&amp;quot; Sins: Header Interfaces."&gt;Sin No.2&lt;/a&gt;: Header Interfaces.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="http://www.nikosbaxevanis.com/bonus-bits/2012/02/test-after-development-sins-ignoring-cross-cutting-concerns.html" target="_blank" title="&amp;quot;Test-After Development&amp;quot; Sins: Ignoring cross-cutting concerns."&gt;Sin No.3&lt;/a&gt;: Ignoring cross-cutting concerns.&lt;/p&gt;
+
+&lt;p&gt;Sin No.4: Increasing costs.&lt;/p&gt;
+
+&lt;p&gt;Sin No.5:&amp;#0160;Decreasing quality.&lt;/p&gt;
 </content>
   </entry>
   <entry>
@@ -4492,6 +5087,27 @@ Stack Overflow
 </content>
   </entry>
   <entry>
+    <title>Using class libraries from different platforms</title>
+    <link rel="alternate" href="/blog/2011/10/11/using-class-libraries-from-different-platforms"/>
+    <id>http://nikosbaxevanis.com/blog/2011/10/11/using-class-libraries-from-different-platforms</id>
+    <updated>2011-10-11T00:00:00+03:00</updated>
+    <author>
+      <name>Nikos Baxevanis</name>
+    </author>
+    <content type="html">&lt;p&gt;There are times where we need to use a library written in a different platform than the one we are currently on.&amp;#0160;Most of the times a port already exists and we can choose to go with that.&amp;#0160;Before using a port there are some good considerations:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;The size of the original codebase.&lt;/li&gt;
+&lt;li&gt;The kind of project (is it a logger, an&amp;#0160;ORM, etc).&lt;/li&gt;
+&lt;li&gt;The current version of the original compared with the ported one. It depends on the activity of the original but if the ported is left 1+ year behind this is not a good sign.&lt;/li&gt;
+&lt;li&gt;The quality of the ported codebase,&amp;#0160;framework usage, coding conventions. Does it use recommeded guidelines for the target framework?&lt;/li&gt;
+&lt;li&gt;The activity of the ported project. If it&amp;#39;s low that&amp;#39;s a sign that future versions might now show up. However, consider contributing.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Besides ported code, there are cases where we can use a tool that allows us to use the original library from a different platform. For example, when working in .NET we can use Java class libraries through IKVM.NET which has a bytecode compiler called&amp;#0160;&lt;a href="http://www.ikvm.net/userguide/ikvmc.html" target="_blank" title="IKVM.NET Bytecode Compiler (ikvmc.exe)"&gt;IKVMC&lt;/a&gt;.&lt;/p&gt;
+</content>
+  </entry>
+  <entry>
     <title>IKVMC in Action with Hamcrest</title>
     <link rel="alternate" href="/blog/2011/10/11/ikvmc-in-action-with-hamcrest"/>
     <id>http://nikosbaxevanis.com/blog/2011/10/11/ikvmc-in-action-with-hamcrest</id>
@@ -4583,27 +5199,6 @@ public void EqualTo()
 </content>
   </entry>
   <entry>
-    <title>Using class libraries from different platforms</title>
-    <link rel="alternate" href="/blog/2011/10/11/using-class-libraries-from-different-platforms"/>
-    <id>http://nikosbaxevanis.com/blog/2011/10/11/using-class-libraries-from-different-platforms</id>
-    <updated>2011-10-11T00:00:00+03:00</updated>
-    <author>
-      <name>Nikos Baxevanis</name>
-    </author>
-    <content type="html">&lt;p&gt;There are times where we need to use a library written in a different platform than the one we are currently on.&amp;#0160;Most of the times a port already exists and we can choose to go with that.&amp;#0160;Before using a port there are some good considerations:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;The size of the original codebase.&lt;/li&gt;
-&lt;li&gt;The kind of project (is it a logger, an&amp;#0160;ORM, etc).&lt;/li&gt;
-&lt;li&gt;The current version of the original compared with the ported one. It depends on the activity of the original but if the ported is left 1+ year behind this is not a good sign.&lt;/li&gt;
-&lt;li&gt;The quality of the ported codebase,&amp;#0160;framework usage, coding conventions. Does it use recommeded guidelines for the target framework?&lt;/li&gt;
-&lt;li&gt;The activity of the ported project. If it&amp;#39;s low that&amp;#39;s a sign that future versions might now show up. However, consider contributing.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Besides ported code, there are cases where we can use a tool that allows us to use the original library from a different platform. For example, when working in .NET we can use Java class libraries through IKVM.NET which has a bytecode compiler called&amp;#0160;&lt;a href="http://www.ikvm.net/userguide/ikvmc.html" target="_blank" title="IKVM.NET Bytecode Compiler (ikvmc.exe)"&gt;IKVMC&lt;/a&gt;.&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
     <title>What goes first? (Theory or Tooling)</title>
     <link rel="alternate" href="/blog/2011/09/26/what-goes-first-theory-or-tooling"/>
     <id>http://nikosbaxevanis.com/blog/2011/09/26/what-goes-first-theory-or-tooling</id>
@@ -4681,44 +5276,6 @@ public void EqualTo()
 </content>
   </entry>
   <entry>
-    <title>Heuristics for Static Factory Methods in AutoFixture</title>
-    <link rel="alternate" href="/blog/2011/08/25/heuristics-for-static-factory-methods-in-autofixture"/>
-    <id>http://nikosbaxevanis.com/blog/2011/08/25/heuristics-for-static-factory-methods-in-autofixture</id>
-    <updated>2011-08-25T00:00:00+03:00</updated>
-    <author>
-      <name>Nikos Baxevanis</name>
-    </author>
-    <content type="html">&lt;p&gt;Here is a type with a private constructor:&lt;/p&gt;
-&lt;pre class="highlight text"&gt;public class TypeWithFactoryMethod
-{
-    private TypeWithFactoryMethod() 
-    {
-    }
-
-    public static TypeWithFactoryMethod Create()
-    {
-        return new TypeWithFactoryMethod();
-    }
-
-    public static TypeWithFactoryMethod Create(object argument)
-    {
-        return new TypeWithFactoryMethod();
-    }
-}
-&lt;/pre&gt;
-&lt;p&gt;In order to create an instance of that type we have to call one of it&amp;#39;s static factory methods, for example:&lt;/p&gt;
-&lt;pre class="highlight text"&gt;var instance = TypeWithFactoryMethod.Create();
-&lt;/pre&gt;
-&lt;p&gt;If we try to create an &lt;a href="http://blogs.msdn.com/b/ploeh/archive/2008/11/17/anonymous-variables.aspx" target="_blank" title="Anonymous Variables"&gt;Anonymous Variable&lt;/a&gt; with &lt;a href="http://autofixture.codeplex.com" target="_blank" title="AutoFixture makes it easier for developers to do Test-Driven Development by automating non-relevant Test Fixture Setup, allowing the Test Developer to focus on the essentials of each test case."&gt;AutoFixture&lt;/a&gt; right now (version 2.1) it will throw an exception since there are no public constructors:&lt;/p&gt;
-&lt;pre class="highlight text"&gt;var fixture = new Fixture();
-var result = fixture.CreateAnonymous&amp;lt;TypeWithFactoryMethod&amp;gt;();
-&lt;/pre&gt;
-&lt;p&gt;Using the latest version from&amp;#0160;&lt;a href="http://autofixture.codeplex.com/SourceControl/list/changesets" target="_blank" title="AutoFixture (changesets)"&gt;trunk&lt;/a&gt;&amp;#0160;(and on the next public release) the above code will work.&amp;#0160;It will successfully return an instance of the type by using&amp;#0160;a set of heuristics that enable AutoFixture to search for static factory methods.&lt;/p&gt;
-
-&lt;p&gt;The latest build (including strong names) can be downloaded from &lt;a href="http://teamcity.codebetter.com/project.html?projectId=project129&amp;amp;tab=projectOverview. " target="_blank"&gt;here&lt;/a&gt;.&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
     <title>Combining Data Theories in AutoFixture.Xunit extension</title>
     <link rel="alternate" href="/blog/2011/08/25/combining-data-theories-in-autofixture-dot-xunit-extension"/>
     <id>http://nikosbaxevanis.com/blog/2011/08/25/combining-data-theories-in-autofixture-dot-xunit-extension</id>
@@ -4767,6 +5324,44 @@ public void Test(string s1, string s2, MyClass myClass)
 &lt;p&gt;While this feature comes with AutoFixture.Xunit extension, the CompositeDataAttribute class depends only on the xunit.extensions assembly.&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;You may compile the code from the latest&amp;#0160;&lt;a href="http://autofixture.codeplex.com/SourceControl/list/changesets" target="_blank" title="AutoFixture (changesets)"&gt;trunk&lt;/a&gt;&amp;#0160;version, alternatively&amp;#0160;the latest build (including strong names) can be downloaded from&amp;#0160;&lt;a href="http://teamcity.codebetter.com/project.html?projectId=project129&amp;amp;tab=projectOverview. " target="_blank"&gt;here&lt;/a&gt;.&lt;/p&gt;&lt;/p&gt;
+</content>
+  </entry>
+  <entry>
+    <title>Heuristics for Static Factory Methods in AutoFixture</title>
+    <link rel="alternate" href="/blog/2011/08/25/heuristics-for-static-factory-methods-in-autofixture"/>
+    <id>http://nikosbaxevanis.com/blog/2011/08/25/heuristics-for-static-factory-methods-in-autofixture</id>
+    <updated>2011-08-25T00:00:00+03:00</updated>
+    <author>
+      <name>Nikos Baxevanis</name>
+    </author>
+    <content type="html">&lt;p&gt;Here is a type with a private constructor:&lt;/p&gt;
+&lt;pre class="highlight text"&gt;public class TypeWithFactoryMethod
+{
+    private TypeWithFactoryMethod() 
+    {
+    }
+
+    public static TypeWithFactoryMethod Create()
+    {
+        return new TypeWithFactoryMethod();
+    }
+
+    public static TypeWithFactoryMethod Create(object argument)
+    {
+        return new TypeWithFactoryMethod();
+    }
+}
+&lt;/pre&gt;
+&lt;p&gt;In order to create an instance of that type we have to call one of it&amp;#39;s static factory methods, for example:&lt;/p&gt;
+&lt;pre class="highlight text"&gt;var instance = TypeWithFactoryMethod.Create();
+&lt;/pre&gt;
+&lt;p&gt;If we try to create an &lt;a href="http://blogs.msdn.com/b/ploeh/archive/2008/11/17/anonymous-variables.aspx" target="_blank" title="Anonymous Variables"&gt;Anonymous Variable&lt;/a&gt; with &lt;a href="http://autofixture.codeplex.com" target="_blank" title="AutoFixture makes it easier for developers to do Test-Driven Development by automating non-relevant Test Fixture Setup, allowing the Test Developer to focus on the essentials of each test case."&gt;AutoFixture&lt;/a&gt; right now (version 2.1) it will throw an exception since there are no public constructors:&lt;/p&gt;
+&lt;pre class="highlight text"&gt;var fixture = new Fixture();
+var result = fixture.CreateAnonymous&amp;lt;TypeWithFactoryMethod&amp;gt;();
+&lt;/pre&gt;
+&lt;p&gt;Using the latest version from&amp;#0160;&lt;a href="http://autofixture.codeplex.com/SourceControl/list/changesets" target="_blank" title="AutoFixture (changesets)"&gt;trunk&lt;/a&gt;&amp;#0160;(and on the next public release) the above code will work.&amp;#0160;It will successfully return an instance of the type by using&amp;#0160;a set of heuristics that enable AutoFixture to search for static factory methods.&lt;/p&gt;
+
+&lt;p&gt;The latest build (including strong names) can be downloaded from &lt;a href="http://teamcity.codebetter.com/project.html?projectId=project129&amp;amp;tab=projectOverview. " target="_blank"&gt;here&lt;/a&gt;.&lt;/p&gt;
 </content>
   </entry>
   <entry>

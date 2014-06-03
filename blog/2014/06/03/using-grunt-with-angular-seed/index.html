@@ -1,0 +1,595 @@
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" /><meta content="width=device-width, user-scalable=no" name="viewport" /><title>Using Grunt with angular-seed</title><link href="http://fonts.googleapis.com/css?family=Lora:400,700|Open+Sans" rel="stylesheet" type="text/css" /><link href="/stylesheets/fontello.css?1401783646" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/styles.css?1401783646" media="screen" rel="stylesheet" type="text/css" /></head><body><div class="row"><h1>Using Grunt with angular-seed</h1><div class="post"><p><em>This post contains step-by-step instructions to enable development and deployment task automation for <a href="https://github.com/angular/angular-seed">angular-seed</a> projects using <a href="http://gruntjs.com/">Grunt</a>.</em></p>
+
+<p><strong>Step 1 – Preparing to use Grunt</strong></p>
+
+<p>To make sure that no npm errors will propagate during the installation of npm packages it is recommended to clean the npm cache.</p>
+
+<p><a href="http://codebetter.com/glennblock/2012/02/27/my-tale-of-npm-woe-when-all-else-fails-clear-you-cache/"><em>&ldquo;.. clear you cache! It might save you from switching professions.&rdquo;</em></a> &ndash; Glenn Block</p>
+<pre class="highlight text">$ npm cache clean
+</pre>
+<p>Next, install Grunt&#39;s command line interface, <a href="https://github.com/gruntjs/grunt-cli">grunt-cli</a>.</p>
+<pre class="highlight text">$ npm install -g grunt-cli
+</pre>
+<p>In fact, grunt-cli is the only required globally installed npm module to demo this post.</p>
+<pre class="highlight text">$ npm list -g -depth=0
+C:\Users\Nikos\AppData\Roaming\npm
+└── grunt-cli@0.1.13
+</pre>
+<p><strong>Step 2 - Create a Gruntfile.js in the root directory</strong></p>
+<pre class="highlight text">'use strict';
+
+module.exports = function (grunt) {
+
+  require('load-grunt-tasks')(grunt);
+  require('time-grunt')(grunt);
+
+  grunt.initConfig({
+
+    myApp: {
+      app: require('./bower.json').appPath || 'app',
+      dist: 'dist'
+    },
+
+    typescript: {
+      base: {
+        src: ['&lt;%= myApp.app %&gt;/js/{,*/}*.ts'],
+        options: {
+          target: 'es5',
+          sourceMap: true
+        }
+      },
+      test: {
+        src: ['test/unit/{,*/}*.ts'],
+        options: {
+          target: 'es5',
+          sourceMap: true
+        }
+      }
+    },
+
+    watch: {
+      ts: {
+        files: ['&lt;%= myApp.app %&gt;/js/{,*/}*.ts'],
+        tasks: ['typescript']
+      },
+      tsTest: {
+        files: ['test/unit/{,*/}*.ts'],
+        tasks: ['typescript:test']
+      },
+      js: {
+        files: ['&lt;%= myApp.app %&gt;/js/{,*/}*.js'],
+        tasks: ['newer:jshint:all'],
+        options: {
+          livereload: true
+        }
+      },
+      jsTest: {
+        files: ['test/unit/{,*/}*.js'],
+        tasks: ['newer:jshint:test', 'karma']
+      },
+      styles: {
+        files: ['&lt;%= myApp.app %&gt;/css/{,*/}*.css'],
+        tasks: ['newer:copy:styles', 'autoprefixer']
+      },
+      gruntfile: {
+        files: ['Gruntfile.js']
+      },
+      livereload: {
+        options: {
+          livereload: '&lt;%= connect.options.livereload %&gt;'
+        },
+        files: [
+          '&lt;%= myApp.app %&gt;/{,*/}*.html',
+          '.tmp/css/{,*/}*.css',
+          '&lt;%= myApp.app %&gt;/img/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
+        ]
+      }
+    },
+
+    connect: {
+      options: {
+        port: 9000,
+        hostname: 'localhost',
+        livereload: 35729
+      },
+      livereload: {
+        options: {
+          open: true,
+          base: [
+            '.tmp',
+            '&lt;%= myApp.app %&gt;'
+          ]
+        }
+      },
+      test: {
+        options: {
+          port: 9001,
+          base: [
+            '.tmp',
+            'test',
+            '&lt;%= myApp.app %&gt;'
+          ]
+        }
+      },
+      dist: {
+        options: {
+          base: '&lt;%= myApp.dist %&gt;'
+        }
+      }
+    },
+
+    jshint: {
+      options: {
+        jshintrc: '.jshintrc',
+        reporter: require('jshint-stylish')
+      },
+      all: [
+        'Gruntfile.js',
+        '&lt;%= myApp.app %&gt;/js/{,*/}*.js'
+      ],
+      test: {
+        options: {
+          jshintrc: '.jshintrc'
+        },
+        src: ['test/unit/{,*/}*.js']
+      }
+    },
+
+    clean: {
+      dist: {
+        files: [{
+          dot: true,
+          src: [
+            '.tmp',
+            '&lt;%= myApp.dist %&gt;/*',
+            '!&lt;%= myApp.dist %&gt;/.git*'
+          ]
+        }]
+      },
+      server: '.tmp'
+    },
+
+    autoprefixer: {
+      options: {
+        browsers: ['last 1 version']
+      },
+      dist: {
+        files: [{
+          expand: true,
+          cwd: '.tmp/css/',
+          src: '{,*/}*.css',
+          dest: '.tmp/css/'
+        }]
+      }
+    },
+
+    'bower-install': {
+      app: {
+        html: '&lt;%= myApp.app %&gt;/index.html',
+        ignorePath: '&lt;%= myApp.app %&gt;/'
+      }
+    },
+
+    rev: {
+      dist: {
+        files: {
+          src: [
+            '&lt;%= myApp.dist %&gt;/js/{,*/}*.js',
+            '&lt;%= myApp.dist %&gt;/css/{,*/}*.css',
+            '&lt;%= myApp.dist %&gt;/img/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
+            '&lt;%= myApp.dist %&gt;/css/fonts/*'
+          ]
+        }
+      }
+    },
+
+    useminPrepare: {
+      html: '&lt;%= myApp.app %&gt;/index.html',
+      options: {
+        dest: '&lt;%= myApp.dist %&gt;'
+      }
+    },
+
+    usemin: {
+      html: ['&lt;%= myApp.dist %&gt;/{,*/}*.html'],
+      css: ['&lt;%= myApp.dist %&gt;/css/{,*/}*.css'],
+      options: {
+        assetsDirs: ['&lt;%= myApp.dist %&gt;']
+      }
+    },
+
+    imagemin: {
+      dist: {
+        files: [{
+          expand: true,
+          cwd: '&lt;%= myApp.app %&gt;/img',
+          src: '{,*/}*.{png,jpg,jpeg,gif}',
+          dest: '&lt;%= myApp.dist %&gt;/img'
+        }]
+      }
+    },
+    svgmin: {
+      dist: {
+        files: [{
+          expand: true,
+          cwd: '&lt;%= myApp.app %&gt;/img',
+          src: '{,*/}*.svg',
+          dest: '&lt;%= myApp.dist %&gt;/img'
+        }]
+      }
+    },
+    htmlmin: {
+      dist: {
+        options: {
+          collapseWhitespace: true,
+          collapseBooleanAttributes: true,
+          removeCommentsFromCDATA: true,
+          removeOptionalTags: true
+        },
+        files: [{
+          expand: true,
+          cwd: '&lt;%= myApp.dist %&gt;',
+          src: ['*.html', 'partials/{,*/}*.html'],
+          dest: '&lt;%= myApp.dist %&gt;'
+        }]
+      }
+    },
+
+    ngmin: {
+      dist: {
+        files: [{
+          expand: true,
+          cwd: '.tmp/concat/js',
+          src: '*.js',
+          dest: '.tmp/concat/js'
+        }]
+      }
+    },
+
+    cdnify: {
+      dist: {
+        html: ['&lt;%= myApp.dist %&gt;/*.html']
+      }
+    },
+
+    copy: {
+      dist: {
+        files: [{
+          expand: true,
+          dot: true,
+          cwd: '&lt;%= myApp.app %&gt;',
+          dest: '&lt;%= myApp.dist %&gt;',
+          src: [
+            '*.{ico,png,txt}',
+            '.htaccess',
+            '*.html',
+            'partials/{,*/}*.html',
+            'bower_components/**/*',
+            'img/{,*/}*.{webp}',
+            'fonts/*'
+          ]
+        }, {
+          expand: true,
+          cwd: '.tmp/img',
+          dest: '&lt;%= myApp.dist %&gt;/img',
+          src: ['generated/*']
+        }]
+      },
+      styles: {
+        expand: true,
+        cwd: '&lt;%= myApp.app %&gt;/css',
+        dest: '.tmp/css/',
+        src: '{,*/}*.css'
+      }
+    },
+
+    concurrent: {
+      server: [
+        'copy:styles'
+      ],
+      test: [
+        'copy:styles'
+      ],
+      dist: [
+        'copy:styles',
+        'imagemin',
+        'svgmin'
+      ]
+    },
+
+    replace: {
+      development: {
+        options: {
+          patterns: [{
+            json: grunt.file.readJSON(
+              'config.development.json')
+          }]
+        },
+        files: [{
+          expand: true,
+          flatten: true,
+          src: ['config.js'],
+          dest: '&lt;%= myApp.app %&gt;/js'
+        }]
+      },
+      azure: {
+        options: {
+          patterns: [{
+            json: grunt.file.readJSON('config.azure.json')
+          }]
+        },
+        files: [{
+          expand: true,
+          flatten: true,
+          src: ['config.js'],
+          dest: '&lt;%= myApp.app %&gt;/js'
+        }]
+      }
+    },
+
+    karma: {
+      unit: {
+        configFile: './test/karma.conf.js',
+        singleRun: true
+      }
+    }
+  });
+
+  grunt.registerTask('serve', function (target) {
+    if (target === 'dist') {
+      return grunt.task.run(['build', 'connect:dist:keepalive']);
+    }
+
+    grunt.task.run([
+      'clean:server',
+      'bower-install',
+      'concurrent:server',
+      'autoprefixer',
+      'connect:livereload',
+      'replace:development',
+      'watch'
+    ]);
+  });
+
+  grunt.registerTask('server', function () {
+    grunt.log.warn(
+      'The `server` task has been deprecated. Use `grunt serve` to start a server.'
+    );
+    grunt.task.run(['serve']);
+  });
+
+  grunt.registerTask('test', [
+    'clean:server',
+    'concurrent:test',
+    'autoprefixer',
+    'connect:test',
+    'karma'
+  ]);
+
+  grunt.registerTask('build', [
+    'clean:dist',
+    'bower-install',
+    'useminPrepare',
+    'concurrent:dist',
+    'autoprefixer',
+    'concat',
+    'ngmin',
+    'copy:dist',
+    'cdnify',
+    'cssmin',
+    'uglify',
+    'rev',
+    'usemin',
+    'htmlmin'
+  ]);
+
+  grunt.registerTask('default', [
+    'newer:jshint',
+    'test',
+    'build'
+  ]);
+};
+</pre>
+<p>This is quite a sophisticated Gruntfile, with reasonable defaults and best practises, composed by <a href="https://github.com/yeoman/generator-angular">generator-angular</a>, as well as this <a href="http://newtriks.com/2013/11/29/environment-specific-configuration-in-angularjs-using-grunt/">post</a>, and this <a href="http://nikosbaxevanis.com/blog/2014/04/03/typescript-slash-grunt-slash-angular/">post</a>.</p>
+
+<p><strong>Step 3 – Add environment specific configuration files</strong></p>
+<pre class="highlight json"><span class="p">{</span><span class="w">
+  </span><span class="s2">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;value&quot;</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre>
+<p>Save the above key-value placeholder as <strong>config.azure.json</strong> and <strong>config.development.json</strong> in the root directory.</p>
+
+<p><strong>Step 4 – Make angular-mocks a Bower development-dependency</strong></p>
+<pre class="highlight diff"><span class="err">diff --git a/bower.json b/bower.json
+</span><span class="gh">@@ -9,7 +9,9 @@
+</span>     &quot;angular&quot;: &quot;1.2.x&quot;,
+     &quot;angular-route&quot;: &quot;1.2.x&quot;,
+     &quot;angular-loader&quot;: &quot;1.2.x&quot;,
+<span class="gd">-    &quot;angular-mocks&quot;: &quot;~1.2.x&quot;,
+</span>     &quot;html5-boilerplate&quot;: &quot;~4.3.0&quot;
+<span class="gd">-  }
+</span><span class="gi">+  },
++  &quot;devDependencies&quot;: {
++    &quot;angular-mocks&quot;: &quot;~1.2.x&quot;
++   }
+</span> }
+</pre>
+<p>(Currently <a href="https://github.com/angular/angular-seed/blob/238b1a9aaa34e6ef98c6aaa0418c24c0c19dd2e3/bower.json">bower.json</a> includes <code>angular-mocks</code> as an application dependency, although it&#39;s really a development/testing dependency.)</p>
+
+<p><strong>Step 5 – Add the npm packages required by Grunt</strong></p>
+<pre class="highlight diff"><span class="err">diff --git a/package.json b/package.json
+</span><span class="gh">@@ -11,12 +11,52 @@
+</span>     &quot;http-server&quot;: &quot;^0.6.1&quot;,
+     &quot;bower&quot;: &quot;^1.3.1&quot;,
+     &quot;shelljs&quot;: &quot;^0.2.6&quot;,
+<span class="gd">-    &quot;karma-junit-reporter&quot;: &quot;^0.2.2&quot;
+</span><span class="gi">+    &quot;karma-junit-reporter&quot;: &quot;^0.2.2&quot;,
++    &quot;grunt&quot;: &quot;~0.4.1&quot;,
++    &quot;grunt-cli&quot;: &quot;~0.1.13&quot;,
++    &quot;grunt-autoprefixer&quot;: &quot;~0.4.0&quot;,
++    &quot;grunt-bower-install&quot;: &quot;~0.7.0&quot;,
++    &quot;grunt-concurrent&quot;: &quot;~0.4.1&quot;,
++    &quot;grunt-contrib-clean&quot;: &quot;~0.5.0&quot;,
++    &quot;grunt-contrib-coffee&quot;: &quot;~0.7.0&quot;,
++    &quot;grunt-contrib-compass&quot;: &quot;~0.6.0&quot;,
++    &quot;grunt-contrib-concat&quot;: &quot;~0.3.0&quot;,
++    &quot;grunt-contrib-connect&quot;: &quot;~0.5.0&quot;,
++    &quot;grunt-contrib-copy&quot;: &quot;~0.4.1&quot;,
++    &quot;grunt-contrib-cssmin&quot;: &quot;~0.7.0&quot;,
++    &quot;grunt-contrib-htmlmin&quot;: &quot;~0.1.3&quot;,
++    &quot;grunt-contrib-imagemin&quot;: &quot;~0.3.0&quot;,
++    &quot;grunt-contrib-jshint&quot;: &quot;~0.7.1&quot;,
++    &quot;grunt-contrib-uglify&quot;: &quot;~0.2.0&quot;,
++    &quot;grunt-contrib-watch&quot;: &quot;~0.5.2&quot;,
++    &quot;grunt-google-cdn&quot;: &quot;~0.2.0&quot;,
++    &quot;grunt-karma&quot;: &quot;~0.6.2&quot;,
++    &quot;grunt-newer&quot;: &quot;~0.5.4&quot;,
++    &quot;grunt-ngmin&quot;: &quot;~0.0.2&quot;,
++    &quot;grunt-replace&quot;: &quot;~0.7.6&quot;,
++    &quot;grunt-rev&quot;: &quot;~0.1.0&quot;,
++    &quot;grunt-svgmin&quot;: &quot;~0.2.0&quot;,
++    &quot;grunt-typescript&quot;: &quot;*&quot;,
++    &quot;grunt-usemin&quot;: &quot;~2.0.0&quot;,
++    &quot;jshint-stylish&quot;: &quot;~0.1.3&quot;,
++    &quot;load-grunt-tasks&quot;: &quot;~0.2.0&quot;,
++    &quot;requirejs&quot;: &quot;~2.1.10&quot;,
++    &quot;time-grunt&quot;: &quot;~0.2.1&quot;,
++    &quot;karma-ng-scenario&quot;: &quot;~0.1.0&quot;,
++    &quot;karma-html2js-preprocessor&quot;: &quot;~0.1.0&quot;,
++    &quot;karma-firefox-launcher&quot;: &quot;~0.1.3&quot;,
++    &quot;karma-script-launcher&quot;: &quot;~0.1.0&quot;,
++    &quot;karma-chrome-launcher&quot;: &quot;~0.1.2&quot;,
++    &quot;karma-jasmine&quot;: &quot;~0.1.5&quot;,
++    &quot;karma-coffee-preprocessor&quot;: &quot;~0.1.2&quot;,
++    &quot;karma-requirejs&quot;: &quot;~0.2.1&quot;,
++    &quot;karma-phantomjs-launcher&quot;: &quot;~0.1.1&quot;,
++    &quot;karma-ng-html2js-preprocessor&quot;: &quot;~0.1.0&quot;
+</span>   },
+   &quot;scripts&quot;: {
+     &quot;postinstall&quot;: &quot;bower install&quot;,
+<span class="err">
+</span><span class="gd">-    &quot;prestart&quot;: &quot;npm install&quot;,
+</span><span class="gi">+    &quot;prestart&quot;: &quot;npm install &amp;&amp; grunt bower-install&quot;,
+</span>     &quot;start&quot;: &quot;http-server -a localhost -p 8000&quot;,
+<span class="err">
+</span>     &quot;pretest&quot;: &quot;npm install&quot;,
+</pre>
+<p><strong>Step 6 – Install locally the npm and Bower packages</strong></p>
+<pre class="highlight text">npm install
+</pre>
+<p>This has been pre-configured by angular-seed to also automatically call <code>bower install</code>. Two new folders will be created in the project:</p>
+
+<ul>
+<li>node_modules, containing the required npm packages for the tools</li>
+<li>app/bower_components, containing the AngularJS framework files</li>
+</ul>
+
+<p>This normally takes a while.</p>
+
+<p><strong>Step 7 – Inject some awesomeness to index.html</strong></p>
+<pre class="highlight diff"><span class="err">diff --git a/app/index.html b/app/index.html
+</span><span class="gh">@@ -9,9 +9,15 @@
+</span>   &lt;title&gt;My AngularJS App&lt;/title&gt;
+   &lt;meta name=&quot;description&quot; content=&quot;&quot;&gt;
+   &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+<span class="gi">+  &lt;!-- build:css styles/vendor.css --&gt;
+</span>   &lt;link rel=&quot;stylesheet&quot; href=&quot;bower_components/html5-boilerplate/css/normalize.css&quot;&gt;
+   &lt;link rel=&quot;stylesheet&quot; href=&quot;bower_components/html5-boilerplate/css/main.css&quot;&gt;
+<span class="gi">+  &lt;!-- bower:css --&gt;
++  &lt;!-- endbower --&gt;
++  &lt;!-- endbuild --&gt;
++  &lt;!-- build:css({.tmp,app}) styles/main.css --&gt;
+</span>   &lt;link rel=&quot;stylesheet&quot; href=&quot;css/app.css&quot;/&gt;
+<span class="gi">+  &lt;!-- endbuild --&gt;
+</span>   &lt;script src=&quot;bower_components/html5-boilerplate/js/vendor/modernizr-2.6.2.min.js&quot;&gt;&lt;/script&gt;
+ &lt;/head&gt;
+ &lt;body&gt;
+<span class="gh">@@ -31,12 +37,19 @@
+</span>   &lt;!-- In production use:
+   &lt;script src=&quot;//ajax.googleapis.com/ajax/libs/angularjs/x.x.x/angular.min.js&quot;&gt;&lt;/script&gt;
+   --&gt;
+<span class="gi">+  &lt;!-- build:js scripts/vendor.js --&gt;
++  &lt;!-- bower:js --&gt;
+</span>   &lt;script src=&quot;bower_components/angular/angular.js&quot;&gt;&lt;/script&gt;
+   &lt;script src=&quot;bower_components/angular-route/angular-route.js&quot;&gt;&lt;/script&gt;
+<span class="gi">+  &lt;!-- endbower --&gt;
++  &lt;!-- endbuild --&gt;
++
++  &lt;!-- build:js({.tmp,app}) scripts/scripts.js --&gt;
+</span>   &lt;script src=&quot;js/app.js&quot;&gt;&lt;/script&gt;
+   &lt;script src=&quot;js/services.js&quot;&gt;&lt;/script&gt;
+   &lt;script src=&quot;js/controllers.js&quot;&gt;&lt;/script&gt;
+   &lt;script src=&quot;js/filters.js&quot;&gt;&lt;/script&gt;
+   &lt;script src=&quot;js/directives.js&quot;&gt;&lt;/script&gt;
+<span class="gi">+  &lt;!-- endbuild --&gt;
+</span> &lt;/body&gt;
+ &lt;/html&gt;
+</pre>
+<p>The <code>build-css</code> tag bundles and minifies CSS while <code>build:js</code> bundles and minifies the scripts.</p>
+
+<p><strong>Run the angular-seed application</strong></p>
+<pre class="highlight text">npm start
+</pre>
+<p>This is already pre-configured by angular-seed with a simple development web server.</p>
+
+<p>In addition, <a href="https://www.npmjs.org/package/grunt-bower-install">grunt-bower-install</a> is invoked to look at all bower.json components and determine the best order to inject their scripts in the HTML file.</p>
+
+<blockquote>
+<p>That is also the reason why we injected <code>build:js</code> tags in the index.html.</p>
+</blockquote>
+
+<p><strong>Run the angular-seed application – using Grunt</strong></p>
+<pre class="highlight text">grunt serve
+</pre>
+<p>Modify the index.html, partial views, TypeScript<sup>1</sup>, or JavaScript files to see everything in action.</p>
+
+<p><strong>Deploying</strong></p>
+<pre class="highlight text">grunt
+</pre>
+<p>This normally takes a few seconds<sup>2</sup>.</p>
+<pre class="highlight text">Done, without errors.
+
+Execution Time (2014-06-02 21:57:42 UTC)
+concurrent:test    2.3s  ■■■■■■■■■■■■■■■■■■■■ 14%
+karma:unit         4.5s  ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ 27%
+concurrent:dist    6.5s  ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ 40%
+copy:dist         381ms  ■■■■ 2%
+uglify:generated   1.9s  ■■■■■■■■■■■■■■■■■ 12%
+Total 16.3s
+</pre>
+<p>Pretty cool!</p>
+
+<p><br>
+<br></p>
+
+<hr>
+
+<p><sup>1</sup>To enable *.ts auto-compilation install TypeScript with <code>npm install -g TypeScript</code>.</p>
+
+<p><sup>2</sup>In case of JSHint errors, under the <code>globals</code> directive in <code>.jshintrc</code> add the variables below:</p>
+<pre class="highlight diff"><span class="err">diff --git a/.jshintrc b/.jshintrc
+</span><span class="gh">@@ -1,6 +1,13 @@
+</span> {
+   &quot;globalstrict&quot;: true,
+   &quot;globals&quot;: {
+<span class="gd">-    &quot;angular&quot;: false
+</span><span class="gi">+    &quot;angular&quot;   : false,
++    &quot;module&quot;    : false,
++    &quot;require&quot;   : false,
++    &quot;describe&quot;  : false,
++    &quot;beforeEach&quot;: false,
++    &quot;it&quot;        : false,
++    &quot;inject&quot;    : false,
++    &quot;expect&quot;    : false
+</span>   }
+ }
+</pre></div><div class="dater">June 03, 2014</div><div class="categories">Published in<a class="category" href="/category/javascript/">JavaScript&nbsp;</a><a class="category" href="/category/angularjs/">AngularJS&nbsp;</a></div></div><div class="homer"><a href="/"><i class="icon-tape" style="font-size:32px;"></i></a></div><script type="text/javascript">var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-24262928-1']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>
