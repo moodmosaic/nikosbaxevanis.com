@@ -1,5 +1,4 @@
-<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" /><meta content="width=device-width, user-scalable=no" name="viewport" /><title>Persistence specification testing combined with AutoFixture</title><link href="http://fonts.googleapis.com/css?family=Lora:400,700|Open+Sans" rel="stylesheet" type="text/css" /><link href="/stylesheets/fontello.css?1402301603" media="screen" rel="stylesheet" type="text/css" />
-<link href="/stylesheets/styles.css?1402301603" media="screen" rel="stylesheet" type="text/css" /></head><body><div class="row"><h1>Persistence specification testing combined with AutoFixture</h1><div class="post"><p>When working with NHibernate you need to make sure that your mappings are correct. At least, you have to make sure that when you&nbsp;save an item you can also qet that item back.</p>
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" /><meta content="width=device-width, user-scalable=no" name="viewport" /><title>Persistence specification testing combined with AutoFixture</title><link href="/stylesheets/styles.css?1402741299" media="screen" rel="stylesheet" type="text/css" /></head><body><div><h1>Persistence specification testing combined with AutoFixture</h1><div>March 13, 2011</div><br /><div><p>When working with NHibernate you need to make sure that your mappings are correct. At least, you have to make sure that when you&nbsp;save an item you can also qet that item back.</p>
 
 <p>If you are using FluentNHibernate you can use the <a href="https://github.com/jagregory/fluent-nhibernate/tree/master/src/FluentNHibernate/Testing" target="_blank">PersistenceSpecification&lt;T&gt; class</a>. However, the&nbsp;PersistenceSpecification&lt;T&gt; class requires that you pass the property to check and also a value for that property.</p>
 
@@ -29,10 +28,9 @@ public void ShouldVerifyTheMappings()
 }
 </pre>
 <p>Combining&nbsp;AutoFixture with the PersistenceSpecification&lt;T&gt; class results in&nbsp;writing less code when testing NHibernate mappings, specially when dealing with complex types.</p>
-</div><div class="dater">March 13, 2011</div><div class="categories">Published in<a class="category" href="/category/unit-testing/">Unit Testing&nbsp;</a><a class="category" href="/category/nhibernate/">NHibernate&nbsp;</a></div></div><div class="homer"><a href="/"><i class="icon-tape" style="font-size:32px;"></i></a></div><script type="text/javascript">var _gaq = _gaq || [];
+</div><hr /><small>Published in <a href="/category/unit-testing/">Unit Testing</a>, <a href="/category/nhibernate/">NHibernate</a>, by <a href="/">Nikos Baxevanis</a>.</small></div><script type="text/javascript">var _gaq = _gaq || [];
 _gaq.push(['_setAccount', 'UA-24262928-1']);
 _gaq.push(['_trackPageview']);
-
 (function() {
   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';

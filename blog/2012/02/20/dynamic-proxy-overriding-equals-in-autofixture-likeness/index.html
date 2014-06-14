@@ -1,5 +1,4 @@
-<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" /><meta content="width=device-width, user-scalable=no" name="viewport" /><title>Dynamic Proxy overriding Equals in AutoFixture Likeness</title><link href="http://fonts.googleapis.com/css?family=Lora:400,700|Open+Sans" rel="stylesheet" type="text/css" /><link href="/stylesheets/fontello.css?1402301603" media="screen" rel="stylesheet" type="text/css" />
-<link href="/stylesheets/styles.css?1402301603" media="screen" rel="stylesheet" type="text/css" /></head><body><div class="row"><h1>Dynamic Proxy overriding Equals in AutoFixture Likeness</h1><div class="post"><p>From version 2.9.0 of AutoFixture, the&nbsp;<a href="http://blog.ploeh.dk/2010/06/29/IntroducingAutoFixtureLikeness.aspx" target="_blank">Likeness</a>&nbsp;class contains a new feature for&nbsp;creating a dynamic proxy that overrides Equals on the destination type.</p>
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" /><meta content="width=device-width, user-scalable=no" name="viewport" /><title>Dynamic Proxy overriding Equals in AutoFixture Likeness</title><link href="/stylesheets/styles.css?1402741299" media="screen" rel="stylesheet" type="text/css" /></head><body><div><h1>Dynamic Proxy overriding Equals in AutoFixture Likeness</h1><div>February 20, 2012</div><br /><div><p>From version 2.9.0 of AutoFixture, the&nbsp;<a href="http://blog.ploeh.dk/2010/06/29/IntroducingAutoFixtureLikeness.aspx" target="_blank">Likeness</a>&nbsp;class contains a new feature for&nbsp;creating a dynamic proxy that overrides Equals on the destination type.</p>
 
 <p>As an example, we want to compare instances of the following types:</p>
 <pre class="highlight text">public class DoubleParameterType&lt;T1, T2&gt;
@@ -97,10 +96,9 @@ public void Test()
 <p>Although the new Bar instance is created inside the DoSomething method, we can pass a <em>proxied </em>Bar instance on the mock&rsquo;s Verify method.</p>
 
 <p>Internally, a custom Proxy Generator was written which also&nbsp;supports types with non-parameterless constructors.&nbsp;In order to create proxies of such types, the values from the source have to be compatible with the parameters on the destination constructor.&nbsp;(The mapping between the two is made possible by using the same semantic heuristics, as the default semantic comparison.)</p>
-</div><div class="dater">February 20, 2012</div><div class="categories">Published in<a class="category" href="/category/autofixture/">AutoFixture&nbsp;</a></div></div><div class="homer"><a href="/"><i class="icon-tape" style="font-size:32px;"></i></a></div><script type="text/javascript">var _gaq = _gaq || [];
+</div><hr /><small>Published in <a href="/category/autofixture/">AutoFixture</a>, by <a href="/">Nikos Baxevanis</a>.</small></div><script type="text/javascript">var _gaq = _gaq || [];
 _gaq.push(['_setAccount', 'UA-24262928-1']);
 _gaq.push(['_trackPageview']);
-
 (function() {
   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
