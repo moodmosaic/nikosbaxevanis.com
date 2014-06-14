@@ -7,8 +7,6 @@ comments: [disqus]
 slug: "A maturity model for open-source code."
 ---
 
-> I couldn't tweet this text into 140 characters so I blogged it.
-
  A maturity model for open-source code:
 
 **Level 0**

@@ -19,7 +19,7 @@ end
 
 class Article
 
-  @@dir         = "#{Dir.pwd}/source/data/articles/"
+  @@dir         = "#{Dir.pwd}/source/data/blog/"
   @@date_range  = @@dir.size..@@dir.size+10
 
   attr_accessor :published, :year, :month, :day, :title, :file, :url, :slug, :date, :type, :body, :categories, :resource
@@ -168,7 +168,7 @@ end
 
 ready do
 
-  articles    = []
+  blog    = []
   screencasts = []
   talks       = []
   projects    = []
@@ -178,7 +178,7 @@ ready do
     when /^#{Regexp.quote(Article.dir)}/
       article = Article.new(res)
       if article.published then
-        articles.unshift article
+        blog.unshift article
         proxy "#{article.url}/index.html", article.file, :locals => { :article => article }
       end
     when /^#{Regexp.quote(Screencast.dir)}/
@@ -194,12 +194,12 @@ ready do
     end
   end
 
-  zipped = (articles + screencasts + talks + projects).sort_by { |item| item.date }.reverse
+  zipped = (blog + screencasts + talks + projects).sort_by { |item| item.date }.reverse
 
   proxy "/index.html"              , "/dashboard.html"    , :locals => { :entries => zipped  }
   proxy "/talks/index.html"        , "/thingies.html"     , :locals => { :entries => talks, :title => "Talks" }
   proxy "/screencasts/index.html"  , "/thingies.html"     , :locals => { :entries => screencasts, :title => "Screencasts" }
-  proxy "/articles/index.html"     , "/thingies.html"     , :locals => { :entries => articles, :title => "Articles" }
+  proxy "/blog/index.html"         , "/thingies.html"     , :locals => { :entries => blog, :title => "Blog" }
   proxy "/projects/index.html"     , "/thingies.html"     , :locals => { :entries => projects, :title => "Projects" }
   proxy "/feed/index.xml"          , "/feed.xml"          , :locals => { :items => zipped }
   proxy "/testimonials/index.html" , "/testimonials.html"
@@ -252,7 +252,7 @@ ready do
 #  proxy "/stats/index.html", "/stats.html", :locals => {
 #    :latest_topics    => stats_last_6_months,
 #    :all_topics       => stats_all_time,
-#    :article_count    => articles.size,
+#    :article_count    => blog.size,
 #    :talk_count       => talks.size,
 #    :screencast_count => screencasts.size,
 #    :project_count    => projects.size,
@@ -284,7 +284,7 @@ ready do
   #
   # puts categories_per_slice.to_json
 
-  # exported_posts = articles.map do |article|
+  # exported_posts = blog.map do |article|
   #   {
   #     "title"            => article.title,
   #     "slug"             => article.slug,
@@ -308,7 +308,7 @@ ready do
   #   }
   # end
   # 
-  # exported_tags = articles.map { |article| article.categories }
+  # exported_tags = blog.map { |article| article.categories }
   #                         .flatten
   #                         .uniq
   #                         .each_with_index

@@ -1,7 +1,8 @@
-h1.title=title
-div.entries
+h1=title
+div
   - for thingie in entries do
-    h3
-      a href=thingie.url #{thingie.title}
-      div.published_date Published on #{thingie.date.strftime("%B %d, %Y")}
-
+    ul
+      li
+        a href=thingie.url #{thingie.title}
+        br 
+        small #{thingie.date.strftime("%B %d, %Y")}
