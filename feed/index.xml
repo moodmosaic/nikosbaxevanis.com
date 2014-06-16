@@ -5,7 +5,7 @@
   <author>
     <name>Nikos Baxevanis</name>
   </author>
-  <updated>2014-06-14T13:21:44+03:00</updated>
+  <updated>2014-06-16T14:09:03+03:00</updated>
   <link href="http://nikosbaxevanis.com/" rel="alternate"/>
   <link href="http://nikosbaxevanis.com/feed/" rel="self"/>
   <id>http://nikosbaxevanis.com/</id>
@@ -1325,13 +1325,13 @@ tsTest: {
 &lt;/pre&gt;
 &lt;p&gt;The file comparison output should be similar with the image shown below:&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-04-03-typescript-grunt-angular-1.png?1402741299" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-04-03-typescript-grunt-angular-1.png?1402916937" /&gt;&lt;/p&gt;
 
 &lt;h3&gt;Linting configuration&lt;/h3&gt;
 
 &lt;p&gt;Remove the indentation setting from JSHint since &lt;a href="https://typescript.codeplex.com/workitem/204"&gt;TypeScript indents code idiomatically&lt;/a&gt;.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-04-03-typescript-grunt-angular-2.png?1402741299" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-04-03-typescript-grunt-angular-2.png?1402916937" /&gt;&lt;/p&gt;
 
 &lt;h3&gt;Declaration source files usage&lt;/h3&gt;
 
@@ -1608,16 +1608,6 @@ public void Scenario(ISpecimenBuilder builder)
 </content>
   </entry>
   <entry>
-    <title>GreanTech/Exude: Contributor</title>
-    <link rel="alternate" href="https://github.com/GreanTech/Exude"/>
-    <id>http://nikosbaxevanis.comhttps://github.com/GreanTech/Exude</id>
-    <updated>2014-03-13T00:00:00+02:00</updated>
-    <author>
-      <name>Nikos Baxevanis</name>
-    </author>
-    <content type="html"></content>
-  </entry>
-  <entry>
     <title>How to configure AutoFoq with Foq's return strategy</title>
     <link rel="alternate" href="/blog/2014/02/23/how-to-configure-autofoq-with-foqs-return-strategy"/>
     <id>http://nikosbaxevanis.com/blog/2014/02/23/how-to-configure-autofoq-with-foqs-return-strategy</id>
@@ -1777,7 +1767,7 @@ let CustomizationFillsReturnValuesDecleratively (sut : IInterface) =
     </author>
     <content type="html">&lt;p&gt;&lt;u&gt;Note&lt;/u&gt;: After following this post, the end result is pretty awesome:&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-17.png?1402741299" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-17.png?1402916937" /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Radio Edit (tl;dr)&lt;/strong&gt;&lt;/p&gt;
 
@@ -1806,7 +1796,7 @@ let CustomizationFillsReturnValuesDecleratively (sut : IInterface) =
 
 &lt;p&gt;Create a new Virtual Machine on Windows Azure to install and access TeamCity.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-1.png?1402741299" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-1.png?1402916937" /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;Turn off Internet Explorer&amp;#39;s Enhanced Security Configuration.&lt;/li&gt;
@@ -1817,7 +1807,7 @@ let CustomizationFillsReturnValuesDecleratively (sut : IInterface) =
 &lt;/ul&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-3.png?1402741299" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-3.png?1402916937" /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;Install Karma and karma-teamcity-reporter plugin:&lt;br&gt;&lt;pre&gt;&lt;code&gt;  npm install -g karma
@@ -1834,19 +1824,19 @@ let CustomizationFillsReturnValuesDecleratively (sut : IInterface) =
 &lt;/ul&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-4.png?1402741299" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-4.png?1402916937" /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;u&gt;Optional&lt;/u&gt;: &lt;a href="https://help.github.com/articles/generating-ssh-keys"&gt;Generate SSH keys&lt;/a&gt; if you use SSH keys to establish a secure connection between the Virtual Machine and Git.&lt;/p&gt;
 
 &lt;p&gt;Install TeamCity and choose a port so it can be accessed from a browser (e.g. port 80).&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-5.png?1402741299" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-5.png?1402916937" /&gt;&lt;/p&gt;
 
 &lt;p&gt;If you use SSH keys to establish a secure connection between the Virtual Machine and Git, make sure to run TeamCity Server under a user account that can access the path where the SSH keys are saved.&lt;/p&gt;
 
 &lt;p&gt;Use the &lt;code&gt;whoami&lt;/code&gt; command in the Command Prompt to find out the Virtual Machine&amp;#39;s domain name.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-6.png?1402741299" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-6.png?1402916937" /&gt;&lt;/p&gt;
 
 &lt;p&gt;Add a new inbound rule to Windows Firewall with the TeamCity Server port that was entered during installation.&lt;/p&gt;
 
@@ -1856,7 +1846,7 @@ let CustomizationFillsReturnValuesDecleratively (sut : IInterface) =
 
 &lt;p&gt;On Windows Azure Management Portal add a new endpoint with the selected TeamCity Server port that was entered during installation.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-7.png?1402741299" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-7.png?1402916937" /&gt;&lt;/p&gt;
 
 &lt;p&gt;Log in to the TeamCity Server:&lt;/p&gt;
 
@@ -1866,20 +1856,20 @@ let CustomizationFillsReturnValuesDecleratively (sut : IInterface) =
 &lt;li&gt;Attach a new VCS root on Build Configuration for Git.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-8.png?1402741299" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-8.png?1402916937" /&gt;&lt;/p&gt;
 
 &lt;p&gt;For the demo, I forked the &lt;a href="https://github.com/moodmosaic/angular-phonecat"&gt;angular-phonecat&lt;/a&gt; project.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-9.png?1402741299" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-9.png?1402916937" /&gt;&lt;/p&gt;
 
 &lt;p&gt;Select an authentication method and test the connection.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-10.png?1402741299" /&gt;
-&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-11.png?1402741299" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-10.png?1402916937" /&gt;
+&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-11.png?1402916937" /&gt;&lt;/p&gt;
 
 &lt;p&gt;Add a Build Step and attach the newly created Build Configuration.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-12.png?1402741299" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-12.png?1402916937" /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;In the runner type select Command Line.&lt;/li&gt;
@@ -1889,20 +1879,20 @@ let CustomizationFillsReturnValuesDecleratively (sut : IInterface) =
 &lt;li&gt;In the command parameters option enter &lt;code&gt;start karma.conf.js --reporters teamcity --single-run&lt;/code&gt;.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-13.png?1402741299" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-13.png?1402916937" /&gt;&lt;/p&gt;
 
 &lt;p&gt;As a last step, include the &lt;code&gt;karma-teamcity-reporter&lt;/code&gt; plugin in the karma.conf.js file.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-14.png?1402741299" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-14.png?1402916937" /&gt;&lt;/p&gt;
 
 &lt;p&gt;Push to Git to trigger the build process and see the commit on TeamCity Server.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-15.png?1402741299" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-15.png?1402916937" /&gt;&lt;/p&gt;
 
 &lt;p&gt;The end result is pretty awesome:&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-16.png?1402741299" /&gt;
-&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-17.png?1402741299" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-16.png?1402916937" /&gt;
+&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-17.png?1402916937" /&gt;&lt;/p&gt;
 </content>
   </entry>
   <entry>
@@ -2248,31 +2238,31 @@ PM&amp;gt; Install-Package Xunit.Extensions
 
 &lt;p&gt;&lt;a href="http://msdn.microsoft.com/en-us/library/bb298736.aspx"&gt;Enumerable.ToArray&lt;/a&gt; &amp;#8594; &lt;a href="http://msdn.microsoft.com/en-us/library/ee340263.aspx"&gt;Seq.toArray&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-1.png?1402741299" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-1.png?1402916937" /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;AsEnumerable&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;a href="http://msdn.microsoft.com/en-us/library/bb335435.aspx"&gt;Enumerable.AsEnumerable&lt;/a&gt; &amp;#8594; &lt;code&gt;seq { }&lt;/code&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-2.png?1402741299" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-2.png?1402916937" /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;First&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;a href="http://msdn.microsoft.com/en-us/library/bb291976.aspx"&gt;Enumerable.First&lt;/a&gt; &amp;#8594; &lt;a href="http://msdn.microsoft.com/en-us/library/ee340330.aspx"&gt;Seq.head&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-3.png?1402741299" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-3.png?1402916937" /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Count&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;a href="http://msdn.microsoft.com/en-us/library/bb338038.aspx"&gt;Enumerable.Count&lt;/a&gt; &amp;#8594; &lt;a href="http://msdn.microsoft.com/en-us/library/ee370547.aspx"&gt;Seq.length&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-4.png?1402741299" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-4.png?1402916937" /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;SequenceEqual&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;a href="http://msdn.microsoft.com/en-us/library/bb348567.aspx"&gt;Enumerable.SequenceEqual&lt;/a&gt; &amp;#8594; &lt;a href="http://msdn.microsoft.com/en-us/library/ee353659.aspx"&gt;Seq.compareWith&lt;/a&gt; &lt;a href="http://msdn.microsoft.com/en-us/library/ee353429.aspx"&gt;Operators.compare&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-5.png?1402741299" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-5.png?1402916937" /&gt;&lt;/p&gt;
 </content>
   </entry>
   <entry>
@@ -2336,16 +2326,6 @@ let AutoMockInterfaceAndSetupExpectationsDeclaratively
 </content>
   </entry>
   <entry>
-    <title>ploeh/Albedo: Core Contributor</title>
-    <link rel="alternate" href="http://github.com/ploeh/albedo"/>
-    <id>http://nikosbaxevanis.comhttp://github.com/ploeh/albedo</id>
-    <updated>2013-10-07T00:00:00+03:00</updated>
-    <author>
-      <name>Nikos Baxevanis</name>
-    </author>
-    <content type="html"></content>
-  </entry>
-  <entry>
     <title>How to configure MSBuild to locate the F# build targets</title>
     <link rel="alternate" href="/blog/2013/10/04/how-to-configure-msbuild-to-locate-the-f-number-build-targets"/>
     <id>http://nikosbaxevanis.com/blog/2013/10/04/how-to-configure-msbuild-to-locate-the-f-number-build-targets</id>
@@ -2379,7 +2359,7 @@ let AutoMockInterfaceAndSetupExpectationsDeclaratively
 
 &lt;p&gt;The most important changes are shown below. You can also see the diff as an image &lt;a href="/images/articles/2013-10-04-how-to-configure-msbuild-to-locate-the-fsharp-build-targets.png"&gt;here&lt;/a&gt;:&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-04-how-to-configure-msbuild-to-locate-the-fsharp-build-targets.png?1402741299" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-04-how-to-configure-msbuild-to-locate-the-fsharp-build-targets.png?1402916937" /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;A note for VS 2012 users&lt;/strong&gt;&lt;/p&gt;
 
@@ -4818,25 +4798,6 @@ public void Test()
 </content>
   </entry>
   <entry>
-    <title>Test-After Development Sins (Ignoring cross-cutting concerns)</title>
-    <link rel="alternate" href="/blog/2012/02/18/test-after-development-sins-ignoring-cross-cutting-concerns"/>
-    <id>http://nikosbaxevanis.com/blog/2012/02/18/test-after-development-sins-ignoring-cross-cutting-concerns</id>
-    <updated>2012-02-18T00:00:00+02:00</updated>
-    <author>
-      <name>Nikos Baxevanis</name>
-    </author>
-    <content type="html">&lt;p&gt;A&amp;#0160;&lt;a href="http://www.nikosbaxevanis.com/bonus-bits/2012/01/test-after-development-sins-introduction.html" target="_blank" title="&amp;quot;Test-After Development&amp;quot; Sins: Introduction"&gt;series&lt;/a&gt;&amp;#0160;of articles exploring the impact of writing tests&amp;#0160;&lt;em&gt;after&amp;#0160;&lt;/em&gt;the code is written&amp;#0160;on the implementation part of&amp;#0160;&lt;a href="http://en.wikipedia.org/wiki/Software_development_process" target="_blank" title="A software development process, also known as a software development life cycle (SDLC), is a structure imposed on the development of a software product."&gt;SDLC&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;span style="text-decoration: underline;"&gt;Sin No.3&lt;/span&gt;: Ignoring cross-cutting concerns.&lt;/p&gt;
-
-&lt;p&gt;The problem with this approach becomes very clear. It will be hard and tedious work, inside each test, to create stubs and mocks for each and every aspect.&amp;#0160;The intent of the unit tests will also look wrong since, in reality, these aspects should not be treated as&lt;em&gt;&amp;#0160;&lt;/em&gt;dependencies of the&amp;#0160;&lt;a href="http://xunitpatterns.com/SUT.html" target="_blank" title="The &amp;quot;system under test&amp;quot;. It is short for &amp;quot;whatever thing we are testing&amp;quot; and is always defined from the perspective of the test."&gt;SUT&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Among others, logging and caching are cross-cutting concerns that can easily slip through the services (making us treat them as normal dependencies).&amp;#0160;&lt;/p&gt;
-
-&lt;p&gt;While the preferred way to model these aspects is using decorators and/or dynamic interceptors,&amp;#0160;there are many times that we see classes violating the&amp;#0160;&lt;a href="http://en.wikipedia.org/wiki/Single_responsibility_principle" target="_blank" title="In object-oriented programming, the single responsibility principle states that every object should have a single responsibility, and that responsibility should be entirely encapsulated by the class. All its services should be narrowly aligned with that responsibility."&gt;SRP&lt;/a&gt;&amp;#0160;containing &lt;em&gt;all-in-one&lt;/em&gt; logging, caching, auditing and other aspects (and even violating the&amp;#0160;&lt;a href="http://en.wikipedia.org/wiki/Interface_segregation_principle" target="_blank" title="The notion that many client specific interfaces are better than one general purpose interface."&gt;ISP&lt;/a&gt;&amp;#0160;with a coarse-grained&amp;#0160;&lt;a href="http://martinfowler.com/bliki/HeaderInterface.html" target="_blank" title="A header interface is an explicit interface that mimics the implicit public interface of a class. Essentially you take all the public methods of a class and declare them in an interface."&gt;Header Interface&lt;/a&gt;).&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
     <title>Parameterized Tests for ServiceStack Web Services</title>
     <link rel="alternate" href="/blog/2012/02/18/parameterized-tests-for-servicestack-web-services"/>
     <id>http://nikosbaxevanis.com/blog/2012/02/18/parameterized-tests-for-servicestack-web-services</id>
@@ -4912,6 +4873,25 @@ public void HttpGetReturnsNonEmptyResultWithId(IRestClient sut)
 </content>
   </entry>
   <entry>
+    <title>Test-After Development Sins (Ignoring cross-cutting concerns)</title>
+    <link rel="alternate" href="/blog/2012/02/18/test-after-development-sins-ignoring-cross-cutting-concerns"/>
+    <id>http://nikosbaxevanis.com/blog/2012/02/18/test-after-development-sins-ignoring-cross-cutting-concerns</id>
+    <updated>2012-02-18T00:00:00+02:00</updated>
+    <author>
+      <name>Nikos Baxevanis</name>
+    </author>
+    <content type="html">&lt;p&gt;A&amp;#0160;&lt;a href="http://www.nikosbaxevanis.com/bonus-bits/2012/01/test-after-development-sins-introduction.html" target="_blank" title="&amp;quot;Test-After Development&amp;quot; Sins: Introduction"&gt;series&lt;/a&gt;&amp;#0160;of articles exploring the impact of writing tests&amp;#0160;&lt;em&gt;after&amp;#0160;&lt;/em&gt;the code is written&amp;#0160;on the implementation part of&amp;#0160;&lt;a href="http://en.wikipedia.org/wiki/Software_development_process" target="_blank" title="A software development process, also known as a software development life cycle (SDLC), is a structure imposed on the development of a software product."&gt;SDLC&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;span style="text-decoration: underline;"&gt;Sin No.3&lt;/span&gt;: Ignoring cross-cutting concerns.&lt;/p&gt;
+
+&lt;p&gt;The problem with this approach becomes very clear. It will be hard and tedious work, inside each test, to create stubs and mocks for each and every aspect.&amp;#0160;The intent of the unit tests will also look wrong since, in reality, these aspects should not be treated as&lt;em&gt;&amp;#0160;&lt;/em&gt;dependencies of the&amp;#0160;&lt;a href="http://xunitpatterns.com/SUT.html" target="_blank" title="The &amp;quot;system under test&amp;quot;. It is short for &amp;quot;whatever thing we are testing&amp;quot; and is always defined from the perspective of the test."&gt;SUT&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Among others, logging and caching are cross-cutting concerns that can easily slip through the services (making us treat them as normal dependencies).&amp;#0160;&lt;/p&gt;
+
+&lt;p&gt;While the preferred way to model these aspects is using decorators and/or dynamic interceptors,&amp;#0160;there are many times that we see classes violating the&amp;#0160;&lt;a href="http://en.wikipedia.org/wiki/Single_responsibility_principle" target="_blank" title="In object-oriented programming, the single responsibility principle states that every object should have a single responsibility, and that responsibility should be entirely encapsulated by the class. All its services should be narrowly aligned with that responsibility."&gt;SRP&lt;/a&gt;&amp;#0160;containing &lt;em&gt;all-in-one&lt;/em&gt; logging, caching, auditing and other aspects (and even violating the&amp;#0160;&lt;a href="http://en.wikipedia.org/wiki/Interface_segregation_principle" target="_blank" title="The notion that many client specific interfaces are better than one general purpose interface."&gt;ISP&lt;/a&gt;&amp;#0160;with a coarse-grained&amp;#0160;&lt;a href="http://martinfowler.com/bliki/HeaderInterface.html" target="_blank" title="A header interface is an explicit interface that mimics the implicit public interface of a class. Essentially you take all the public methods of a class and declare them in an interface."&gt;Header Interface&lt;/a&gt;).&lt;/p&gt;
+</content>
+  </entry>
+  <entry>
     <title>Test-After Development Sins (Header Interfaces)</title>
     <link rel="alternate" href="/blog/2012/01/28/test-after-development-sins-header-interfaces"/>
     <id>http://nikosbaxevanis.com/blog/2012/01/28/test-after-development-sins-header-interfaces</id>
@@ -4945,6 +4925,27 @@ public void HttpGetReturnsNonEmptyResultWithId(IRestClient sut)
 </content>
   </entry>
   <entry>
+    <title>Test-After Development Sins</title>
+    <link rel="alternate" href="/blog/2012/01/28/test-after-development-sins"/>
+    <id>http://nikosbaxevanis.com/blog/2012/01/28/test-after-development-sins</id>
+    <updated>2012-01-28T00:00:00+02:00</updated>
+    <author>
+      <name>Nikos Baxevanis</name>
+    </author>
+    <content type="html">&lt;p&gt;A series of short articles exploring the impact of writing tests&amp;#0160;&lt;em&gt;after&amp;#0160;&lt;/em&gt;the code is written&amp;#0160;on the implementation part of &lt;a href="http://en.wikipedia.org/wiki/Software_development_process" target="_blank" title="A software development process, also known as a software development life cycle (SDLC), is a structure imposed on the development of a software product."&gt;SDLC&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="http://www.nikosbaxevanis.com/bonus-bits/2012/01/test-after-development-sins-production-code-first.html" target="_blank" title="&amp;quot;Test-After Development&amp;quot; Sins: Production Code First."&gt; Sin No.1&lt;/a&gt;:&amp;#0160;Production Code First.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="http://www.nikosbaxevanis.com/bonus-bits/2012/01/test-after-development-sins-coarse-header-interfaces.html" target="_blank" title="&amp;quot;Test-After Development&amp;quot; Sins: Header Interfaces."&gt;Sin No.2&lt;/a&gt;: Header Interfaces.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="http://www.nikosbaxevanis.com/bonus-bits/2012/02/test-after-development-sins-ignoring-cross-cutting-concerns.html" target="_blank" title="&amp;quot;Test-After Development&amp;quot; Sins: Ignoring cross-cutting concerns."&gt;Sin No.3&lt;/a&gt;: Ignoring cross-cutting concerns.&lt;/p&gt;
+
+&lt;p&gt;Sin No.4: Increasing costs.&lt;/p&gt;
+
+&lt;p&gt;Sin No.5:&amp;#0160;Decreasing quality.&lt;/p&gt;
+</content>
+  </entry>
+  <entry>
     <title>Test-After Development Sins (Production Code First)</title>
     <link rel="alternate" href="/blog/2012/01/28/test-after-development-sins-production-code-first"/>
     <id>http://nikosbaxevanis.com/blog/2012/01/28/test-after-development-sins-production-code-first</id>
@@ -4965,27 +4966,6 @@ public void HttpGetReturnsNonEmptyResultWithId(IRestClient sut)
 &lt;p&gt;Even worse, inside those methods, dependencies might be resolved using a&amp;#0160;&lt;a href="http://martinfowler.com/articles/injection.html#UsingAServiceLocator" target="_blank"&gt;Service Locator&lt;/a&gt;&amp;#0160;(which is &lt;a href="http://blog.ploeh.dk/2010/02/03/ServiceLocatorIsAnAntiPattern.aspx" target="_blank" title="Service Locator is an Anti-Pattern"&gt;not&lt;/a&gt; good) forcing us to mock the container (if that&amp;#39;s an option at all) in order to successfully write unit tests&amp;#0160;&lt;em&gt;afterwards&lt;/em&gt;.&lt;/p&gt;
 
 &lt;p&gt;At the end, a lot of time is spent to write a few&amp;#0160;&lt;a href="http://xunitpatterns.com/Fragile%20Test.html" target="_blank" title="A test fails to compile or run when the system under test (SUT) is changed in ways that do not affect the part the test is exercising."&gt;Fragile Tests&lt;/a&gt;, resulting in a system which is (in most other places) not covered by tests at all.&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
-    <title>Test-After Development Sins</title>
-    <link rel="alternate" href="/blog/2012/01/28/test-after-development-sins"/>
-    <id>http://nikosbaxevanis.com/blog/2012/01/28/test-after-development-sins</id>
-    <updated>2012-01-28T00:00:00+02:00</updated>
-    <author>
-      <name>Nikos Baxevanis</name>
-    </author>
-    <content type="html">&lt;p&gt;A series of short articles exploring the impact of writing tests&amp;#0160;&lt;em&gt;after&amp;#0160;&lt;/em&gt;the code is written&amp;#0160;on the implementation part of &lt;a href="http://en.wikipedia.org/wiki/Software_development_process" target="_blank" title="A software development process, also known as a software development life cycle (SDLC), is a structure imposed on the development of a software product."&gt;SDLC&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href="http://www.nikosbaxevanis.com/bonus-bits/2012/01/test-after-development-sins-production-code-first.html" target="_blank" title="&amp;quot;Test-After Development&amp;quot; Sins: Production Code First."&gt; Sin No.1&lt;/a&gt;:&amp;#0160;Production Code First.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href="http://www.nikosbaxevanis.com/bonus-bits/2012/01/test-after-development-sins-coarse-header-interfaces.html" target="_blank" title="&amp;quot;Test-After Development&amp;quot; Sins: Header Interfaces."&gt;Sin No.2&lt;/a&gt;: Header Interfaces.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href="http://www.nikosbaxevanis.com/bonus-bits/2012/02/test-after-development-sins-ignoring-cross-cutting-concerns.html" target="_blank" title="&amp;quot;Test-After Development&amp;quot; Sins: Ignoring cross-cutting concerns."&gt;Sin No.3&lt;/a&gt;: Ignoring cross-cutting concerns.&lt;/p&gt;
-
-&lt;p&gt;Sin No.4: Increasing costs.&lt;/p&gt;
-
-&lt;p&gt;Sin No.5:&amp;#0160;Decreasing quality.&lt;/p&gt;
 </content>
   </entry>
   <entry>
@@ -5175,16 +5155,6 @@ Stack Overflow
     &lt;li&gt;&lt;a href="http://download.oracle.com/javase/6/docs/api/java/util/Set.html" target="_blank"&gt;Interface Set&amp;lt;E&amp;gt;&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;&lt;/p&gt;
 </content>
-  </entry>
-  <entry>
-    <title>moodmosaic/Fare: Creator</title>
-    <link rel="alternate" href="http://github.com/moodmosaic/fare"/>
-    <id>http://nikosbaxevanis.comhttp://github.com/moodmosaic/fare</id>
-    <updated>2011-11-02T00:00:00+02:00</updated>
-    <author>
-      <name>Nikos Baxevanis</name>
-    </author>
-    <content type="html"></content>
   </entry>
   <entry>
     <title>Estimation Quiz</title>
@@ -5401,6 +5371,44 @@ public void EqualTo()
 </content>
   </entry>
   <entry>
+    <title>Heuristics for Static Factory Methods in AutoFixture</title>
+    <link rel="alternate" href="/blog/2011/08/25/heuristics-for-static-factory-methods-in-autofixture"/>
+    <id>http://nikosbaxevanis.com/blog/2011/08/25/heuristics-for-static-factory-methods-in-autofixture</id>
+    <updated>2011-08-25T00:00:00+03:00</updated>
+    <author>
+      <name>Nikos Baxevanis</name>
+    </author>
+    <content type="html">&lt;p&gt;Here is a type with a private constructor:&lt;/p&gt;
+&lt;pre class="highlight text"&gt;public class TypeWithFactoryMethod
+{
+    private TypeWithFactoryMethod() 
+    {
+    }
+
+    public static TypeWithFactoryMethod Create()
+    {
+        return new TypeWithFactoryMethod();
+    }
+
+    public static TypeWithFactoryMethod Create(object argument)
+    {
+        return new TypeWithFactoryMethod();
+    }
+}
+&lt;/pre&gt;
+&lt;p&gt;In order to create an instance of that type we have to call one of it&amp;#39;s static factory methods, for example:&lt;/p&gt;
+&lt;pre class="highlight text"&gt;var instance = TypeWithFactoryMethod.Create();
+&lt;/pre&gt;
+&lt;p&gt;If we try to create an &lt;a href="http://blogs.msdn.com/b/ploeh/archive/2008/11/17/anonymous-variables.aspx" target="_blank" title="Anonymous Variables"&gt;Anonymous Variable&lt;/a&gt; with &lt;a href="http://autofixture.codeplex.com" target="_blank" title="AutoFixture makes it easier for developers to do Test-Driven Development by automating non-relevant Test Fixture Setup, allowing the Test Developer to focus on the essentials of each test case."&gt;AutoFixture&lt;/a&gt; right now (version 2.1) it will throw an exception since there are no public constructors:&lt;/p&gt;
+&lt;pre class="highlight text"&gt;var fixture = new Fixture();
+var result = fixture.CreateAnonymous&amp;lt;TypeWithFactoryMethod&amp;gt;();
+&lt;/pre&gt;
+&lt;p&gt;Using the latest version from&amp;#0160;&lt;a href="http://autofixture.codeplex.com/SourceControl/list/changesets" target="_blank" title="AutoFixture (changesets)"&gt;trunk&lt;/a&gt;&amp;#0160;(and on the next public release) the above code will work.&amp;#0160;It will successfully return an instance of the type by using&amp;#0160;a set of heuristics that enable AutoFixture to search for static factory methods.&lt;/p&gt;
+
+&lt;p&gt;The latest build (including strong names) can be downloaded from &lt;a href="http://teamcity.codebetter.com/project.html?projectId=project129&amp;amp;tab=projectOverview. " target="_blank"&gt;here&lt;/a&gt;.&lt;/p&gt;
+</content>
+  </entry>
+  <entry>
     <title>Combining Data Theories in AutoFixture.Xunit extension</title>
     <link rel="alternate" href="/blog/2011/08/25/combining-data-theories-in-autofixture-dot-xunit-extension"/>
     <id>http://nikosbaxevanis.com/blog/2011/08/25/combining-data-theories-in-autofixture-dot-xunit-extension</id>
@@ -5449,44 +5457,6 @@ public void Test(string s1, string s2, MyClass myClass)
 &lt;p&gt;While this feature comes with AutoFixture.Xunit extension, the CompositeDataAttribute class depends only on the xunit.extensions assembly.&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;You may compile the code from the latest&amp;#0160;&lt;a href="http://autofixture.codeplex.com/SourceControl/list/changesets" target="_blank" title="AutoFixture (changesets)"&gt;trunk&lt;/a&gt;&amp;#0160;version, alternatively&amp;#0160;the latest build (including strong names) can be downloaded from&amp;#0160;&lt;a href="http://teamcity.codebetter.com/project.html?projectId=project129&amp;amp;tab=projectOverview. " target="_blank"&gt;here&lt;/a&gt;.&lt;/p&gt;&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
-    <title>Heuristics for Static Factory Methods in AutoFixture</title>
-    <link rel="alternate" href="/blog/2011/08/25/heuristics-for-static-factory-methods-in-autofixture"/>
-    <id>http://nikosbaxevanis.com/blog/2011/08/25/heuristics-for-static-factory-methods-in-autofixture</id>
-    <updated>2011-08-25T00:00:00+03:00</updated>
-    <author>
-      <name>Nikos Baxevanis</name>
-    </author>
-    <content type="html">&lt;p&gt;Here is a type with a private constructor:&lt;/p&gt;
-&lt;pre class="highlight text"&gt;public class TypeWithFactoryMethod
-{
-    private TypeWithFactoryMethod() 
-    {
-    }
-
-    public static TypeWithFactoryMethod Create()
-    {
-        return new TypeWithFactoryMethod();
-    }
-
-    public static TypeWithFactoryMethod Create(object argument)
-    {
-        return new TypeWithFactoryMethod();
-    }
-}
-&lt;/pre&gt;
-&lt;p&gt;In order to create an instance of that type we have to call one of it&amp;#39;s static factory methods, for example:&lt;/p&gt;
-&lt;pre class="highlight text"&gt;var instance = TypeWithFactoryMethod.Create();
-&lt;/pre&gt;
-&lt;p&gt;If we try to create an &lt;a href="http://blogs.msdn.com/b/ploeh/archive/2008/11/17/anonymous-variables.aspx" target="_blank" title="Anonymous Variables"&gt;Anonymous Variable&lt;/a&gt; with &lt;a href="http://autofixture.codeplex.com" target="_blank" title="AutoFixture makes it easier for developers to do Test-Driven Development by automating non-relevant Test Fixture Setup, allowing the Test Developer to focus on the essentials of each test case."&gt;AutoFixture&lt;/a&gt; right now (version 2.1) it will throw an exception since there are no public constructors:&lt;/p&gt;
-&lt;pre class="highlight text"&gt;var fixture = new Fixture();
-var result = fixture.CreateAnonymous&amp;lt;TypeWithFactoryMethod&amp;gt;();
-&lt;/pre&gt;
-&lt;p&gt;Using the latest version from&amp;#0160;&lt;a href="http://autofixture.codeplex.com/SourceControl/list/changesets" target="_blank" title="AutoFixture (changesets)"&gt;trunk&lt;/a&gt;&amp;#0160;(and on the next public release) the above code will work.&amp;#0160;It will successfully return an instance of the type by using&amp;#0160;a set of heuristics that enable AutoFixture to search for static factory methods.&lt;/p&gt;
-
-&lt;p&gt;The latest build (including strong names) can be downloaded from &lt;a href="http://teamcity.codebetter.com/project.html?projectId=project129&amp;amp;tab=projectOverview. " target="_blank"&gt;here&lt;/a&gt;.&lt;/p&gt;
 </content>
   </entry>
   <entry>
@@ -6605,16 +6575,6 @@ EnterpriseLibraryContainer.Current = new WindsorServiceLocator(container);
 </content>
   </entry>
   <entry>
-    <title>AutoFixture/AutoFixture: Core Contributor</title>
-    <link rel="alternate" href="https://github.com/AutoFixture/AutoFixture"/>
-    <id>http://nikosbaxevanis.comhttps://github.com/AutoFixture/AutoFixture</id>
-    <updated>2011-05-01T00:00:00+03:00</updated>
-    <author>
-      <name>Nikos Baxevanis</name>
-    </author>
-    <content type="html"></content>
-  </entry>
-  <entry>
     <title>NHibernate SessionPerRequest with WcfOperationSessionContext (Part 2)</title>
     <link rel="alternate" href="/blog/2011/04/15/nhibernate-sessionperrequest-with-wcfoperationsessioncontext-part-2"/>
     <id>http://nikosbaxevanis.com/blog/2011/04/15/nhibernate-sessionperrequest-with-wcfoperationsessioncontext-part-2</id>
@@ -7003,46 +6963,6 @@ public void NHibernateShouldBeAbleToPersistCurrency()
 </content>
   </entry>
   <entry>
-    <title>Persistence specification testing combined with AutoFixture</title>
-    <link rel="alternate" href="/blog/2011/03/13/persistence-specification-testing-combined-with-autofixture"/>
-    <id>http://nikosbaxevanis.com/blog/2011/03/13/persistence-specification-testing-combined-with-autofixture</id>
-    <updated>2011-03-13T00:00:00+02:00</updated>
-    <author>
-      <name>Nikos Baxevanis</name>
-    </author>
-    <content type="html">&lt;p&gt;When working with NHibernate you need to make sure that your mappings are correct. At least, you have to make sure that when you&amp;nbsp;save an item you can also qet that item back.&lt;/p&gt;
-
-&lt;p&gt;If you are using FluentNHibernate you can use the &lt;a href="https://github.com/jagregory/fluent-nhibernate/tree/master/src/FluentNHibernate/Testing" target="_blank"&gt;PersistenceSpecification&amp;lt;T&amp;gt; class&lt;/a&gt;. However, the&amp;nbsp;PersistenceSpecification&amp;lt;T&amp;gt; class requires that you pass the property to check and also a value for that property.&lt;/p&gt;
-
-&lt;p&gt;By using &lt;a title="AutoFixture makes it easier for developers to do Test-Driven Development by automating non-relevant Test Fixture Setup, allowing the Test Developer to focus on the essentials of each test case." href="http://autofixture.codeplex.com/" target="_blank"&gt;AutoFixture&lt;/a&gt; you can easily create objects that you can pass inside the CheckXx methods:&lt;/p&gt;
-&lt;pre class="highlight text"&gt;[Fact]
-public void ShouldVerifyTheMappings()
-{
-    var fixture = new Fixture();
-
-    using (session)
-    {
-        new PersistenceSpecification&amp;lt;EventType&amp;gt;(session)
-            .CheckProperty(x =&amp;gt; x.EventTypeId, 
-                fixture.CreateAnonymous&amp;lt;long&amp;gt;())
-            .CheckProperty(x =&amp;gt; x.EventTypeName, 
-                fixture.CreateAnonymous&amp;lt;string&amp;gt;())
-            .CheckProperty(x =&amp;gt; x.ExchangeServerId, 
-                fixture.CreateAnonymous&amp;lt;int&amp;gt;())
-            .CheckProperty(x =&amp;gt; x.LastUpdatedOn, 
-                DateTime.Today)
-            .CheckProperty(x =&amp;gt; x.NextMarketId, 
-                fixture.CreateAnonymous&amp;lt;long&amp;gt;())
-            .CheckReference(x =&amp;gt; x.Bookmaker, 
-                fixture.CreateAnonymous&amp;lt;Bookmaker&amp;gt;())
-            .VerifyTheMappings();
-    }
-}
-&lt;/pre&gt;
-&lt;p&gt;Combining&amp;nbsp;AutoFixture with the PersistenceSpecification&amp;lt;T&amp;gt; class results in&amp;nbsp;writing less code when testing NHibernate mappings, specially when dealing with complex types.&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
     <title>Unit Testing Events (The SpinWait.SpinUntil Method)</title>
     <link rel="alternate" href="/blog/2011/03/13/unit-testing-events-the-spinwait-dot-spinuntil-method"/>
     <id>http://nikosbaxevanis.com/blog/2011/03/13/unit-testing-events-the-spinwait-dot-spinuntil-method</id>
@@ -7084,6 +7004,46 @@ public void FooEvent()
 }
 &lt;/pre&gt;
 &lt;p&gt;The above tests are exactly the same. The one with the SpinWait.SpinUntil method is easier to read and it also requires less code. Pretty cool.&lt;/p&gt;
+</content>
+  </entry>
+  <entry>
+    <title>Persistence specification testing combined with AutoFixture</title>
+    <link rel="alternate" href="/blog/2011/03/13/persistence-specification-testing-combined-with-autofixture"/>
+    <id>http://nikosbaxevanis.com/blog/2011/03/13/persistence-specification-testing-combined-with-autofixture</id>
+    <updated>2011-03-13T00:00:00+02:00</updated>
+    <author>
+      <name>Nikos Baxevanis</name>
+    </author>
+    <content type="html">&lt;p&gt;When working with NHibernate you need to make sure that your mappings are correct. At least, you have to make sure that when you&amp;nbsp;save an item you can also qet that item back.&lt;/p&gt;
+
+&lt;p&gt;If you are using FluentNHibernate you can use the &lt;a href="https://github.com/jagregory/fluent-nhibernate/tree/master/src/FluentNHibernate/Testing" target="_blank"&gt;PersistenceSpecification&amp;lt;T&amp;gt; class&lt;/a&gt;. However, the&amp;nbsp;PersistenceSpecification&amp;lt;T&amp;gt; class requires that you pass the property to check and also a value for that property.&lt;/p&gt;
+
+&lt;p&gt;By using &lt;a title="AutoFixture makes it easier for developers to do Test-Driven Development by automating non-relevant Test Fixture Setup, allowing the Test Developer to focus on the essentials of each test case." href="http://autofixture.codeplex.com/" target="_blank"&gt;AutoFixture&lt;/a&gt; you can easily create objects that you can pass inside the CheckXx methods:&lt;/p&gt;
+&lt;pre class="highlight text"&gt;[Fact]
+public void ShouldVerifyTheMappings()
+{
+    var fixture = new Fixture();
+
+    using (session)
+    {
+        new PersistenceSpecification&amp;lt;EventType&amp;gt;(session)
+            .CheckProperty(x =&amp;gt; x.EventTypeId, 
+                fixture.CreateAnonymous&amp;lt;long&amp;gt;())
+            .CheckProperty(x =&amp;gt; x.EventTypeName, 
+                fixture.CreateAnonymous&amp;lt;string&amp;gt;())
+            .CheckProperty(x =&amp;gt; x.ExchangeServerId, 
+                fixture.CreateAnonymous&amp;lt;int&amp;gt;())
+            .CheckProperty(x =&amp;gt; x.LastUpdatedOn, 
+                DateTime.Today)
+            .CheckProperty(x =&amp;gt; x.NextMarketId, 
+                fixture.CreateAnonymous&amp;lt;long&amp;gt;())
+            .CheckReference(x =&amp;gt; x.Bookmaker, 
+                fixture.CreateAnonymous&amp;lt;Bookmaker&amp;gt;())
+            .VerifyTheMappings();
+    }
+}
+&lt;/pre&gt;
+&lt;p&gt;Combining&amp;nbsp;AutoFixture with the PersistenceSpecification&amp;lt;T&amp;gt; class results in&amp;nbsp;writing less code when testing NHibernate mappings, specially when dealing with complex types.&lt;/p&gt;
 </content>
   </entry>
   <entry>
@@ -8695,60 +8655,6 @@ public string ProfilerPath
 </content>
   </entry>
   <entry>
-    <title>An alternative (.NET 2.0) to the Task-based Asynchronous Pattern</title>
-    <link rel="alternate" href="/blog/2010/10/31/an-alternative-dot-net-2-dot-0-to-the-task-based-asynchronous-pattern"/>
-    <id>http://nikosbaxevanis.com/blog/2010/10/31/an-alternative-dot-net-2-dot-0-to-the-task-based-asynchronous-pattern</id>
-    <updated>2010-10-31T00:00:00+03:00</updated>
-    <author>
-      <name>Nikos Baxevanis</name>
-    </author>
-    <content type="html">&lt;blockquote&gt;
-&lt;p&gt;Write code that looks like&amp;#0160;synchronous but actually executes&amp;#0160;asynchronously with the PowerThreading library and the AsyncEnumerator class.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;In the &lt;a href="http://nikosbaxevanis.com/2010/10/31/the-task-based-asynchronous-pattern-part-1-the-basics/" target="_blank" title="The Task-based Asynchronous Pattern - Part 1 (The Basics)"&gt;previous post&lt;/a&gt; I discussed about the new language features that will help the developers write&amp;#0160;asynchronous&amp;#0160;code easily without having to split their flow in callback methods. In this post I want to show you an alternative way of doing this using the AsyncEnumerator class. This works for .NET 2.0+ and it is very similar with the upcoming features.&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;AsyncEnumerator class resides in the PowerThreading library. It is written by Jeffrey Richter and can be obtained from the&amp;#0160;&lt;a href="http://www.wintellect.com/" target="_blank" title="Wintellect is a nationally recognized consulting, training and debugging firm dedicated to helping companies build better software, faster through a concentration on .NET and Windows technologies."&gt;Wintellect&lt;/a&gt;&amp;#0160;website.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;I will start, again, with some code that executes&amp;#0160;synchronously:&lt;/p&gt;
-&lt;pre class="highlight text"&gt;private void FetchStockQuotesSync(WebService svc)
-{
-    // This blocks. You don't know when the FetchStockQuotes
-    // method returns. It may takes from minutes, to hours or
-    // it may not return at all.
-    IStockQuote qt = svc.FetchStockQuotes();
-}
-&lt;/pre&gt;
-&lt;p&gt;Fortunately the WebService class implements the&amp;#0160;&lt;a href="http://msdn.microsoft.com/en-us/library/system.iasyncresult.aspx" target="_blank" title="Represents the status of an asynchronous operation."&gt;IAsyncResult&lt;/a&gt;&amp;#0160;interface, so the same code can be executed asynchronously using the AsyncEnumerator class:&lt;/p&gt;
-&lt;pre class="highlight text"&gt;// Inside your method create an instance of an AsyncEnumerator class,
-// specifying the iterator method to be driven by the AsyncEnumerator.
-AsyncEnumerator ae = new AsyncEnumerator();
-ae.BeginExecute(GetStockQuotesAsyncEnumerator(ae, svc), ae.EndExecute);
-
-private static IEnumerator&amp;lt;int&amp;gt; GetStockQuotesAsyncEnumerator(
-    AsyncEnumerator ae, WebService svc)
-{
-    svc.BeginGetStockQuotes(ae.End(), null);
-    yield return 1;
-    IStockQuote qt = svc.EndGetStockQuotes(ae.DequeueAsyncResult());
-}
-&lt;/pre&gt;
-&lt;p&gt;This technique is similar to the &lt;a href="http://msdn.microsoft.com/en-us/vstudio/async.aspx" target="_blank" title="Async CTP"&gt;new language features&lt;/a&gt; for asynchronous programming. In fact, what I&amp;#39;ve discussed works from .NET 2.0 up to any future version.&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;A very interesting&amp;#0160;topic regarding the AsyncEnumerator class and the Async CTP can be found at the PowerTheading &lt;a href="http://tech.groups.yahoo.com/group/PowerThreading/message/836" target="_blank" title="Where do you see AsyncEnumurator in regards to the Async CTP."&gt;discussion group&lt;/a&gt;.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;Until the Async CTP is shipped you can benefit from what already exists. I have been using the AsyncEnumerator class for quite a long time and I am very happy with it. However, the Async CTP looks promising but it would be very interesting to see some performance measurements in the future.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href="http://www.codeproject.com/script/Articles/BlogFeedList.aspx?amid=5962224" rel="tag" style="display: none;"&gt;CodeProject&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;The sample application can be found &lt;a href="https://github.com/moodmosaic/BonusBits.CodeSamples" target="_blank" title="BonusBits Blog source-code."&gt;here&lt;/a&gt;.&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
     <title>The Task-based Asynchronous Pattern - Part 1 (The Basics)</title>
     <link rel="alternate" href="/blog/2010/10/31/the-task-based-asynchronous-pattern-part-1-the-basics"/>
     <id>http://nikosbaxevanis.com/blog/2010/10/31/the-task-based-asynchronous-pattern-part-1-the-basics</id>
@@ -8843,6 +8749,60 @@ private void FetchStockQuotesApmCallback(IAsyncResult ar)
 &lt;/blockquote&gt;
 
 &lt;p&gt;It becomes very clear that in the near future it&amp;#39;s the programming language that will handle most of the asynchronous stuff and not the programmer. Currently, you can download and install the &lt;a href="http://go.microsoft.com/fwlink/?LinkId=203690" target="_blank" title="Download a CTP with new syntax and APIs for asynchronous development."&gt;Async CTP&lt;/a&gt;. For more information around the new features you can visit the official website&amp;#0160;&lt;a href="http://msdn.microsoft.com/en-us/vstudio/async.aspx" target="_blank" title="Asynchronous Programming for C# and Visual Basic"&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;The sample application can be found &lt;a href="https://github.com/moodmosaic/BonusBits.CodeSamples" target="_blank" title="BonusBits Blog source-code."&gt;here&lt;/a&gt;.&lt;/p&gt;
+</content>
+  </entry>
+  <entry>
+    <title>An alternative (.NET 2.0) to the Task-based Asynchronous Pattern</title>
+    <link rel="alternate" href="/blog/2010/10/31/an-alternative-dot-net-2-dot-0-to-the-task-based-asynchronous-pattern"/>
+    <id>http://nikosbaxevanis.com/blog/2010/10/31/an-alternative-dot-net-2-dot-0-to-the-task-based-asynchronous-pattern</id>
+    <updated>2010-10-31T00:00:00+03:00</updated>
+    <author>
+      <name>Nikos Baxevanis</name>
+    </author>
+    <content type="html">&lt;blockquote&gt;
+&lt;p&gt;Write code that looks like&amp;#0160;synchronous but actually executes&amp;#0160;asynchronously with the PowerThreading library and the AsyncEnumerator class.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;In the &lt;a href="http://nikosbaxevanis.com/2010/10/31/the-task-based-asynchronous-pattern-part-1-the-basics/" target="_blank" title="The Task-based Asynchronous Pattern - Part 1 (The Basics)"&gt;previous post&lt;/a&gt; I discussed about the new language features that will help the developers write&amp;#0160;asynchronous&amp;#0160;code easily without having to split their flow in callback methods. In this post I want to show you an alternative way of doing this using the AsyncEnumerator class. This works for .NET 2.0+ and it is very similar with the upcoming features.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;AsyncEnumerator class resides in the PowerThreading library. It is written by Jeffrey Richter and can be obtained from the&amp;#0160;&lt;a href="http://www.wintellect.com/" target="_blank" title="Wintellect is a nationally recognized consulting, training and debugging firm dedicated to helping companies build better software, faster through a concentration on .NET and Windows technologies."&gt;Wintellect&lt;/a&gt;&amp;#0160;website.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;I will start, again, with some code that executes&amp;#0160;synchronously:&lt;/p&gt;
+&lt;pre class="highlight text"&gt;private void FetchStockQuotesSync(WebService svc)
+{
+    // This blocks. You don't know when the FetchStockQuotes
+    // method returns. It may takes from minutes, to hours or
+    // it may not return at all.
+    IStockQuote qt = svc.FetchStockQuotes();
+}
+&lt;/pre&gt;
+&lt;p&gt;Fortunately the WebService class implements the&amp;#0160;&lt;a href="http://msdn.microsoft.com/en-us/library/system.iasyncresult.aspx" target="_blank" title="Represents the status of an asynchronous operation."&gt;IAsyncResult&lt;/a&gt;&amp;#0160;interface, so the same code can be executed asynchronously using the AsyncEnumerator class:&lt;/p&gt;
+&lt;pre class="highlight text"&gt;// Inside your method create an instance of an AsyncEnumerator class,
+// specifying the iterator method to be driven by the AsyncEnumerator.
+AsyncEnumerator ae = new AsyncEnumerator();
+ae.BeginExecute(GetStockQuotesAsyncEnumerator(ae, svc), ae.EndExecute);
+
+private static IEnumerator&amp;lt;int&amp;gt; GetStockQuotesAsyncEnumerator(
+    AsyncEnumerator ae, WebService svc)
+{
+    svc.BeginGetStockQuotes(ae.End(), null);
+    yield return 1;
+    IStockQuote qt = svc.EndGetStockQuotes(ae.DequeueAsyncResult());
+}
+&lt;/pre&gt;
+&lt;p&gt;This technique is similar to the &lt;a href="http://msdn.microsoft.com/en-us/vstudio/async.aspx" target="_blank" title="Async CTP"&gt;new language features&lt;/a&gt; for asynchronous programming. In fact, what I&amp;#39;ve discussed works from .NET 2.0 up to any future version.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;A very interesting&amp;#0160;topic regarding the AsyncEnumerator class and the Async CTP can be found at the PowerTheading &lt;a href="http://tech.groups.yahoo.com/group/PowerThreading/message/836" target="_blank" title="Where do you see AsyncEnumurator in regards to the Async CTP."&gt;discussion group&lt;/a&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Until the Async CTP is shipped you can benefit from what already exists. I have been using the AsyncEnumerator class for quite a long time and I am very happy with it. However, the Async CTP looks promising but it would be very interesting to see some performance measurements in the future.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="http://www.codeproject.com/script/Articles/BlogFeedList.aspx?amid=5962224" rel="tag" style="display: none;"&gt;CodeProject&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;The sample application can be found &lt;a href="https://github.com/moodmosaic/BonusBits.CodeSamples" target="_blank" title="BonusBits Blog source-code."&gt;here&lt;/a&gt;.&lt;/p&gt;
 </content>

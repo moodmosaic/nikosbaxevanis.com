@@ -1,4 +1,4 @@
-<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" /><meta content="width=device-width, user-scalable=no" name="viewport" /><title>Truly Constrained Non-Deterministic Numbers in AutoFixture</title><link href="/stylesheets/styles.css?1402741299" media="screen" rel="stylesheet" type="text/css" /></head><body><div><h1>Truly Constrained Non-Deterministic Numbers in AutoFixture</h1><div>October 08, 2012</div><br /><div><p>Numbers in <a href="https://github.com/autofixture/autofixture">AutoFixture</a> are currently created using a <strong>strictly monotonically increasing</strong> sequence.</p>
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width, initial-scale=1.0" name="viewport" /><meta content="Nikos Baxevanis: Full-stack programmer working on small as well as big projects using test-driven development." name="Description" /><title>Truly Constrained Non-Deterministic Numbers in AutoFixture</title><link href="/stylesheets/styles.css?1402916937" media="screen" rel="stylesheet" type="text/css" /></head><body><div><div><h1>Truly Constrained Non-Deterministic Numbers in AutoFixture</h1><div>October 08, 2012</div></div><div><p>Numbers in <a href="https://github.com/autofixture/autofixture">AutoFixture</a> are currently created using a <strong>strictly monotonically increasing</strong> sequence.</p>
 <pre class="highlight text">
 var fixture = new Fixture();
 
@@ -45,7 +45,7 @@ var f = fixture.CreateAnonymous&lt;float&gt;();
 // Prints -&gt; -82.0
 </pre>
 <p>After applying the customization, numbers are now created in the range of [-100, 100]. However, when requesting more numbers than the range size the range is automatically changed to [101, 255].</p>
-</div><hr /><small>Published in <a href="/category/autofixture/">AutoFixture</a>, by <a href="/">Nikos Baxevanis</a>.</small></div><script type="text/javascript">var _gaq = _gaq || [];
+</div><div><hr /><small>Published in <a href="/category/autofixture/">AutoFixture</a>, by <a href="/">Nikos Baxevanis</a>.</small></div></div><script type="text/javascript">var _gaq = _gaq || [];
 _gaq.push(['_setAccount', 'UA-24262928-1']);
 _gaq.push(['_trackPageview']);
 (function() {

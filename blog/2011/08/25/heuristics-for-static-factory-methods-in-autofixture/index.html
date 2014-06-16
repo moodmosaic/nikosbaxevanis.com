@@ -1,4 +1,4 @@
-<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" /><meta content="width=device-width, user-scalable=no" name="viewport" /><title>Heuristics for Static Factory Methods in AutoFixture</title><link href="/stylesheets/styles.css?1402741299" media="screen" rel="stylesheet" type="text/css" /></head><body><div><h1>Heuristics for Static Factory Methods in AutoFixture</h1><div>August 25, 2011</div><br /><div><p>Here is a type with a private constructor:</p>
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width, initial-scale=1.0" name="viewport" /><meta content="Nikos Baxevanis: Full-stack programmer working on small as well as big projects using test-driven development." name="Description" /><title>Heuristics for Static Factory Methods in AutoFixture</title><link href="/stylesheets/styles.css?1402916937" media="screen" rel="stylesheet" type="text/css" /></head><body><div><div><h1>Heuristics for Static Factory Methods in AutoFixture</h1><div>August 25, 2011</div></div><div><p>Here is a type with a private constructor:</p>
 <pre class="highlight text">public class TypeWithFactoryMethod
 {
     private TypeWithFactoryMethod() 
@@ -26,7 +26,7 @@ var result = fixture.CreateAnonymous&lt;TypeWithFactoryMethod&gt;();
 <p>Using the latest version from&#0160;<a href="http://autofixture.codeplex.com/SourceControl/list/changesets" target="_blank" title="AutoFixture (changesets)">trunk</a>&#0160;(and on the next public release) the above code will work.&#0160;It will successfully return an instance of the type by using&#0160;a set of heuristics that enable AutoFixture to search for static factory methods.</p>
 
 <p>The latest build (including strong names) can be downloaded from <a href="http://teamcity.codebetter.com/project.html?projectId=project129&amp;tab=projectOverview. " target="_blank">here</a>.</p>
-</div><hr /><small>Published in <a href="/category/autofixture/">AutoFixture</a>, by <a href="/">Nikos Baxevanis</a>.</small></div><script type="text/javascript">var _gaq = _gaq || [];
+</div><div><hr /><small>Published in <a href="/category/autofixture/">AutoFixture</a>, by <a href="/">Nikos Baxevanis</a>.</small></div></div><script type="text/javascript">var _gaq = _gaq || [];
 _gaq.push(['_setAccount', 'UA-24262928-1']);
 _gaq.push(['_trackPageview']);
 (function() {

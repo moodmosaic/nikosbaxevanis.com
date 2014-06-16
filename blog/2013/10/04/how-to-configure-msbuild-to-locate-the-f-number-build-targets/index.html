@@ -1,4 +1,4 @@
-<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" /><meta content="width=device-width, user-scalable=no" name="viewport" /><title>How to configure MSBuild to locate the F# build targets</title><link href="/stylesheets/styles.css?1402741299" media="screen" rel="stylesheet" type="text/css" /></head><body><div><h1>How to configure MSBuild to locate the F# build targets</h1><div>October 04, 2013</div><br /><div><p><strong>Problem</strong></p>
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width, initial-scale=1.0" name="viewport" /><meta content="Nikos Baxevanis: Full-stack programmer working on small as well as big projects using test-driven development." name="Description" /><title>How to configure MSBuild to locate the F# build targets</title><link href="/stylesheets/styles.css?1402916937" media="screen" rel="stylesheet" type="text/css" /></head><body><div><div><h1>How to configure MSBuild to locate the F# build targets</h1><div>October 04, 2013</div></div><div><p><strong>Problem</strong></p>
 
 <p>When the <a href="http://nuget.org/packages/AutoFixture.AutoFoq">AutoFixture.AutoFoq</a> build run on the <a href="http://teamcity.codebetter.com/">CodeBetter CI</a> server for the first time, the following error message appeared:</p>
 
@@ -24,7 +24,7 @@
 
 <p>The most important changes are shown below. You can also see the diff as an image <a href="/images/articles/2013-10-04-how-to-configure-msbuild-to-locate-the-fsharp-build-targets.png">here</a>:</p>
 
-<p><img alt="Image" src="/images/articles/2013-10-04-how-to-configure-msbuild-to-locate-the-fsharp-build-targets.png?1402741299" /></p>
+<p><img alt="Image" src="/images/articles/2013-10-04-how-to-configure-msbuild-to-locate-the-fsharp-build-targets.png?1402916937" /></p>
 
 <p><strong>A note for VS 2012 users</strong></p>
 
@@ -58,7 +58,7 @@
 <pre class="highlight text">&lt;Reference Include='FSharp.Core, Version=$(TargetFSharpCoreVersion), Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'&gt;
 </pre>
 <p>The F# build targets, compiler, and run time should be located successfully now.</p>
-</div><hr /><small>Published in <a href="/category/fsharp/">FSharp</a>, by <a href="/">Nikos Baxevanis</a>.</small></div><script type="text/javascript">var _gaq = _gaq || [];
+</div><div><hr /><small>Published in <a href="/category/fsharp/">FSharp</a>, by <a href="/">Nikos Baxevanis</a>.</small></div></div><script type="text/javascript">var _gaq = _gaq || [];
 _gaq.push(['_setAccount', 'UA-24262928-1']);
 _gaq.push(['_trackPageview']);
 (function() {
