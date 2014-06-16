@@ -1,40 +1,23 @@
 html {
-    padding-bottom: 2em;
+  -webkit-text-size-adjust: 100%;
+     -moz-text-size-adjust: 100%;
+      -ms-text-size-adjust: 100%;
 }
 
 body {
-    font-family: sans-serif;
-    line-height: 1.5em;
-    max-width: 40em;
-    padding: 0 2%;
-    margin: auto;
+  max-width: 38em;
+  margin: auto;
+  text-align: left;
 }
 
 h1 {
-    line-height: 1.0em;
+  line-height: 1.0em;
 }
 
-.important {
-    color: red;
-}
-
-.footer {
-    text-align: right;
-}
-
-.centered {
-    text-align: center;
-}
-
-.ad-container {
-    float: left;
-    min-width: 33%;
+img {
+  max-width: 100%;
 }
 
 .author {
-    text-align: right;
-}
-
-.dashboard {
-    line-height: 1.8em;
+  text-align: right;
 }

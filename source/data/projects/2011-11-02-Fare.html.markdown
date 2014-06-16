@@ -1,8 +1,0 @@
----
-layout:       talk
-name:        "moodmosaic/Fare"
-description:  "Creator"
-date:         2011-11-02
-url:          "http://github.com/moodmosaic/fare"
-categories:   []
----

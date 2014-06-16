@@ -136,42 +136,11 @@ class Talk
   end
 end
 
-class Project
-
-  @@dir        = "#{Dir.pwd}/source/data/projects/"
-  @@date_range = @@dir.size..@@dir.size+10
-
-  attr_accessor :type, :date, :title, :name, :description, :url, :body, :categories
-
-  def initialize(resource)
-    @date         = resource.metadata[:page]["date"]
-    @name         = resource.metadata[:page]["name"]
-    @description  = resource.metadata[:page]["description"]
-    @title        = "#{@name}: #{@description}"
-    @file         = resource.source_file["#{Dir.pwd}/source".size..-1].sub(/\.markdown$/, '')
-    @type         = :project
-    @url          = resource.metadata[:page]["url"]
-    @body         = ""
-
-    raw_categories = resource.metadata[:page]["categories"] || []
-    if raw_categories.is_a? String then
-      @categories = raw_categories.split(' ')
-    else
-      @categories = raw_categories
-    end
-  end
-
-  def self.dir
-    @@dir
-  end
-end
-
 ready do
 
-  blog    = []
+  blog        = []
   screencasts = []
   talks       = []
-  projects    = []
 
   sitemap.resources.each do |res|
     case res.source_file
@@ -189,18 +158,15 @@ ready do
       end
     when /^#{Regexp.quote(Talk.dir)}/
       talks.unshift Talk.new(res)
-    when /^#{Regexp.quote(Project.dir)}/
-      projects.unshift Project.new(res)
     end
   end
 
-  zipped = (blog + screencasts + talks + projects).sort_by { |item| item.date }.reverse
+  zipped = (blog + screencasts + talks).sort_by { |item| item.date }.reverse
 
   proxy "/index.html"              , "/dashboard.html"    , :locals => { :entries => zipped  }
   proxy "/talks/index.html"        , "/thingies.html"     , :locals => { :entries => talks, :title => "Talks" }
   proxy "/screencasts/index.html"  , "/thingies.html"     , :locals => { :entries => screencasts, :title => "Screencasts" }
   proxy "/blog/index.html"         , "/thingies.html"     , :locals => { :entries => blog, :title => "Blog" }
-  proxy "/projects/index.html"     , "/thingies.html"     , :locals => { :entries => projects, :title => "Projects" }
   proxy "/feed/index.xml"          , "/feed.xml"          , :locals => { :items => zipped }
   proxy "/testimonials/index.html" , "/testimonials.html"
   

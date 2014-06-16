@@ -1,8 +1,14 @@
-h1=title
+h1 = title
 div
   - for thingie in entries do
     ul
       li
         a href=thingie.url #{thingie.title}
-        br 
-        small #{thingie.date.strftime("%B %d, %Y")}
+        div
+          i #{thingie.date.strftime("%B %d, %Y")}
+div
+  hr
+  small
+    | Published by 
+    a href="/" Nikos Baxevanis
+    | .

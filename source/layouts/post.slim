@@ -1,15 +1,16 @@
-- wrap_layout :layout do 
-  h1=data.page.title
-  div=article.date.strftime("%B %d, %Y")
-  br
+- wrap_layout :layout do
+  div
+    h1=data.page.title
+    div=article.date.strftime("%B %d, %Y")
   div
     == yield
-  hr
-  small
-    | Published in 
-    - for category in article.categories do
-      a href="/category/#{category.downcase.gsub(' ', '-')}/" #{category}
-      | , 
-    | by 
-    a href="/" Nikos Baxevanis
-    | .
+  div
+    hr
+    small
+      | Published in 
+      - for category in article.categories do
+        a href="/category/#{category.downcase.gsub(' ', '-')}/" #{category}
+        | , 
+      | by 
+      a href="/" Nikos Baxevanis
+      | .
