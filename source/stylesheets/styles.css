@@ -23,3 +23,20 @@ img {
 .author {
   text-align: right;
 }
+
+pre {
+  padding: 5px;
+  font-family: Consolas, Menlo, Monaco, "Lucida Console", "Liberation Mono", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Courier New", monospace, serif;
+  margin-bottom: 10px;
+  background-color: #eee;
+  overflow: auto;
+  width: auto;
+  max-height: 600px;
+}
+
+code {
+  white-space: pre-wrap;
+  padding: 1px 5px;
+  font-family: Consolas, Menlo, Monaco, "Lucida Console", "Liberation Mono", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Courier New", monospace, serif;
+  background-color: #eee;
+}
