@@ -5,10 +5,11 @@ html {
 }
 
 body {
-  max-width: 38em;
+  max-width: 46em;
   margin: auto;
   text-align: left;
   padding-bottom: 1.8em;
+  font: 13px Helvetica, arial, freesans, clean, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
 }
 
 h1 {
