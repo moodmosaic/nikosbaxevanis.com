@@ -1,17 +1,19 @@
 - require "open-uri"
 - wrap_layout :layout do
   h1=data.page.title 
-  div=screencast.date.strftime("%B %d, %Y")
+  div
+    =screencast.date.strftime("%B %d, %Y")
+    - for category in screencast.categories do
+      |  |  
+      a href="/category/#{category.downcase.gsub(' ', '-')}/" #{category}
+      |
   br
   div
     iframe src="http://player.vimeo.com/video/#{data.page.video_url}?title=0&amp;byline=0&amp;portrait=0" width="631" height="355" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen
-  == yield
-  hr
-  small
-    | Published in 
-    - for category in screencast.categories do
-      a href="/category/#{category.downcase.gsub(' ', '-')}/" #{category}
-      | , 
-    | by 
-    a href="/" Nikos Baxevanis
-    | .
+  div
+    == yield
+  div
+    hr
+    | Have feedback on this post? Let 
+    a href="http://twitter.com/nikosbaxevanis" target="_blank" @nikosbaxevanis
+    |  know on Twitter.
