@@ -1,4 +1,4 @@
-<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width, initial-scale=1.0" name="viewport" /><meta content="Programmer using Test-Driven Development, C# and F#. Core Contributor to AutoFixture." name="Description" /><title>SingleInstance(Of T) Class for Windows Phone 7</title><link href="/stylesheets/styles.css?1403853394" media="screen" rel="stylesheet" type="text/css" /></head><body><div><div><h1>SingleInstance(Of T) Class for Windows Phone 7</h1><div>November 20, 2010</div></div><div><p>When building applications for&nbsp;a mobile operating system such as Windows Phone 7 (WP7) you might want (at times) to defer the creation of large objects, &nbsp;specifically when this creation is going to increase memory consumption.</p>
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width, initial-scale=1.0" name="viewport" /><meta content="Programmer using Test-Driven Development, C# and F#. Core Contributor to AutoFixture." name="Description" /><title>SingleInstance(Of T) Class for Windows Phone 7</title><link href="/stylesheets/styles.css?1404124601" media="screen" rel="stylesheet" type="text/css" /></head><body><div><div><h1>SingleInstance(Of T) Class for Windows Phone 7</h1><div>November 20, 2010 |  <a href="/category/async/">Async</a></div></div><div><p>When building applications for&nbsp;a mobile operating system such as Windows Phone 7 (WP7) you might want (at times) to defer the creation of large objects, &nbsp;specifically when this creation is going to increase memory consumption.</p>
 
 <p>While in the desktop CLR there is the <a title="Provides support for lazy initialization." href="http://msdn.microsoft.com/en-us/library/dd642331.aspx" target="_blank">Lazy(Of T) Class</a>, when working on WP7 this class does not exist (at least not at the time of this writing).</p>
 
@@ -75,7 +75,7 @@ internal sealed class SingleInstance&lt;T&gt; where T : class
 </ul>
 
 <p>Keep in mind that the SingleInstance(Of T)&nbsp;class uses a&nbsp;Func(TResult) Delegate.&nbsp;There is a known performance hit when calling delegates compared to direct method calls. (See the Delegates section <a title="Writing Faster Managed Code: Know What Things Cost by Jan Gray." href="http://msdn.microsoft.com/en-us/library/ms973852.aspx" target="_blank">here</a>).</p>
-</div><div><hr /><small>Published in <a href="/category/async/">Async</a>, by <a href="/">Nikos Baxevanis</a>.</small></div></div><script type="text/javascript">var _gaq = _gaq || [];
+</div><div><br /><hr />Have feedback on this post? Let <a href="http://twitter.com/nikosbaxevanis" target="_blank">@nikosbaxevanis</a> know on Twitter.</div></div><script type="text/javascript">var _gaq = _gaq || [];
 _gaq.push(['_setAccount', 'UA-24262928-1']);
 _gaq.push(['_trackPageview']);
 (function() {
