@@ -5,10 +5,314 @@
   <author>
     <name>Nikos Baxevanis</name>
   </author>
-  <updated>2014-07-01T13:35:22+03:00</updated>
+  <updated>2014-07-28T10:47:41+03:00</updated>
   <link href="http://nikosbaxevanis.com/" rel="alternate"/>
   <link href="http://nikosbaxevanis.com/feed/" rel="self"/>
   <id>http://nikosbaxevanis.com/</id>
+  <entry>
+    <title>In-memory Drain abstractions applied to A Functional Architecture with F#</title>
+    <link rel="alternate" href="/blog/2014/07/28/in-memory-drain-abstractions-applied-to-a-functional-architecture-with-f-number"/>
+    <id>http://nikosbaxevanis.com/blog/2014/07/28/in-memory-drain-abstractions-applied-to-a-functional-architecture-with-f-number</id>
+    <updated>2014-07-28T00:00:00+03:00</updated>
+    <author>
+      <name>Nikos Baxevanis</name>
+    </author>
+    <content type="html">&lt;p&gt;This post shows how to apply the &lt;a href="http://blog.ploeh.dk/2014/07/23/drain/"&gt;Drain&lt;/a&gt; filter abstraction to the master branch of the Pluralsight course about &lt;a href="http://pluralsight.com/training/Courses/TableOfContents/functional-architecture-fsharp"&gt;A Functional Architecture with F#&lt;/a&gt; by &lt;a href="http://blog.ploeh.dk/"&gt;Mark Seemann&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;As the diff-output shows, applying filtering with Drains cuts the maintenance of multiple homogenous abstractions, and makes the code cleaner and easier to reason about.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;&lt;em&gt;For a better diff-output highlighting experience, there is also a Gist &lt;a href="https://gist.github.com/moodmosaic/98d8d1854d66f58e0500" target="_blank"&gt;available here&lt;/a&gt;.&lt;/em&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;DomainModel.fs.diff:&lt;/p&gt;
+&lt;pre class="highlight diff"&gt;&lt;span class="gh"&gt;diff --git a/BookingApi/DomainModel.fs b/BookingApi/DomainModel.fs
+index 4a4260f..c2079cf 100644
+&lt;/span&gt;&lt;span class="gd"&gt;--- a/BookingApi/DomainModel.fs
+&lt;/span&gt;&lt;span class="gi"&gt;+++ b/BookingApi/DomainModel.fs
+&lt;/span&gt;&lt;span class="gh"&gt;@@ -7,6 +7,23 @@ type Period =
+&lt;/span&gt;     | Month of int * int
+     | Day of int * int * int
+&lt;span class="err"&gt;
+&lt;/span&gt;&lt;span class="gi"&gt;+[&amp;lt;AutoOpen&amp;gt;]
++module Drain =
++    type IDrainable&amp;lt;'a, 'b&amp;gt; =
++        inherit seq&amp;lt;'a&amp;gt;
++        abstract On : 'b -&amp;gt; seq&amp;lt;'a&amp;gt;
++
++    let on x (d : IDrainable&amp;lt;'a, 'b&amp;gt;) = d.On x
++
++    let ofSeq areEqual s =
++        { new IDrainable&amp;lt;'a, 'b&amp;gt; with
++            member this.On x = s |&amp;gt; Seq.filter (fun y -&amp;gt; areEqual y x)
++            member this.GetEnumerator() = s.GetEnumerator()
++            member this.GetEnumerator() =
++                (this :&amp;gt; 'a seq).GetEnumerator() :&amp;gt; System.Collections.IEnumerator }
++
++    let empty&amp;lt;'a, 'b&amp;gt; = Seq.empty&amp;lt;'a&amp;gt; |&amp;gt; ofSeq (fun x (y : 'b) -&amp;gt; false)
++
+&lt;/span&gt; module Dates =
+     let InitInfinite (date : DateTime) =
+         date |&amp;gt; Seq.unfold (fun d -&amp;gt; Some(d, d.AddDays 1.0))
+&lt;span class="gh"&gt;@@ -30,24 +47,11 @@ module Dates =
+&lt;/span&gt;&lt;span class="err"&gt;
+&lt;/span&gt; module Reservations =
+&lt;span class="err"&gt;
+&lt;/span&gt;&lt;span class="gd"&gt;-    type IReservations =
+-        inherit seq&amp;lt;Envelope&amp;lt;Reservation&amp;gt;&amp;gt;
+-        abstract Between : DateTime -&amp;gt; DateTime -&amp;gt; seq&amp;lt;Envelope&amp;lt;Reservation&amp;gt;&amp;gt;
+-
+-    type ReservationsInMemory(reservations) =
+-        interface IReservations with
+-            member this.Between min max =
+-                reservations
+-                |&amp;gt; Seq.filter (fun r -&amp;gt; min &amp;lt;= r.Item.Date &amp;amp;&amp;amp; r.Item.Date &amp;lt;= max)
+-            member this.GetEnumerator() =
+-                reservations.GetEnumerator()
+-            member this.GetEnumerator() =
+-                (this :&amp;gt; seq&amp;lt;Envelope&amp;lt;Reservation&amp;gt;&amp;gt;).GetEnumerator() :&amp;gt; System.Collections.IEnumerator
+-
+-    let ToReservations reservations = ReservationsInMemory(reservations)
+&lt;/span&gt;&lt;span class="gi"&gt;+    let ToReservations reservations =
++        reservations |&amp;gt; Drain.ofSeq (fun x y -&amp;gt; x.Item.Date &amp;gt;= fst y &amp;amp;&amp;amp; x.Item.Date &amp;lt;= snd y)
+&lt;/span&gt;&lt;span class="err"&gt;
+&lt;/span&gt;&lt;span class="gd"&gt;-    let Between min max (reservations : IReservations) =
+-        reservations.Between min max
+&lt;/span&gt;&lt;span class="gi"&gt;+    let Between min max (reservations : IDrainable&amp;lt;Envelope&amp;lt;Reservation&amp;gt;, DateTime * DateTime&amp;gt;) =
++        reservations |&amp;gt; Drain.on(min, max)
+&lt;/span&gt;&lt;span class="err"&gt;
+&lt;/span&gt;     let On (date : DateTime) reservations =
+         let min = date.Date
+&lt;span class="gh"&gt;@@ -73,18 +77,8 @@ module Reservations =
+&lt;/span&gt;&lt;span class="err"&gt;
+&lt;/span&gt; module Notifications =
+&lt;span class="err"&gt;
+&lt;/span&gt;&lt;span class="gd"&gt;-    type INotifications =
+-        inherit seq&amp;lt;Envelope&amp;lt;Notification&amp;gt;&amp;gt;
+-        abstract About : Guid -&amp;gt; seq&amp;lt;Envelope&amp;lt;Notification&amp;gt;&amp;gt;
+-
+-    type NotificationsInMemory(notifications : Envelope&amp;lt;Notification&amp;gt; seq) =
+-        interface INotifications with
+-            member this.About id =
+-                notifications |&amp;gt; Seq.filter (fun n -&amp;gt; n.Item.About = id)
+-            member this.GetEnumerator() = notifications.GetEnumerator()
+-            member this.GetEnumerator() = 
+-                (this :&amp;gt; Envelope&amp;lt;Notification&amp;gt; seq).GetEnumerator() :&amp;gt; System.Collections.IEnumerator
+-
+-    let ToNotifications notifications = NotificationsInMemory(notifications)
+-
+-    let About id (notifications : INotifications) = notifications.About id
+&lt;/span&gt;&lt;span class="gi"&gt;+    let ToNotifications notifications =
++        notifications |&amp;gt; Drain.ofSeq (fun x y -&amp;gt; x.Item.About = y)
++ 
++    let About id (notifications : IDrainable&amp;lt;Envelope&amp;lt;Notification&amp;gt;, Guid&amp;gt;) =
++        notifications |&amp;gt; Drain.on id
+&lt;/span&gt;&lt;/pre&gt;
+&lt;p&gt;Controllers.fs.diff:&lt;/p&gt;
+&lt;pre class="highlight diff"&gt;&lt;span class="gh"&gt;diff --git a/BookingApi/Controllers.fs b/BookingApi/Controllers.fs
+index 2234ae0..986c5a9 100644
+&lt;/span&gt;&lt;span class="gd"&gt;--- a/BookingApi/Controllers.fs
+&lt;/span&gt;&lt;span class="gi"&gt;+++ b/BookingApi/Controllers.fs
+&lt;/span&gt;&lt;span class="gh"&gt;@@ -41,7 +41,7 @@ type ReservationsController() =
+&lt;/span&gt;         if disposing then subject.Dispose()
+         base.Dispose disposing
+&lt;span class="err"&gt;
+&lt;/span&gt;&lt;span class="gd"&gt;-type NotificationsController(notifications : Notifications.INotifications) =
+&lt;/span&gt;&lt;span class="gi"&gt;+type NotificationsController(notifications) =
+&lt;/span&gt;     inherit ApiController()
+&lt;span class="err"&gt;
+&lt;/span&gt;     member this.Get id =
+&lt;span class="gh"&gt;@@ -61,7 +61,7 @@ type NotificationsController(notifications : Notifications.INotifications) =
+&lt;/span&gt;&lt;span class="err"&gt;
+&lt;/span&gt;     member this.Notifications = notifications
+&lt;span class="err"&gt;
+&lt;/span&gt;&lt;span class="gd"&gt;-type AvailabilityController(reservations : Reservations.IReservations,
+&lt;/span&gt;&lt;span class="gi"&gt;+type AvailabilityController(reservations,
+&lt;/span&gt;                             seatingCapacity : int) =
+     inherit ApiController()
+&lt;/pre&gt;
+&lt;p&gt;Infrastructure.fs.diff:&lt;/p&gt;
+&lt;pre class="highlight diff"&gt;&lt;span class="gh"&gt;diff --git a/BookingApi/Infrastructure.fs b/BookingApi/Infrastructure.fs
+index 18867a8..7082d19 100644
+&lt;/span&gt;&lt;span class="gd"&gt;--- a/BookingApi/Infrastructure.fs
+&lt;/span&gt;&lt;span class="gi"&gt;+++ b/BookingApi/Infrastructure.fs
+&lt;/span&gt;&lt;span class="gh"&gt;@@ -9,7 +9,7 @@ open System.Reactive
+&lt;/span&gt; open FSharp.Reactive
+ open Ploeh.Samples.Booking.HttpApi.Reservations
+&lt;span class="err"&gt;
+&lt;/span&gt;&lt;span class="gd"&gt;-type CompositionRoot(reservations : IReservations,
+&lt;/span&gt;&lt;span class="gi"&gt;+type CompositionRoot(reservations,
+&lt;/span&gt;                      notifications,
+                      reservationRequestObserver,
+                      seatingCapacity) =
+&lt;/pre&gt;
+&lt;p&gt;TestDsl.fs.diff:&lt;/p&gt;
+&lt;pre class="highlight diff"&gt;&lt;span class="gh"&gt;diff --git a/BookingApi.UnitTests/TestDsl.fs b/BookingApi.UnitTests/TestDsl.fs
+index df09626..cde8e4d 100644
+&lt;/span&gt;&lt;span class="gd"&gt;--- a/BookingApi.UnitTests/TestDsl.fs
+&lt;/span&gt;&lt;span class="gi"&gt;+++ b/BookingApi.UnitTests/TestDsl.fs
+&lt;/span&gt;&lt;span class="gh"&gt;@@ -37,19 +37,20 @@ type DateStringCustomization() =
+&lt;/span&gt;                             (context.Resolve typeof&amp;lt;DateTime&amp;gt; :?&amp;gt; DateTime).ToString &amp;quot;yyyy.MM.dd&amp;quot; :&amp;gt; obj
+                         | _ -&amp;gt; NoSpecimen(request) :&amp;gt; obj }
+&lt;span class="err"&gt;
+&lt;/span&gt;&lt;span class="gi"&gt;+open Ploeh.Samples.Booking.HttpApi
++open Ploeh.Samples.Booking.HttpApi.Notifications
++
+&lt;/span&gt; type NotificationsCustomization() =
+     interface ICustomization with
+         member this.Customize fixture =
+&lt;span class="gd"&gt;-            fixture.Customizations.Add(
+-                TypeRelay(
+-                    typeof&amp;lt;Ploeh.Samples.Booking.HttpApi.Notifications.INotifications&amp;gt;,
+-                    typeof&amp;lt;Ploeh.Samples.Booking.HttpApi.Notifications.NotificationsInMemory&amp;gt;))
+-
+&lt;/span&gt;&lt;span class="gi"&gt;+            let notifications =
++                fixture.CreateMany&amp;lt;Envelope&amp;lt;Notification&amp;gt;&amp;gt;() |&amp;gt; ToNotifications
++            fixture.Inject notifications
++ 
+&lt;/span&gt; type ReservationsCustomization() =
+     interface ICustomization with
+         member this.Customize fixture =
+&lt;span class="gd"&gt;-            fixture.Inject&amp;lt;Ploeh.Samples.Booking.HttpApi.Reservations.IReservations&amp;gt;(
+-                [] |&amp;gt; Ploeh.Samples.Booking.HttpApi.Reservations.ToReservations)
+&lt;/span&gt;&lt;span class="gi"&gt;+            fixture.Inject Drain.empty&amp;lt;Envelope&amp;lt;Reservation&amp;gt;, DateTime * DateTime&amp;gt;
+&lt;/span&gt;&lt;span class="err"&gt;
+&lt;/span&gt; type TestConventions() =
+     inherit CompositeCustomization(
+&lt;/pre&gt;
+&lt;p&gt;DomainModelTests.fs.diff:&lt;/p&gt;
+&lt;pre class="highlight diff"&gt;&lt;span class="gh"&gt;diff --git a/BookingApi.UnitTests/DomainModelTests.fs b/BookingApi.UnitTests/DomainModelTests.fs
+index 221e560..c021706 100644
+&lt;/span&gt;&lt;span class="gd"&gt;--- a/BookingApi.UnitTests/DomainModelTests.fs
+&lt;/span&gt;&lt;span class="gi"&gt;+++ b/BookingApi.UnitTests/DomainModelTests.fs
+&lt;/span&gt;&lt;span class="gh"&gt;@@ -92,14 +92,10 @@ module DatesTests =
+&lt;/span&gt;&lt;span class="err"&gt;
+&lt;/span&gt; module ReserverationsTests =
+     open Reservations
+&lt;span class="gd"&gt;-
+-    [&amp;lt;Theory; TestConventions&amp;gt;]
+-    let ReservationsInMemoryAreReservations (sut : ReservationsInMemory) =
+-        Assert.IsAssignableFrom&amp;lt;IReservations&amp;gt;(sut)
+&lt;/span&gt;&lt;span class="err"&gt;
+&lt;/span&gt;     [&amp;lt;Theory; TestConventions&amp;gt;]
+     let ToReservationsReturnsCorrectResult (expected : Envelope&amp;lt;Reservation&amp;gt; seq) =
+&lt;span class="gd"&gt;-        let actual : ReservationsInMemory = expected |&amp;gt; ToReservations
+&lt;/span&gt;&lt;span class="gi"&gt;+        let actual = expected |&amp;gt; ToReservations
+&lt;/span&gt;         Assert.Equal&amp;lt;Envelope&amp;lt;Reservation&amp;gt;&amp;gt;(expected, actual)
+&lt;span class="err"&gt;
+&lt;/span&gt;     [&amp;lt;Theory; TestConventions&amp;gt;]
+&lt;span class="gh"&gt;@@ -111,7 +107,7 @@ module ReserverationsTests =
+&lt;/span&gt;         let expected = reservations |&amp;gt; Seq.skip 2 |&amp;gt; Seq.take 6
+         let sut = reservations |&amp;gt; ToReservations
+&lt;span class="err"&gt;
+&lt;/span&gt;&lt;span class="gd"&gt;-        let actual = (sut :&amp;gt; IReservations).Between min.Item.Date max.Item.Date
+&lt;/span&gt;&lt;span class="gi"&gt;+        let actual = sut |&amp;gt; Drain.on(min.Item.Date, max.Item.Date)
+&lt;/span&gt;&lt;span class="err"&gt;
+&lt;/span&gt;         Assert.Equal&amp;lt;Envelope&amp;lt;Reservation&amp;gt;&amp;gt;(expected, actual)
+&lt;span class="err"&gt;
+&lt;/span&gt;&lt;span class="gh"&gt;@@ -125,7 +121,7 @@ module ReserverationsTests =
+&lt;/span&gt;&lt;span class="err"&gt;
+&lt;/span&gt;         let actual = sut |&amp;gt; Between min.Item.Date max.Item.Date
+&lt;span class="err"&gt;
+&lt;/span&gt;&lt;span class="gd"&gt;-        let expected = (sut :&amp;gt; IReservations).Between min.Item.Date max.Item.Date
+&lt;/span&gt;&lt;span class="gi"&gt;+        let expected = sut |&amp;gt; Drain.on(min.Item.Date, max.Item.Date)
+&lt;/span&gt;         Assert.Equal&amp;lt;Envelope&amp;lt;Reservation&amp;gt;&amp;gt;(expected, actual)
+&lt;span class="err"&gt;
+&lt;/span&gt;     [&amp;lt;Theory; TestConventions&amp;gt;]
+&lt;span class="gh"&gt;@@ -203,12 +199,8 @@ module NotificationsTest =
+&lt;/span&gt;     open Notifications
+&lt;span class="err"&gt;
+&lt;/span&gt;     [&amp;lt;Theory; TestConventions&amp;gt;]
+&lt;span class="gd"&gt;-    let NotificationsInMemoryAreNotifications (sut : NotificationsInMemory) =
+-        Assert.IsAssignableFrom&amp;lt;INotifications&amp;gt; sut
+-
+-    [&amp;lt;Theory; TestConventions&amp;gt;]
+&lt;/span&gt;     let ToNotificationsReturnsCorrectResult (expected : Envelope&amp;lt;Notification&amp;gt; seq) =
+&lt;span class="gd"&gt;-        let actual : NotificationsInMemory = expected |&amp;gt; ToNotifications
+&lt;/span&gt;&lt;span class="gi"&gt;+        let actual = expected |&amp;gt; ToNotifications
+&lt;/span&gt;         Assert.Equal&amp;lt;Envelope&amp;lt;Notification&amp;gt;&amp;gt;(expected, actual)
+&lt;span class="err"&gt;
+&lt;/span&gt;     [&amp;lt;Theory; TestConventions&amp;gt;]
+&lt;span class="gh"&gt;@@ -219,7 +211,7 @@ module NotificationsTest =
+&lt;/span&gt;         let expected = notifications |&amp;gt; PickRandom
+         let sut = notifications |&amp;gt; ToNotifications
+&lt;span class="err"&gt;
+&lt;/span&gt;&lt;span class="gd"&gt;-        let actual = (sut :&amp;gt; INotifications).About expected.Item.About
+&lt;/span&gt;&lt;span class="gi"&gt;+        let actual = sut |&amp;gt; Drain.on expected.Item.About
+&lt;/span&gt;&lt;span class="err"&gt;
+&lt;/span&gt;         Assert.Equal(1, actual |&amp;gt; Seq.length)
+         Assert.Equal(expected, actual |&amp;gt; Seq.head)
+&lt;span class="gh"&gt;@@ -232,7 +224,7 @@ module NotificationsTest =
+&lt;/span&gt;         let sut = generator |&amp;gt; Seq.take 10 |&amp;gt; Seq.toList |&amp;gt; ToNotifications
+         Assert.False(sut |&amp;gt; Seq.exists (fun n -&amp;gt; n.Item.About = about))
+&lt;span class="err"&gt;
+&lt;/span&gt;&lt;span class="gd"&gt;-        let actual = (sut :&amp;gt; INotifications).About about
+&lt;/span&gt;&lt;span class="gi"&gt;+        let actual = sut |&amp;gt; Drain.on about
+&lt;/span&gt;&lt;span class="err"&gt;
+&lt;/span&gt;         Assert.True(actual |&amp;gt; Seq.isEmpty)
+&lt;span class="err"&gt;
+&lt;/span&gt;&lt;span class="gh"&gt;@@ -241,7 +233,7 @@ module NotificationsTest =
+&lt;/span&gt;         let sut = notifications |&amp;gt; ToNotifications
+         let about = (sut |&amp;gt; Seq.toList |&amp;gt; PickRandom).Item.About
+&lt;span class="err"&gt;
+&lt;/span&gt;&lt;span class="gd"&gt;-        let actual : Envelope&amp;lt;Notification&amp;gt; seq = sut |&amp;gt; About about
+&lt;/span&gt;&lt;span class="gi"&gt;+        let actual = sut |&amp;gt; About about
+&lt;/span&gt;&lt;span class="err"&gt;
+&lt;/span&gt;&lt;span class="gd"&gt;-        let expected = (sut :&amp;gt; INotifications).About about
+&lt;/span&gt;&lt;span class="gi"&gt;+        let expected = sut |&amp;gt; Drain.on about
+&lt;/span&gt;         Assert.Equal&amp;lt;Envelope&amp;lt;Notification&amp;gt;&amp;gt;(expected, actual)
+&lt;/pre&gt;
+&lt;p&gt;ControllerTests.fs.diff&lt;/p&gt;
+&lt;pre class="highlight diff"&gt;&lt;span class="gh"&gt;diff --git a/BookingApi.UnitTests/ControllerTests.fs b/BookingApi.UnitTests/ControllerTests.fs
+index 166278e..05f9363 100644
+&lt;/span&gt;&lt;span class="gd"&gt;--- a/BookingApi.UnitTests/ControllerTests.fs
+&lt;/span&gt;&lt;span class="gi"&gt;+++ b/BookingApi.UnitTests/ControllerTests.fs
+&lt;/span&gt;&lt;span class="gh"&gt;@@ -79,11 +79,11 @@ module NotificationsControllerTests =
+&lt;/span&gt;&lt;span class="err"&gt;
+&lt;/span&gt;     [&amp;lt;Theory; TestConventions&amp;gt;]
+     let NotificationsAreExposedForExpection
+&lt;span class="gd"&gt;-        ([&amp;lt;Frozen&amp;gt;]expected : Notifications.INotifications)
+&lt;/span&gt;&lt;span class="gi"&gt;+        ([&amp;lt;Frozen&amp;gt;]expected : IDrainable&amp;lt;Envelope&amp;lt;Notification&amp;gt;, Guid&amp;gt;)
+&lt;/span&gt;         (sut : NotificationsController) =
+&lt;span class="err"&gt;
+&lt;/span&gt;&lt;span class="gd"&gt;-        let actual : Notifications.INotifications = sut.Notifications
+-        Assert.Equal&amp;lt;Notifications.INotifications&amp;gt;(expected, actual)
+&lt;/span&gt;&lt;span class="gi"&gt;+        let actual = sut.Notifications
++        Assert.Equal&amp;lt;IDrainable&amp;lt;Envelope&amp;lt;Notification&amp;gt;, Guid&amp;gt;&amp;gt;(expected, actual)
+&lt;/span&gt;&lt;span class="err"&gt;
+&lt;/span&gt;     [&amp;lt;Theory; TestConventions&amp;gt;]
+     let GetWithoutMatchingNotificationReturnsCorrectResult
+&lt;span class="gh"&gt;@@ -187,7 +187,7 @@ module AvailabilityControllerTests =
+&lt;/span&gt;                                                     yearsInFuture : int) =
+         // Fixture setup
+         let reservations = mutableReservations |&amp;gt; Reservations.ToReservations
+&lt;span class="gd"&gt;-        fixture.Inject&amp;lt;Reservations.IReservations&amp;gt; reservations
+&lt;/span&gt;&lt;span class="gi"&gt;+        fixture.Inject reservations
+&lt;/span&gt;         let sut =
+             fixture.Generate&amp;lt;AvailabilityController&amp;gt;()
+             |&amp;gt; Seq.filter (fun c -&amp;gt; c.SeatingCapacity &amp;gt; 1)
+&lt;span class="gh"&gt;@@ -284,7 +284,7 @@ module AvailabilityControllerTests =
+&lt;/span&gt;                                                      yearsInFuture : int) =
+         // Fixture setup
+         let reservations = mutableReservations |&amp;gt; Reservations.ToReservations
+&lt;span class="gd"&gt;-        fixture.Inject&amp;lt;Reservations.IReservations&amp;gt; reservations
+&lt;/span&gt;&lt;span class="gi"&gt;+        fixture.Inject reservations
+&lt;/span&gt;         let sut =
+             fixture.Generate&amp;lt;AvailabilityController&amp;gt;()
+             |&amp;gt; Seq.filter (fun c -&amp;gt; c.SeatingCapacity &amp;gt; 1)
+&lt;span class="gh"&gt;@@ -395,7 +395,7 @@ module AvailabilityControllerTests =
+&lt;/span&gt;                                                    yearsInFuture : int) =
+         // Fixture setup
+         let reservations = mutableReservations |&amp;gt; Reservations.ToReservations
+&lt;span class="gd"&gt;-        fixture.Inject&amp;lt;Reservations.IReservations&amp;gt; reservations
+&lt;/span&gt;&lt;span class="gi"&gt;+        fixture.Inject reservations
+&lt;/span&gt;         let sut =
+             fixture.Generate&amp;lt;AvailabilityController&amp;gt;()
+             |&amp;gt; Seq.filter (fun c -&amp;gt; c.SeatingCapacity &amp;gt; 1)
+&lt;/pre&gt;
+&lt;p&gt;To apply the diff, access the source code by getting &lt;a href="http://pluralsight.com/training/Products/Individual"&gt;a Pluralsight subscription&lt;/a&gt; which is totally worth it for this course.&lt;/p&gt;
+</content>
+  </entry>
   <entry>
     <title>Config files with angular-seed</title>
     <link rel="alternate" href="/blog/2014/06/09/config-files-with-angular-seed"/>
@@ -1325,13 +1629,13 @@ tsTest: {
 &lt;/pre&gt;
 &lt;p&gt;The file comparison output should be similar with the image shown below:&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-04-03-typescript-grunt-angular-1.png?1404210034" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-04-03-typescript-grunt-angular-1.png?1406533648" /&gt;&lt;/p&gt;
 
 &lt;h3&gt;Linting configuration&lt;/h3&gt;
 
 &lt;p&gt;Remove the indentation setting from JSHint since &lt;a href="https://typescript.codeplex.com/workitem/204"&gt;TypeScript indents code idiomatically&lt;/a&gt;.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-04-03-typescript-grunt-angular-2.png?1404210034" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-04-03-typescript-grunt-angular-2.png?1406533648" /&gt;&lt;/p&gt;
 
 &lt;h3&gt;Declaration source files usage&lt;/h3&gt;
 
@@ -1767,7 +2071,7 @@ let CustomizationFillsReturnValuesDecleratively (sut : IInterface) =
     </author>
     <content type="html">&lt;p&gt;&lt;u&gt;Note&lt;/u&gt;: After following this post, the end result is pretty awesome:&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-17.png?1404210034" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-17.png?1406533648" /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Radio Edit (tl;dr)&lt;/strong&gt;&lt;/p&gt;
 
@@ -1796,7 +2100,7 @@ let CustomizationFillsReturnValuesDecleratively (sut : IInterface) =
 
 &lt;p&gt;Create a new Virtual Machine on Windows Azure to install and access TeamCity.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-1.png?1404210034" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-1.png?1406533648" /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;Turn off Internet Explorer&amp;#39;s Enhanced Security Configuration.&lt;/li&gt;
@@ -1807,7 +2111,7 @@ let CustomizationFillsReturnValuesDecleratively (sut : IInterface) =
 &lt;/ul&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-3.png?1404210034" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-3.png?1406533648" /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;Install Karma and karma-teamcity-reporter plugin:&lt;br&gt;&lt;pre&gt;&lt;code&gt;  npm install -g karma
@@ -1824,19 +2128,19 @@ let CustomizationFillsReturnValuesDecleratively (sut : IInterface) =
 &lt;/ul&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-4.png?1404210034" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-4.png?1406533648" /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;u&gt;Optional&lt;/u&gt;: &lt;a href="https://help.github.com/articles/generating-ssh-keys"&gt;Generate SSH keys&lt;/a&gt; if you use SSH keys to establish a secure connection between the Virtual Machine and Git.&lt;/p&gt;
 
 &lt;p&gt;Install TeamCity and choose a port so it can be accessed from a browser (e.g. port 80).&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-5.png?1404210034" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-5.png?1406533648" /&gt;&lt;/p&gt;
 
 &lt;p&gt;If you use SSH keys to establish a secure connection between the Virtual Machine and Git, make sure to run TeamCity Server under a user account that can access the path where the SSH keys are saved.&lt;/p&gt;
 
 &lt;p&gt;Use the &lt;code&gt;whoami&lt;/code&gt; command in the Command Prompt to find out the Virtual Machine&amp;#39;s domain name.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-6.png?1404210034" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-6.png?1406533648" /&gt;&lt;/p&gt;
 
 &lt;p&gt;Add a new inbound rule to Windows Firewall with the TeamCity Server port that was entered during installation.&lt;/p&gt;
 
@@ -1846,7 +2150,7 @@ let CustomizationFillsReturnValuesDecleratively (sut : IInterface) =
 
 &lt;p&gt;On Windows Azure Management Portal add a new endpoint with the selected TeamCity Server port that was entered during installation.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-7.png?1404210034" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-7.png?1406533649" /&gt;&lt;/p&gt;
 
 &lt;p&gt;Log in to the TeamCity Server:&lt;/p&gt;
 
@@ -1856,20 +2160,20 @@ let CustomizationFillsReturnValuesDecleratively (sut : IInterface) =
 &lt;li&gt;Attach a new VCS root on Build Configuration for Git.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-8.png?1404210034" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-8.png?1406533649" /&gt;&lt;/p&gt;
 
 &lt;p&gt;For the demo, I forked the &lt;a href="https://github.com/moodmosaic/angular-phonecat"&gt;angular-phonecat&lt;/a&gt; project.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-9.png?1404210034" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-9.png?1406533649" /&gt;&lt;/p&gt;
 
 &lt;p&gt;Select an authentication method and test the connection.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-10.png?1404210034" /&gt;
-&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-11.png?1404210034" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-10.png?1406533648" /&gt;
+&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-11.png?1406533648" /&gt;&lt;/p&gt;
 
 &lt;p&gt;Add a Build Step and attach the newly created Build Configuration.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-12.png?1404210034" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-12.png?1406533648" /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;In the runner type select Command Line.&lt;/li&gt;
@@ -1879,20 +2183,20 @@ let CustomizationFillsReturnValuesDecleratively (sut : IInterface) =
 &lt;li&gt;In the command parameters option enter &lt;code&gt;start karma.conf.js --reporters teamcity --single-run&lt;/code&gt;.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-13.png?1404210034" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-13.png?1406533648" /&gt;&lt;/p&gt;
 
 &lt;p&gt;As a last step, include the &lt;code&gt;karma-teamcity-reporter&lt;/code&gt; plugin in the karma.conf.js file.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-14.png?1404210034" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-14.png?1406533648" /&gt;&lt;/p&gt;
 
 &lt;p&gt;Push to Git to trigger the build process and see the commit on TeamCity Server.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-15.png?1404210034" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-15.png?1406533648" /&gt;&lt;/p&gt;
 
 &lt;p&gt;The end result is pretty awesome:&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-16.png?1404210034" /&gt;
-&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-17.png?1404210034" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-16.png?1406533648" /&gt;
+&lt;img alt="Image" src="/images/articles/2014-01-08-azure-teamcity-angular-karma-17.png?1406533648" /&gt;&lt;/p&gt;
 </content>
   </entry>
   <entry>
@@ -2238,31 +2542,31 @@ PM&amp;gt; Install-Package Xunit.Extensions
 
 &lt;p&gt;&lt;a href="http://msdn.microsoft.com/en-us/library/bb298736.aspx"&gt;Enumerable.ToArray&lt;/a&gt; &amp;#8594; &lt;a href="http://msdn.microsoft.com/en-us/library/ee340263.aspx"&gt;Seq.toArray&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-1.png?1404210034" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-1.png?1406533648" /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;AsEnumerable&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;a href="http://msdn.microsoft.com/en-us/library/bb335435.aspx"&gt;Enumerable.AsEnumerable&lt;/a&gt; &amp;#8594; &lt;code&gt;seq { }&lt;/code&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-2.png?1404210034" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-2.png?1406533648" /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;First&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;a href="http://msdn.microsoft.com/en-us/library/bb291976.aspx"&gt;Enumerable.First&lt;/a&gt; &amp;#8594; &lt;a href="http://msdn.microsoft.com/en-us/library/ee340330.aspx"&gt;Seq.head&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-3.png?1404210034" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-3.png?1406533648" /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Count&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;a href="http://msdn.microsoft.com/en-us/library/bb338038.aspx"&gt;Enumerable.Count&lt;/a&gt; &amp;#8594; &lt;a href="http://msdn.microsoft.com/en-us/library/ee370547.aspx"&gt;Seq.length&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-4.png?1404210034" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-4.png?1406533648" /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;SequenceEqual&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;a href="http://msdn.microsoft.com/en-us/library/bb348567.aspx"&gt;Enumerable.SequenceEqual&lt;/a&gt; &amp;#8594; &lt;a href="http://msdn.microsoft.com/en-us/library/ee353659.aspx"&gt;Seq.compareWith&lt;/a&gt; &lt;a href="http://msdn.microsoft.com/en-us/library/ee353429.aspx"&gt;Operators.compare&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-5.png?1404210034" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-24-replacing-a-few-linq-query-operators-with-fsharp-sequences-5.png?1406533648" /&gt;&lt;/p&gt;
 </content>
   </entry>
   <entry>
@@ -2359,7 +2663,7 @@ let AutoMockInterfaceAndSetupExpectationsDeclaratively
 
 &lt;p&gt;The most important changes are shown below. You can also see the diff as an image &lt;a href="/images/articles/2013-10-04-how-to-configure-msbuild-to-locate-the-fsharp-build-targets.png"&gt;here&lt;/a&gt;:&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-04-how-to-configure-msbuild-to-locate-the-fsharp-build-targets.png?1404210034" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Image" src="/images/articles/2013-10-04-how-to-configure-msbuild-to-locate-the-fsharp-build-targets.png?1406533648" /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;A note for VS 2012 users&lt;/strong&gt;&lt;/p&gt;
 
@@ -6963,6 +7267,46 @@ public void NHibernateShouldBeAbleToPersistCurrency()
 </content>
   </entry>
   <entry>
+    <title>Persistence specification testing combined with AutoFixture</title>
+    <link rel="alternate" href="/blog/2011/03/13/persistence-specification-testing-combined-with-autofixture"/>
+    <id>http://nikosbaxevanis.com/blog/2011/03/13/persistence-specification-testing-combined-with-autofixture</id>
+    <updated>2011-03-13T00:00:00+02:00</updated>
+    <author>
+      <name>Nikos Baxevanis</name>
+    </author>
+    <content type="html">&lt;p&gt;When working with NHibernate you need to make sure that your mappings are correct. At least, you have to make sure that when you&amp;nbsp;save an item you can also qet that item back.&lt;/p&gt;
+
+&lt;p&gt;If you are using FluentNHibernate you can use the &lt;a href="https://github.com/jagregory/fluent-nhibernate/tree/master/src/FluentNHibernate/Testing" target="_blank"&gt;PersistenceSpecification&amp;lt;T&amp;gt; class&lt;/a&gt;. However, the&amp;nbsp;PersistenceSpecification&amp;lt;T&amp;gt; class requires that you pass the property to check and also a value for that property.&lt;/p&gt;
+
+&lt;p&gt;By using &lt;a title="AutoFixture makes it easier for developers to do Test-Driven Development by automating non-relevant Test Fixture Setup, allowing the Test Developer to focus on the essentials of each test case." href="http://autofixture.codeplex.com/" target="_blank"&gt;AutoFixture&lt;/a&gt; you can easily create objects that you can pass inside the CheckXx methods:&lt;/p&gt;
+&lt;pre class="highlight text"&gt;[Fact]
+public void ShouldVerifyTheMappings()
+{
+    var fixture = new Fixture();
+
+    using (session)
+    {
+        new PersistenceSpecification&amp;lt;EventType&amp;gt;(session)
+            .CheckProperty(x =&amp;gt; x.EventTypeId, 
+                fixture.CreateAnonymous&amp;lt;long&amp;gt;())
+            .CheckProperty(x =&amp;gt; x.EventTypeName, 
+                fixture.CreateAnonymous&amp;lt;string&amp;gt;())
+            .CheckProperty(x =&amp;gt; x.ExchangeServerId, 
+                fixture.CreateAnonymous&amp;lt;int&amp;gt;())
+            .CheckProperty(x =&amp;gt; x.LastUpdatedOn, 
+                DateTime.Today)
+            .CheckProperty(x =&amp;gt; x.NextMarketId, 
+                fixture.CreateAnonymous&amp;lt;long&amp;gt;())
+            .CheckReference(x =&amp;gt; x.Bookmaker, 
+                fixture.CreateAnonymous&amp;lt;Bookmaker&amp;gt;())
+            .VerifyTheMappings();
+    }
+}
+&lt;/pre&gt;
+&lt;p&gt;Combining&amp;nbsp;AutoFixture with the PersistenceSpecification&amp;lt;T&amp;gt; class results in&amp;nbsp;writing less code when testing NHibernate mappings, specially when dealing with complex types.&lt;/p&gt;
+</content>
+  </entry>
+  <entry>
     <title>Unit Testing Events (The SpinWait.SpinUntil Method)</title>
     <link rel="alternate" href="/blog/2011/03/13/unit-testing-events-the-spinwait-dot-spinuntil-method"/>
     <id>http://nikosbaxevanis.com/blog/2011/03/13/unit-testing-events-the-spinwait-dot-spinuntil-method</id>
@@ -7004,46 +7348,6 @@ public void FooEvent()
 }
 &lt;/pre&gt;
 &lt;p&gt;The above tests are exactly the same. The one with the SpinWait.SpinUntil method is easier to read and it also requires less code. Pretty cool.&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
-    <title>Persistence specification testing combined with AutoFixture</title>
-    <link rel="alternate" href="/blog/2011/03/13/persistence-specification-testing-combined-with-autofixture"/>
-    <id>http://nikosbaxevanis.com/blog/2011/03/13/persistence-specification-testing-combined-with-autofixture</id>
-    <updated>2011-03-13T00:00:00+02:00</updated>
-    <author>
-      <name>Nikos Baxevanis</name>
-    </author>
-    <content type="html">&lt;p&gt;When working with NHibernate you need to make sure that your mappings are correct. At least, you have to make sure that when you&amp;nbsp;save an item you can also qet that item back.&lt;/p&gt;
-
-&lt;p&gt;If you are using FluentNHibernate you can use the &lt;a href="https://github.com/jagregory/fluent-nhibernate/tree/master/src/FluentNHibernate/Testing" target="_blank"&gt;PersistenceSpecification&amp;lt;T&amp;gt; class&lt;/a&gt;. However, the&amp;nbsp;PersistenceSpecification&amp;lt;T&amp;gt; class requires that you pass the property to check and also a value for that property.&lt;/p&gt;
-
-&lt;p&gt;By using &lt;a title="AutoFixture makes it easier for developers to do Test-Driven Development by automating non-relevant Test Fixture Setup, allowing the Test Developer to focus on the essentials of each test case." href="http://autofixture.codeplex.com/" target="_blank"&gt;AutoFixture&lt;/a&gt; you can easily create objects that you can pass inside the CheckXx methods:&lt;/p&gt;
-&lt;pre class="highlight text"&gt;[Fact]
-public void ShouldVerifyTheMappings()
-{
-    var fixture = new Fixture();
-
-    using (session)
-    {
-        new PersistenceSpecification&amp;lt;EventType&amp;gt;(session)
-            .CheckProperty(x =&amp;gt; x.EventTypeId, 
-                fixture.CreateAnonymous&amp;lt;long&amp;gt;())
-            .CheckProperty(x =&amp;gt; x.EventTypeName, 
-                fixture.CreateAnonymous&amp;lt;string&amp;gt;())
-            .CheckProperty(x =&amp;gt; x.ExchangeServerId, 
-                fixture.CreateAnonymous&amp;lt;int&amp;gt;())
-            .CheckProperty(x =&amp;gt; x.LastUpdatedOn, 
-                DateTime.Today)
-            .CheckProperty(x =&amp;gt; x.NextMarketId, 
-                fixture.CreateAnonymous&amp;lt;long&amp;gt;())
-            .CheckReference(x =&amp;gt; x.Bookmaker, 
-                fixture.CreateAnonymous&amp;lt;Bookmaker&amp;gt;())
-            .VerifyTheMappings();
-    }
-}
-&lt;/pre&gt;
-&lt;p&gt;Combining&amp;nbsp;AutoFixture with the PersistenceSpecification&amp;lt;T&amp;gt; class results in&amp;nbsp;writing less code when testing NHibernate mappings, specially when dealing with complex types.&lt;/p&gt;
 </content>
   </entry>
   <entry>
