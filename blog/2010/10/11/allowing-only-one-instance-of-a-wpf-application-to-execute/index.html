@@ -1,4 +1,4 @@
-<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width, initial-scale=1.0" name="viewport" /><meta content="Programmer using Test-Driven Development, C# and F#. Core Contributor to AutoFixture." name="Description" /><title>Allowing only one instance of a WPF application to execute</title><link href="/stylesheets/styles.css?1406533649" media="screen" rel="stylesheet" type="text/css" /></head><body><div><div><p><a href="/">Nikos Baxevanis</a></p></div><div><h1>Allowing only one instance of a WPF application to execute</h1><div>October 11, 2010 |  <a href="/category/wpf/">WPF</a></div></div><div><p>Sometimes, for any reason, you want to have only one instance per application.</p>
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width, initial-scale=1.0" name="viewport" /><meta content="Programmer using Test-Driven Development, C# and F#. Core Contributor to AutoFixture." name="Description" /><title>Allowing only one instance of a WPF application to execute</title><link href="/stylesheets/styles.css?1407910093" media="screen" rel="stylesheet" type="text/css" /></head><body><div><div><h1>Allowing only one instance of a WPF application to execute</h1><div>October 11, 2010 |  <a href="/category/wpf/">WPF</a></div></div><div><p>Sometimes, for any reason, you want to have only one instance per application.</p>
 
 <p>Search on the internet and you will find&nbsp;<a href="http://www.google.gr/search?sourceid=chrome&amp;ie=UTF-8&amp;q=wpf+single+instance" target="_blank">many different ways</a> of doing this. However, inside Jeffrey Ricther&rsquo;s <a title="CLR via C#, Third Edition" href="http://www.microsoft.com/learning/en/us/book.aspx?ID=13874" target="_blank">excellent book</a>&nbsp;there is a way&nbsp;of allowing only one instance of an application (Console, WinForms, WPF) to execute at any given time using kernel-mode constructs.</p>
 
@@ -181,7 +181,7 @@ internal partial class App : Application
 }
 </pre>
 <p>One improvement would be to restore the window only if it&rsquo;s minimized by checking the return value of SetForegroundWindow method. I leave this to you, go on and adapt it to your own needs.</p>
-</div><div><br /><hr />Have feedback on this post? Let <a href="http://twitter.com/nikosbaxevanis" target="_blank">@nikosbaxevanis</a> know on Twitter.</div></div><script type="text/javascript">var _gaq = _gaq || [];
+</div><div><br /><hr />Published by <a href="/">Nikos Baxevanis</a> — Have feedback on this post? Let <a href="http://twitter.com/nikosbaxevanis" target="_blank">@nikosbaxevanis</a> know on Twitter.</div></div><script type="text/javascript">var _gaq = _gaq || [];
 _gaq.push(['_setAccount', 'UA-24262928-1']);
 _gaq.push(['_trackPageview']);
 (function() {

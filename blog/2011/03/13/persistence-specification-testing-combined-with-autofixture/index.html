@@ -1,4 +1,4 @@
-<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width, initial-scale=1.0" name="viewport" /><meta content="Programmer using Test-Driven Development, C# and F#. Core Contributor to AutoFixture." name="Description" /><title>Persistence specification testing combined with AutoFixture</title><link href="/stylesheets/styles.css?1406533649" media="screen" rel="stylesheet" type="text/css" /></head><body><div><div><p><a href="/">Nikos Baxevanis</a></p></div><div><h1>Persistence specification testing combined with AutoFixture</h1><div>March 13, 2011 |  <a href="/category/unit-testing/">Unit Testing</a> |  <a href="/category/nhibernate/">NHibernate</a></div></div><div><p>When working with NHibernate you need to make sure that your mappings are correct. At least, you have to make sure that when you&nbsp;save an item you can also qet that item back.</p>
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width, initial-scale=1.0" name="viewport" /><meta content="Programmer using Test-Driven Development, C# and F#. Core Contributor to AutoFixture." name="Description" /><title>Persistence specification testing combined with AutoFixture</title><link href="/stylesheets/styles.css?1407910093" media="screen" rel="stylesheet" type="text/css" /></head><body><div><div><h1>Persistence specification testing combined with AutoFixture</h1><div>March 13, 2011 |  <a href="/category/unit-testing/">Unit Testing</a> |  <a href="/category/nhibernate/">NHibernate</a></div></div><div><p>When working with NHibernate you need to make sure that your mappings are correct. At least, you have to make sure that when you&nbsp;save an item you can also qet that item back.</p>
 
 <p>If you are using FluentNHibernate you can use the <a href="https://github.com/jagregory/fluent-nhibernate/tree/master/src/FluentNHibernate/Testing" target="_blank">PersistenceSpecification&lt;T&gt; class</a>. However, the&nbsp;PersistenceSpecification&lt;T&gt; class requires that you pass the property to check and also a value for that property.</p>
 
@@ -28,7 +28,7 @@ public void ShouldVerifyTheMappings()
 }
 </pre>
 <p>Combining&nbsp;AutoFixture with the PersistenceSpecification&lt;T&gt; class results in&nbsp;writing less code when testing NHibernate mappings, specially when dealing with complex types.</p>
-</div><div><br /><hr />Have feedback on this post? Let <a href="http://twitter.com/nikosbaxevanis" target="_blank">@nikosbaxevanis</a> know on Twitter.</div></div><script type="text/javascript">var _gaq = _gaq || [];
+</div><div><br /><hr />Published by <a href="/">Nikos Baxevanis</a> — Have feedback on this post? Let <a href="http://twitter.com/nikosbaxevanis" target="_blank">@nikosbaxevanis</a> know on Twitter.</div></div><script type="text/javascript">var _gaq = _gaq || [];
 _gaq.push(['_setAccount', 'UA-24262928-1']);
 _gaq.push(['_trackPageview']);
 (function() {

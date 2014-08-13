@@ -1,4 +1,4 @@
-<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width, initial-scale=1.0" name="viewport" /><meta content="Programmer using Test-Driven Development, C# and F#. Core Contributor to AutoFixture." name="Description" /><title>How to configure AutoFoq with Foq's return strategy</title><link href="/stylesheets/styles.css?1406533649" media="screen" rel="stylesheet" type="text/css" /></head><body><div><div><p><a href="/">Nikos Baxevanis</a></p></div><div><h1>How to configure AutoFoq with Foq's return strategy</h1><div>February 23, 2014 |  <a href="/category/autofixture/">AutoFixture</a> |  <a href="/category/fsharp/">FSharp</a></div></div><div><p><i>This post explains how to configure <a href="http://nuget.org/packages/AutoFixture.AutoFoq">AutoFixture.AutoFoq 3</a> so that <code>null</code> values are never returned when using <a href="https://foq.codeplex.com/">Foq</a> 1.5.1 and newer.</i></p>
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width, initial-scale=1.0" name="viewport" /><meta content="Programmer using Test-Driven Development, C# and F#. Core Contributor to AutoFixture." name="Description" /><title>How to configure AutoFoq with Foq's return strategy</title><link href="/stylesheets/styles.css?1407910093" media="screen" rel="stylesheet" type="text/css" /></head><body><div><div><h1>How to configure AutoFoq with Foq's return strategy</h1><div>February 23, 2014 |  <a href="/category/autofixture/">AutoFixture</a> |  <a href="/category/fsharp/">FSharp</a></div></div><div><p><i>This post explains how to configure <a href="http://nuget.org/packages/AutoFixture.AutoFoq">AutoFixture.AutoFoq 3</a> so that <code>null</code> values are never returned when using <a href="https://foq.codeplex.com/">Foq</a> 1.5.1 and newer.</i></p>
 
 <p>Foq&#39;s behavior for mock objects that have not been explicitly setup, is to return <code>null</code> if the return type of a function is a <a href="http://en.wikipedia.org/wiki/Reference_type">reference type</a> (e.g. a string):</p>
 <pre class="highlight text">type IInterface =
@@ -111,7 +111,7 @@ let CustomizationFillsReturnValues () =
 let CustomizationFillsReturnValuesDecleratively (sut : IInterface) =
     let actual = sut.DoSomething()
     // -&gt; actual: &quot;f5cdf6b1-a473-410f-95f3-f427f7abb0c7&quot;
-</pre></div><div><br /><hr />Have feedback on this post? Let <a href="http://twitter.com/nikosbaxevanis" target="_blank">@nikosbaxevanis</a> know on Twitter.</div></div><script type="text/javascript">var _gaq = _gaq || [];
+</pre></div><div><br /><hr />Published by <a href="/">Nikos Baxevanis</a> — Have feedback on this post? Let <a href="http://twitter.com/nikosbaxevanis" target="_blank">@nikosbaxevanis</a> know on Twitter.</div></div><script type="text/javascript">var _gaq = _gaq || [];
 _gaq.push(['_setAccount', 'UA-24262928-1']);
 _gaq.push(['_trackPageview']);
 (function() {

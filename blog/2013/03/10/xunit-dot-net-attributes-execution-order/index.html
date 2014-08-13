@@ -1,4 +1,4 @@
-<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width, initial-scale=1.0" name="viewport" /><meta content="Programmer using Test-Driven Development, C# and F#. Core Contributor to AutoFixture." name="Description" /><title>xUnit.net Attributes Execution Order</title><link href="/stylesheets/styles.css?1406533649" media="screen" rel="stylesheet" type="text/css" /></head><body><div><div><p><a href="/">Nikos Baxevanis</a></p></div><div><h1>xUnit.net Attributes Execution Order</h1><div>March 10, 2013 |  <a href="/category/xunit.net/">xUnit.net</a></div></div><div><p>The test below uses the <a href="http://xunit.codeplex.com/">xUnit.net</a> framework and executes twice, since it is decorated with two data sources. The first data source is the built-in <code>[InlineData]</code> and the second data source is the custom <code>[StringData]</code>.</p>
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width, initial-scale=1.0" name="viewport" /><meta content="Programmer using Test-Driven Development, C# and F#. Core Contributor to AutoFixture." name="Description" /><title>xUnit.net Attributes Execution Order</title><link href="/stylesheets/styles.css?1407910093" media="screen" rel="stylesheet" type="text/css" /></head><body><div><div><h1>xUnit.net Attributes Execution Order</h1><div>March 10, 2013 |  <a href="/category/xunit.net/">xUnit.net</a></div></div><div><p>The test below uses the <a href="http://xunit.codeplex.com/">xUnit.net</a> framework and executes twice, since it is decorated with two data sources. The first data source is the built-in <code>[InlineData]</code> and the second data source is the custom <code>[StringData]</code>.</p>
 <pre class="highlight text">[Theory]
 [InlineData(&quot;foo&quot;, &quot;bar&quot;)]
 [StringData]
@@ -62,7 +62,7 @@ public void Test(string a, string b)
         yield return new object[] { &quot;cow&quot;, &quot;zoo&quot; };
     }
 }
-</pre></div><div><br /><hr />Have feedback on this post? Let <a href="http://twitter.com/nikosbaxevanis" target="_blank">@nikosbaxevanis</a> know on Twitter.</div></div><script type="text/javascript">var _gaq = _gaq || [];
+</pre></div><div><br /><hr />Published by <a href="/">Nikos Baxevanis</a> — Have feedback on this post? Let <a href="http://twitter.com/nikosbaxevanis" target="_blank">@nikosbaxevanis</a> know on Twitter.</div></div><script type="text/javascript">var _gaq = _gaq || [];
 _gaq.push(['_setAccount', 'UA-24262928-1']);
 _gaq.push(['_trackPageview']);
 (function() {
