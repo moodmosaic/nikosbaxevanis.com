@@ -2,8 +2,6 @@ moodmosaic
 -------
 This is the transformed content for my site at web address [http://nikosbaxevanis.com/](http://nikosbaxevanis.com/) including my [blog](http://nikosbaxevanis.com/blog).
 
-The images are hosted on Flickr while the text is hosted here, on GitHub.
-
 Technology
 -------
 
