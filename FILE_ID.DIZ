@@ -1,0 +1,4 @@
+ruby dk.rb init
+ruby dk.rb install
+gem install bundler
+bundle install
