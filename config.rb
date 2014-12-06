@@ -127,10 +127,10 @@ ready do
 
   zipped = (articles + screencasts).sort_by { |item| item.date }.reverse
 
-  proxy "/index.html"              , "/dashboard.html"    , :locals => { :entries => zipped }
-  proxy "/screencasts/index.html"  , "/thingies.html"     , :locals => { :entries => screencasts, :title => "Screencasts" }
-  proxy "/blog/index.html"         , "/thingies.html"     , :locals => { :entries => articles,    :title => "Blog" }
-  proxy "/feed/index.xml"          , "/feed.xml"          , :locals => { :items => zipped }
+  proxy "/index.html"              , "/dashboard.html"    , :locals => { :entries => zipped                               }
+  proxy "/screencasts/index.html"  , "/entries.html"      , :locals => { :entries => screencasts, :title => "Screencasts" }
+  proxy "/blog/index.html"         , "/entries.html"      , :locals => { :entries => articles,    :title => "Blog"        }
+  proxy "/feed/index.xml"          , "/feed.xml"          , :locals => { :entries => zipped                               }
   proxy "/testimonials/index.html" , "/testimonials.html"
 
   categories = zipped
@@ -143,12 +143,12 @@ ready do
       entries = zipped
         .select { |entry| entry.categories.include? category }
       proxy "/category/#{category.downcase.gsub(' ', '-')}/index.html",
-            "/thingies.html" ,
+            "/entries.html" ,
             :locals => { :entries => entries, :title => category }
     }
 
   ignore "/feed.xml"
-  ignore "/thingies.html"
+  ignore "/entries.html"
   ignore "/dashboard.html"
   ignore "/screencasts.html"
   ignore "/data/*"
