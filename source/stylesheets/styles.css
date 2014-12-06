@@ -44,7 +44,13 @@ code {
   white-space: pre-wrap;
   padding: 1px 5px;
   font-family: Consolas, Menlo, Monaco, "Lucida Console", "Liberation Mono", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Courier New", monospace, serif;
-  background-color: #f7f7f7;
   font-size: 85%;
   border-radius: 3px;
+}
+
+hr {
+  border: 0;
+  height: 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
 }
