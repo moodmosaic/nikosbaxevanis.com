@@ -9,9 +9,10 @@ body {
   margin: auto;
   text-align: left;
   padding-bottom: 1.8em;
-  font-family: "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif;
+  font-family: 'Lato', sans-serif;
   font-size: 14px;
-  line-height: 1.6;
+  line-height: 1.4;
+  font-weight: 400;
 }
 
 h1 {
@@ -53,4 +54,14 @@ hr {
   height: 0;
   border-top: 1px solid rgba(0, 0, 0, 0.1);
   border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+a {
+  text-decoration: none;
+  color: #455A64;
+  border-bottom: 1px solid #CFD8DC;
+}
+a:hover {
+  color: #607D8B;
+  border-bottom: 1px solid #607D8B;
 }
