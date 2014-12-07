@@ -3,7 +3,6 @@ html {
      -moz-text-size-adjust: 100%;
       -ms-text-size-adjust: 100%;
 }
-
 body {
   max-width: 40rem;
   margin: auto;
@@ -12,20 +11,12 @@ body {
   font-family: 'Lato', sans-serif;
   line-height: 1.4;
 }
-
-h1 {
-  line-height: 1.8rem;
-}
-
+h1 {  line-height: 1.8rem }
 img {
   max-width: 100%;
   border-radius: 2px;
 }
-
-.author {
-  text-align: right;
-}
-
+.author { text-align: right }
 pre {
   padding: 5px;
   font-family: Consolas, Menlo, Monaco, "Lucida Console", "Liberation Mono", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Courier New", monospace, serif;
@@ -38,7 +29,6 @@ pre {
   line-height: 1.45;
   border-radius: 3px;
 }
-
 code {
   white-space: pre-wrap;
   padding: 1px 5px;
@@ -46,41 +36,34 @@ code {
   font-size: 85%;
   border-radius: 3px;
 }
-
 hr {
   border: 0;
   height: 0;
   border-top: 1px solid rgba(0, 0, 0, 0.1);
   border-bottom: 1px solid rgba(255, 255, 255, 0.3);
 }
-
 a {
   text-decoration: none;
   color: #455A64;
   border-bottom: 1px solid #CFD8DC;
 }
-
 a:hover {
   color: #607D8B;
   border-bottom: 1px solid #607D8B;
 }
-
 .dashboard {
   text-align: center;
   margin: 5px 0px 0px 0px;
 }
-
-.dashboard h1 {
-  font-size: 2rem;
-  padding-bottom: 1rem;
-  padding-top: 0.6rem;
-}
-
-.dashboard p {
-  font-size: 15px;
-  margin: .6rem 0;
-}
-
+    .dashboard h1 {
+      font-size: 2rem;
+      padding-bottom: 1rem;
+      padding-top: 0.6rem;
+    }
+    .dashboard p {
+      font-size: 15px;
+      margin: .6rem 0;
+    }
 .dashboard:after {
   display: block;
   content: "";
@@ -89,10 +72,7 @@ a:hover {
   margin: 3rem auto;
   background-color: #eee;
 }
-
-.archive {
-}
-
+.archive { }
 .archive-item {
   margin-bottom: 1rem;
   overflow: auto; /* clearfix */
@@ -111,23 +91,19 @@ a:hover {
   margin: 3rem auto;
   background-color: #eee;
 }
-
 @media (min-width: 34rem) {
-  .archive-item {
-    margin-bottom: .5rem;
-  }
-  .archive-date {
-    float: right;
-    margin-left: 1rem;
-  }
+    .archive-item {  margin-bottom: .5rem }
+    .archive-date {
+      float: right;
+      margin-left: 1rem;
+    }
 }
-
 .footer {
   text-align: center;
   margin-bottom: 2rem;
 }
-.footer a {
-  text-decoration: none;
-  border-bottom: none;
-  font-weight: bold;
-}
+    .footer a {
+      text-decoration: none;
+      border-bottom: none;
+      font-weight: bold;
+    }
