@@ -127,6 +127,7 @@ ready do
 
   zipped = (articles + screencasts).sort_by { |item| item.date }.reverse
 
+  proxy "/index.html"              , "/dashboard.html"    , :locals => { :entries => zipped                               }
   proxy "/screencasts/index.html"  , "/entries.html"      , :locals => { :entries => screencasts, :title => "Screencasts" }
   proxy "/blog/index.html"         , "/entries.html"      , :locals => { :entries => articles,    :title => "Blog"        }
   proxy "/feed/index.xml"          , "/feed.xml"          , :locals => { :entries => zipped                               }
@@ -148,6 +149,7 @@ ready do
 
   ignore "/feed.xml"
   ignore "/entries.html"
+  ignore "/dashboard.html"
   ignore "/screencasts.html"
   ignore "/data/*"
 end
