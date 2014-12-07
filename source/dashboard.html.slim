@@ -1,7 +1,7 @@
 div.dashboard
   <img alt="moodmosaic" height="172.5" src="http://nikosbaxevanis.com/images/home.jpg" width="172.5">
   <h1>Nikos Baxevanis</h1>
-  <p> Associated with&nbsp;
+  <p>Contributing to&nbsp;
     <a target="_blank" href="https://github.com/AutoFixture/AutoFixture">AutoFixture</a>,&nbsp;
     <a target="_blank" href="https://github.com/GreanTech/AtomEventStore">AtomEvenStore</a>,&nbsp;
     <a target="_blank" href="https://github.com/moodmosaic/Fare">Fare</a>,&nbsp;
@@ -14,3 +14,13 @@ div.dashboard
     <a target="_blank" href="https://github.com/moodmosaic/feedback">github</a> or&nbsp;
     <a target="_blank" href="https://twitter.com/nikosbaxevanis">twitter</a>.
   </p>
+
+div.archive
+  - for thingie in entries do
+    div.archive-item
+      span.archive-date #{thingie.date.strftime("%B %d, %Y")}
+      a.archive-title href=thingie.url #{thingie.title}
+      
+div.footer
+  | Be notified of new posts. 
+  a href="/feed" Subscribe to the web feed.
