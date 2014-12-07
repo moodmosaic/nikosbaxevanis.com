@@ -59,6 +59,7 @@ a {
   color: #455A64;
   border-bottom: 1px solid #CFD8DC;
 }
+
 a:hover {
   color: #607D8B;
   border-bottom: 1px solid #607D8B;
@@ -68,15 +69,18 @@ a:hover {
   text-align: center;
   margin: 5px 6px;
 }
+
 .dashboard h1 {
   font-size: 2rem;
   padding-bottom: 1rem;
   padding-top: 0.6rem;
 }
+
 .dashboard p {
   font-size: 15px;
   margin: .6rem 0;
 }
+
 .dashboard:after {
   display: block;
   content: "";
