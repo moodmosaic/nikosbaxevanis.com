@@ -8,7 +8,7 @@ body {
   margin: auto;
   text-align: left;
   padding-bottom: 1.8rem;
-  font-family: 'Lato', sans-serif;
+  font-family: 'Lato',sans-serif;
   line-height: 1.4;
 }
 h1 {  line-height: 1.9rem }
@@ -16,7 +16,6 @@ img {
   max-width: 100%;
   border-radius: 2px;
 }
-.author { text-align: right }
 pre {
   padding: 5px;
   margin-bottom: 10px;
@@ -33,12 +32,6 @@ code {
   background-color: #f7f7f7;
   border-radius: 3px;
 }
-hr {
-  border: 0;
-  height: 0;
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-}
 a {
   text-decoration: none;
   color: #455A64;
@@ -50,12 +43,8 @@ a:hover {
 }
 .dashboard {
   text-align: center;
-  margin: 5px 0px 0px 0px;
+  margin: 5px 0 0;
 }
-    .dashboard h1 {
-      font-size: 2rem;
-      padding-top: 0.6rem;
-    }
     .dashboard p {
       font-size: 15px;
       margin: .6rem 0;
@@ -68,10 +57,9 @@ a:hover {
   margin: 3rem auto;
   background-color: #eee;
 }
-.archive { }
 .archive-item {
   margin-bottom: 1rem;
-  overflow: auto; /* clearfix */
+  overflow: auto;
 }
 .archive-date {
   margin-top: 0;
@@ -87,7 +75,7 @@ a:hover {
   margin: 3rem auto;
   background-color: #eee;
 }
-@media (min-width: 34rem) {
+@media (min-width: 34rem) { 
     .archive-item {  margin-bottom: .5rem }
     .archive-date {
       float: right;
@@ -101,15 +89,13 @@ a:hover {
     .footer a {
       text-decoration: none;
       border-bottom: none;
-      font-weight: bold;
+      font-weight: 700;
     }
-.questions {
-  text-align: center;
-}
+.questions {  text-align: center }
     .questions a {
       text-decoration: none;
       border-bottom: none;
-      font-weight: bold;
+      font-weight: 700;
     }
 .questions:before {
   display: block;
