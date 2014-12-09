@@ -9,6 +9,8 @@ body {
   text-align: left;
   padding-bottom: 1.8rem;
   font-family: 'Lato',sans-serif;
+  font-size: 0.875em;
+  color: #252525;
   line-height: 1.4;
 }
 h1 {  line-height: 1.9rem }
@@ -17,20 +19,24 @@ img {
   border-radius: 2px;
 }
 pre {
-  padding: 5px;
-  margin-bottom: 10px;
-  background-color: #f7f7f7;
   overflow: auto;
   width: auto;
   max-height: 600px;
-  line-height: 1.45;
-  border-radius: 3px;
+  border: 1px solid #ddd;
+  padding: 1em;
 }
 code {
-  white-space: pre-wrap;
-  padding: 1px 5px;
-  background-color: #f7f7f7;
-  border-radius: 3px;
+  color: black;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 2px;
+  padding: 1px 4px;
+}
+hr {
+  border: 0;
+  height: 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
 }
 a {
   text-decoration: none;
@@ -41,6 +47,7 @@ a:hover {
   color: #607D8B;
   border-bottom: 1px solid #607D8B;
 }
+.author { text-align: right; }
 .dashboard {
   text-align: center;
   margin: 5px 0 0;
