@@ -13,7 +13,7 @@ alias: /bonus-bits/2010/12/a-sneak-preview-of-websocket-enabled-wcf-services.htm
 <li><a href="http://tools.ietf.org/html/draft-hixie-thewebsocketprotocol-76" target="_blank" title="The WebSocket protocol draft-hixie-thewebsocketprotocol-76.">draft-hixie-thewebsocketprotocol-76</a></li>
 </ul>
 <p>The prototype can be found at&#0160;<a href="http://html5labs.interoperabilitybridges.com/" target="_blank" title="The HTML5 Labs site is the place where Microsoft prototypes early and unstable web standard specifications from standards bodies such as the W3C.">HTML5 Labs</a>, however (at the time of this&#0160;writing) the samples did not come with source code and they were delay signed (which means you have to <a href="http://mailinglist.interoperabilitybridges.com/scripts/wa-INTEROP.exe?A2=HTML5_WEBSOCKETS;e6d276d8.1012" target="_self">follow the instructions</a>&#0160;to run them).&#0160;After running the samples (and since I had no access to the source code) I opened with reflector and had a look under the hood.</p>
-<p>What I noticed is that a WebSocket-enabled service in .NET will be written like any other WCF service with <span style="text-decoration: underline;">two differences</span>:</p>
+<p>What I noticed is that a WebSocket-enabled service in .NET will be written like any other WCF service with two differences:</p>
 
 The service implementation has to derive from the base WebSocketService class:
 
