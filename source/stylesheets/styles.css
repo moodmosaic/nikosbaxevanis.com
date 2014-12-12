@@ -8,10 +8,10 @@ body {
   margin: auto;
   text-align: left;
   padding-bottom: 1.8rem;
-  font-family: 'Lato',sans-serif;
+  font-family: 'Roboto',sans-serif;
   font-size: 0.875em;
   color: #252525;
-  line-height: 1.4;
+  line-height: 1.5;
 }
 h1 {  line-height: 1.9rem }
 img {
@@ -82,7 +82,7 @@ a:hover {
   margin: 3rem auto;
   background-color: #eee;
 }
-@media (min-width: 34rem) { 
+@media (min-width: 34rem) {
     .archive-item {  margin-bottom: .5rem }
     .archive-date {
       float: right;
