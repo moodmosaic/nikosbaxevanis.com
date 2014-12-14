@@ -11,7 +11,7 @@ xml.feed "xmlns" => "http://www.w3.org/2005/Atom" do
   xml.link "href" => "http://nikosbaxevanis.com/feed/", "rel" => "self"
   xml.id "http://nikosbaxevanis.com/"
 
-  items.each do |item|
+  entries.each do |item|
     xml.entry do
       xml.title item.title
       xml.link "rel" => "alternate", "href" => item.url
