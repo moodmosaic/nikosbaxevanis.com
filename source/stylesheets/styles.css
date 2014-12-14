@@ -52,6 +52,11 @@ a:hover {
   text-align: center;
   margin: 5px 0 0;
 }
+    .dashboard a {
+      text-decoration: none;
+      border-bottom: none;
+      font-weight: 700;
+    }
     .dashboard p {
       font-size: 15px;
       margin: .6rem 0;
