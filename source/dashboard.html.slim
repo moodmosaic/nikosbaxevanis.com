@@ -1,16 +1,20 @@
 div.dashboard
-  <img alt="moodmosaic" height="173" src="http://nikosbaxevanis.com/images/home.jpg" width="173">
-  <h1>Nikos Baxevanis</h1>
-  <p>Writing and delivering fine open-source code.</p>
-  <p>Contributor to&nbsp;
-    <a target="_blank" href="https://github.com/AutoFixture/AutoFixture">AutoFixture</a>,&nbsp;
-    <a target="_blank" href="https://github.com/moodmosaic/Fare">Fare</a>,&nbsp;
-    <a target="_blank" href="https://github.com/GreanTech/Qaiain">Qaiain</a>,&nbsp;
-    <a target="_blank" href="https://github.com/ploeh/Albedo">Albedo</a>,&nbsp;
-    <a target="_blank" href="https://github.com/GreanTech/AtomEventStore">AtomEvenStore</a>,&nbsp;
-    <a target="_blank" href="https://github.com/GreanTech/Exude">Exude</a>,&nbsp;and others.
-  </p>
-
+  img alt="moodmosaic" height="173" src="http://nikosbaxevanis.com/images/home.jpg" width="173"
+  h1 Nikos Baxevanis
+  p
+  | (
+  a target="_blank" href="https://github.com/moodmosaic" @github
+  | , 
+  a target="_blank" href="https://twitter.com/nikosbaxevanis" @twitter
+  | )
+div.archive
+  h2 Recent Posts
+  - for thingie in entries.take(7) do
+    div.archive-item
+      span.archive-date #{thingie.date.strftime("%B %d, %Y")}
+      a.archive-title href=thingie.url #{thingie.title}
 div.footer
-  | Be notified of new posts. 
+  | The 
+  a href="/archive" archives
+  |  have older posts. 
   a href="/feed" Subscribe to the web feed.
