@@ -7,12 +7,14 @@ div.dashboard
   | , 
   a target="_blank" href="https://twitter.com/nikosbaxevanis" @twitter
   | )
-div.archive
+div
   h2 Recent Posts
-  - for thingie in entries.take(7) do
-    div.archive-item
-      span.archive-date #{thingie.date.strftime("%B %d, %Y")}
-      a.archive-title href=thingie.url #{thingie.title}
+  - for thingie in entries.take(5) do
+    ul
+      li
+        a href=thingie.url #{thingie.title}
+        div
+          i #{thingie.date.strftime("%B %d, %Y")}
 div.footer
   | The 
   a href="/archive" archives

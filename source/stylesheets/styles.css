@@ -7,7 +7,7 @@ body {
   max-width: 40rem;
   margin: auto;
   text-align: left;
-  padding-bottom: 1.8rem;
+  padding: 1rem;
   font-family: 'Roboto',sans-serif;
   font-size: 0.875em;
   color: #252525;
@@ -51,6 +51,13 @@ a:hover {
 .dashboard {
   text-align: center;
 }
+.dashboard:after {
+  display: block;
+  content: "";
+  height: 1px;
+  margin: 2.3rem auto 2rem auto;
+  background-color: #eee;
+}
     .dashboard a {
       text-decoration: none;
       border-bottom: none;
@@ -60,31 +67,6 @@ a:hover {
       font-size: 15px;
       margin: .6rem 0;
     }
-.archive-item {
-  margin-bottom: 1rem;
-  overflow: auto;
-}
-.archive-date {
-  margin-top: 0;
-  margin-bottom: 0;
-  display: block;
-  color: #ccc;
-}
-.archive:before {
-  display: block;
-  content: "";
-  width: 115px;
-  height: 1px;
-  margin: 3rem auto;
-  background-color: #eee;
-}
-@media (min-width: 34rem) {
-    .archive-item {  margin-bottom: .5rem }
-    .archive-date {
-      float: right;
-      margin-left: 1rem;
-    }
-}
 .footer {
   text-align: center;
   margin-bottom: 2rem;
