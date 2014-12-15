@@ -50,7 +50,6 @@ a:hover {
 .author { text-align: right; }
 .dashboard {
   text-align: center;
-  margin: 5px 0 0;
 }
     .dashboard a {
       text-decoration: none;
@@ -61,14 +60,6 @@ a:hover {
       font-size: 15px;
       margin: .6rem 0;
     }
-.dashboard:after {
-  display: block;
-  content: "";
-  width: 100px;
-  height: 1px;
-  margin: 3rem auto;
-  background-color: #eee;
-}
 .archive-item {
   margin-bottom: 1rem;
   overflow: auto;
@@ -79,10 +70,10 @@ a:hover {
   display: block;
   color: #ccc;
 }
-.archive:after {
+.archive:before {
   display: block;
   content: "";
-  width: 100px;
+  width: 115px;
   height: 1px;
   margin: 3rem auto;
   background-color: #eee;
@@ -103,16 +94,10 @@ a:hover {
       border-bottom: none;
       font-weight: 700;
     }
-.questions {  text-align: center }
-    .questions a {
-      text-decoration: none;
-      border-bottom: none;
-      font-weight: 700;
-    }
-.questions:before {
+.footer:before {
   display: block;
   content: "";
-  width: 100px;
+  width: 115px;
   height: 1px;
   margin: 3rem auto;
   background-color: #eee;
