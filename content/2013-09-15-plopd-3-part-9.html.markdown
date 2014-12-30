@@ -1,0 +1,46 @@
+---
+layout: post
+title: PLoPD 3 - Part 9
+---
+
+This post is part of the notes I kept while reading the [Pattern Languages of Program Design 3](http://www.amazon.com/Pattern-Languages-Program-Design-v/dp/0201310112) book.
+
+The notes I kept in this post come from the Process Patterns section of the book.
+
+## The Selfish Clash, by Brian Foote and Joseph Yoder
+
+### p. 453
+
+> "artifacts embody architecture"
+
+### p. 454
+
+> "code that is easy to read is easier to modify"
+
+**Works Out Of The Box**
+
+### p. 456
+
+> "if an artifact, such as class, framework, component, or application, can't be made to work at all, or requires elaborate preparation in order to work, the designer may become discourages, and look to other options"
+
+### p. 457
+
+> "users should not be left frustrated on Christmas Day because the batteries were *not* included"
+
+**Low Surface-To-Volume Ratio**
+
+### p. 459
+
+> "objects that allow a user to control a large volume of complex machinery with a small, simple interface are more likely to flourish than those that don't"
+
+### p. 460
+
+> "design objects with low surface-to-volume ratios, that is, objects with small external interfaces, or surface areas, that encapsulate a large 
+volume of internal complexity"
+
+> "a good abstraction becomes an element of the vocabulary of a domain-specific language"
+
+See also:
+
+* [http://www.laputan.org/selfish/selfish.html](http://www.laputan.org/selfish/selfish.html)
+* [http://joeyoder.com/PDFs/selfish.pdf](http://joeyoder.com/PDFs/selfish.pdf)

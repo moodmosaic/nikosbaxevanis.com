@@ -1,0 +1,34 @@
+---
+layout: post
+title: Adventures using Rhino ServiceBus
+---
+
+<p><img src="http://farm9.staticflickr.com/8513/8397467253_db8789c486_o.png" alt="" /></p>
+
+<p>Recently, with the team I work,&#0160;we tried&#0160;<a href="http://hibernatingrhinos.com/open-source/rhino-service-bus" target="_blank" title="A developer friendly service bus for .NET">Rhino ServiceBus</a>&#0160;on a project. The fact that it has it&#39;s own queuing subsystem&#0160;<a href="http://github.com/ayende/rhino-queues" target="_blank" title="An open source, Xcopy-deployed queuing subsystem.">Rhino Queues</a>&#0160;(which requires no installation or administration) and it is integrated with the IoC container (we had already chosen for that project), Castle Windsor, made it a good candidate for spending some weeks trying it.</p>
+<p>While we were doing some sort of&#0160;<a href="http://en.wikipedia.org/wiki/Stress_testing" target="_self" title="Stress testing is a form of testing that is used to determine the stability of a given system or entity.">stress testing</a>&#0160;(about 6000 requests), we noticed that&#0160;the memory was increasing (like it does in a memory leak situation).&#0160;</p>
+
+<p><img src="http://farm9.staticflickr.com/8515/8397467157_129af3b874_o.png" alt="" /></p>
+
+<p>Since the behavior was unexpected, we spent some time on ways to workaround it, incl. reading the source code, building with the latest and greatest.&#0160;<span style="text-decoration: line-through;">My colleague,</span> <a href="http://open-voip.blogspot.com/" target="_blank" title="open-voip.blogspot.com is the single destination Blog for VOIP, IP Telephony, IPPBX, Open Souce voip, voip news and voip info based on voice over ip ...">G. Nikolaropoulos</a>,&#0160;started also a <a href="http://groups.google.com/group/rhino-tools-dev/browse_thread/thread/df8ce259df2cdd04" target="_blank" title="Memory Consumption of rhino-esb">thread</a>&#0160;on the Rhino Tools Dev discussion group. We got feedback very fast:&#0160;<em>the memory is held inside Rhino Queues, to avoid replying with the same message more than once&#0160;in case of network loss. Every 3 minutes, Rhino Queues cleans the list up and memory is freed.</em></p>
+<p>We built a very basic sample application but we also tested the&#0160;<a href="http://github.com/ayende/alexandria" target="_blank" title="Sample netflix like application for books.">article code</a>&#0160;that was&#0160;<a href="http://msdn.microsoft.com/en-us/magazine/ff796225.aspx" target="_blank" title="Building Distributed Apps with NHibernate and Rhino Service Bus by Oren Eini.">published</a>&#0160;on MSDN (there is also a&#0160;<a href="http://msdn.microsoft.com/en-us/magazine/ff872394.aspx" target="_blank" title="Building Distributed Apps with NHibernate and Rhino Service Bus, Part 2 by Oren Eini">second part</a>). The behavior was the same even after 3 minutes wait (not to say worse).</p>
+
+<p><img src="http://farm9.staticflickr.com/8330/8398555766_539fc0df48_o.png" alt="" /></p>
+
+<p>We thought it should be fair to investigate even further and ask in person via E-mail. We got a reply fast, instructing that we should set the <a href="http://en.wikipedia.org/wiki/Extensible_Storage_Engine" target="_blank" title="Extensible Storage Engine (ESE), also known as JET Blue, is an Indexed Sequential Access Method (ISAM) data storage technology from Microsoft.">Extensible Storage Engine</a> (ESE) CacheSizeMax parameter to 1024. Rhino Queues use ESE internally for message storage.</p>
+<blockquote>
+<p>In the sample application which can be found on <a href="https://github.com/moodmosaic/BonusBits.CodeSamples" target="_blank" title="BonusBits Blog source-code.">here</a>,&#0160;I set the CacheSizeMax&#0160;to 512.</p>
+</blockquote>
+<p>But what exactly is the CacheSizeMax parameter?</p>
+
+<p>Well, Rhino Queues uses &#0160;the <a href="http://managedesent.codeplex.com/" target="_blank" title="ManagedEsent provides managed access to ESENT, the embeddable database engine native to Windows. ManagedEsent uses the esent.dll that is part of Microsoft Windows so there are no extra unmanaged binaries to download and install.">ManagedEsent</a> library which provides managed access to ESE. I opened the library with Reflector and searched for the CacheSizeMax which is declared &#0160;inside the JET_param enum.</p>
+
+<p><img src="http://farm9.staticflickr.com/8491/8398555724_309f969cb5_o.png" alt="" /></p>
+
+<p><span style="text-decoration: underline;">Microsoft.Isam.Esent.Interop.JET_param, CacheSizeMax</span>&#0160;<em>This parameter configures the maximum size of the database page cache. The size is in database pages. If this parameter is left to its default value, then the maximum size of the cache will be set to the size of physical memory when JetInit is called.&#0160;</em></p>
+
+<p><img src="http://farm9.staticflickr.com/8500/8398555748_e1575041cd_o.png" alt="" /></p>
+
+<p>Setting the Microsoft.Isam.Esent.Interop.SystemParameters.CacheSizeMax to 1024 or 512 seems to solve the problem with the increasing memory usage.&#0160;The question is, if this call sets a global variable then it may have a negative impact to the rest applications using the ESE (ex. Microsoft Exchange).</p>
+<p>I decided to contact <a href="http://blogs.msdn.com/b/laurionb/" target="_blank" title="ESE/ESENT Database Stuff">Laurion Burchall</a>, a Software Engineer on the ESE/ESENTteam, with my question.&#0160;The answer: <em>The setting is per-process so it won’t cause problems with other applications that use ESENT.&#0160;By default ESENT will automatically manage the cache size so you shouldn’t need to worry. We look at the amount of free memory on the system, the amount of paging activity and the amount of database I/O when deciding on the cache size. Although the cache is growing you should find that the system isn’t paging and that if you start using memory in other applications ESENT will actually shrink its cache.</em></p>
+<p>It is very easy to use and deploy with Rhino ServiceBus.&#0160;If you are planning to use it, I hope you find this&#0160;information&#0160;useful.</p>

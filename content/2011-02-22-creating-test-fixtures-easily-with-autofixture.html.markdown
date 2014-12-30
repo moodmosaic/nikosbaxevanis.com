@@ -1,0 +1,22 @@
+---
+layout: post
+title: Creating Test Fixtures easily with AutoFixture
+---
+
+<p>When doing TDD there are many times that we use an <a href="http://martinfowler.com/bliki/ObjectMother.html" target="_blank" title="An object mother is a kind of class used in testing to help create example objects that you use for testing.">ObjectMother</a>&#0160;class for test fixtures.&#0160;In large domains, writing such classes can become tedious work. If we want random data things get even more complicated.</p>
+<p><a href="http://autofixture.codeplex.com/" target="_blank" title="AutoFixture makes it easier for developers to do Test-Driven Development by automating non-relevant Test Fixture Setup, allowing the Test Developer to focus on the essentials of each test case.">AutoFixture</a> is a library written by&#0160;<a href="http://blog.ploeh.dk/default.aspx" target="_blank" title="Mark Seemann&#39;s .NET blog">Mark Seemann</a> and can&#0160;automate test fixture creation thereby saving time and making tests cleaner, faster, flexible and customizable.</p>
+<p>Here is an example:</p>
+
+<p><img src="http://farm9.staticflickr.com/8052/8397466545_578ec5d2b7_o.png" alt="Unit Testing a class which contains an interface" style="display: block;" /></p>
+
+<p>Here I setup Moq to return a sequence of&#0160;<span style="color: #2b91af; font-family: monospace; font-size: 13px;">EventItem&#0160;</span>objects when I call the FindAll method. In the Setup method I pass a delegate where I use AutoFixture to create the sequence.&#0160;What I&#0160;<span style="text-decoration: underline;">really like</span>&#0160;here is that even though the&#0160;<span style="color: #2b91af; font-family: monospace; font-size: 13px;">EventItem</span>&#0160;contains interfaces AutoFixture can successfully create the sequence.</p>
+<p>This is made possible by calling the Customize method and passing an instance of the&#0160;<span style="color: #2b91af; font-family: monospace; font-size: 13px;">AutoMoqCustomization&#0160;</span>type. This way we instruct AutoFixture to become an <a href="http://blog.ploeh.dk/2010/08/19/AutoFixtureAsAnAutomockingContainer.aspx" target="_blank" title="AutoFixture as an auto-mocking container.">auto-mocking container</a>&#0160;and mock the interface types.</p>
+
+<p><img src="http://farm9.staticflickr.com/8087/8397466531_9ab4150533_o.png" alt="One of the class properties which is an interface" /></p>
+
+<p>AutoFixture includes an assembly called Ploeh.AutoFixture.AutoMoq that uses Moq (which in turn Moq uses Castle DynamicProxy to&#0160;generate proxies on the fly at runtime).</p>
+<blockquote>
+<p>There is also&#0160;Ploeh.AutoFixture.Xunit assembly for xUnit.net <a href="http://blog.ploeh.dk/2010/10/08/AutoDataTheoriesWithAutoFixture.aspx" target="_blank" title="AutoData Theories with AutoFixture">data theories</a>.</p>
+</blockquote>
+<p>All this stuff is amazing, and I would like to mention that the source code is perfectly written, contains a lot of patterns and best practises (like the&#0160;<a href="http://www.natpryce.com/articles/000714.html" target="_blank" title="Test Data Builders: an alternative to the Object Mother pattern">Test Data Builder</a> pattern). I am very happy with it.</p>
+

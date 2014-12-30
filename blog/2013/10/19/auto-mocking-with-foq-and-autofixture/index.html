@@ -1,59 +1,8 @@
-<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width, initial-scale=1.0" name="viewport" /><meta content="Programmer using Test-Driven Development, F#, C#, and Haskell. Contributor to open-source code." name="description" /><meta content="F# C# haskell fsharp csharp tdd autofixture" name="keywords" /><title>Auto-Mocking with Foq and AutoFixture</title><link href="http://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet" type="text/css" /><link href="/stylesheets/styles.css?1418682978" media="screen" rel="stylesheet" type="text/css" />
-<link href="/stylesheets/syntax.css?1418682978" media="screen" rel="stylesheet" type="text/css" /></head><body><div><div><a href="/">←</a></div><div><h1>Auto-Mocking with Foq and AutoFixture</h1><div>October 19, 2013 |  <a href="/category/autofixture/">AutoFixture</a> |  <a href="/category/fsharp/">FSharp</a></div></div><div><p>A new Auto-mocking extension have been recently added to <a href="http://github.com/autofixture/autofixture">AutoFixture</a> allowing the mock instances to be created by <a href="http://foq.codeplex.com/">Foq</a>. </p>
-
-<p>This brings the total number of Auto-mocking extensions for AutoFixture up to five:</p>
-
-<ul>
-<li><a href="http://nuget.org/packages/AutoFixture.AutoMoq">AutoFixture.AutoMoq</a></li>
-<li><a href="http://nuget.org/packages/AutoFixture.AutoRhinoMocks">AutoFixture.AutoRhinoMocks</a></li>
-<li><a href="http://nuget.org/packages/AutoFixture.AutoFakeItEasy">AutoFixture.AutoFakeItEasy</a></li>
-<li><a href="http://nuget.org/packages/AutoFixture.AutoNSubstitute">AutoFixture.AutoNSubstitute</a></li>
-<li><a href="http://nuget.org/packages/AutoFixture.AutoFoq">AutoFixture.AutoFoq</a></li>
-</ul>
-
-<p><strong>Install</strong></p>
-
-<p>To install AutoFixture with Auto Mocking using Foq, run the following command in the Package Manager Console:</p>
-<pre class="highlight text">PM&gt; Install-Package AutoFixture.AutoFoq
-</pre>
-<p>To use it, add an <code>AutoFoqCustomization</code> to the <code>Fixture</code> instance:</p>
-<pre class="highlight text">let fixture = Fixture().Customize(AutoFoqCustomization())
-</pre>
-<p><strong>Typical usage</strong></p>
-
-<p>In the test below the mocked instance is created automatically by Foq:</p>
-<pre class="highlight text">[&lt;Fact&gt;]
-let AutoMockInterfaceAndSetupExpectations() =
-    // Fixture setup
-    let fixture = Fixture().Customize(AutoFoqCustomization())
-    let dummy = obj()
-    // Exercise system
-    let sut = fixture.Create&lt;IInterface&gt;()
-    sut.MakeIt(dummy) |&gt; ignore
-    // Verify outcome
-    Mock.Verify(&lt;@ sut.MakeIt(dummy) @&gt;, Times.Once)
-    // Teardown
-</pre>
-<p><strong>Declarative usage</strong></p>
-
-<p>The above test can be written declaratively using <a href="http://blog.ploeh.dk/2010/10/08/AutoDataTheoriesWithAutoFixture.aspx">AutoData</a> theories:</p>
-<pre class="highlight text">[&lt;Theory&gt;][&lt;AutoFoqData&gt;]
-let AutoMockInterfaceAndSetupExpectationsDeclaratively 
-  (sut: IInterface, dummy: obj) =
-    sut.MakeIt(dummy) |&gt; ignore
-    Mock.Verify(&lt;@ sut.MakeIt(dummy) @&gt;, Times.Once)
-</pre>
-<p>The <code>[AutoFoqData]</code> attribute is defined as:</p>
-<pre class="highlight text">type AutoFoqDataAttribute() = 
-    inherit AutoDataAttribute(
-        Fixture().Customize(AutoFoqCustomization()))
-</pre>
-<p>An automatically published release created from the latest successful build can be also downloaded from <a href="http://autofixture.codeplex.com/releases/">here</a>.</p>
-</div><div class="footer">Have a question about this post? Ask away on   <a href="http://twitter.com/nikosbaxevanis" target="_blank">Twitter</a> or in <a href="https://github.com/moodmosaic/feedback" target="_blank">my feedback repo</a>.</div></div><script type="text/javascript">var _gaq = _gaq || [];
-_gaq.push(['_setAccount', 'UA-24262928-1']);
-_gaq.push(['_trackPageview']);
-(function() {
-  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-})();</script></body></html>
+<!DOCTYPE html>
+<html>
+  <head>
+  <link rel='canonical' href='http://blog.nikosbaxevanis.com/2013/10/19/auto-mocking-with-foq-and-autofixture/'/>
+  <meta http-equiv='content-type' content='text/html; charset=utf-8' />
+  <meta http-equiv='refresh' content='0;url=http://blog.nikosbaxevanis.com/2013/10/19/auto-mocking-with-foq-and-autofixture/' />
+  </head>
+</html>

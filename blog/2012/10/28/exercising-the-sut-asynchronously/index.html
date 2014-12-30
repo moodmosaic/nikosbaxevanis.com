@@ -1,40 +1,8 @@
-<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width, initial-scale=1.0" name="viewport" /><meta content="Programmer using Test-Driven Development, F#, C#, and Haskell. Contributor to open-source code." name="description" /><meta content="F# C# haskell fsharp csharp tdd autofixture" name="keywords" /><title>Exercising the SUT asynchronously</title><link href="http://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet" type="text/css" /><link href="/stylesheets/styles.css?1418682978" media="screen" rel="stylesheet" type="text/css" />
-<link href="/stylesheets/syntax.css?1418682978" media="screen" rel="stylesheet" type="text/css" /></head><body><div><div><a href="/">←</a></div><div><h1>Exercising the SUT asynchronously</h1><div>October 28, 2012 |  <a href="/category/unit-testing/">Unit Testing</a></div></div><div><p>In unit testing, there are times were the <a href="http://xunitpatterns.com/SUT.html">SUT</a> has to be exercised <strong>asynchronously</strong>.</p>
-
-<p>How can we wait for the exercise to complete execution?</p>
-
-<ul>
-<li>An instance of the SUT can be created on the main thread.</li>
-<li>The main <em>(waiting)</em> thread <strong>spins in user mode</strong> while starting the exercise of the SUT asynchronously.</li>
-<li>Once the result has been received, the execution continues on the main thread.</li>
-<li>The assertion takes place.</li>
-</ul>
-
-<p>The <a href="http://msdn.microsoft.com/en-us/library/system.threading.spinwait.aspx">SpinWait</a> synchronization type contains a method named <a href="http://msdn.microsoft.com/en-us/library/system.threading.spinwait.spinuntil.aspx">SpinUntil</a> which works perfect for the described scenario.</p>
-<pre class="highlight text">// Fixture setup
-var sut = new ObjectLocalStorage();
-sut.Set(@object, expected);
-object result = null;
-
-// Exercise system
-new Task(() =&gt; result = sut.Get(@object)).Start();
-SpinWait.SpinUntil(() =&gt; result != null);
-
-// Verify outcome
-Assert.Equal(expected, result);
-// Teardown
-</pre>
-<ul>
-<li>Once the <code>Task</code> has been created it is immediately scheduled for execution by calling the <code>Start</code> method.</li>
-<li>As long as the unit test runs fast, the waiting thread spins in user mode, which is a <a href="http://msdn.microsoft.com/en-us/library/ee722114.aspx">good thing</a>.</li>
-</ul>
-
-<p>There is also a <a href="http://msdn.microsoft.com/en-us/library/dd449238.aspx">SpinUntil overload</a> accepting a TimeSpan timeout.</p>
-</div><div class="footer">Have a question about this post? Ask away on   <a href="http://twitter.com/nikosbaxevanis" target="_blank">Twitter</a> or in <a href="https://github.com/moodmosaic/feedback" target="_blank">my feedback repo</a>.</div></div><script type="text/javascript">var _gaq = _gaq || [];
-_gaq.push(['_setAccount', 'UA-24262928-1']);
-_gaq.push(['_trackPageview']);
-(function() {
-  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-})();</script></body></html>
+<!DOCTYPE html>
+<html>
+  <head>
+  <link rel='canonical' href='http://blog.nikosbaxevanis.com/2012/10/28/exercising-the-sut-asynchronously/'/>
+  <meta http-equiv='content-type' content='text/html; charset=utf-8' />
+  <meta http-equiv='refresh' content='0;url=http://blog.nikosbaxevanis.com/2012/10/28/exercising-the-sut-asynchronously/' />
+  </head>
+</html>

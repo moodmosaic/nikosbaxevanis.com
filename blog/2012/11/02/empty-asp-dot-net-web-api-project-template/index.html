@@ -1,72 +1,8 @@
-<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width, initial-scale=1.0" name="viewport" /><meta content="Programmer using Test-Driven Development, F#, C#, and Haskell. Contributor to open-source code." name="description" /><meta content="F# C# haskell fsharp csharp tdd autofixture" name="keywords" /><title>Empty ASP.NET Web API Project Template</title><link href="http://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet" type="text/css" /><link href="/stylesheets/styles.css?1418682978" media="screen" rel="stylesheet" type="text/css" />
-<link href="/stylesheets/syntax.css?1418682978" media="screen" rel="stylesheet" type="text/css" /></head><body><div><div><a href="/">←</a></div><div><h1>Empty ASP.NET Web API Project Template</h1><div>November 02, 2012 |  <a href="/category/web-api/">Web API</a></div></div><div><p>Usually, every time you create a new Web API project you:</p>
-
-<ol>
-<li>Delete almost all the generated code.</li>
-<li>Uninstall NuGet packages that you don&#39;t need (yet, or at all).</li>
-<li>Remove unused assembly references.</li>
-<li>Manually edit the <code>Web.config</code> file(s) to remove the elements that point to the assemblies which have been removed.</li>
-</ol>
-
-<h2>Solution</h2>
-
-<p>Use the <a href="https://github.com/moodmosaic/EmptyWebApiProjectTemplate">Empty ASP.NET Web API Project Template</a>. The Visual Studio extension can be downloaded from <a href="http://visualstudiogallery.msdn.microsoft.com/a989a149-4bc3-4292-ac8a-5101ee1722d7">here</a>.</p>
-
-<p>It will add a new project template <code>Empty Web API</code> which includes the following:</p>
-
-<p><strong>Files</strong></p>
-
-<ul>
-<li>Properties\AssemblyInfo.cs</li>
-<li>favicon.ico</li>
-<li>Global.asax</li>
-<li>Web.config</li>
-</ul>
-
-<p><strong>Assemblies</strong></p>
-
-<ul>
-<li>System</li>
-<li>System.Core</li>
-<li>System.Configuration</li>
-<li>System.Net.Http</li>
-<li>System.Web</li>
-<li>System.Web.Abstractions</li>
-<li>System.Web.ApplicationServices</li>
-<li><del>System.Web.Mvc</del></li>
-<li>System.Web.Routing</li>
-<li>System.Xml</li>
-</ul>
-
-<p><strong>NuGet packages</strong></p>
-
-<ul>
-<li>Microsoft.AspNet.WebApi.Client</li>
-<li>Microsoft.AspNet.WebApi.Core</li>
-<li>Microsoft.AspNet.WebApi.WebHost</li>
-<li><del>Microsoft.AspNet.Providers.Core</del></li>
-<li>Microsoft.Net.Http</li>
-<li><del>Newtonsoft.Json</del></li>
-</ul>
-
-<h2>Remarks</h2>
-
-<p>A <code>favicon.ico</code> file is included because the browser requests it so <a href="http://developer.yahoo.com/performance/rules.html#favicon">it&#39;s better not to respond with a 404 Not Found</a>.</p>
-
-<p><strong>Update (2013/10/06)</strong>:</p>
-
-<p>You may install <a href="http://www.nuget.org/packages/newtonsoft.json/">Newtonsoft.Json</a> through NuGet:</p>
-
-<blockquote>
-<p>PM&gt; Install-Package Newtonsoft.Json</p>
-</blockquote>
-
-<p>Depending on the configuration, the Newtonsoft.Json package <del>is included because it is</del> can be lazy loaded inside the <code>System.Net.Http.Formatting.JsonMediaTypeFormatter</code> type.</p>
-</div><div class="footer">Have a question about this post? Ask away on   <a href="http://twitter.com/nikosbaxevanis" target="_blank">Twitter</a> or in <a href="https://github.com/moodmosaic/feedback" target="_blank">my feedback repo</a>.</div></div><script type="text/javascript">var _gaq = _gaq || [];
-_gaq.push(['_setAccount', 'UA-24262928-1']);
-_gaq.push(['_trackPageview']);
-(function() {
-  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-})();</script></body></html>
+<!DOCTYPE html>
+<html>
+  <head>
+  <link rel='canonical' href='http://blog.nikosbaxevanis.com/2012/11/02/empty-asp-net-web-api-project-template/'/>
+  <meta http-equiv='content-type' content='text/html; charset=utf-8' />
+  <meta http-equiv='refresh' content='0;url=http://blog.nikosbaxevanis.com/2012/11/02/empty-asp-net-web-api-project-template/' />
+  </head>
+</html>

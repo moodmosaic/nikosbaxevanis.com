@@ -1,37 +1,8 @@
-<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width, initial-scale=1.0" name="viewport" /><meta content="Programmer using Test-Driven Development, F#, C#, and Haskell. Contributor to open-source code." name="description" /><meta content="F# C# haskell fsharp csharp tdd autofixture" name="keywords" /><title>Heuristics for Static Factory Methods in AutoFixture</title><link href="http://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet" type="text/css" /><link href="/stylesheets/styles.css?1418682978" media="screen" rel="stylesheet" type="text/css" />
-<link href="/stylesheets/syntax.css?1418682978" media="screen" rel="stylesheet" type="text/css" /></head><body><div><div><a href="/">←</a></div><div><h1>Heuristics for Static Factory Methods in AutoFixture</h1><div>August 25, 2011 |  <a href="/category/autofixture/">AutoFixture</a></div></div><div><p>Here is a type with a private constructor:</p>
-<pre class="highlight text">public class TypeWithFactoryMethod
-{
-    private TypeWithFactoryMethod() 
-    {
-    }
-
-    public static TypeWithFactoryMethod Create()
-    {
-        return new TypeWithFactoryMethod();
-    }
-
-    public static TypeWithFactoryMethod Create(object argument)
-    {
-        return new TypeWithFactoryMethod();
-    }
-}
-</pre>
-<p>In order to create an instance of that type we have to call one of it&#39;s static factory methods, for example:</p>
-<pre class="highlight text">var instance = TypeWithFactoryMethod.Create();
-</pre>
-<p>If we try to create an <a href="http://blogs.msdn.com/b/ploeh/archive/2008/11/17/anonymous-variables.aspx" target="_blank" title="Anonymous Variables">Anonymous Variable</a> with <a href="http://autofixture.codeplex.com" target="_blank" title="AutoFixture makes it easier for developers to do Test-Driven Development by automating non-relevant Test Fixture Setup, allowing the Test Developer to focus on the essentials of each test case.">AutoFixture</a> right now (version 2.1) it will throw an exception since there are no public constructors:</p>
-<pre class="highlight text">var fixture = new Fixture();
-var result = fixture.CreateAnonymous&lt;TypeWithFactoryMethod&gt;();
-</pre>
-<p>Using the latest version from&#0160;<a href="http://autofixture.codeplex.com/SourceControl/list/changesets" target="_blank" title="AutoFixture (changesets)">trunk</a>&#0160;(and on the next public release) the above code will work.&#0160;It will successfully return an instance of the type by using&#0160;a set of heuristics that enable AutoFixture to search for static factory methods.</p>
-
-<p>The latest build (including strong names) can be downloaded from <a href="http://teamcity.codebetter.com/project.html?projectId=project129&amp;tab=projectOverview. " target="_blank">here</a>.</p>
-</div><div class="footer">Have a question about this post? Ask away on   <a href="http://twitter.com/nikosbaxevanis" target="_blank">Twitter</a> or in <a href="https://github.com/moodmosaic/feedback" target="_blank">my feedback repo</a>.</div></div><script type="text/javascript">var _gaq = _gaq || [];
-_gaq.push(['_setAccount', 'UA-24262928-1']);
-_gaq.push(['_trackPageview']);
-(function() {
-  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-})();</script></body></html>
+<!DOCTYPE html>
+<html>
+  <head>
+  <link rel='canonical' href='http://blog.nikosbaxevanis.com/autofixture/2011/08/25/heuristics-for-static-factory-methods-in-autofixture/'/>
+  <meta http-equiv='content-type' content='text/html; charset=utf-8' />
+  <meta http-equiv='refresh' content='0;url=http://blog.nikosbaxevanis.com/autofixture/2011/08/25/heuristics-for-static-factory-methods-in-autofixture/' />
+  </head>
+</html>

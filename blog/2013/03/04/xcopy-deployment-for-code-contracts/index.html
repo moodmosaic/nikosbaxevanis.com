@@ -1,28 +1,8 @@
-<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width, initial-scale=1.0" name="viewport" /><meta content="Programmer using Test-Driven Development, F#, C#, and Haskell. Contributor to open-source code." name="description" /><meta content="F# C# haskell fsharp csharp tdd autofixture" name="keywords" /><title>XCOPY deployment for Code Contracts</title><link href="http://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet" type="text/css" /><link href="/stylesheets/styles.css?1418682978" media="screen" rel="stylesheet" type="text/css" />
-<link href="/stylesheets/syntax.css?1418682978" media="screen" rel="stylesheet" type="text/css" /></head><body><div><div><a href="/">←</a></div><div><h1>XCOPY deployment for Code Contracts</h1><div>March 04, 2013 |  <a href="/category/visual-studio/">Visual Studio</a></div></div><div><p>If you don&#39;t wish to install <a href="http://research.microsoft.com/en-us/projects/contracts/">Code Contracts</a> through the Windows Installer:</p>
-
-<ul>
-<li>Go to <code>\Program Files (x86)\MSBuild\(version)\Microsoft.Common.Targets\ImportAfter</code> folder.</li>
-<li>Create a new file with name <code>CodeContractsAfter.targets</code> and paste the following XML:</li>
-</ul>
-<pre class="highlight xml"><span class="nt">&lt;Project</span> <span class="na">xmlns=</span><span class="s">&quot;http://schemas.microsoft.com/developer/msbuild/2003&quot;</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;PropertyGroup&gt;</span>
-    <span class="nt">&lt;CodeContractsInstallDir</span> <span class="na">Condition=</span><span class="s">&quot;'$(CodeContractsInstallDir)'==''&quot;</span><span class="nt">&gt;</span>CONTRACTS_PATH<span class="nt">&lt;/CodeContractsInstallDir&gt;</span>
-  <span class="nt">&lt;/PropertyGroup&gt;</span>
-  <span class="nt">&lt;Import</span> <span class="na">Condition=</span><span class="s">&quot;'$(CodeContractsImported)' != 'true' AND '$(DontImportCodeContracts)' != 'true'&quot;</span> 
-          <span class="na">Project=</span><span class="s">&quot;$(CodeContractsInstallDir)MsBuild\v4.0\Microsoft.CodeContracts.targets&quot;</span> <span class="nt">/&gt;</span>
-<span class="nt">&lt;/Project&gt;</span>
-</pre>
-<ul>
-<li>Extract the contents from the Code Contracts Windows Installer using the <a href="https://code.google.com/p/lessmsi/">lessmsi</a> tool.</li>
-<li>Locate the <code>Contracts</code> folder in the extracted contents.</li>
-<li>Replace the <code>CONTRACTS_PATH</code> in <code>CodeContractsAfter.targets</code> with the actual <code>Contracts</code> folder location.</li>
-</ul>
-</div><div class="footer">Have a question about this post? Ask away on   <a href="http://twitter.com/nikosbaxevanis" target="_blank">Twitter</a> or in <a href="https://github.com/moodmosaic/feedback" target="_blank">my feedback repo</a>.</div></div><script type="text/javascript">var _gaq = _gaq || [];
-_gaq.push(['_setAccount', 'UA-24262928-1']);
-_gaq.push(['_trackPageview']);
-(function() {
-  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-})();</script></body></html>
+<!DOCTYPE html>
+<html>
+  <head>
+  <link rel='canonical' href='http://blog.nikosbaxevanis.com/2013/03/04/xcopy-deployment-for-code-contracts/'/>
+  <meta http-equiv='content-type' content='text/html; charset=utf-8' />
+  <meta http-equiv='refresh' content='0;url=http://blog.nikosbaxevanis.com/2013/03/04/xcopy-deployment-for-code-contracts/' />
+  </head>
+</html>

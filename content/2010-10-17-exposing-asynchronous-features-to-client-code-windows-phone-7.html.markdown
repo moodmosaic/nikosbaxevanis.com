@@ -1,0 +1,136 @@
+---
+layout: post
+title: Exposing asynchronous features to client code for Windows Phone 7
+---
+
+<p>Today, line of Internet and multimedia-enabled smartphones have become popular. Fortunately if you are a .NET developer&#0160;you can use your existing skills and language and target some of the most popular <a href="http://en.wikipedia.org/wiki/Mobile_operating_system" target="_blank" title="A mobile operating system, also known as a mobile OS, a mobile platform, or a handheld operating system, is the operating system that controls a mobile device.">mobile operating systems</a>.</p>
+<p>Windows Phone 7 is a mobile operating system developed by Microsoft, and is the successor to their Windows Mobile platform.&#0160;</p>
+<p>You can expose asynchronous features to client code using one of the following .NET Framework&#39;s&#0160;Asynchronous&#0160;Programming Models:</p>
+<ul>
+<li>IAsyncResult <em>The CLR’s Asynchronous Programming Model (APM)</em></li>
+<li>Event-based Asynchronous Pattern <em>(EAP)</em></li>
+</ul>
+<p>IAsyncResult has been around since .NET 1.0 and has been used in most&#0160;<a href="http://en.wikipedia.org/wiki/Base_Class_Library" target="_blank" title="The Base Class Library (BCL) is a standard library available to all languages using the .NET Framework.">BCL</a> classes, while the main benefit of the EAP is that it integrates with the Visual Studio UI designers.&#0160;You can learn how to properly implement the IAsyncResult interface (APM) from the excellent article on MSDN, <em><a href="http://msdn.microsoft.com/en-us/magazine/cc163467.aspx" target="_self" title="Implementing the CLR Asynchronous Programming Model">Implementing the CLR Asynchronous Programming Model</a></em>, by Jeffrey Richter.</p>
+<p>In this post I will show you how easy it to use types implementing the IAsyncResult interface on Windows Phone 7. I will use the PowerThreading library because it provides a similar (not to say an improved) implementation of the one described in the original MSDN article. I will explain how to use it and how this becomes easier using the AsyncEnumerator class.</p>
+<blockquote>
+<p>AsyncEnumerator class resides in the PowerThreading library. It is written by Jeffrey Richter and can be obtained from the <a href="http://www.wintellect.com/" target="_blank" title="Wintellect is a nationally recognized consulting, training and debugging firm dedicated to helping companies build better software, faster through a concentration on .NET and Windows technologies.">Wintellect</a> website.</p>
+<p>The sample Windows Phone 7 application can be found <a href="https://github.com/moodmosaic/BonusBits.CodeSamples" target="_blank" title="BonusBits Blog source-code.">here</a>.</p>
+</blockquote>
+
+<p><img src="http://farm9.staticflickr.com/8497/8397466171_850dc3a0c9_o.png" alt="" /></p>
+
+**Sync I/O&#0160;pauses the UI**
+
+<p><img src="http://farm9.staticflickr.com/8217/8398554750_01c3311321_o.png" alt="" /></p>
+
+<p>The code below shows how&#0160;ExecuteWithSyncIO method is implemented. The application shows a MessageBox to the user that the UI will pause while the execution is in progress.</p>
+
+```
+private void ExecuteWithSyncIO()
+{
+    for (int n = 0; n < iterations; n++)
+    {
+        this.webService.GetStockQuotes();
+    }
+    SetStatus("Sync/IO completed.", StatusState.Ready);
+}
+```
+
+**Delegate&#39;s BeginInvoke method is not supported**
+
+<p><img src="http://farm9.staticflickr.com/8507/8397466099_216efe6f78_o.png" alt="" /></p>
+
+```
+private void ExecuteWithDelegateBeginInvoke()
+{
+    Func<IStockQuote> stockQuoteDelegate = this.webService.GetStockQuotes;
+    // NOTE: Calling delegates asynchronously is NOT supported in WP7.
+    stockQuoteDelegate.BeginInvoke((ar) =>
+    {
+        stockQuoteDelegate.EndInvoke(ar);        
+    }, null);
+}
+```
+
+<p>The code below shows how ExecuteWithDelegateBeginInvoke method is implemented. </p>
+<p>This method is here just for the demo, since it is not allowed to invoke a delegate asynchronously in the Compact Framework.</p>
+
+```
+private void ExecuteWithDelegateBeginInvoke()
+{
+    Func<IStockQuote> stockQuoteDelegate = this.webService.GetStockQuotes;
+    // NOTE: Calling delegates asynchronously is NOT supported in WP7.
+    stockQuoteDelegate.BeginInvoke((ar) =>
+    {
+        stockQuoteDelegate.EndInvoke(ar);        
+    }, null);
+}
+```
+
+<p><img src="http://farm9.staticflickr.com/8085/8398554712_4190f00280_o.png" alt="" /></p>
+
+**IAsyncResult interface**
+
+<p>The code below shows how the ExecuteWithIAsyncResult method is implemented. The only problem is that, when using the IAsyncResult, you need to specify a method to be called when a corresponding asynchronous operation completes. This can result in using synchronization constructs to avoid race conditions. It also splits the flow of your code. You can inline the callback method using <a href="http://msdn.microsoft.com/en-us/library/0yw3tz5k(VS.80).aspx" target="_blank" title="In versions of C# previous to 2.0, the only way to declare a delegate was to use named methods. C# 2.0 introduces anonymous methods.">Anonymous Methods</a> or&#0160;<a href="http://msdn.microsoft.com/en-us/library/bb397687.aspx" target="_blank" title="In the C# programming language a lambda expression is an anonymous function that can contain expressions and statements.">Lamda Expressions</a> as shown below but if your logic is complicated your code will not be beautiful.</p>
+
+```
+private void ExecuteWithIAsyncResult()
+{
+    SetStatus("Working..", StatusState.Busy);
+ 
+    for (int n = 0; n < iterations; n++)
+    {
+        this.webService.BeginGetStockQuotes((ar) =>
+        {
+            // Callback method inlined using Lamda Expressions.
+
+            // NOTE: Code can become ugly here, specially if you need to do 
+            // a lot of stuff that touch properties bounded with UI elements.
+            if (Interlocked.Increment(ref this.numDone) == iterations)
+            {
+                Execute.OnUIThread(() =>
+                {
+                    SetStatus("IAsyncResult APM completed.",
+                        StatusState.Ready);
+                });
+            }
+        }, null);
+    }
+}
+```
+
+**AsyncEnumerator class**
+
+<p>The code below shows how&#0160;ExecuteWithAsyncEnumerator method is implemented. As you can see this method makes your code looks like it&#39;s executing synchronously but actually it executes asynchronously. You do not have to split your code in callback methods or inlined delegates. You do not need to marshall calls in the UI thread using the Dispacher or the SynchronizationContext. All this stuff is handled by the AsyncEnumerator class.</p>
+
+```
+private IEnumerator<int> ExecuteWithAsyncEnumerator(AsyncEnumerator ae)
+{
+    for (int n = 0; n < iterations; n++)
+    {
+        this.webService.BeginGetStockQuotes(ae.End(), null);
+    }
+ 
+    // AsyncEnumerator captures the calling thread's SynchronizationContext.
+    // Set the Wintellect.Threading.AsyncProgModel.SynchronizationContext to
+    // null so that the callback continues on a ThreadPool thread.
+    ae.SyncContext = null;
+    yield return iterations;
+
+    for (int n = 0; n < iterations; n++)
+    {
+        this.webService.EndGetStockQuotes(ae.DequeueAsyncResult());
+    }
+ 
+    // AsyncEnumerator captures the synchronization context.
+    SetStatus("AsyncEnumerator completed.", StatusState.Ready);
+}
+```
+
+<p><img src="http://farm9.staticflickr.com/8092/8397466137_b21abe090c_o.png" alt="" /></p>
+
+<p>While what I&#39;ve discussed in this post applies to&#0160;<a href="http://en.wikipedia.org/wiki/Mobile_application_development" target="_blank" title="Mobile application development is the process by which applications are developed for small low-power handheld devices such as personal digital assistants, enterprise digital assistants or mobile phones.">Mobile application development</a>, the same principles can be applied to&#0160;<a href="http://en.wikipedia.org/wiki/Rich_Internet_application" target="_blank" title="A Rich Internet Application (RIA) is a web application that has many of the characteristics of desktop applications, typically delivered either by way of a site-specific browser, via a browser plug-in, independent sandboxes, or virtual machines.">Rich Internet applications</a> and <a href="http://en.wikipedia.org/wiki/Smart_client" target="_blank" title="A &quot;Smart Client&quot; application can be created in several very different technologies.">Smart client</a>. I have been using the AsyncEnumerator class for over two years and I have to say that it changed the way I think about using the APM. At the <em>end</em>.. delivering responsive applications makes the <em>end</em>-users happy.</p>
+
+
+
+

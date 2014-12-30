@@ -1,81 +1,8 @@
-<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width, initial-scale=1.0" name="viewport" /><meta content="Programmer using Test-Driven Development, F#, C#, and Haskell. Contributor to open-source code." name="description" /><meta content="F# C# haskell fsharp csharp tdd autofixture" name="keywords" /><title>Using the Web API Dependency Resolver with Castle Windsor's Scoped Lifetime</title><link href="http://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet" type="text/css" /><link href="/stylesheets/styles.css?1418682978" media="screen" rel="stylesheet" type="text/css" />
-<link href="/stylesheets/syntax.css?1418682978" media="screen" rel="stylesheet" type="text/css" /></head><body><div><div><a href="/">←</a></div><div><h1>Using the Web API Dependency Resolver with Castle Windsor's Scoped Lifetime</h1><div>July 16, 2012 |  <a href="/category/web-api/">Web API</a> |  <a href="/category/castle-windsor/">Castle Windsor</a></div></div><div><p><strong>Update</strong>: <a href="http://blog.ploeh.dk/">Mark Seemann</a> has provided a <a href="http://blog.ploeh.dk/2012/10/03/DependencyInjectionInASPNETWebAPIWithCastleWindsor.aspx">solution</a> without using the IDependencyResolver interface.</p>
-
-<blockquote>
-<p>This post is the result of a very good <a href="http://nikosbaxevanis.com/2012/06/04/using-the-web-api-dependency-resolver-with-castle-windsor-part-2/#comment-568630441">suggestion</a> in the comments section of the <a href="http://nikosbaxevanis.com/2012/06/04/using-the-web-api-dependency-resolver-with-castle-windsor-part-2">previous</a> post.</p>
-</blockquote>
-
-<p>The WindsorDependencyScope from the previous post has been modified to use the Scoped lifetime <a href="http://docs.castleproject.org/Windsor.Whats-New-In-Windsor-3.ashx#Added_two_new_lifestyles:_scoped_and_bound_2">available</a> in Castle Windsor 3.</p>
-<pre class="highlight text">using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Http.Dependencies;
-using Castle.MicroKernel.Lifestyle;
-using Castle.Windsor;
-
-internal sealed class WindsorDependencyScope : IDependencyScope
-{
-    private readonly IWindsorContainer container;
-    private readonly IDisposable scope;
-
-    public WindsorDependencyScope(IWindsorContainer container)
-    {
-        if (container == null)
-        {
-            throw new ArgumentNullException(&quot;container&quot;);
-        }
-
-        this.container = container;
-        this.scope = container.BeginScope();
-    }
-
-    public object GetService(Type t)
-    {
-        return this.container.Kernel.HasComponent(t) ? this.container.Resolve(t) : null;
-    }
-
-    public IEnumerable&lt;object&gt; GetServices(Type t)
-    {
-        return this.container.ResolveAll(t).Cast&lt;object&gt;().ToArray();
-    }
-
-    public void Dispose()
-    {
-        this.scope.Dispose();
-    }
-}
-</pre>
-<p>The <code>BeginScope</code> is an extension method for the <code>IWindsorContainer</code> type. It returns by default an instance of a <code>CallContextLifetimeScope</code> type. It uses the <a href="http://msdn.microsoft.com/en-us/library/system.runtime.remoting.messaging.callcontext.aspx">Call Context</a> so it can be associated with thread pool threads and manually created threads within a <em>single</em> AppDomain (it does not use the <em>Logical</em> Call Context).</p>
-
-<p>On each request the Web API calls the <a href="http://aspnetwebstack.codeplex.com/SourceControl/changeset/view/a1b7c04f7227#src%2fSystem.Web.Http%2fHttpRequestMessageExtensions.cs">GetDependencyScope</a> extension method of the <a href="http://msdn.microsoft.com/en-us/library/system.net.http.httprequestmessage.aspx">HttpRequestMessage</a> type, which, in return, calls it&#39;s own <a href="http://aspnetwebstack.codeplex.com/SourceControl/changeset/view/a1b7c04f7227#src%2fSystem.Web.Http%2fDependencies%2fIDependencyResolver.cs">BeginScope</a> method to start a new resolution scope. Using our own implementation of the <a href="http://aspnetwebstack.codeplex.com/SourceControl/changeset/view/a1b7c04f7227#src%2fSystem.Web.Http%2fDependencies%2fIDependencyResolver.cs">IDependencyResolver</a> interface we always return a new instance of the WindsorDependencyScope type.</p>
-<pre class="highlight text">internal sealed class WindsorDependencyResolver : IDependencyResolver
-{    
-    // 'using' Directives and other type members removed for brevity.
-
-    public IDependencyScope BeginScope()
-    {
-        return new WindsorDependencyScope(this.container);
-    }
-}
-</pre>
-<p>Since we use the Scoped lifetime we need to define it also in the registration code. Then, we will always have at most one instance of each requested type per resolution scope (that is, a request).</p>
-<pre class="highlight text">internal sealed class WebWindsorInstaller : IWindsorInstaller
-{
-    public void Install(IWindsorContainer container, IConfigurationStore store)
-    {
-        container.Register(Classes
-            .FromAssemblyContaining&lt;ValuesController&gt;()
-            .BasedOn&lt;IHttpController&gt;()
-            .LifestyleScoped());
-    }
-}
-</pre>
-<p>The source code can be found <a href="http://nikosbaxevanis.com/downloads/WebApiScopedLifetimeDependencyResolverSample.zip">here</a>.</p>
-</div><div class="footer">Have a question about this post? Ask away on   <a href="http://twitter.com/nikosbaxevanis" target="_blank">Twitter</a> or in <a href="https://github.com/moodmosaic/feedback" target="_blank">my feedback repo</a>.</div></div><script type="text/javascript">var _gaq = _gaq || [];
-_gaq.push(['_setAccount', 'UA-24262928-1']);
-_gaq.push(['_trackPageview']);
-(function() {
-  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-})();</script></body></html>
+<!DOCTYPE html>
+<html>
+  <head>
+  <link rel='canonical' href='http://blog.nikosbaxevanis.com/2012/07/16/using-the-web-api-dependency-resolver-with-castle-windsor-scoped-lifetime/'/>
+  <meta http-equiv='content-type' content='text/html; charset=utf-8' />
+  <meta http-equiv='refresh' content='0;url=http://blog.nikosbaxevanis.com/2012/07/16/using-the-web-api-dependency-resolver-with-castle-windsor-scoped-lifetime/' />
+  </head>
+</html>

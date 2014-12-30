@@ -1,0 +1,100 @@
+---
+layout: post
+title: The Task-based Asynchronous Pattern - Part 1 (The Basics)
+---
+
+<blockquote>
+<p>The future of asynchronous programming in C# adheres to&#0160;a new language feature and a new framework pattern.&#0160;</p>
+<p>Asynchronous&#0160;programming will be similar to synchronous programming.</p>
+</blockquote>
+<p>Today hosting in the cloud has become popular. You’re paying for each virtual machine (VM) that is running so your service must scale or else you have to pay for another VM to handle the load.&#0160;&#0160;Both the classic APM and the EAP require you to split your code in a callback function so many people even chose to write their code synchronous.&#0160;No matter if you call a web service or access a file on disk (that is,&#0160;I/O-Bound Asynchronous Operations) or if you want to compute PI (a Periodic Compute-Bound Operation) your&#0160;application has to be scalable and responsive.&#0160;&#0160; &#0160;</p>
+<p>I have&#0160;<a href="http://nikosbaxevanis.com/categories/Windows_Phone/" target="_blank" title="Exposing asynchronous features to client code.">already&#0160;discussed</a>&#0160;about the two patterns that are available in the .NET Framework for&#0160;asynchronous&#0160;programming.</p>
+<ul>
+<li>Callback-based&#0160;Asynchronous Pattern&#0160;(APM)</li>
+<li>Event-based&#0160;Asynchronous Pattern (EAP) &#0160; &#0160;</li>
+</ul>
+<p>I like the APM because with a good IAsyncResult implementation in hand you can easily expose&#0160;asynchronous&#0160;features to all versions of the .NET Framework (1.0-today) and also target Microsoft&#0160;Silverlight, Windows Phone 7, etc.&#0160;</p>
+<p>To start, here is some code that executes&#0160;synchronously:</p>
+
+```
+private void FetchStockQuotesSync(WebService svc)
+{
+    // This blocks. You don't know when the FetchStockQuotes
+    // method returns. It may takes from minutes, to hours or
+    // it may not return at all.
+    IStockQuote qt = svc.FetchStockQuotes();
+}
+```
+      
+<p>Fortunately the WebService class implements the <a href="http://msdn.microsoft.com/en-us/library/system.iasyncresult.aspx" target="_blank" title="Represents the status of an asynchronous operation.">IAsyncResult</a> interface, so the same code can be executed asynchronously:</p>
+
+```
+private void FetchStockQuotesApm(WebService svc)
+{
+    // This never blocks. Your code returns immediately.
+    svc.BeginFetchStockQuotes(FetchStockQuotesApmCallback, svc);
+}
+ 
+private void FetchStockQuotesApmCallback(IAsyncResult ar)
+{
+    // The operation completed asynchrnously.
+    WebService svc = (WebService)ar.AsyncState;
+    IStockQuote qt = svc.EndFetchStockQuotes(ar);
+}
+```
+
+<p>Event if the WebService class does not implement the IAsyncResult interface, you can define a delegate and invoke it&#0160;asynchronously,&#0160;via BeginInvoke.</p>
+<blockquote>
+<p style="text-align: justify;">The following code below is here just for the demo.&#0160;There is a known performance hit when calling delegates compared to direct method calls. (See the Delegates section <a href="http://msdn.microsoft.com/en-us/library/ms973852.aspx" target="_blank" title="Writing Faster Managed Code: Know What Things Cost by Jan Gray.">here</a>).</p>
+</blockquote>
+
+```
+private void FetchStockQuotesApm(WebService svc)
+{
+    // This never blocks. Your code returns immediately.
+    Func<IStockQuote> @delegate = svc.FetchStockQuotes;
+    @delegate.BeginInvoke(FetchStockQuotesApmCallback, @delegate);
+}
+ 
+private void FetchStockQuotesApmCallback(IAsyncResult ar)
+{
+    // The operation completed asynchrnously.
+    Func<IStockQuote> @delegate = (Func<IStockQuote>)ar.AsyncState;
+    IStockQuote qt  = @delegate.EndInvoke(ar);
+}
+```
+      
+<blockquote>
+<p style="text-align: justify;">Unfortunately,&#0160;it turns out that the APM does not look so sexy and most of the developers just don&#39;t use it.&#0160;</p>
+</blockquote>
+<p>The future of asynchronous programming in C# adheres to a new framework pattern called the <strong>Task-based Asynchronous Pattern (TAP)</strong>.
+</p>
+The new language features `async` and `await` and the TAP allow you to do this:
+
+```
+private async void FetchStockQuotesAsyncCtp(WebService svc)
+{
+    IStockQuote qt = await svc.FetchStockQuotesTaskAsync();
+}
+```
+      
+<p>Well, this is exciting. &#0160;The method is marked as async. This means that the method body is compiled specially, allowing parts of&#0160;it to be turned into callbacks.&#0160;The FetchStockQuotesTaskAsync method returns a Task&lt;IStockQuote&gt; by converting the BeginFetchStockQuotes/EndFetchStockQuotes methods into a task. Until the task completes, there is nothing to do but await for it.</p>
+<p>Here is how the&#0160;FetchStockQuotesTaskAsync method is written:</p>
+
+```
+public static Task<IStockQuote> FetchStockQuotesTaskAsync(this IWebService svc)
+{
+    return Task<IStockQuote>.Factory.FromAsync(
+        svc.BeginFetchStockQuotes, // BeginPart
+        svc.EndFetchStockQuotes,   // EndPart
+        null);                     // State, Options
+}
+```
+
+<blockquote>
+<p style="text-align: justify;">FetchStockQuotesTaskAsync&#0160;is an extension method, because adding this feature directly to the WebService class will break compatibility with previous versions of the .NET Framework (1.0, 1.1, 2.0). Also, if you don&#39;t own the code of the WebService class you would define it as an extension method anyway.</p>
+</blockquote>
+<p>It becomes very clear that in the near future it&#39;s the programming language that will handle most of the asynchronous stuff and not the programmer. Currently, you can download and install the <a href="http://go.microsoft.com/fwlink/?LinkId=203690" target="_blank" title="Download a CTP with new syntax and APIs for asynchronous development.">Async CTP</a>. For more information around the new features you can visit the official website&#0160;<a href="http://msdn.microsoft.com/en-us/vstudio/async.aspx" target="_blank" title="Asynchronous Programming for C# and Visual Basic">here</a>.</p>
+
+<p>The sample application can be found <a href="https://github.com/moodmosaic/BonusBits.CodeSamples" target="_blank" title="BonusBits Blog source-code.">here</a>.</p>
+
