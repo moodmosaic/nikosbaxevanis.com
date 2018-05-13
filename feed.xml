@@ -12,7 +12,7 @@
   <entry>
     <title>The feed has moved</title>
     <link rel="alternate" href="http://blog.nikosbaxevanis.com/atom.xml"/>
-    <id>http://blog.nikosbaxevanis.com/atom.xml</id>
+    <id>http://blog.nikosbaxevanis.com/feed.xml</id>
     <updated>2014-12-30T00:00:00+03:00</updated>
     <author>
       <name>Nikos Baxevanis</name>
