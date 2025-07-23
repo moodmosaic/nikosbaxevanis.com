@@ -1,0 +1,128 @@
+\documentclass[10pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+
+\pagestyle{plain}
+
+\renewcommand{\rmdefault}{pag}
+\renewcommand{\sfdefault}{phv}
+\renewcommand{\ttdefault}{pcr}
+
+\newenvironment{itemize*}
+  {\begin{itemize}
+    \setlength{\itemsep}{0.5mm}
+    \setlength{\parskip}{0.5mm}}
+  {\end{itemize}}
+
+\newenvironment{enumerate*}
+  {\begin{enumerate}
+    \setlength{\itemsep}{0.8mm}
+    \setlength{\parskip}{0.7mm}}
+  {\end{enumerate}}
+
+\newenvironment{myquote}
+  {\list{}{\leftmargin=4.5mm\rightmargin=0cm}\item[]}
+  {\endlist}
+
+\begin{document}
+\thispagestyle{empty}
+
+\begin{center}
+~\\[3mm]
+{\Huge Nikos C. Baxevanis} \\[5.5mm]
+{\large \emph{Resume}} \\[5.5mm]
+\href{https://nikosbaxevanis.com}{nikosbaxevanis.com} ~$\bullet$~~
+nikos.baxevanis@gmail.com ~$\bullet$~~ Zl\'in, Czech Republic \\[5mm]
+\hrule
+~\\[6mm]
+\end{center}
+
+\paragraph{Summary.}
+Pragmatic software engineer with two decades of experience writing and shipping
+software. Active in open source since 2011 and in security-focused engineering
+since 2017. Deep expertise in property-based testing, fuzzing, and program
+analysis; active in blockchain and smart contract security since 2017. Track
+record of building foundational test and analysis tools, driving major
+open-source projects, and finding critical vulnerabilities in production
+systems. Looking for roles where I can advance software assurance, mentor
+engineers, and push the boundaries of correctness tooling.
+
+\paragraph{Key Accomplishments}
+\begin{itemize}
+\item Designed and co-implemented the first fuzzing and model-based testing
+  tools for the Stacks blockchain, including
+  \href{https://github.com/stacks-network/rendezvous}{rendezvous} and
+  \href{https://github.com/stacks-network/madhouse-rs}{madhouse-rs}, enabling
+  consensus and smart contract validation in Rust.
+\item Helped shape and now maintain
+  \href{https://github.com/hedgehogqa}{Hedgehog}, a property-based testing
+  framework for Haskell, F\#, Scala, and R. In production use since 2016;
+  originally powered Echidna, the first smart-contract fuzzer for Ethereum.
+\item Core maintainer and feature author for AutoFixture, a leading .NET testing
+  library -- contributed major sub-tools like
+  \href{https://github.com/moodmosaic/Fare}{Fare}. Recognized by Mark Seemann.
+\item Held key engineering and technical leadership roles in two successful
+  acquisitions---KBMax (2021) and BetKerner (2012)---with focus on correct,
+  secure system development.
+\end{itemize}
+
+\paragraph{Professional Experience}
+\begin{myquote}
+\begin{description}
+\item[Stacks Foundation.] Remote. \emph{2022—present.} \emph{Resident.}
+  Pioneered formal fuzzing and automated testing for blockchain smart contracts
+  and consensus. Focus: critical-path security, differential testing, and
+  building tools to help auditors and protocol developers. Joined via the
+  Critical Bounties program.
+\item[Security Researcher \& Consultant.] Remote. \emph{2017—present.}
+  \emph{Freelance.} Advise and audit DeFi projects on protocol correctness,
+  testing, and secure smart contract engineering. Contributed input to Uniswap
+  v3 liquidity strategy \href{https://atise.medium.com/64725c6c0b10}{research}
+  led by Atis Elsts. Delivered support for fuzzing and adversarial testing.
+\item[KBMax.] Remote. \emph{2014—2021.} \emph{Senior Software Engineer.}
+  Principal developer for the first cloud-native CPQ with interactive 3D
+  visualization on Azure. Led reliability and correctness work across full
+  stack. Company acquired 2021.
+\item[BetKerner.] Athens, Greece. \emph{2009—2012.} \emph{CTO.} Built and
+  led a team for an automated betting analytics platform leveraging live data
+  and expert signals. Contributed to product development through to acquisition
+  in 2012.
+\item[Topologic.] Athens, Greece. \emph{2005—2009.}
+  \emph{Lead Software Engineer.} Shipped full-stack airport management and
+  incident tracking software deployed at Athens Intl. Airport, using .NET \&
+  geospatial APIs.
+\end{description}
+\end{myquote}
+
+\paragraph{Summary of Qualifications}
+\begin{itemize*}
+\item 20 years of software engineering; open source contributor since 2011.
+\item Expertise in property-based, model-based, fuzzing, and mutation testing.
+\item Deep experience in smart contract security and blockchain testing.
+\item Contributed to testing libraries and generators in Haskell, Rust, F\#,
+  and TypeScript.
+\item Advocates correctness-by-design, secure software practices, and mentoring.
+\item Known for uncovering subtle bugs in mission-critical systems.
+\end{itemize*}
+
+\paragraph{Open Source \& Writing.}
+Curated technical posts, open-source work, and peer quotes available at
+\href{https://nikosbaxevanis.com}{nikosbaxevanis.com}.
+
+\paragraph{Education}
+\begin{myquote}
+\begin{description}
+\item[Technological Educational Institute of Athens.]
+  \emph{2002—2006.} B.Sc. in Biomedical Engineering.
+\end{description}
+\end{myquote}
+
+\paragraph{Logistics.}
+Permanent resident in the Czech Republic. Greek citizen. Fluent in English and
+Greek.
+
+\bigskip\noindent\emph{Last updated 22 July 2025.}
+
+\end{document}
