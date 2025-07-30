@@ -2,7 +2,7 @@
 
 \usepackage[margin=1in]{geometry}
 \usepackage{xcolor}
-\usepackage[hidelinks]{hyperref}
+\usepackage{hyperref}
 
 \pagestyle{plain}
 
@@ -40,71 +40,94 @@ nikos.baxevanis@gmail.com ~$\bullet$~~ Zl\'in, Czech Republic \\[5mm]
 \end{center}
 
 \paragraph{Summary.}
-Pragmatic software engineer with two decades of experience writing and shipping
-software. Active in open source since 2011 and in security-focused engineering
-since 2017. Deep expertise in property-based testing, fuzzing, and program
-analysis; active in blockchain and smart contract security since 2017. Track
-record of building foundational test and analysis tools, driving major
-open-source projects, and finding critical vulnerabilities in production
-systems. Looking for roles where I can advance software assurance, mentor
-engineers, and push the boundaries of correctness tooling.
+Deep expertise in property-based testing, fuzzing, and automated bug
+discovery; specializes in input shrinking, reproducible failure discovery, and
+instrumentation for testable and debuggable execution paths. Experienced
+software engineer with two decades of experience building tools that catch
+deep bugs in critical systems before they go live. Track record of building
+foundational testing tools, driving major open-source projects, and preventing
+critical issues in production systems. Looking for roles where I can advance
+software correctness tooling, mentor engineers, and push the boundaries of
+automated bug detection.
 
 \paragraph{Key Accomplishments}
 \begin{itemize}
-\item Designed and co-implemented the first fuzzing and model-based testing
-  tools for the Stacks blockchain, including
+\item Core contributor to \href{https://github.com/hedgehogqa}{Hedgehog}
+  (2016—present), a property-based testing framework for Haskell, F\#, Scala,
+  and R. Powered Echidna, the first smart-contract fuzzer for Ethereum
+  developed by Trail of Bits. Helped shape the framework from early days and
+  continue as active maintainer.
+\item Developed fuzzers and model-based testing tools for Rust and Clarity at
+  Stacks Foundation, including
   \href{https://github.com/stacks-network/rendezvous}{rendezvous} and
-  \href{https://github.com/stacks-network/madhouse-rs}{madhouse-rs}, enabling
-  consensus and smart contract validation in Rust.
-\item Helped shape and now maintain
-  \href{https://github.com/hedgehogqa}{Hedgehog}, a property-based testing
-  framework for Haskell, F\#, Scala, and R. In production use since 2016;
-  originally powered Echidna, the first smart-contract fuzzer for Ethereum.
-\item Core maintainer and feature author for AutoFixture, a leading .NET testing
-  library -- contributed major sub-tools like
-  \href{https://github.com/moodmosaic/Fare}{Fare}. Recognized by Mark Seemann.
-\item Held key engineering and technical leadership roles in two successful
-  acquisitions---KBMax (2021) and BetKerner (2012)---with focus on correct,
-  secure system development.
+  \href{https://github.com/stacks-network/madhouse-rs}{madhouse-rs}. These
+  tools flagged consensus issues, denial-of-service vectors, and block
+  production edge cases during the lead-up to a major network upgrade.
+\item Core contributor to
+  \href{https://github.com/AutoFixture/AutoFixture}{AutoFixture} (2011—2016),
+  a leading .NET testing library (3.5k+ stars). Helped shape
+  \href{https://blog.ploeh.dk/2013/03/01/AutoFixture3/}{AutoFixture 3} and
+  contributed major sub-tools like
+  \href{https://github.com/moodmosaic/Fare}{Fare} for regex-constrained test
+  data generation. Project later submitted to the .NET Foundation.
+\item Ported \href{https://github.com/moodmosaic/splitmix}{SplitMix}
+  (2017—2020), a fast splittable PRNG based on work by Steele, Lea, and Flood.
+  Passes all dieharder tests and used in Hedgehog for replay and
+  shrinking—critical components for reproducible failure discovery.
 \end{itemize}
 
 \paragraph{Professional Experience}
 \begin{myquote}
 \begin{description}
 \item[Stacks Foundation.] Remote. \emph{2022—present.} \emph{Resident.}
-  Pioneered formal fuzzing and automated testing for blockchain smart contracts
-  and consensus. Focus: critical-path security, differential testing, and
-  building tools to help auditors and protocol developers. Joined via the
-  Critical Bounties program.
-\item[Security Researcher \& Consultant.] Remote. \emph{2017—present.}
-  \emph{Freelance.} Advise and audit DeFi projects on protocol correctness,
-  testing, and secure smart contract engineering. Contributed input to Uniswap
-  v3 liquidity strategy \href{https://atise.medium.com/64725c6c0b10}{research}
-  led by Atis Elsts. Delivered support for fuzzing and adversarial testing.
-\item[KBMax.] Remote. \emph{2014—2021.} \emph{Senior Software Engineer.}
-  Principal developer for the first cloud-native CPQ with interactive 3D
-  visualization on Azure. Led reliability and correctness work across full
-  stack. Company acquired 2021.
-\item[BetKerner.] Athens, Greece. \emph{2009—2012.} \emph{CTO.} Built and
-  led a team for an automated betting analytics platform leveraging live data
-  and expert signals. Contributed to product development through to acquisition
-  in 2012.
-\item[Topologic.] Athens, Greece. \emph{2005—2009.}
-  \emph{Lead Software Engineer.} Shipped full-stack airport management and
-  incident tracking software deployed at Athens Intl. Airport, using .NET \&
-  geospatial APIs.
+  Developed formal fuzzing and automated testing infrastructure for blockchain
+  smart contracts and consensus protocols. Focus: building tools for catching
+  edge cases, differential testing, and creating testing frameworks that help
+  protocol developers prevent bugs before deployment. Joined via the Critical
+  Bounties program.
+\item[Testing Infrastructure Consultant.] Remote. \emph{2019—present.}
+  \emph{Freelance.} Design and implement comprehensive testing strategies for
+  DeFi projects, focusing on protocol correctness and automated bug detection.
+  \href{https://atise.medium.com/64725c6c0b10}{Contributed input to Uniswap v3
+  liquidity strategy research} (first two parts of the series). Specialized in
+  fuzzing and property-based testing implementations.
+\item[KBMax.] Remote. \emph{2014—2021.} \emph{Principal Software Engineer.}
+  Core developer for the first cloud-native CPQ with interactive 3D
+  visualization on Azure. Played key role in architectural decisions and
+  scalability solutions. Implemented comprehensive testing strategies that
+  prevented production issues. Developed solutions ranging from Azure Storage
+  Queue-based distributed systems to Salesforce integration packages. Managed
+  Azure infrastructure operations including massive database updates across
+  thousands of databases spanning US/EU regions. Navigated full acquisition
+  process including due diligence, technical assessments, and integration
+  planning. Company acquired 2021.
+\item[BetKerner.] Athens, Greece. \emph{2009—2012.} \emph{CTO.} Built and led
+  a team for an automated betting analytics platform leveraging live data and
+  expert signals. Implemented robust testing infrastructure to ensure system
+  reliability under high-frequency trading conditions. Led product development
+  through to acquisition in 2012.
+\item[Topologic.] Athens, Greece. \emph{2005—2009.} \emph{Lead Software
+  Engineer.} Shipped full-stack airport management and incident tracking
+  software deployed at Athens Intl. Airport, using .NET \& geospatial APIs.
+  Established testing practices for mission-critical systems.
 \end{description}
 \end{myquote}
 
 \paragraph{Summary of Qualifications}
 \begin{itemize*}
-\item 20 years of software engineering; open source contributor since 2011.
-\item Expertise in property-based, model-based, fuzzing, and mutation testing.
-\item Deep experience in smart contract security and blockchain testing.
-\item Contributed to testing libraries and generators in Haskell, Rust, F\#,
-  and TypeScript.
-\item Advocates correctness-by-design, secure software practices, and mentoring.
-\item Known for catching subtle bugs before systems go live.
+\item Deep expertise in property-based, model-based, fuzzing, and mutation
+  testing.
+\item Proven track record of catching subtle bugs before systems go live.
+\item Contributed to testing libraries in Haskell, F\#, .NET, Rust, and
+  TypeScript.
+\item 20 years of software engineering; open source testing tool contributor
+  since 2011.
+\item Extensive experience building testing infrastructure for critical
+  systems.
+\item Navigated complete acquisition process including due diligence and
+  technical assessments.
+\item Advocates correctness-by-design, comprehensive testing practices, and
+  mentoring.
 \end{itemize*}
 
 \paragraph{Open Source \& Writing.}
