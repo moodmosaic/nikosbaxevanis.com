@@ -1,47 +1,8 @@
-<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width, initial-scale=1.0" name="viewport" /><meta content="Programmer using Test-Driven Development, F#, C#, and Haskell. Contributor to open-source code." name="description" /><meta content="F# C# haskell fsharp csharp tdd autofixture" name="keywords" /><title>Creating JSON-enabled ViewModels</title><link href="http://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet" type="text/css" /><link href="/stylesheets/styles.css?1418682978" media="screen" rel="stylesheet" type="text/css" />
-<link href="/stylesheets/syntax.css?1418682978" media="screen" rel="stylesheet" type="text/css" /></head><body><div><div><a href="/">←</a></div><div><h1>Creating JSON-enabled ViewModels</h1><div>July 17, 2011 |  <a href="/category/wpf/">WPF</a></div></div><div><p>Recently, Ian Randall&nbsp;contributed something really cool to the DynamicViewModel codebase:&nbsp;Support for binding to a JSON object.&nbsp;I find this exciting!&nbsp;</p>
-
-<p>In the trunk of DynamicViewModel you can find an example that uses the Stack Exchange API. It is a WPF application for searching the Stack Overflow Users.&nbsp;</p>
-
-<p><img src="http://farm9.staticflickr.com/8045/8398555224_d4ecaec7ae_o.png" alt="Screenshot of the demo application" /></p>
-
-<p>All API responses are JSON in Stack Exchange API. Ian took advantage of that and wrote a DynamicViewModelFactory that contains the factory method below:</p>
-<pre class="highlight text">public static DynamicViewModel Create(string json)
-{
-    DynamicViewModel result;
-    if (!json.TryCreateDynamic(out result))
-    {
-        throw new ArgumentException(&quot;parameter was not a valid JSON string&quot;);
-    }
-
-    return result;
-}
-</pre>
-<p>This factory method creates an instance of a DynamicViewModel from a JSON formatted string. In order to use it you need to write code similar to the one below:</p>
-<pre class="highlight text">var uriString = &quot;http://api.stackoverflow.com/1.1/users?filter=&quot; + e.Argument;
-var request   = CreateHttpWebRequest(uriString);
-var response  = request.GetResponse();
-
-using (var streamReader = new StreamReader(response.GetResponseStream()))
-{
-    var json = streamReader.ReadToEnd();
-    dynamic viewModel = DynamicViewModelFactory.Create(json);
-}
-</pre>
-<p>And some XAML action:</p>
-<pre class="highlight text">&lt;TextBlock
-    Grid.Column=&quot;0&quot;
-    VerticalAlignment=&quot;Center&quot;
-    Margin=&quot;4,0,0,0&quot;
-    Text=&quot;{Binding display_name}&quot; /&gt;
-&lt;TextBlock
-    Grid.Column=&quot;1&quot;
-    VerticalAlignment=&quot;Center&quot;
-    Text=&quot;{Binding reputation}&quot; /&gt;
-
-&lt;local:BadgesUserControl
-    Grid.Column=&quot;2&quot;
-    DataContext=&quot;{Binding badge_counts}&quot; /&gt;
-</pre>
-<p>The source code is <a href="http://dynamicviewmodel.codeplex.com/SourceControl/list/changesets" target="_blank">here</a>. Thanks to&nbsp;<a href="http://xaml.geek.nz/contact" target="_self">Ian Randall</a>!</p>
-</div><div class="footer">Have a question about this post? Ask away on   <a href="http://twitter.com/nikosbaxevanis" target="_blank">Twitter</a> or in <a href="https://github.com/moodmosaic/feedback" target="_blank">my feedback repo</a>.</div></div></body></html>
+<!DOCTYPE html>
+<html>
+  <head>
+  <link rel='canonical' href='https://blog.nikosbaxevanis.com/2011/07/17/creating-json-enabled-viewmodels/'/>
+  <meta http-equiv='content-type' content='text/html; charset=utf-8' />
+  <meta http-equiv='refresh' content='0;url=https://blog.nikosbaxevanis.com/2011/07/17/creating-json-enabled-viewmodels/' />
+  </head>
+</html>

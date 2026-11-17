@@ -1,48 +1,8 @@
-<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width, initial-scale=1.0" name="viewport" /><meta content="Programmer using Test-Driven Development, F#, C#, and Haskell. Contributor to open-source code." name="description" /><meta content="F# C# haskell fsharp csharp tdd autofixture" name="keywords" /><title>Knockout! MVVM with HTML + JavaScript</title><link href="http://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet" type="text/css" /><link href="/stylesheets/styles.css?1418682978" media="screen" rel="stylesheet" type="text/css" />
-<link href="/stylesheets/syntax.css?1418682978" media="screen" rel="stylesheet" type="text/css" /></head><body><div><div><a href="/">←</a></div><div><h1>Knockout! MVVM with HTML + JavaScript</h1><div>October 24, 2010 |  <a href="/category/javascript/">JavaScript</a></div></div><div><ul>
-<li>Download notepad2.</li>
-<li>Unzip, Run.</li>
-<li>Copy-paste the markup below.</li>
-<li>Save.</li>
-</ul>
-<pre class="highlight html"><span class="nt">&lt;html&gt;</span>
-  <span class="nt">&lt;head&gt;</span>
-    <span class="nt">&lt;meta</span> <span class="na">http-equiv=</span><span class="s">&quot;Content-Type&quot;</span> <span class="na">content=</span><span class="s">&quot;text/html; charset=utf-8&quot;</span> <span class="nt">/&gt;</span>
-    <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span>
-        <span class="na">src=</span><span class="s">&quot;http://knockoutjs.com/js/knockout-2.1.0.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
-  <span class="nt">&lt;/head&gt;</span>
-  <span class="nt">&lt;body&gt;</span>
-    <span class="nt">&lt;div&gt;</span>
-      <span class="nt">&lt;p&gt;</span>
-        In this example, the two text boxes are bound to
-        <span class="nt">&lt;em&gt;</span>observable<span class="nt">&lt;/em&gt;</span> variables on a data model. The &quot;full name&quot;
-        display is bound to a <span class="nt">&lt;em&gt;</span>dependent observable<span class="nt">&lt;/em&gt;</span>, whose value
-        is computed in terms of the observables.<span class="nt">&lt;/p&gt;</span>
-      <span class="nt">&lt;h2&gt;</span>
-        Live example<span class="nt">&lt;/h2&gt;</span>
-      <span class="nt">&lt;div&gt;</span>
-        <span class="nt">&lt;p&gt;</span>
-          First name:
-          <span class="nt">&lt;input</span> <span class="na">data-bind=</span><span class="s">&quot;value: firstName&quot;</span> <span class="nt">/&gt;&lt;/p&gt;</span>
-        <span class="nt">&lt;p&gt;</span>
-          Last name:
-          <span class="nt">&lt;input</span> <span class="na">data-bind=</span><span class="s">&quot;value: lastName&quot;</span> <span class="nt">/&gt;&lt;/p&gt;</span>
-        <span class="nt">&lt;h2&gt;</span>
-          Hello, <span class="nt">&lt;span</span> <span class="na">data-bind=</span><span class="s">&quot;text: fullName&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>!<span class="nt">&lt;/h2&gt;</span>
-        <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;</span>
-          <span class="kd">var</span> <span class="nx">viewModel</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="na">firstName</span><span class="p">:</span> <span class="nx">ko</span><span class="p">.</span><span class="nx">observable</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">),</span>
-            <span class="na">lastName</span> <span class="p">:</span> <span class="nx">ko</span><span class="p">.</span><span class="nx">observable</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
-          <span class="p">};</span>
-          <span class="nx">viewModel</span><span class="p">.</span><span class="nx">fullName</span> <span class="o">=</span> <span class="nx">ko</span><span class="p">.</span><span class="nx">dependentObservable</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-            <span class="k">return</span> <span class="nx">viewModel</span><span class="p">.</span><span class="nx">firstName</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nx">viewModel</span><span class="p">.</span><span class="nx">lastName</span><span class="p">();</span>
-          <span class="p">});</span>
-          <span class="nx">ko</span><span class="p">.</span><span class="nx">applyBindings</span><span class="p">(</span><span class="nx">viewModel</span><span class="p">);</span>
-        <span class="nt">&lt;/script&gt;</span>
-      <span class="nt">&lt;/div&gt;</span>
-    <span class="nt">&lt;/div&gt;</span>
-  <span class="nt">&lt;/body&gt;</span>
-<span class="nt">&lt;/html&gt;</span>
-</pre>
-<p>Don&#39;t forget to visit the <a href="http://knockoutjs.com/" title="Knockout is a JavaScript library that helps you to create rich, responsive display and editor user interfaces with a clean underlying data model. Any time you have sections of UI that update dynamically (e.g., changing depending on the user’s actions or when an external data source changes), KO can help you implement it more simply and maintainably." target="_blank">Knockout</a> website.</p>
-</div><div class="footer">Have a question about this post? Ask away on   <a href="http://twitter.com/nikosbaxevanis" target="_blank">Twitter</a> or in <a href="https://github.com/moodmosaic/feedback" target="_blank">my feedback repo</a>.</div></div></body></html>
+<!DOCTYPE html>
+<html>
+  <head>
+  <link rel='canonical' href='https://blog.nikosbaxevanis.com/2010/10/24/knockout-mvvm-with-html-plus-javascript/'/>
+  <meta http-equiv='content-type' content='text/html; charset=utf-8' />
+  <meta http-equiv='refresh' content='0;url=https://blog.nikosbaxevanis.com/2010/10/24/knockout-mvvm-with-html-plus-javascript/' />
+  </head>
+</html>

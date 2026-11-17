@@ -1,51 +1,8 @@
-<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="width=device-width, initial-scale=1.0" name="viewport" /><meta content="Programmer using Test-Driven Development, F#, C#, and Haskell. Contributor to open-source code." name="description" /><meta content="F# C# haskell fsharp csharp tdd autofixture" name="keywords" /><title>Enabling Add-In functionality in ASP.NET MVC 3 (Part 2)</title><link href="http://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet" type="text/css" /><link href="/stylesheets/styles.css?1418682978" media="screen" rel="stylesheet" type="text/css" />
-<link href="/stylesheets/syntax.css?1418682978" media="screen" rel="stylesheet" type="text/css" /></head><body><div><div><a href="/">←</a></div><div><h1>Enabling Add-In functionality in ASP.NET MVC 3 (Part 2)</h1><div>August 22, 2011 |  <a href="/category/asp.net-mvc/">ASP.NET MVC</a></div></div><div><p>In this <a href="http://www.nikosbaxevanis.com/bonus-bits/2011/08/enabling-add-in-functionality-in-aspnet-mvc3.html" target="_blank" title="Enabling Add-In functionality in ASP.NET MVC 3">post</a> I discussed the implementation of a&#0160;Unity-specific controller factory &#0160;that could take&#0160;a delegate as a parameter in the constructor acting as the fallback factory when the DI container can not supply a controller.</p>
-
-<p>However, I did not really like the initial design. There are cases when the UnityControllerFactory can be used standalone without third party extensiblity in mind.</p>
-
-<p>One possible improvement in the design is to introduce a <a href="http://en.wikipedia.org/wiki/Composite_pattern" target="_blank" title="Composite Pattern">composite</a> implementation for an IControllerFactory. That way, we still have the chance to supply a MEF-specific controller factory.</p>
-
-<p>A possible implementation of the <a href="http://msdn.microsoft.com/en-us/library/system.web.mvc.icontrollerfactory.createcontroller.aspx" target="_blank" title="Creates the specified controller by using the specified request context.">CreateController</a> method is the one below:</p>
-<pre class="highlight text">public override IController CreateController(
-   RequestContext requestContext, 
-   string controllerName)
-{
-    return (from factory in this.Factories
-            let controller = factory.CreateController(
-                requestContext, controllerName)
-            where controller != null
-            select controller).FirstOrDefault();
-}
-</pre>
-<p>It will iterate through all controller factories calling their CreateController method. The first IController instance provided by the controller factories is returned.</p>
-
-<p>With this implementation, if the Unity-specific controller factory can not provide an IController instance we will ask the next controller factory (MEF-specific controller factory in this example) to provide the IController instance, and so on.</p>
-
-<p>The&#0160;<a href="http://msdn.microsoft.com/en-us/library/dd460275.aspx" target="_blank" title="Sets the specified controller factory.">SetControllerFactory</a>&#0160;method can accept an instance of a CompositeControllerFactory type as shown below:</p>
-<pre class="highlight text">private static void BootstrapContainer()
-{
-    // No direct reference on the container outside this method.
-    var unityControllerFactory = new UnityControllerFactory(
-        new UnityContainer()
-            .Install(Registrator.ForControllers,
-                     Registrator.ForServices,
-                     Registrator.ForEnterpriseLibrary));
-
-
-    string extensionsPath = Path.Combine(
-        AppDomain.CurrentDomain.BaseDirectory, &quot;Extensions&quot;);
-
-    var discoverableControllerFactory = new DiscoverableControllerFactory(
-        new CompositionContainer(
-            new DirectoryCatalog(extensionsPath))
-            );
-
-    ControllerBuilder.Current.SetControllerFactory(
-        new CompositeControllerFactory(
-            unityControllerFactory, 
-            discoverableControllerFactory)
-            );
-}
-</pre>
-<p><a href="https://github.com/moodmosaic/System.Web.Mvc.Composition/blob/master/Src/System.Web.Mvc.Composition/CompositeControllerFactory.cs" target="_blank" title="CompositeControllerFactory.cs">Implementation</a>,&#0160;<a href="https://github.com/moodmosaic/System.Web.Mvc.Composition/blob/master/Src/System.Web.Mvc.CompositionUnitTest/CompositeControllerFactoryFacts.cs" target="_blank" title="CompositeControllerFactoryFacts.cs">Unit tests</a>&#0160;and <a href="http://nuget.org/List/Packages/System.Web.Mvc.Composition" target="_blank" title="System.Web.Mvc.Composition">NuGet Package</a>.&#0160;Sample application available <a href="http://goo.gl/bcye3" target="_blank" title="ExtensibleMvcApplicationDemo-Part2.zip">here</a>.</p>
-</div><div class="footer">Have a question about this post? Ask away on   <a href="http://twitter.com/nikosbaxevanis" target="_blank">Twitter</a> or in <a href="https://github.com/moodmosaic/feedback" target="_blank">my feedback repo</a>.</div></div></body></html>
+<!DOCTYPE html>
+<html>
+  <head>
+  <link rel='canonical' href='https://blog.nikosbaxevanis.com/2011/08/22/enabling-add-in-functionality-in-asp-dot-net-mvc-3-part-2/'/>
+  <meta http-equiv='content-type' content='text/html; charset=utf-8' />
+  <meta http-equiv='refresh' content='0;url=https://blog.nikosbaxevanis.com/2011/08/22/enabling-add-in-functionality-in-asp-dot-net-mvc-3-part-2/' />
+  </head>
+</html>
